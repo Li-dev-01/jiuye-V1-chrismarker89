@@ -231,14 +231,14 @@ function App() {
 
 
                     {/* 原有的可视化页面 - 保留作为备份 */}
-                    <Route path="/analytics/original" element={
+                    {/* <Route path="/analytics/original" element={
                       <PublicRouteGuard>
                         <QuestionnaireLayout>
                           <AnalyticsPage />
-                          
+
                         </QuestionnaireLayout>
                       </PublicRouteGuard>
-                    } />
+                    } /> */}
 
 
                     <Route path="/stories" element={
