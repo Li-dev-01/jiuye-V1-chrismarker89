@@ -1,0 +1,7 @@
+{
+  "tableName": "questionnaire_responses",
+  "dataDistributions": {},
+  "customGenerators": {},
+  "relationships": {},
+  "constraints": {}
+}

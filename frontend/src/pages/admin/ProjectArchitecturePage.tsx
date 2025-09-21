@@ -259,9 +259,9 @@ const apiEndpoints = [
     method: 'GET',
     description: '分析数据接口',
     tables: ['questionnaire_responses', 'valid_heart_voices', 'valid_stories', 'analytics_cache'],
-    pages: ['AnalyticsPage', 'UnifiedAnalyticsPage', 'RealisticDashboard', 'PublicDashboard'],
+    pages: ['NewQuestionnaireVisualizationPage', 'QuestionnaireAnalyticsPage'],
     status: 'active',
-    issues: ['多个分析页面功能重叠']
+    issues: []
   }
 ];
 
@@ -295,22 +295,13 @@ const pageFeatures = [
     issues: []
   },
   {
-    name: 'AnalyticsPage',
-    type: 'admin',
-    description: '数据分析页面',
+    name: 'NewQuestionnaireVisualizationPage',
+    type: 'public',
+    description: '新版6维度可视化分析页面',
     tables: ['questionnaire_responses', 'valid_heart_voices', 'valid_stories'],
-    apis: ['/api/analytics/data', '/api/analytics/charts'],
+    apis: ['/api/analytics/visualization', '/api/analytics/summary'],
     status: 'active',
-    issues: ['与UnifiedAnalyticsPage功能重叠']
-  },
-  {
-    name: 'UnifiedAnalyticsPage',
-    type: 'admin',
-    description: '统一分析页面',
-    tables: ['analytics_cache', 'questionnaire_responses'],
-    apis: ['/api/analytics/unified', '/api/analytics/export'],
-    status: 'active',
-    issues: ['与AnalyticsPage功能重叠']
+    issues: []
   },
   {
     name: 'UserManagementPage',

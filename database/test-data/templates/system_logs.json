@@ -1,0 +1,7 @@
+{
+  "tableName": "system_logs",
+  "dataDistributions": {},
+  "customGenerators": {},
+  "relationships": {},
+  "constraints": {}
+}

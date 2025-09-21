@@ -55,11 +55,7 @@ export const QuestionnaireLayout: React.FC<QuestionnaireLayoutProps> = ({ childr
       icon: <BookOutlined />,
       label: <Link to="/stories">故事墙</Link>
     },
-    {
-      key: '/voices',
-      icon: <MessageOutlined />,
-      label: <Link to="/voices">问卷心声</Link>
-    },
+
 
   ];
 
@@ -94,7 +90,7 @@ export const QuestionnaireLayout: React.FC<QuestionnaireLayoutProps> = ({ childr
     if (path.startsWith('/questionnaire')) return '/questionnaire';
     if (path.startsWith('/analytics')) return '/analytics';
     if (path.startsWith('/stories')) return '/stories';
-    if (path.startsWith('/voices')) return '/voices';
+
     return '/';
   };
 

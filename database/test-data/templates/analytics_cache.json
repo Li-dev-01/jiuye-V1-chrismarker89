@@ -1,0 +1,7 @@
+{
+  "tableName": "analytics_cache",
+  "dataDistributions": {},
+  "customGenerators": {},
+  "relationships": {},
+  "constraints": {}
+}

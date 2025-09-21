@@ -1,24 +1,15 @@
 import { Hono } from 'hono';
-import { serve } from '@hono/node-server';
+// import { serve } from '@hono/node-server'; // 仅在本地开发时使用
 import { serveStatic } from '@hono/node-server/serve-static';
 import type { Env } from './types/api';
 import { corsMiddleware } from './middleware/cors';
 import { createAuthRoutes } from './routes/auth';
 import { createQuestionnaireRoutes } from './routes/questionnaire';
-import { createUniversalQuestionnaireRoutes } from './routes/questionnaires';
 import { createUUIDRoutes } from './routes/uuid';
-import { createQuestionnaireAuthRoutes } from './routes/auth/questionnaires';
-import { createSuperAdminRoutes } from './routes/admin/super';
 import { createAdminRoutes } from './routes/admin';
-import { createAISourcesRoutes } from './routes/ai/sources';
-import { createHeartVoicesRoutes } from './routes/heart-voicess';
-import { createHeartVoiceRoutes } from './routes/heart-voices';
-import { createFileManagementRoutes } from './routes/files';
-import { createAutoPngRoutes } from './routes/images/auto-generate';
 import { createStoriesRoutes } from './routes/stories';
-import { createPngTestRoutes } from './routes/images/test';
 import { dataGenerator } from './routes/dataGenerator';
-import { swaggerSpec, swaggerUiOptions } from './docs/swagger-simple';
+// import { swaggerSpec, swaggerUiOptions } from './docs/swagger-simple'; // 暂时禁用swagger，因为在Cloudflare Workers中不兼容
 import analyticsRoutes from './routes/analytics';
 import reviewerRoutes from './routes/reviewer';
 import securityRoutes from './routes/security';
@@ -34,6 +25,9 @@ import { ipAccessControl } from './routes/ip-access-control';
 import { twoFactorAuth } from './routes/two-factor-auth';
 import { intelligentSecurity } from './routes/intelligent-security';
 import userContentManagement from './routes/user-content-management';
+import { createVisualizationRoutes } from './routes/visualization';
+import { createUniversalQuestionnaireRoutes } from './routes/universal-questionnaire';
+import { CronHandler, type CronEvent } from './handlers/cronHandler';
 
 // 创建Hono应用
 const app = new Hono<{ Bindings: Env }>();
@@ -93,62 +87,62 @@ app.get('/health-test', async (c) => {
   });
 });
 
-// Swagger API文档
-app.get('/api-docs/swagger.json', (c) => {
-  return c.json(swaggerSpec);
-});
+// Swagger API文档 - 暂时禁用
+// app.get('/api-docs/swagger.json', (c) => {
+//   return c.json(swaggerSpec);
+// });
 
-// Swagger UI页面
-app.get('/api-docs', (c) => {
-  const html = `
-    <!DOCTYPE html>
-    <html>
-      <head>
-        <title>就业问卷调查系统 API文档</title>
-        <link rel="stylesheet" type="text/css" href="https://unpkg.com/swagger-ui-dist@5.0.1/swagger-ui.css" />
-        <style>
-          html { box-sizing: border-box; overflow: -moz-scrollbars-vertical; overflow-y: scroll; }
-          *, *:before, *:after { box-sizing: inherit; }
-          body { margin:0; background: #fafafa; }
-          .swagger-ui .topbar { display: none; }
-          .swagger-ui .info { margin: 20px 0; }
-          .swagger-ui .info .title { color: #1890ff; }
-        </style>
-      </head>
-      <body>
-        <div id="swagger-ui"></div>
-        <script src="https://unpkg.com/swagger-ui-dist@5.0.1/swagger-ui-bundle.js"></script>
-        <script src="https://unpkg.com/swagger-ui-dist@5.0.1/swagger-ui-standalone-preset.js"></script>
-        <script>
-          window.onload = function() {
-            const ui = SwaggerUIBundle({
-              url: '/api-docs/swagger.json',
-              dom_id: '#swagger-ui',
-              deepLinking: true,
-              presets: [
-                SwaggerUIBundle.presets.apis,
-                SwaggerUIStandalonePreset
-              ],
-              plugins: [
-                SwaggerUIBundle.plugins.DownloadUrl
-              ],
-              layout: "StandaloneLayout",
-              persistAuthorization: true,
-              displayRequestDuration: true,
-              filter: true,
-              showExtensions: true,
-              showCommonExtensions: true,
-              docExpansion: 'list',
-              defaultModelsExpandDepth: 2,
-              defaultModelExpandDepth: 2
-            });
-          };
-        </script>
-      </body>
-    </html>
-  `;
-  return c.html(html);
-});
+// Swagger UI页面 - 暂时禁用
+// app.get('/api-docs', (c) => {
+//   const html = `
+//     <!DOCTYPE html>
+//     <html>
+//       <head>
+//         <title>就业问卷调查系统 API文档</title>
+//         <link rel="stylesheet" type="text/css" href="https://unpkg.com/swagger-ui-dist@5.0.1/swagger-ui.css" />
+//         <style>
+//           html { box-sizing: border-box; overflow: -moz-scrollbars-vertical; overflow-y: scroll; }
+//           *, *:before, *:after { box-sizing: inherit; }
+//           body { margin:0; background: #fafafa; }
+//           .swagger-ui .topbar { display: none; }
+//           .swagger-ui .info { margin: 20px 0; }
+//           .swagger-ui .info .title { color: #1890ff; }
+//         </style>
+//       </head>
+//       <body>
+//         <div id="swagger-ui"></div>
+//         <script src="https://unpkg.com/swagger-ui-dist@5.0.1/swagger-ui-bundle.js"></script>
+//         <script src="https://unpkg.com/swagger-ui-dist@5.0.1/swagger-ui-standalone-preset.js"></script>
+//         <script>
+//           window.onload = function() {
+//             const ui = SwaggerUIBundle({
+//               url: '/api-docs/swagger.json',
+//               dom_id: '#swagger-ui',
+//               deepLinking: true,
+//               presets: [
+//                 SwaggerUIBundle.presets.apis,
+//                 SwaggerUIStandalonePreset
+//               ],
+//               plugins: [
+//                 SwaggerUIBundle.plugins.DownloadUrl
+//               ],
+//               layout: "StandaloneLayout",
+//               persistAuthorization: true,
+//               displayRequestDuration: true,
+//               filter: true,
+//               showExtensions: true,
+//               showCommonExtensions: true,
+//               docExpansion: 'list',
+//               defaultModelsExpandDepth: 2,
+//               defaultModelExpandDepth: 2
+//             });
+//           };
+//         </script>
+//       </body>
+//     </html>
+//   `;
+//   return c.html(html);
+// });
 
 // API路由前缀
 app.route('/api', createApiRoutes());
@@ -236,13 +230,7 @@ function createApiRoutes() {
     console.error('❌ Failed to register user content management routes:', error);
   }
 
-  // 问卷用户认证路由（独立系统）
-  try {
-    api.route('/questionnaire-auth', createQuestionnaireAuthRoutes());
-    console.log('✅ Questionnaire auth routes registered');
-  } catch (error) {
-    console.error('❌ Failed to register questionnaire auth routes:', error);
-  }
+  // 问卷用户认证路由已移除
 
   // UUID用户管理路由
   api.route('/uuid', createUUIDRoutes());
@@ -250,133 +238,20 @@ function createApiRoutes() {
   // 问卷路由
   api.route('/questionnaire', createQuestionnaireRoutes());
 
-  // 通用问卷路由
-  api.route('/questionnaires', createUniversalQuestionnaireRoutes());
+  // 通用问卷路由 (多级专用表优化版)
+  api.route('/universal-questionnaire', createUniversalQuestionnaireRoutes());
 
-  // 心声路由
-  api.route('/heart-voicess', createHeartVoicesRoutes());
 
-  // 新心声路由（问卷心声）
-  try {
-    api.route('/heart-voices', createHeartVoiceRoutes());
-    console.log('✅ Heart voice routes registered');
-  } catch (error) {
-    console.error('❌ Failed to register heart voice routes:', error);
-  }
 
-  // 文件管理路由（R2存储、PNG生成、数据备份）
-  try {
-    api.route('/files', createFileManagementRoutes());
-    console.log('✅ File management routes registered');
-  } catch (error) {
-    console.error('❌ Failed to register file management routes:', error);
-  }
+  // 文件管理和PNG生成路由已移除
 
-  // 自动PNG生成路由
-  try {
-    api.route('/images/auto-generate', createAutoPngRoutes());
-    console.log('✅ Auto PNG routes registered');
-  } catch (error) {
-    console.error('❌ Failed to register auto PNG routes:', error);
-  }
 
-  // PNG测试路由
-  try {
-    api.route('/images/test', createPngTestRoutes());
-    console.log('✅ PNG test routes registered');
-  } catch (error) {
-    console.error('❌ Failed to register PNG test routes:', error);
-  }
 
-  // 临时心声API（简化版本）
-  api.get('/heart-voices/statistics', async (c) => {
-    return c.json({
-      success: true,
-      data: {
-        totalCount: 156,
-        categoryStats: {
-          'employment-feedback': 156
-        },
-        emotionStats: {
-          positive: 45,
-          negative: 38,
-          neutral: 73
-        },
-        recentCount: 23,
-        averageWordCount: 127,
-        topTags: []
-      }
-    });
-  });
 
-  api.post('/heart-voices/:id/like', async (c) => {
-    const heartVoiceId = c.req.param('id');
-    return c.json({
-      success: true,
-      message: '点赞成功',
-      data: {
-        heartVoiceId: parseInt(heartVoiceId),
-        action: 'like'
-      }
-    });
-  });
 
-  api.post('/heart-voices/:id/dislike', async (c) => {
-    const heartVoiceId = c.req.param('id');
-    return c.json({
-      success: true,
-      message: '踩成功',
-      data: {
-        heartVoiceId: parseInt(heartVoiceId),
-        action: 'dislike'
-      }
-    });
-  });
 
-  api.get('/heart-voices/:id/png/:theme?', async (c) => {
-    const heartVoiceId = c.req.param('id');
-    const theme = c.req.param('theme') || 'gradient';
 
-    // 模拟PNG下载链接
-    const mockDownloadUrl = `https://employment-survey-storage.r2.cloudflarestorage.com/png-cards/heart-voices-${heartVoiceId}-${theme}.png`;
 
-    return c.json({
-      success: true,
-      data: {
-        downloadUrl: mockDownloadUrl,
-        cardId: `heart-voices-${heartVoiceId}-${theme}`,
-        theme
-      }
-    });
-  });
-
-  api.get('/heart-voices/list', async (c) => {
-    const page = parseInt(c.req.query('page') || '1');
-    const limit = parseInt(c.req.query('limit') || '20');
-
-    // 模拟心声列表数据
-    const mockHeartVoices = Array.from({ length: limit }, (_, i) => ({
-      id: (page - 1) * limit + i + 1,
-      content: `这是第${(page - 1) * limit + i + 1}条心声内容。求职过程中遇到了很多困难，但是我相信通过努力一定能找到合适的工作。希望就业市场能够更加公平，给每个人平等的机会。`,
-      anonymousNickname: `求职者${(page - 1) * limit + i + 1}`,
-      createdAt: new Date(Date.now() - Math.random() * 30 * 24 * 60 * 60 * 1000).toISOString(),
-      category: 'employment-feedback',
-      wordCount: 50 + Math.floor(Math.random() * 100),
-      emotionCategory: ['positive', 'negative', 'neutral'][Math.floor(Math.random() * 3)],
-      likeCount: Math.floor(Math.random() * 50),
-      dislikeCount: Math.floor(Math.random() * 10)
-    }));
-
-    return c.json({
-      success: true,
-      data: {
-        data: mockHeartVoices,
-        total: 500,
-        page,
-        limit
-      }
-    });
-  });
 
   // 临时PNG管理API
   api.get('/images/auto-generate/stats', async (c) => {
@@ -410,7 +285,7 @@ function createApiRoutes() {
         totalGenerated: 100,
         results: [
           {
-            type: body.contentType || 'heart_voice',
+            type: body.contentType || 'story',
             processed: 25,
             generated: 50,
             errors: []
@@ -430,20 +305,19 @@ function createApiRoutes() {
   // 分析路由 - 使用新的TypeScript版本
   api.route('/analytics', analyticsRoutes);
 
+  // 可视化路由 - 基于真实问卷数据的可视化
+  api.route('/analytics/visualization', createVisualizationRoutes());
+
   // 审核员路由 - 新的TypeScript版本
   api.route('/reviewer', reviewerRoutes);
 
   // 管理员路由
   api.route('/admin', createAdminRoutes());
 
-  // AI源管理路由
-  api.route('/ai/sources', createAISourcesRoutes());
-
   // 数据生成器路由（管理员专用）
   api.route('/admin/data-generator', dataGenerator);
 
-  // 超级管理员路由
-  api.route('/admin/super', createSuperAdminRoutes());
+  // AI源管理和超级管理员路由已移除
 
   // 页面参与统计路由
   api.route('/participation-stats', createParticipationStatsRoutes());
@@ -500,7 +374,7 @@ function createApiRoutes() {
       const db = c.env.DB;
 
       // 并行查询所有统计数据
-      const [questionnaireResult, storyResult, voiceResult] = await Promise.all([
+      const [questionnaireResult, storyResult] = await Promise.all([
         db.prepare(`
           SELECT COUNT(DISTINCT user_uuid) as participants,
                  COUNT(*) as responses
@@ -515,12 +389,7 @@ function createApiRoutes() {
           WHERE audit_status = 'approved'
         `).first(),
 
-        db.prepare(`
-          SELECT COUNT(*) as published,
-                 COUNT(DISTINCT user_id) as authors
-          FROM valid_heart_voices
-          WHERE audit_status = 'approved'
-        `).first()
+
       ]);
 
       return c.json({
@@ -533,10 +402,6 @@ function createApiRoutes() {
           stories: {
             publishedCount: storyResult?.published || 0,
             authorCount: storyResult?.authors || 0
-          },
-          voices: {
-            publishedCount: voiceResult?.published || 0,
-            authorCount: voiceResult?.authors || 0
           },
           lastUpdated: new Date().toISOString()
         },
@@ -555,71 +420,7 @@ function createApiRoutes() {
 
 
 
-  // 临时心声统计API（简化版本）
-  api.get('/heart-voices/statistics', async (c) => {
-    return c.json({
-      success: true,
-      data: {
-        totalCount: 156,
-        categoryStats: {
-          'employment-feedback': 156
-        },
-        emotionStats: {
-          positive: 45,
-          negative: 38,
-          neutral: 73
-        },
-        recentCount: 23,
-        averageWordCount: 127,
-        topTags: []
-      }
-    });
-  });
 
-  api.get('/heart-voices/:id/png/:theme?', async (c) => {
-    const heartVoiceId = c.req.param('id');
-    const theme = c.req.param('theme') || 'gradient';
-
-    // 模拟PNG下载链接
-    const mockDownloadUrl = `https://employment-survey-storage.r2.cloudflarestorage.com/png-cards/heart-voices-${heartVoiceId}-${theme}.png`;
-
-    return c.json({
-      success: true,
-      data: {
-        downloadUrl: mockDownloadUrl,
-        cardId: `heart-voices-${heartVoiceId}-${theme}`,
-        theme
-      }
-    });
-  });
-
-  api.get('/heart-voices/list', async (c) => {
-    const page = parseInt(c.req.query('page') || '1');
-    const limit = parseInt(c.req.query('limit') || '20');
-
-    // 模拟心声列表数据
-    const mockHeartVoices = Array.from({ length: limit }, (_, i) => ({
-      id: (page - 1) * limit + i + 1,
-      content: `这是第${(page - 1) * limit + i + 1}条心声内容。求职过程中遇到了很多困难，但是我相信通过努力一定能找到合适的工作。希望就业市场能够更加公平，给每个人平等的机会。`,
-      anonymousNickname: `求职者${(page - 1) * limit + i + 1}`,
-      createdAt: new Date(Date.now() - Math.random() * 30 * 24 * 60 * 60 * 1000).toISOString(),
-      category: 'employment-feedback',
-      wordCount: 50 + Math.floor(Math.random() * 100),
-      emotionCategory: ['positive', 'negative', 'neutral'][Math.floor(Math.random() * 3)],
-      likeCount: Math.floor(Math.random() * 50),
-      dislikeCount: Math.floor(Math.random() * 10)
-    }));
-
-    return c.json({
-      success: true,
-      data: {
-        data: mockHeartVoices,
-        total: 500,
-        page,
-        limit
-      }
-    });
-  });
 
   // 临时PNG管理API
   api.get('/images/auto-generate/stats', async (c) => {
@@ -630,8 +431,7 @@ function createApiRoutes() {
         totalDownloads: 1247,
         uniqueContents: 89,
         cardStats: [
-          { content_type: 'heart_voice', theme: 'gradient', count: 45, total_downloads: 234 },
-          { content_type: 'heart_voice', theme: 'light', count: 38, total_downloads: 189 },
+
           { content_type: 'story', theme: 'dark', count: 35, total_downloads: 156 },
           { content_type: 'story', theme: 'minimal', count: 38, total_downloads: 201 }
         ],
@@ -653,7 +453,7 @@ function createApiRoutes() {
         totalGenerated: 100,
         results: [
           {
-            type: body.contentType || 'heart_voice',
+            type: body.contentType || 'story',
             processed: 25,
             generated: 50,
             errors: []
@@ -758,15 +558,39 @@ appWithEnv.use('*', async (c, next) => {
 
 appWithEnv.route('/', app);
 
-const port = process.env.PORT ? parseInt(process.env.PORT) : 8005;
-console.log(`🚀 后端服务器启动在 http://localhost:${port}`);
-
-serve({
-  fetch: appWithEnv.fetch,
-  port
-});
+// 本地开发服务器代码已移除，仅保留Cloudflare Workers导出
 
 // Cloudflare Workers导出
 export default {
-  fetch: app.fetch
+  fetch: app.fetch,
+
+  // 定时任务处理器
+  async scheduled(event: CronEvent, env: Env, ctx: ExecutionContext): Promise<void> {
+    console.log('🕐 Cloudflare Workers 定时任务触发:', event.cron);
+
+    try {
+      const cronHandler = new CronHandler(env);
+
+      // 使用 waitUntil 确保定时任务完成
+      ctx.waitUntil(cronHandler.handleCronEvent(event));
+
+      console.log('✅ 定时任务处理完成');
+    } catch (error) {
+      console.error('❌ 定时任务处理失败:', error);
+
+      // 记录错误到监控系统
+      ctx.waitUntil(
+        fetch('https://api.example.com/error-log', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            type: 'cron_error',
+            cron: event.cron,
+            error: error.toString(),
+            timestamp: new Date().toISOString()
+          })
+        }).catch(() => {}) // 忽略日志记录失败
+      );
+    }
+  }
 };

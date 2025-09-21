@@ -1,0 +1,7 @@
+{
+  "tableName": "performance_metrics",
+  "dataDistributions": {},
+  "customGenerators": {},
+  "relationships": {},
+  "constraints": {}
+}

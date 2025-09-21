@@ -5,8 +5,8 @@
 
 // 环境配置
 export const API_CONFIG = {
-  // API基础URL - 只使用真实API
-  BASE_URL: import.meta.env.VITE_API_BASE_URL || 'https://employment-survey-api-prod.justpm2099.workers.dev',
+  // API基础URL - 使用优化后的universal-questionnaire API
+  BASE_URL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:8787',
   
   // 超时设置
   TIMEOUT: 10000,
@@ -21,17 +21,17 @@ export const API_CONFIG = {
 
 // API端点配置
 export const API_ENDPOINTS = {
-  // 基础统计（优化版）
-  BASIC_STATS: '/analytics/basic-stats',
+  // 基础统计（优化版 - 使用新的universal-questionnaire API）
+  BASIC_STATS: '/universal-questionnaire/statistics/employment-survey-2024',
 
-  // 分布数据（优化版）
-  DISTRIBUTION: '/analytics/distribution',
+  // 分布数据（优化版 - 使用新的universal-questionnaire API）
+  DISTRIBUTION: '/universal-questionnaire/statistics/employment-survey-2024',
 
   // 交叉分析（优化版）
   CROSS_ANALYSIS: '/analytics/cross-analysis',
 
-  // 就业分析（优化版）
-  EMPLOYMENT_ANALYSIS: '/analytics/employment',
+  // 就业分析（优化版 - 使用新的universal-questionnaire API）
+  EMPLOYMENT_ANALYSIS: '/universal-questionnaire/statistics/employment-survey-2024',
 
   // 专业分析
   MAJOR_ANALYSIS: '/analytics/majors',
@@ -57,6 +57,17 @@ export const API_ENDPOINTS = {
 
   // 健康检查（优化版）
   HEALTH_CHECK: '/analytics/health',
+
+  // Universal Questionnaire API（新增 - 多级专用表优化版）
+  UNIVERSAL_QUESTIONNAIRE: {
+    STATISTICS: '/universal-questionnaire/statistics/employment-survey-2024',
+    CACHE_STATUS: '/universal-questionnaire/statistics/employment-survey-2024/cache-status',
+    REFRESH_CACHE: '/universal-questionnaire/statistics/employment-survey-2024/refresh',
+    LIST: '/universal-questionnaire/list',
+    RESPONSES: '/universal-questionnaire/responses/employment-survey-2024',
+    DATA_QUALITY: '/universal-questionnaire/data-quality/employment-survey-2024',
+    CONSISTENCY_CHECK: '/universal-questionnaire/consistency-check/employment-survey-2024'
+  },
 
   // 分级审核系统（新增）
   AUDIT_LEVEL: '/api/audit/level',

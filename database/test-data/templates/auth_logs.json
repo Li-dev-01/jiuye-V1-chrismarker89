@@ -1,0 +1,7 @@
+{
+  "tableName": "auth_logs",
+  "dataDistributions": {},
+  "customGenerators": {},
+  "relationships": {},
+  "constraints": {}
+}

@@ -78,12 +78,6 @@ export const MobileNavigation: React.FC<MobileNavigationProps> = ({ role }) => {
   const getDrawerMenuItems = () => {
     const baseItems = [
       {
-        key: 'voices',
-        icon: <MessageOutlined />,
-        label: '心声墙',
-        path: '/voices'
-      },
-      {
         key: 'results',
         icon: <BarChartOutlined />,
         label: '调研结果',
@@ -242,6 +236,7 @@ export const MobileNavigation: React.FC<MobileNavigationProps> = ({ role }) => {
     if (item.action) {
       return (
         <button
+          type="button"
           key={item.key}
           className={`${styles.navItem} ${isActive ? styles.active : ''}`}
           onClick={item.action}

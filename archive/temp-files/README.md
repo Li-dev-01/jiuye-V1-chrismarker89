@@ -61,8 +61,8 @@
 
 1. **克隆项目**
 ```bash
-git clone https://github.com/justpm2099/jiuye-V1.git
-cd jiuye-V1
+git clone https://github.com/Li-dev-01/jiuye_V2.git
+cd jiuye_V2
 ```
 
 2. **安装依赖**

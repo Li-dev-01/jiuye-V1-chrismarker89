@@ -6,9 +6,7 @@
 import { Hono } from 'hono';
 import type { Env } from '../types/api';
 import { createDatabaseService } from '../db';
-import { PngTriggerService } from '../services/pngTriggerService';
-import { IntegratedPngService } from '../services/integratedPngService';
-import { createPngAuthMiddleware } from '../middleware/pngAuthMiddleware';
+// PNG相关服务已移除
 
 // 内容清理函数 - 移除分类标识符
 function cleanContent(content: string): string {
@@ -247,15 +245,7 @@ export function createStoriesRoutes() {
 
       const validId = validResult.meta.last_row_id;
 
-      // 触发PNG生成
-      try {
-        const pngTriggerService = new PngTriggerService(c.env);
-        await pngTriggerService.onStoryApproved(validId as number, data_uuid);
-        console.log(`✅ 故事PNG生成已触发: ${validId}`);
-      } catch (error) {
-        console.error('触发故事PNG生成失败:', error);
-        // 不影响故事创建的成功响应
-      }
+      // PNG生成功能已移除
 
       return c.json({
         success: true,

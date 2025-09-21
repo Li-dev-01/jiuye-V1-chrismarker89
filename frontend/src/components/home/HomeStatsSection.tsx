@@ -173,21 +173,7 @@ export const HomeStatsSection: React.FC<HomeStatsSectionProps> = ({
             </div>
           </Col>
 
-          {/* 提交问卷心声 */}
-          <Col xs={24} sm={8} md={8}>
-            <div className={styles.statCard}>
-              <div className={`${styles.statIconWrapper} ${styles.voices}`}>
-                <MessageOutlined />
-              </div>
-              <div className={styles.statNumber}>
-                {participationStatsService.formatNumber(displayStats.voices.publishedCount)}份
-              </div>
-              <div className={styles.statLabel}>提交问卷心声</div>
-              <div className={styles.statDescription}>
-                来自 {displayStats.voices.authorCount} 位同学的真实感悟
-              </div>
-            </div>
-          </Col>
+
         </Row>
 
         {/* 更新时间 */}

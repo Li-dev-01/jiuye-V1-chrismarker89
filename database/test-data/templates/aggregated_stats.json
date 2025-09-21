@@ -1,0 +1,7 @@
+{
+  "tableName": "aggregated_stats",
+  "dataDistributions": {},
+  "customGenerators": {},
+  "relationships": {},
+  "constraints": {}
+}

@@ -211,8 +211,7 @@ function createApiRoutes() {
   // 管理员路由
   api.route('/admin', createAdminRoutes());
 
-  // 心声路由
-  api.route('/heart-voices', createHeartVoicesRoutes());
+
 
   // 故事路由
   api.route('/stories', createStoriesRoutes());
@@ -237,13 +236,7 @@ function createApiRoutes() {
     console.error('❌ Failed to register questionnaire auth routes:', error);
   }
 
-  // 新心声路由（问卷心声）
-  try {
-    api.route('/heart-voices', createHeartVoiceRoutes());
-    console.log('✅ Heart voice routes registered');
-  } catch (error) {
-    console.error('❌ Failed to register heart voice routes:', error);
-  }
+
 
   // 用户内容管理路由
   try {

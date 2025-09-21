@@ -1,0 +1,7 @@
+{
+  "tableName": "performance_alerts",
+  "dataDistributions": {},
+  "customGenerators": {},
+  "relationships": {},
+  "constraints": {}
+}

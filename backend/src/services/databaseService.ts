@@ -21,24 +21,7 @@ export interface QuestionnaireResponse {
   source: string;
 }
 
-export interface HeartVoice {
-  id?: number;
-  response_id?: number;
-  content: string;
-  author_name?: string;
-  is_anonymous: boolean;
-  emotion_score?: number;
-  emotion_category?: string;
-  category: string;
-  tags?: string; // JSON string
-  word_count?: number;
-  like_count: number;
-  dislike_count: number;
-  view_count: number;
-  is_featured: boolean;
-  is_approved: boolean;
-  created_at?: string;
-}
+
 
 export interface Story {
   id?: number;
@@ -179,109 +162,9 @@ export class DatabaseService {
 
   // ==================== 心声相关 ====================
 
-  /**
-   * 创建心声
-   */
-  async createHeartVoice(data: Omit<HeartVoice, 'id'>): Promise<number> {
-    const result = await this.db.prepare(`
-      INSERT INTO heart_voices (
-        response_id, content, author_name, is_anonymous, emotion_score, emotion_category,
-        category, tags, word_count, like_count, dislike_count, view_count, is_featured, is_approved
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    `).bind(
-      data.response_id || null,
-      data.content,
-      data.author_name || null,
-      data.is_anonymous,
-      data.emotion_score || null,
-      data.emotion_category || null,
-      data.category,
-      data.tags || null,
-      data.word_count || data.content.length,
-      data.like_count,
-      data.dislike_count,
-      data.view_count,
-      data.is_featured,
-      data.is_approved
-    ).run();
 
-    return result.meta.last_row_id as number;
-  }
 
-  /**
-   * 获取心声列表
-   */
-  async getHeartVoices(params: {
-    page?: number;
-    limit?: number;
-    category?: string;
-    featured?: boolean;
-    approved?: boolean;
-  } = {}): Promise<{
-    data: HeartVoice[];
-    total: number;
-    page: number;
-    limit: number;
-  }> {
-    const page = params.page || 1;
-    const limit = params.limit || 20;
-    const offset = (page - 1) * limit;
 
-    let whereClause = 'WHERE 1=1';
-    const bindings: any[] = [];
-
-    if (params.category) {
-      whereClause += ' AND category = ?';
-      bindings.push(params.category);
-    }
-
-    if (params.featured !== undefined) {
-      whereClause += ' AND is_featured = ?';
-      bindings.push(params.featured);
-    }
-
-    if (params.approved !== undefined) {
-      whereClause += ' AND is_approved = ?';
-      bindings.push(params.approved);
-    }
-
-    // 获取总数
-    const countResult = await this.db.prepare(`
-      SELECT COUNT(*) as total FROM heart_voices ${whereClause}
-    `).bind(...bindings).first();
-
-    const total = countResult?.total || 0;
-
-    // 获取数据
-    const dataResult = await this.db.prepare(`
-      SELECT * FROM heart_voices ${whereClause}
-      ORDER BY created_at DESC
-      LIMIT ? OFFSET ?
-    `).bind(...bindings, limit, offset).all();
-
-    return {
-      data: dataResult.results as HeartVoice[],
-      total,
-      page,
-      limit
-    };
-  }
-
-  /**
-   * 更新心声点赞/点踩
-   */
-  async updateHeartVoiceLikes(id: number, type: 'like' | 'dislike', increment: boolean): Promise<boolean> {
-    const field = type === 'like' ? 'like_count' : 'dislike_count';
-    const operator = increment ? '+' : '-';
-
-    const result = await this.db.prepare(`
-      UPDATE heart_voices 
-      SET ${field} = ${field} ${operator} 1, updated_at = CURRENT_TIMESTAMP
-      WHERE id = ?
-    `).bind(id).run();
-
-    return result.success;
-  }
 
   // ==================== 故事相关 ====================
 

@@ -173,9 +173,7 @@ export const getAccessibleMenuItems = (user: User | null) => {
     menuItems.push({ key: 'stories', label: '故事墙', path: '/stories' });
   }
   
-  if (hasPermission(user, 'view_voices')) {
-    menuItems.push({ key: 'voices', label: '问卷心声', path: '/voices' });
-  }
+
   
   // 用户功能菜单
   if (hasPermission(user, 'create_questionnaire')) {

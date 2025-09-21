@@ -1,0 +1,35 @@
+{
+  "version": "1.0.0",
+  "generatedAt": "2025-09-21T07:30:00.000Z",
+  "description": "优化版测试数据 - 只包含完整问卷",
+  "dataStats": {
+    "users": 1200,
+    "responses": 1800,
+    "completionRate": 100,
+    "qualityScore": 100
+  },
+  "features": [
+    "100%完整问卷",
+    "真实数据分布",
+    "逻辑一致性验证",
+    "半匿名用户关联",
+    "测试数据标识"
+  ],
+  "compatibility": {
+    "database": "Cloudflare D1",
+    "nodeVersion": ">=16.0.0",
+    "wranglerVersion": ">=3.0.0"
+  },
+  "changelog": {
+    "1.0.0": {
+      "date": "2025-09-21",
+      "changes": [
+        "优化为只生成完整问卷",
+        "提高数据质量到100%",
+        "创建专门的测试数据目录",
+        "添加批量导入工具",
+        "完善文档和说明"
+      ]
+    }
+  }
+}

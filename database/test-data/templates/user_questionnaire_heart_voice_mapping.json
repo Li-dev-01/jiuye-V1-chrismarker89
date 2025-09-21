@@ -1,0 +1,20 @@
+{
+  "tableName": "user_questionnaire_heart_voice_mapping",
+  "dataDistributions": {
+    "age_range": {
+      "18-22": 0.25,
+      "23-25": 0.45,
+      "26-30": 0.25,
+      "31-35": 0.04,
+      "over-35": 0.01
+    },
+    "gender": {
+      "male": 0.52,
+      "female": 0.46,
+      "prefer-not-say": 0.02
+    }
+  },
+  "customGenerators": {},
+  "relationships": {},
+  "constraints": {}
+}

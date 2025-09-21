@@ -1,5 +1,5 @@
 name = "employment-survey-api-prod"
-main = "src/cloudflare-worker.ts"
+main = "src/index.ts"
 compatibility_date = "2024-09-23"
 compatibility_flags = ["nodejs_compat"]
 
@@ -22,10 +22,16 @@ database_id = "25eee5bd-9aee-439a-8723-c73bf5f4f3d9"
 binding = "R2_BUCKET"
 bucket_name = "employment-survey-storage"
 
-# 定时任务配置
+# 定时任务配置 - 多级同步服务
 [triggers]
 crons = [
-  "*/5 * * * *",    # 每5分钟执行一次统计缓存更新
-  "0 8 * * *",      # 每天上午8点执行数据一致性检查
-  "0 2 * * *"       # 每天凌晨2点执行数据质量监控
+  "*/5 * * * *",    # 每5分钟：实时统计同步 (analytics_to_realtime)
+  "*/10 * * * *",   # 每10分钟：聚合统计同步 (realtime_to_aggregated)
+  "*/15 * * * *",   # 每15分钟：仪表板缓存同步 (aggregated_to_dashboard, dashboard_to_visualization)
+  "*/30 * * * *",   # 每30分钟：导出数据同步 (analytics_to_export)
+  "0 * * * *",      # 每小时：社会洞察数据同步 (analytics_to_social)
+  "0 */6 * * *",    # 每6小时：自动缓存优化分析
+  "0 8 * * *",      # 每天上午8点：数据一致性检查
+  "0 2 * * *",      # 每天凌晨2点：数据质量监控和清理
+  "0 0 * * SUN"     # 每周日凌晨：性能基准更新
 ]

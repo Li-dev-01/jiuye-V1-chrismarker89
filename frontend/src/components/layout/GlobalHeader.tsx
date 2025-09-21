@@ -46,10 +46,7 @@ export const GlobalHeader: React.FC = () => {
       key: 'story',
       label: <Link to="/stories" style={{ color: 'inherit', textDecoration: 'none' }}>故事墙</Link>
     },
-    {
-      key: 'about',
-      label: <Link to="/voices" style={{ color: 'inherit', textDecoration: 'none' }}>问卷心声</Link>
-    },
+
     {
       key: 'test-item',
       label: '测试菜单'

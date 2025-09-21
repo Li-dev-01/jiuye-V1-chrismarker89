@@ -1,0 +1,7 @@
+{
+  "tableName": "dashboard_cache",
+  "dataDistributions": {},
+  "customGenerators": {},
+  "relationships": {},
+  "constraints": {}
+}

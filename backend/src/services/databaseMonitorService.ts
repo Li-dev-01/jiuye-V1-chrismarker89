@@ -138,10 +138,8 @@ export class DatabaseMonitorService {
       // 主要业务表
       const mainTables = [
         'universal_questionnaire_responses',
-        'valid_heart_voices',
         'valid_stories',
-        'raw_story_submissions',
-        'raw_heart_voices'
+        'raw_story_submissions'
       ];
 
       for (const tableName of mainTables) {

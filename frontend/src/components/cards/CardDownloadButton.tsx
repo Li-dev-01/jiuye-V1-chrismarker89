@@ -6,8 +6,8 @@
 import React, { useState } from 'react';
 import { Button, Dropdown, Menu, message, Modal, Spin, Tooltip } from 'antd';
 import { DownloadOutlined, PictureOutlined, ShareAltOutlined, LoadingOutlined } from '@ant-design/icons';
-import { useAuth } from '../../contexts/AuthContext';
-import { UserType } from '../../types/user-types';
+import { useSafeAuth } from '../../hooks/useSafeAuth';
+import { UserRole } from '../../types/auth';
 import { cardDownloadService } from '../../services/cardDownloadService';
 import './CardDownloadButton.css';
 
@@ -38,7 +38,7 @@ const CardDownloadButton: React.FC<CardDownloadButtonProps> = ({
   onSuccess,
   onError
 }) => {
-  const { user, isAuthenticated } = useAuth();
+  const { currentUser, isAuthenticated } = useSafeAuth();
   const [loading, setLoading] = useState<boolean>(false);
   const [previewVisible, setPreviewVisible] = useState<boolean>(false);
   const [previewUrl, setPreviewUrl] = useState<string>('');
@@ -47,7 +47,7 @@ const CardDownloadButton: React.FC<CardDownloadButtonProps> = ({
   const [generatedCards, setGeneratedCards] = useState<any[]>([]);
   
   // 检查用户是否有下载权限
-  const hasDownloadPermission = isAuthenticated && user?.userType === UserType.SEMI_ANONYMOUS;
+  const hasDownloadPermission = isAuthenticated && currentUser?.userType === 'semi_anonymous';
   
   // 加载卡片风格
   React.useEffect(() => {

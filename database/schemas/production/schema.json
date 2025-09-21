@@ -1,0 +1,4011 @@
+{
+  "database": "college-employment-survey",
+  "environment": "production",
+  "extractedAt": "2025-09-21T10:49:12.318Z",
+  "tables": {
+    "admin_responses": {
+      "name": "admin_responses",
+      "columns": [
+        {
+          "cid": 0,
+          "name": "id",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": true
+        },
+        {
+          "cid": 1,
+          "name": "user_id",
+          "type": "TEXT",
+          "notnull": true,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 2,
+          "name": "original_response_id",
+          "type": "TEXT",
+          "notnull": true,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 3,
+          "name": "submission_ip",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 4,
+          "name": "user_agent",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 5,
+          "name": "submission_duration",
+          "type": "INTEGER",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 6,
+          "name": "completion_rate",
+          "type": "REAL",
+          "notnull": false,
+          "default_value": "1.0",
+          "primary_key": false
+        },
+        {
+          "cid": 7,
+          "name": "data_consistency_score",
+          "type": "REAL",
+          "notnull": false,
+          "default_value": "1.0",
+          "primary_key": false
+        },
+        {
+          "cid": 8,
+          "name": "logical_consistency_score",
+          "type": "REAL",
+          "notnull": false,
+          "default_value": "1.0",
+          "primary_key": false
+        },
+        {
+          "cid": 9,
+          "name": "completeness_score",
+          "type": "REAL",
+          "notnull": false,
+          "default_value": "1.0",
+          "primary_key": false
+        },
+        {
+          "cid": 10,
+          "name": "review_status",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": "'pending'",
+          "primary_key": false
+        },
+        {
+          "cid": 11,
+          "name": "reviewer_id",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 12,
+          "name": "review_notes",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 13,
+          "name": "reviewed_at",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 14,
+          "name": "is_suspicious",
+          "type": "INTEGER",
+          "notnull": false,
+          "default_value": "0",
+          "primary_key": false
+        },
+        {
+          "cid": 15,
+          "name": "quality_flags",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 16,
+          "name": "risk_score",
+          "type": "INTEGER",
+          "notnull": false,
+          "default_value": "0",
+          "primary_key": false
+        },
+        {
+          "cid": 17,
+          "name": "fraud_indicators",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 18,
+          "name": "page_view_count",
+          "type": "INTEGER",
+          "notnull": false,
+          "default_value": "0",
+          "primary_key": false
+        },
+        {
+          "cid": 19,
+          "name": "time_on_page",
+          "type": "INTEGER",
+          "notnull": false,
+          "default_value": "0",
+          "primary_key": false
+        },
+        {
+          "cid": 20,
+          "name": "interaction_count",
+          "type": "INTEGER",
+          "notnull": false,
+          "default_value": "0",
+          "primary_key": false
+        },
+        {
+          "cid": 21,
+          "name": "created_at",
+          "type": "TEXT",
+          "notnull": true,
+          "default_value": "datetime('now')",
+          "primary_key": false
+        },
+        {
+          "cid": 22,
+          "name": "updated_at",
+          "type": "TEXT",
+          "notnull": true,
+          "default_value": "datetime('now')",
+          "primary_key": false
+        }
+      ],
+      "foreignKeys": [
+        {
+          "id": null,
+          "seq": null
+        },
+        {
+          "id": null,
+          "seq": null
+        },
+        {
+          "id": null,
+          "seq": null
+        }
+      ],
+      "indexes": [
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        },
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        },
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        },
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        },
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        },
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        },
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        }
+      ],
+      "rowCount": null,
+      "extractedAt": "2025-09-21T10:49:21.624Z"
+    },
+    "aggregated_stats": {
+      "name": "aggregated_stats",
+      "columns": [
+        {
+          "cid": 0,
+          "name": "id",
+          "type": "INTEGER",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": true
+        },
+        {
+          "cid": 1,
+          "name": "dimension",
+          "type": "TEXT",
+          "notnull": true,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 2,
+          "name": "dimension_value",
+          "type": "TEXT",
+          "notnull": true,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 3,
+          "name": "count",
+          "type": "INTEGER",
+          "notnull": false,
+          "default_value": "0",
+          "primary_key": false
+        },
+        {
+          "cid": 4,
+          "name": "percentage",
+          "type": "REAL",
+          "notnull": false,
+          "default_value": "0.0",
+          "primary_key": false
+        },
+        {
+          "cid": 5,
+          "name": "rank_position",
+          "type": "INTEGER",
+          "notnull": false,
+          "default_value": "0",
+          "primary_key": false
+        },
+        {
+          "cid": 6,
+          "name": "percentile",
+          "type": "REAL",
+          "notnull": false,
+          "default_value": "0.0",
+          "primary_key": false
+        },
+        {
+          "cid": 7,
+          "name": "cross_dimension",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 8,
+          "name": "cross_dimension_value",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 9,
+          "name": "cross_count",
+          "type": "INTEGER",
+          "notnull": false,
+          "default_value": "0",
+          "primary_key": false
+        },
+        {
+          "cid": 10,
+          "name": "cross_percentage",
+          "type": "REAL",
+          "notnull": false,
+          "default_value": "0.0",
+          "primary_key": false
+        },
+        {
+          "cid": 11,
+          "name": "trend_direction",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 12,
+          "name": "trend_percentage",
+          "type": "REAL",
+          "notnull": false,
+          "default_value": "0.0",
+          "primary_key": false
+        },
+        {
+          "cid": 13,
+          "name": "trend_significance",
+          "type": "REAL",
+          "notnull": false,
+          "default_value": "0.0",
+          "primary_key": false
+        },
+        {
+          "cid": 14,
+          "name": "period_type",
+          "type": "TEXT",
+          "notnull": true,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 15,
+          "name": "period_date",
+          "type": "TEXT",
+          "notnull": true,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 16,
+          "name": "period_start",
+          "type": "TEXT",
+          "notnull": true,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 17,
+          "name": "period_end",
+          "type": "TEXT",
+          "notnull": true,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 18,
+          "name": "sample_size",
+          "type": "INTEGER",
+          "notnull": false,
+          "default_value": "0",
+          "primary_key": false
+        },
+        {
+          "cid": 19,
+          "name": "confidence_interval",
+          "type": "REAL",
+          "notnull": false,
+          "default_value": "0.0",
+          "primary_key": false
+        },
+        {
+          "cid": 20,
+          "name": "statistical_significance",
+          "type": "REAL",
+          "notnull": false,
+          "default_value": "0.0",
+          "primary_key": false
+        },
+        {
+          "cid": 21,
+          "name": "calculation_method",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": "'standard'",
+          "primary_key": false
+        },
+        {
+          "cid": 22,
+          "name": "last_calculated",
+          "type": "TEXT",
+          "notnull": true,
+          "default_value": "datetime('now')",
+          "primary_key": false
+        },
+        {
+          "cid": 23,
+          "name": "is_active",
+          "type": "INTEGER",
+          "notnull": false,
+          "default_value": "1",
+          "primary_key": false
+        }
+      ],
+      "foreignKeys": [],
+      "indexes": [
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        },
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        },
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        },
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        },
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        },
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        },
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        }
+      ],
+      "rowCount": null,
+      "extractedAt": "2025-09-21T10:49:29.909Z"
+    },
+    "analytics_cache": {
+      "name": "analytics_cache",
+      "columns": [
+        {
+          "cid": 0,
+          "name": "id",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": "lower(hex(randomblob(16)))",
+          "primary_key": true
+        },
+        {
+          "cid": 1,
+          "name": "cache_key",
+          "type": "TEXT",
+          "notnull": true,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 2,
+          "name": "cache_data",
+          "type": "TEXT",
+          "notnull": true,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 3,
+          "name": "expires_at",
+          "type": "TEXT",
+          "notnull": true,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 4,
+          "name": "created_at",
+          "type": "TEXT",
+          "notnull": true,
+          "default_value": "datetime('now')",
+          "primary_key": false
+        },
+        {
+          "cid": 5,
+          "name": "updated_at",
+          "type": "TEXT",
+          "notnull": true,
+          "default_value": "datetime('now')",
+          "primary_key": false
+        }
+      ],
+      "foreignKeys": [],
+      "indexes": [
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        },
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        },
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        },
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        }
+      ],
+      "rowCount": null,
+      "extractedAt": "2025-09-21T10:49:37.216Z"
+    },
+    "analytics_responses": {
+      "name": "analytics_responses",
+      "columns": [
+        {
+          "cid": 0,
+          "name": "id",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": true
+        },
+        {
+          "cid": 1,
+          "name": "user_id",
+          "type": "TEXT",
+          "notnull": true,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 2,
+          "name": "submitted_at",
+          "type": "TEXT",
+          "notnull": true,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 3,
+          "name": "age_range",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 4,
+          "name": "education_level",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 5,
+          "name": "employment_status",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 6,
+          "name": "salary_range",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 7,
+          "name": "work_location",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 8,
+          "name": "industry",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 9,
+          "name": "gender",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 10,
+          "name": "job_search_channels",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 11,
+          "name": "difficulties",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 12,
+          "name": "skills",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 13,
+          "name": "policy_suggestions",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 14,
+          "name": "salary_expectation",
+          "type": "INTEGER",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 15,
+          "name": "work_experience_months",
+          "type": "INTEGER",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 16,
+          "name": "job_search_duration_months",
+          "type": "INTEGER",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 17,
+          "name": "data_quality_score",
+          "type": "REAL",
+          "notnull": false,
+          "default_value": "1.0",
+          "primary_key": false
+        },
+        {
+          "cid": 18,
+          "name": "is_complete",
+          "type": "INTEGER",
+          "notnull": false,
+          "default_value": "1",
+          "primary_key": false
+        },
+        {
+          "cid": 19,
+          "name": "processing_version",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": "'v1.0'",
+          "primary_key": false
+        },
+        {
+          "cid": 20,
+          "name": "is_test_data",
+          "type": "INTEGER",
+          "notnull": false,
+          "default_value": "0",
+          "primary_key": false
+        },
+        {
+          "cid": 21,
+          "name": "created_at",
+          "type": "TEXT",
+          "notnull": true,
+          "default_value": "datetime('now')",
+          "primary_key": false
+        },
+        {
+          "cid": 22,
+          "name": "updated_at",
+          "type": "TEXT",
+          "notnull": true,
+          "default_value": "datetime('now')",
+          "primary_key": false
+        }
+      ],
+      "foreignKeys": [
+        {
+          "id": null,
+          "seq": null
+        }
+      ],
+      "indexes": [
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        },
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        },
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        },
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        },
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        },
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        },
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        },
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        },
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        },
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        }
+      ],
+      "rowCount": null,
+      "extractedAt": "2025-09-21T10:49:44.226Z"
+    },
+    "auth_logs": {
+      "name": "auth_logs",
+      "columns": [
+        {
+          "cid": 0,
+          "name": "id",
+          "type": "INTEGER",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": true
+        },
+        {
+          "cid": 1,
+          "name": "user_uuid",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 2,
+          "name": "user_type",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 3,
+          "name": "action",
+          "type": "TEXT",
+          "notnull": true,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 4,
+          "name": "ip_address",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 5,
+          "name": "user_agent",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 6,
+          "name": "device_fingerprint",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 7,
+          "name": "success",
+          "type": "INTEGER",
+          "notnull": true,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 8,
+          "name": "error_message",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 9,
+          "name": "metadata",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 10,
+          "name": "created_at",
+          "type": "TEXT",
+          "notnull": true,
+          "default_value": "datetime('now')",
+          "primary_key": false
+        }
+      ],
+      "foreignKeys": [
+        {
+          "id": null,
+          "seq": null
+        }
+      ],
+      "indexes": [
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        },
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        },
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        },
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        }
+      ],
+      "rowCount": null,
+      "extractedAt": "2025-09-21T10:49:51.144Z"
+    },
+    "d1_migrations": {
+      "name": "d1_migrations",
+      "columns": [
+        {
+          "cid": 0,
+          "name": "id",
+          "type": "INTEGER",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": true
+        },
+        {
+          "cid": 1,
+          "name": "name",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 2,
+          "name": "applied_at",
+          "type": "TIMESTAMP",
+          "notnull": true,
+          "default_value": "CURRENT_TIMESTAMP",
+          "primary_key": false
+        }
+      ],
+      "foreignKeys": [],
+      "indexes": [
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        }
+      ],
+      "rowCount": null,
+      "extractedAt": "2025-09-21T10:49:58.631Z"
+    },
+    "dashboard_cache": {
+      "name": "dashboard_cache",
+      "columns": [
+        {
+          "cid": 0,
+          "name": "id",
+          "type": "INTEGER",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": true
+        },
+        {
+          "cid": 1,
+          "name": "cache_key",
+          "type": "TEXT",
+          "notnull": true,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 2,
+          "name": "dashboard_type",
+          "type": "TEXT",
+          "notnull": true,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 3,
+          "name": "widget_data",
+          "type": "TEXT",
+          "notnull": true,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 4,
+          "name": "summary_stats",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 5,
+          "name": "chart_configs",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 6,
+          "name": "cache_size",
+          "type": "INTEGER",
+          "notnull": false,
+          "default_value": "0",
+          "primary_key": false
+        },
+        {
+          "cid": 7,
+          "name": "compression_ratio",
+          "type": "REAL",
+          "notnull": false,
+          "default_value": "1.0",
+          "primary_key": false
+        },
+        {
+          "cid": 8,
+          "name": "generation_time_ms",
+          "type": "INTEGER",
+          "notnull": false,
+          "default_value": "0",
+          "primary_key": false
+        },
+        {
+          "cid": 9,
+          "name": "expires_at",
+          "type": "TEXT",
+          "notnull": true,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 10,
+          "name": "refresh_interval",
+          "type": "INTEGER",
+          "notnull": false,
+          "default_value": "600",
+          "primary_key": false
+        },
+        {
+          "cid": 11,
+          "name": "last_accessed",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 12,
+          "name": "access_count",
+          "type": "INTEGER",
+          "notnull": false,
+          "default_value": "0",
+          "primary_key": false
+        },
+        {
+          "cid": 13,
+          "name": "source_tables",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 14,
+          "name": "source_version",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": "'v1.0'",
+          "primary_key": false
+        },
+        {
+          "cid": 15,
+          "name": "created_at",
+          "type": "TEXT",
+          "notnull": true,
+          "default_value": "datetime('now')",
+          "primary_key": false
+        },
+        {
+          "cid": 16,
+          "name": "updated_at",
+          "type": "TEXT",
+          "notnull": true,
+          "default_value": "datetime('now')",
+          "primary_key": false
+        }
+      ],
+      "foreignKeys": [],
+      "indexes": [
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        },
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        },
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        },
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        }
+      ],
+      "rowCount": null,
+      "extractedAt": "2025-09-21T10:50:07.007Z"
+    },
+    "enhanced_visualization_cache": {
+      "name": "enhanced_visualization_cache",
+      "columns": [
+        {
+          "cid": 0,
+          "name": "id",
+          "type": "INTEGER",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": true
+        },
+        {
+          "cid": 1,
+          "name": "cache_key",
+          "type": "TEXT",
+          "notnull": true,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 2,
+          "name": "visualization_type",
+          "type": "TEXT",
+          "notnull": true,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 3,
+          "name": "page_context",
+          "type": "TEXT",
+          "notnull": true,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 4,
+          "name": "chart_data",
+          "type": "TEXT",
+          "notnull": true,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 5,
+          "name": "chart_config",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 6,
+          "name": "metadata",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 7,
+          "name": "data_points",
+          "type": "INTEGER",
+          "notnull": false,
+          "default_value": "0",
+          "primary_key": false
+        },
+        {
+          "cid": 8,
+          "name": "render_complexity",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": "'low'",
+          "primary_key": false
+        },
+        {
+          "cid": 9,
+          "name": "estimated_render_time",
+          "type": "INTEGER",
+          "notnull": false,
+          "default_value": "0",
+          "primary_key": false
+        },
+        {
+          "cid": 10,
+          "name": "cache_strategy",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": "'time_based'",
+          "primary_key": false
+        },
+        {
+          "cid": 11,
+          "name": "invalidation_triggers",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 12,
+          "name": "expires_at",
+          "type": "TEXT",
+          "notnull": true,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 13,
+          "name": "auto_refresh",
+          "type": "INTEGER",
+          "notnull": false,
+          "default_value": "1",
+          "primary_key": false
+        },
+        {
+          "cid": 14,
+          "name": "refresh_priority",
+          "type": "INTEGER",
+          "notnull": false,
+          "default_value": "5",
+          "primary_key": false
+        },
+        {
+          "cid": 15,
+          "name": "hit_count",
+          "type": "INTEGER",
+          "notnull": false,
+          "default_value": "0",
+          "primary_key": false
+        },
+        {
+          "cid": 16,
+          "name": "miss_count",
+          "type": "INTEGER",
+          "notnull": false,
+          "default_value": "0",
+          "primary_key": false
+        },
+        {
+          "cid": 17,
+          "name": "last_hit",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 18,
+          "name": "created_at",
+          "type": "TEXT",
+          "notnull": true,
+          "default_value": "datetime('now')",
+          "primary_key": false
+        },
+        {
+          "cid": 19,
+          "name": "updated_at",
+          "type": "TEXT",
+          "notnull": true,
+          "default_value": "datetime('now')",
+          "primary_key": false
+        }
+      ],
+      "foreignKeys": [],
+      "indexes": [
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        },
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        },
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        },
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        },
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        }
+      ],
+      "rowCount": null,
+      "extractedAt": "2025-09-21T10:50:13.446Z"
+    },
+    "export_responses": {
+      "name": "export_responses",
+      "columns": [
+        {
+          "cid": 0,
+          "name": "id",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": true
+        },
+        {
+          "cid": 1,
+          "name": "response_id",
+          "type": "TEXT",
+          "notnull": true,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 2,
+          "name": "csv_data",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 3,
+          "name": "json_data",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 4,
+          "name": "excel_data",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 5,
+          "name": "export_version",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": "'v1.0'",
+          "primary_key": false
+        },
+        {
+          "cid": 6,
+          "name": "field_mapping",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 7,
+          "name": "anonymization_level",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": "'partial'",
+          "primary_key": false
+        },
+        {
+          "cid": 8,
+          "name": "is_processed",
+          "type": "INTEGER",
+          "notnull": false,
+          "default_value": "0",
+          "primary_key": false
+        },
+        {
+          "cid": 9,
+          "name": "processing_errors",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 10,
+          "name": "last_exported_at",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 11,
+          "name": "export_count",
+          "type": "INTEGER",
+          "notnull": false,
+          "default_value": "0",
+          "primary_key": false
+        },
+        {
+          "cid": 12,
+          "name": "created_at",
+          "type": "TEXT",
+          "notnull": true,
+          "default_value": "datetime('now')",
+          "primary_key": false
+        },
+        {
+          "cid": 13,
+          "name": "updated_at",
+          "type": "TEXT",
+          "notnull": true,
+          "default_value": "datetime('now')",
+          "primary_key": false
+        }
+      ],
+      "foreignKeys": [
+        {
+          "id": null,
+          "seq": null
+        }
+      ],
+      "indexes": [
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        }
+      ],
+      "rowCount": null,
+      "extractedAt": "2025-09-21T10:50:20.321Z"
+    },
+    "heart_voices_fts": {
+      "name": "heart_voices_fts",
+      "columns": [
+        {
+          "cid": 0,
+          "name": "content",
+          "type": "",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 1,
+          "name": "category",
+          "type": "",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 2,
+          "name": "tags",
+          "type": "",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 3,
+          "name": "content_id",
+          "type": "",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": false
+        }
+      ],
+      "foreignKeys": [],
+      "indexes": [],
+      "rowCount": null,
+      "extractedAt": "2025-09-21T10:50:27.804Z"
+    },
+    "heart_voices_fts_config": {
+      "name": "heart_voices_fts_config",
+      "columns": [
+        {
+          "cid": 0,
+          "name": "k",
+          "type": "",
+          "notnull": true,
+          "default_value": null,
+          "primary_key": true
+        },
+        {
+          "cid": 1,
+          "name": "v",
+          "type": "",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": false
+        }
+      ],
+      "foreignKeys": [],
+      "indexes": [
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        }
+      ],
+      "rowCount": null,
+      "extractedAt": "2025-09-21T10:50:34.552Z"
+    },
+    "heart_voices_fts_content": {
+      "name": "heart_voices_fts_content",
+      "columns": [
+        {
+          "cid": 0,
+          "name": "id",
+          "type": "INTEGER",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": true
+        },
+        {
+          "cid": 1,
+          "name": "c0",
+          "type": "",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 2,
+          "name": "c1",
+          "type": "",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 3,
+          "name": "c2",
+          "type": "",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 4,
+          "name": "c3",
+          "type": "",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": false
+        }
+      ],
+      "foreignKeys": [],
+      "indexes": [],
+      "rowCount": null,
+      "extractedAt": "2025-09-21T10:50:41.630Z"
+    },
+    "heart_voices_fts_data": {
+      "name": "heart_voices_fts_data",
+      "columns": [
+        {
+          "cid": 0,
+          "name": "id",
+          "type": "INTEGER",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": true
+        },
+        {
+          "cid": 1,
+          "name": "block",
+          "type": "BLOB",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": false
+        }
+      ],
+      "foreignKeys": [],
+      "indexes": [],
+      "rowCount": null,
+      "extractedAt": "2025-09-21T10:50:48.400Z"
+    },
+    "heart_voices_fts_docsize": {
+      "name": "heart_voices_fts_docsize",
+      "columns": [
+        {
+          "cid": 0,
+          "name": "id",
+          "type": "INTEGER",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": true
+        },
+        {
+          "cid": 1,
+          "name": "sz",
+          "type": "BLOB",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": false
+        }
+      ],
+      "foreignKeys": [],
+      "indexes": [],
+      "rowCount": null,
+      "extractedAt": "2025-09-21T10:50:55.453Z"
+    },
+    "heart_voices_fts_idx": {
+      "name": "heart_voices_fts_idx",
+      "columns": [
+        {
+          "cid": 0,
+          "name": "segid",
+          "type": "",
+          "notnull": true,
+          "default_value": null,
+          "primary_key": true
+        },
+        {
+          "cid": 1,
+          "name": "term",
+          "type": "",
+          "notnull": true,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 2,
+          "name": "pgno",
+          "type": "",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": false
+        }
+      ],
+      "foreignKeys": [],
+      "indexes": [
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        }
+      ],
+      "rowCount": null,
+      "extractedAt": "2025-09-21T10:51:04.125Z"
+    },
+    "performance_alert_history": {
+      "name": "performance_alert_history",
+      "columns": [
+        {
+          "cid": 0,
+          "name": "id",
+          "type": "INTEGER",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": true
+        },
+        {
+          "cid": 1,
+          "name": "alert_id",
+          "type": "INTEGER",
+          "notnull": true,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 2,
+          "name": "triggered_at",
+          "type": "TEXT",
+          "notnull": true,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 3,
+          "name": "metric_value",
+          "type": "REAL",
+          "notnull": true,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 4,
+          "name": "threshold_value",
+          "type": "REAL",
+          "notnull": true,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 5,
+          "name": "message",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 6,
+          "name": "resolved_at",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": false
+        }
+      ],
+      "foreignKeys": [
+        {
+          "id": null,
+          "seq": null
+        }
+      ],
+      "indexes": [
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        },
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        }
+      ],
+      "rowCount": null,
+      "extractedAt": "2025-09-21T10:51:10.916Z"
+    },
+    "performance_alerts": {
+      "name": "performance_alerts",
+      "columns": [
+        {
+          "cid": 0,
+          "name": "id",
+          "type": "INTEGER",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": true
+        },
+        {
+          "cid": 1,
+          "name": "alert_name",
+          "type": "TEXT",
+          "notnull": true,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 2,
+          "name": "metric_type",
+          "type": "TEXT",
+          "notnull": true,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 3,
+          "name": "threshold_value",
+          "type": "REAL",
+          "notnull": true,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 4,
+          "name": "comparison_operator",
+          "type": "TEXT",
+          "notnull": true,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 5,
+          "name": "time_window_minutes",
+          "type": "INTEGER",
+          "notnull": true,
+          "default_value": "5",
+          "primary_key": false
+        },
+        {
+          "cid": 6,
+          "name": "is_enabled",
+          "type": "INTEGER",
+          "notnull": true,
+          "default_value": "1",
+          "primary_key": false
+        },
+        {
+          "cid": 7,
+          "name": "notification_channels",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 8,
+          "name": "created_at",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": "CURRENT_TIMESTAMP",
+          "primary_key": false
+        },
+        {
+          "cid": 9,
+          "name": "updated_at",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": "CURRENT_TIMESTAMP",
+          "primary_key": false
+        }
+      ],
+      "foreignKeys": [],
+      "indexes": [
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        }
+      ],
+      "rowCount": null,
+      "extractedAt": "2025-09-21T10:51:17.929Z"
+    },
+    "performance_baselines": {
+      "name": "performance_baselines",
+      "columns": [
+        {
+          "cid": 0,
+          "name": "id",
+          "type": "INTEGER",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": true
+        },
+        {
+          "cid": 1,
+          "name": "endpoint",
+          "type": "TEXT",
+          "notnull": true,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 2,
+          "name": "baseline_response_time",
+          "type": "REAL",
+          "notnull": true,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 3,
+          "name": "baseline_cache_hit_rate",
+          "type": "REAL",
+          "notnull": true,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 4,
+          "name": "baseline_error_rate",
+          "type": "REAL",
+          "notnull": true,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 5,
+          "name": "measurement_period",
+          "type": "TEXT",
+          "notnull": true,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 6,
+          "name": "created_at",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": "CURRENT_TIMESTAMP",
+          "primary_key": false
+        },
+        {
+          "cid": 7,
+          "name": "is_active",
+          "type": "INTEGER",
+          "notnull": true,
+          "default_value": "1",
+          "primary_key": false
+        }
+      ],
+      "foreignKeys": [],
+      "indexes": [
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        },
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        }
+      ],
+      "rowCount": null,
+      "extractedAt": "2025-09-21T10:51:24.734Z"
+    },
+    "performance_metrics": {
+      "name": "performance_metrics",
+      "columns": [
+        {
+          "cid": 0,
+          "name": "id",
+          "type": "INTEGER",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": true
+        },
+        {
+          "cid": 1,
+          "name": "timestamp",
+          "type": "TEXT",
+          "notnull": true,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 2,
+          "name": "endpoint",
+          "type": "TEXT",
+          "notnull": true,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 3,
+          "name": "response_time",
+          "type": "REAL",
+          "notnull": true,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 4,
+          "name": "cache_hit",
+          "type": "INTEGER",
+          "notnull": true,
+          "default_value": "0",
+          "primary_key": false
+        },
+        {
+          "cid": 5,
+          "name": "data_source",
+          "type": "TEXT",
+          "notnull": true,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 6,
+          "name": "query_count",
+          "type": "INTEGER",
+          "notnull": true,
+          "default_value": "0",
+          "primary_key": false
+        },
+        {
+          "cid": 7,
+          "name": "error_count",
+          "type": "INTEGER",
+          "notnull": true,
+          "default_value": "0",
+          "primary_key": false
+        },
+        {
+          "cid": 8,
+          "name": "user_agent",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 9,
+          "name": "client_ip",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 10,
+          "name": "created_at",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": "CURRENT_TIMESTAMP",
+          "primary_key": false
+        }
+      ],
+      "foreignKeys": [],
+      "indexes": [
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        },
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        },
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        },
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        },
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        }
+      ],
+      "rowCount": null,
+      "extractedAt": "2025-09-21T10:51:31.680Z"
+    },
+    "questionnaire_heart_voices": {
+      "name": "questionnaire_heart_voices",
+      "columns": [
+        {
+          "cid": 0,
+          "name": "id",
+          "type": "INTEGER",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": true
+        },
+        {
+          "cid": 1,
+          "name": "questionnaire_response_id",
+          "type": "INTEGER",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 2,
+          "name": "questionnaire_id",
+          "type": "TEXT",
+          "notnull": true,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 3,
+          "name": "user_id",
+          "type": "TEXT",
+          "notnull": true,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 4,
+          "name": "content",
+          "type": "TEXT",
+          "notnull": true,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 5,
+          "name": "word_count",
+          "type": "INTEGER",
+          "notnull": false,
+          "default_value": "0",
+          "primary_key": false
+        },
+        {
+          "cid": 6,
+          "name": "category",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": "'employment-feedback'",
+          "primary_key": false
+        },
+        {
+          "cid": 7,
+          "name": "tags",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 8,
+          "name": "emotion_score",
+          "type": "REAL",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 9,
+          "name": "emotion_category",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 10,
+          "name": "is_public",
+          "type": "BOOLEAN",
+          "notnull": false,
+          "default_value": "true",
+          "primary_key": false
+        },
+        {
+          "cid": 11,
+          "name": "is_approved",
+          "type": "BOOLEAN",
+          "notnull": false,
+          "default_value": "true",
+          "primary_key": false
+        },
+        {
+          "cid": 12,
+          "name": "status",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": "'active'",
+          "primary_key": false
+        },
+        {
+          "cid": 13,
+          "name": "submission_type",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": "'anonymous'",
+          "primary_key": false
+        },
+        {
+          "cid": 14,
+          "name": "anonymous_nickname",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 15,
+          "name": "ip_address",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 16,
+          "name": "user_agent",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 17,
+          "name": "created_at",
+          "type": "DATETIME",
+          "notnull": false,
+          "default_value": "CURRENT_TIMESTAMP",
+          "primary_key": false
+        },
+        {
+          "cid": 18,
+          "name": "updated_at",
+          "type": "DATETIME",
+          "notnull": false,
+          "default_value": "CURRENT_TIMESTAMP",
+          "primary_key": false
+        }
+      ],
+      "foreignKeys": [
+        {
+          "id": null,
+          "seq": null
+        }
+      ],
+      "indexes": [
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        },
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        },
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        },
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        },
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        },
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        },
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        },
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        }
+      ],
+      "rowCount": null,
+      "extractedAt": "2025-09-21T10:51:38.876Z"
+    },
+    "questionnaire_responses": {
+      "name": "questionnaire_responses",
+      "columns": [
+        {
+          "cid": 0,
+          "name": "id",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": "lower(hex(randomblob(16)))",
+          "primary_key": true
+        },
+        {
+          "cid": 1,
+          "name": "user_id",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 2,
+          "name": "personal_info",
+          "type": "TEXT",
+          "notnull": true,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 3,
+          "name": "education_info",
+          "type": "TEXT",
+          "notnull": true,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 4,
+          "name": "employment_info",
+          "type": "TEXT",
+          "notnull": true,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 5,
+          "name": "job_search_info",
+          "type": "TEXT",
+          "notnull": true,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 6,
+          "name": "employment_status",
+          "type": "TEXT",
+          "notnull": true,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 7,
+          "name": "status",
+          "type": "TEXT",
+          "notnull": true,
+          "default_value": "'pending'",
+          "primary_key": false
+        },
+        {
+          "cid": 8,
+          "name": "created_at",
+          "type": "TEXT",
+          "notnull": true,
+          "default_value": "datetime('now')",
+          "primary_key": false
+        },
+        {
+          "cid": 9,
+          "name": "updated_at",
+          "type": "TEXT",
+          "notnull": true,
+          "default_value": "datetime('now')",
+          "primary_key": false
+        }
+      ],
+      "foreignKeys": [
+        {
+          "id": null,
+          "seq": null
+        }
+      ],
+      "indexes": [
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        },
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        },
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        },
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        }
+      ],
+      "rowCount": null,
+      "extractedAt": "2025-09-21T10:51:48.073Z"
+    },
+    "realtime_stats": {
+      "name": "realtime_stats",
+      "columns": [
+        {
+          "cid": 0,
+          "name": "id",
+          "type": "INTEGER",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": true
+        },
+        {
+          "cid": 1,
+          "name": "stat_key",
+          "type": "TEXT",
+          "notnull": true,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 2,
+          "name": "stat_category",
+          "type": "TEXT",
+          "notnull": true,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 3,
+          "name": "count_value",
+          "type": "INTEGER",
+          "notnull": false,
+          "default_value": "0",
+          "primary_key": false
+        },
+        {
+          "cid": 4,
+          "name": "percentage_value",
+          "type": "REAL",
+          "notnull": false,
+          "default_value": "0.0",
+          "primary_key": false
+        },
+        {
+          "cid": 5,
+          "name": "average_value",
+          "type": "REAL",
+          "notnull": false,
+          "default_value": "0.0",
+          "primary_key": false
+        },
+        {
+          "cid": 6,
+          "name": "median_value",
+          "type": "REAL",
+          "notnull": false,
+          "default_value": "0.0",
+          "primary_key": false
+        },
+        {
+          "cid": 7,
+          "name": "total_sample_size",
+          "type": "INTEGER",
+          "notnull": false,
+          "default_value": "0",
+          "primary_key": false
+        },
+        {
+          "cid": 8,
+          "name": "time_window",
+          "type": "TEXT",
+          "notnull": true,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 9,
+          "name": "window_start",
+          "type": "TEXT",
+          "notnull": true,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 10,
+          "name": "window_end",
+          "type": "TEXT",
+          "notnull": true,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 11,
+          "name": "data_source",
+          "type": "TEXT",
+          "notnull": true,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 12,
+          "name": "confidence_level",
+          "type": "REAL",
+          "notnull": false,
+          "default_value": "1.0",
+          "primary_key": false
+        },
+        {
+          "cid": 13,
+          "name": "margin_of_error",
+          "type": "REAL",
+          "notnull": false,
+          "default_value": "0.0",
+          "primary_key": false
+        },
+        {
+          "cid": 14,
+          "name": "last_updated",
+          "type": "TEXT",
+          "notnull": true,
+          "default_value": "datetime('now')",
+          "primary_key": false
+        },
+        {
+          "cid": 15,
+          "name": "update_frequency",
+          "type": "INTEGER",
+          "notnull": false,
+          "default_value": "300",
+          "primary_key": false
+        },
+        {
+          "cid": 16,
+          "name": "is_active",
+          "type": "INTEGER",
+          "notnull": false,
+          "default_value": "1",
+          "primary_key": false
+        }
+      ],
+      "foreignKeys": [],
+      "indexes": [
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        },
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        },
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        },
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        },
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        },
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        },
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        }
+      ],
+      "rowCount": null,
+      "extractedAt": "2025-09-21T10:51:57.403Z"
+    },
+    "reviews": {
+      "name": "reviews",
+      "columns": [
+        {
+          "cid": 0,
+          "name": "id",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": "lower(hex(randomblob(16)))",
+          "primary_key": true
+        },
+        {
+          "cid": 1,
+          "name": "questionnaire_id",
+          "type": "TEXT",
+          "notnull": true,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 2,
+          "name": "reviewer_id",
+          "type": "TEXT",
+          "notnull": true,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 3,
+          "name": "status",
+          "type": "TEXT",
+          "notnull": true,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 4,
+          "name": "comment",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 5,
+          "name": "created_at",
+          "type": "TEXT",
+          "notnull": true,
+          "default_value": "datetime('now')",
+          "primary_key": false
+        }
+      ],
+      "foreignKeys": [
+        {
+          "id": null,
+          "seq": null
+        },
+        {
+          "id": null,
+          "seq": null
+        }
+      ],
+      "indexes": [
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        },
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        },
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        },
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        },
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        }
+      ],
+      "rowCount": null,
+      "extractedAt": "2025-09-21T10:52:07.735Z"
+    },
+    "social_insights_data": {
+      "name": "social_insights_data",
+      "columns": [
+        {
+          "cid": 0,
+          "name": "id",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": true
+        },
+        {
+          "cid": 1,
+          "name": "response_id",
+          "type": "TEXT",
+          "notnull": true,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 2,
+          "name": "user_id",
+          "type": "TEXT",
+          "notnull": true,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 3,
+          "name": "employment_trend_score",
+          "type": "REAL",
+          "notnull": false,
+          "default_value": "0.0",
+          "primary_key": false
+        },
+        {
+          "cid": 4,
+          "name": "salary_satisfaction_score",
+          "type": "REAL",
+          "notnull": false,
+          "default_value": "0.0",
+          "primary_key": false
+        },
+        {
+          "cid": 5,
+          "name": "career_stability_score",
+          "type": "REAL",
+          "notnull": false,
+          "default_value": "0.0",
+          "primary_key": false
+        },
+        {
+          "cid": 6,
+          "name": "market_competitiveness_score",
+          "type": "REAL",
+          "notnull": false,
+          "default_value": "0.0",
+          "primary_key": false
+        },
+        {
+          "cid": 7,
+          "name": "skill_match_score",
+          "type": "REAL",
+          "notnull": false,
+          "default_value": "0.0",
+          "primary_key": false
+        },
+        {
+          "cid": 8,
+          "name": "sentiment_score",
+          "type": "REAL",
+          "notnull": false,
+          "default_value": "0.0",
+          "primary_key": false
+        },
+        {
+          "cid": 9,
+          "name": "key_concerns",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 10,
+          "name": "career_goals",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 11,
+          "name": "skill_gaps",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 12,
+          "name": "user_persona",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 13,
+          "name": "career_stage",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 14,
+          "name": "risk_category",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 15,
+          "name": "market_segment",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 16,
+          "name": "employment_probability",
+          "type": "REAL",
+          "notnull": false,
+          "default_value": "0.0",
+          "primary_key": false
+        },
+        {
+          "cid": 17,
+          "name": "salary_prediction_range",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 18,
+          "name": "career_success_indicators",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 19,
+          "name": "social_mobility_index",
+          "type": "REAL",
+          "notnull": false,
+          "default_value": "0.0",
+          "primary_key": false
+        },
+        {
+          "cid": 20,
+          "name": "economic_pressure_score",
+          "type": "REAL",
+          "notnull": false,
+          "default_value": "0.0",
+          "primary_key": false
+        },
+        {
+          "cid": 21,
+          "name": "policy_impact_score",
+          "type": "REAL",
+          "notnull": false,
+          "default_value": "0.0",
+          "primary_key": false
+        },
+        {
+          "cid": 22,
+          "name": "analysis_date",
+          "type": "TEXT",
+          "notnull": true,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 23,
+          "name": "trend_period",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": "'current'",
+          "primary_key": false
+        },
+        {
+          "cid": 24,
+          "name": "cohort_identifier",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 25,
+          "name": "confidence_level",
+          "type": "REAL",
+          "notnull": false,
+          "default_value": "0.0",
+          "primary_key": false
+        },
+        {
+          "cid": 26,
+          "name": "analysis_version",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": "'v1.0'",
+          "primary_key": false
+        },
+        {
+          "cid": 27,
+          "name": "is_test_data",
+          "type": "INTEGER",
+          "notnull": false,
+          "default_value": "0",
+          "primary_key": false
+        },
+        {
+          "cid": 28,
+          "name": "created_at",
+          "type": "TEXT",
+          "notnull": true,
+          "default_value": "datetime('now')",
+          "primary_key": false
+        },
+        {
+          "cid": 29,
+          "name": "updated_at",
+          "type": "TEXT",
+          "notnull": true,
+          "default_value": "datetime('now')",
+          "primary_key": false
+        }
+      ],
+      "foreignKeys": [
+        {
+          "id": null,
+          "seq": null
+        },
+        {
+          "id": null,
+          "seq": null
+        }
+      ],
+      "indexes": [
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        },
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        },
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        },
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        },
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        },
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        },
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        }
+      ],
+      "rowCount": null,
+      "extractedAt": "2025-09-21T10:52:16.649Z"
+    },
+    "system_logs": {
+      "name": "system_logs",
+      "columns": [
+        {
+          "cid": 0,
+          "name": "id",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": "lower(hex(randomblob(16)))",
+          "primary_key": true
+        },
+        {
+          "cid": 1,
+          "name": "user_id",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 2,
+          "name": "action",
+          "type": "TEXT",
+          "notnull": true,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 3,
+          "name": "resource_type",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 4,
+          "name": "resource_id",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 5,
+          "name": "details",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 6,
+          "name": "ip_address",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 7,
+          "name": "user_agent",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 8,
+          "name": "created_at",
+          "type": "TEXT",
+          "notnull": true,
+          "default_value": "datetime('now')",
+          "primary_key": false
+        }
+      ],
+      "foreignKeys": [
+        {
+          "id": null,
+          "seq": null
+        }
+      ],
+      "indexes": [
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        },
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        },
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        },
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        },
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        }
+      ],
+      "rowCount": null,
+      "extractedAt": "2025-09-21T10:52:26.175Z"
+    },
+    "universal_questionnaire_configs": {
+      "name": "universal_questionnaire_configs",
+      "columns": [
+        {
+          "cid": 0,
+          "name": "id",
+          "type": "INTEGER",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": true
+        },
+        {
+          "cid": 1,
+          "name": "questionnaire_id",
+          "type": "TEXT",
+          "notnull": true,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 2,
+          "name": "title",
+          "type": "TEXT",
+          "notnull": true,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 3,
+          "name": "description",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 4,
+          "name": "config_data",
+          "type": "TEXT",
+          "notnull": true,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 5,
+          "name": "status",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": "'draft'",
+          "primary_key": false
+        },
+        {
+          "cid": 6,
+          "name": "created_by",
+          "type": "INTEGER",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 7,
+          "name": "created_at",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": "CURRENT_TIMESTAMP",
+          "primary_key": false
+        },
+        {
+          "cid": 8,
+          "name": "updated_at",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": "CURRENT_TIMESTAMP",
+          "primary_key": false
+        }
+      ],
+      "foreignKeys": [
+        {
+          "id": null,
+          "seq": null
+        }
+      ],
+      "indexes": [
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        },
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        },
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        }
+      ],
+      "rowCount": null,
+      "extractedAt": "2025-09-21T10:52:35.486Z"
+    },
+    "universal_questionnaire_responses": {
+      "name": "universal_questionnaire_responses",
+      "columns": [
+        {
+          "cid": 0,
+          "name": "id",
+          "type": "INTEGER",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": true
+        },
+        {
+          "cid": 1,
+          "name": "questionnaire_id",
+          "type": "TEXT",
+          "notnull": true,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 2,
+          "name": "user_id",
+          "type": "INTEGER",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 3,
+          "name": "response_data",
+          "type": "TEXT",
+          "notnull": true,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 4,
+          "name": "submitted_at",
+          "type": "TEXT",
+          "notnull": true,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 5,
+          "name": "ip_address",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 6,
+          "name": "user_agent",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 7,
+          "name": "created_at",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": "CURRENT_TIMESTAMP",
+          "primary_key": false
+        },
+        {
+          "cid": 8,
+          "name": "updated_at",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": "CURRENT_TIMESTAMP",
+          "primary_key": false
+        }
+      ],
+      "foreignKeys": [
+        {
+          "id": null,
+          "seq": null
+        }
+      ],
+      "indexes": [
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        },
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        },
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        }
+      ],
+      "rowCount": null,
+      "extractedAt": "2025-09-21T10:52:45.746Z"
+    },
+    "universal_questionnaire_statistics": {
+      "name": "universal_questionnaire_statistics",
+      "columns": [
+        {
+          "cid": 0,
+          "name": "id",
+          "type": "INTEGER",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": true
+        },
+        {
+          "cid": 1,
+          "name": "questionnaire_id",
+          "type": "TEXT",
+          "notnull": true,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 2,
+          "name": "question_id",
+          "type": "TEXT",
+          "notnull": true,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 3,
+          "name": "statistics_data",
+          "type": "TEXT",
+          "notnull": true,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 4,
+          "name": "last_updated",
+          "type": "TEXT",
+          "notnull": true,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 5,
+          "name": "created_at",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": "CURRENT_TIMESTAMP",
+          "primary_key": false
+        }
+      ],
+      "foreignKeys": [],
+      "indexes": [
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        },
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        },
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        }
+      ],
+      "rowCount": null,
+      "extractedAt": "2025-09-21T10:52:54.626Z"
+    },
+    "universal_users": {
+      "name": "universal_users",
+      "columns": [
+        {
+          "cid": 0,
+          "name": "uuid",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": true
+        },
+        {
+          "cid": 1,
+          "name": "user_type",
+          "type": "TEXT",
+          "notnull": true,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 2,
+          "name": "identity_hash",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 3,
+          "name": "username",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 4,
+          "name": "password_hash",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 5,
+          "name": "display_name",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 6,
+          "name": "role",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 7,
+          "name": "permissions",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 8,
+          "name": "profile",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 9,
+          "name": "metadata",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 10,
+          "name": "status",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": "'active'",
+          "primary_key": false
+        },
+        {
+          "cid": 11,
+          "name": "created_at",
+          "type": "TEXT",
+          "notnull": true,
+          "default_value": "datetime('now')",
+          "primary_key": false
+        },
+        {
+          "cid": 12,
+          "name": "updated_at",
+          "type": "TEXT",
+          "notnull": true,
+          "default_value": "datetime('now')",
+          "primary_key": false
+        },
+        {
+          "cid": 13,
+          "name": "last_active_at",
+          "type": "TEXT",
+          "notnull": true,
+          "default_value": "datetime('now')",
+          "primary_key": false
+        }
+      ],
+      "foreignKeys": [],
+      "indexes": [
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        },
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        },
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        },
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        },
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        },
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        },
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        },
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        }
+      ],
+      "rowCount": null,
+      "extractedAt": "2025-09-21T10:53:04.563Z"
+    },
+    "user_content_mappings": {
+      "name": "user_content_mappings",
+      "columns": [
+        {
+          "cid": 0,
+          "name": "id",
+          "type": "INTEGER",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": true
+        },
+        {
+          "cid": 1,
+          "name": "user_uuid",
+          "type": "TEXT",
+          "notnull": true,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 2,
+          "name": "content_type",
+          "type": "TEXT",
+          "notnull": true,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 3,
+          "name": "content_id",
+          "type": "TEXT",
+          "notnull": true,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 4,
+          "name": "status",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": "'pending'",
+          "primary_key": false
+        },
+        {
+          "cid": 5,
+          "name": "metadata",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 6,
+          "name": "created_at",
+          "type": "TEXT",
+          "notnull": true,
+          "default_value": "datetime('now')",
+          "primary_key": false
+        },
+        {
+          "cid": 7,
+          "name": "updated_at",
+          "type": "TEXT",
+          "notnull": true,
+          "default_value": "datetime('now')",
+          "primary_key": false
+        }
+      ],
+      "foreignKeys": [
+        {
+          "id": null,
+          "seq": null
+        }
+      ],
+      "indexes": [
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        },
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        },
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        },
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        }
+      ],
+      "rowCount": null,
+      "extractedAt": "2025-09-21T10:53:13.502Z"
+    },
+    "user_questionnaire_heart_voice_mapping": {
+      "name": "user_questionnaire_heart_voice_mapping",
+      "columns": [
+        {
+          "cid": 0,
+          "name": "id",
+          "type": "INTEGER",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": true
+        },
+        {
+          "cid": 1,
+          "name": "user_id",
+          "type": "TEXT",
+          "notnull": true,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 2,
+          "name": "questionnaire_response_id",
+          "type": "INTEGER",
+          "notnull": true,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 3,
+          "name": "heart_voice_id",
+          "type": "INTEGER",
+          "notnull": true,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 4,
+          "name": "created_at",
+          "type": "DATETIME",
+          "notnull": false,
+          "default_value": "CURRENT_TIMESTAMP",
+          "primary_key": false
+        }
+      ],
+      "foreignKeys": [
+        {
+          "id": null,
+          "seq": null
+        },
+        {
+          "id": null,
+          "seq": null
+        }
+      ],
+      "indexes": [
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        },
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        },
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        },
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        }
+      ],
+      "rowCount": null,
+      "extractedAt": "2025-09-21T10:53:22.401Z"
+    },
+    "user_sessions": {
+      "name": "user_sessions",
+      "columns": [
+        {
+          "cid": 0,
+          "name": "session_id",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": true
+        },
+        {
+          "cid": 1,
+          "name": "user_uuid",
+          "type": "TEXT",
+          "notnull": true,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 2,
+          "name": "session_token",
+          "type": "TEXT",
+          "notnull": true,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 3,
+          "name": "device_fingerprint",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 4,
+          "name": "ip_address",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 5,
+          "name": "user_agent",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 6,
+          "name": "device_info",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 7,
+          "name": "expires_at",
+          "type": "TEXT",
+          "notnull": true,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 8,
+          "name": "is_active",
+          "type": "INTEGER",
+          "notnull": false,
+          "default_value": "1",
+          "primary_key": false
+        },
+        {
+          "cid": 9,
+          "name": "created_at",
+          "type": "TEXT",
+          "notnull": true,
+          "default_value": "datetime('now')",
+          "primary_key": false
+        },
+        {
+          "cid": 10,
+          "name": "updated_at",
+          "type": "TEXT",
+          "notnull": true,
+          "default_value": "datetime('now')",
+          "primary_key": false
+        }
+      ],
+      "foreignKeys": [
+        {
+          "id": null,
+          "seq": null
+        }
+      ],
+      "indexes": [
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        },
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        },
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        },
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        },
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        },
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        }
+      ],
+      "rowCount": null,
+      "extractedAt": "2025-09-21T10:53:30.977Z"
+    },
+    "user_statistics_cache": {
+      "name": "user_statistics_cache",
+      "columns": [
+        {
+          "cid": 0,
+          "name": "id",
+          "type": "INTEGER",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": true
+        },
+        {
+          "cid": 1,
+          "name": "stat_date",
+          "type": "DATE",
+          "notnull": true,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 2,
+          "name": "user_type",
+          "type": "TEXT",
+          "notnull": true,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 3,
+          "name": "metric_name",
+          "type": "TEXT",
+          "notnull": true,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 4,
+          "name": "metric_value",
+          "type": "INTEGER",
+          "notnull": true,
+          "default_value": "0",
+          "primary_key": false
+        },
+        {
+          "cid": 5,
+          "name": "metadata",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 6,
+          "name": "created_at",
+          "type": "TEXT",
+          "notnull": true,
+          "default_value": "datetime('now')",
+          "primary_key": false
+        },
+        {
+          "cid": 7,
+          "name": "updated_at",
+          "type": "TEXT",
+          "notnull": true,
+          "default_value": "datetime('now')",
+          "primary_key": false
+        }
+      ],
+      "foreignKeys": [],
+      "indexes": [
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        },
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        },
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        },
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        }
+      ],
+      "rowCount": null,
+      "extractedAt": "2025-09-21T10:53:40.462Z"
+    },
+    "users": {
+      "name": "users",
+      "columns": [
+        {
+          "cid": 0,
+          "name": "id",
+          "type": "TEXT",
+          "notnull": false,
+          "default_value": "lower(hex(randomblob(16)))",
+          "primary_key": true
+        },
+        {
+          "cid": 1,
+          "name": "username",
+          "type": "TEXT",
+          "notnull": true,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 2,
+          "name": "email",
+          "type": "TEXT",
+          "notnull": true,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 3,
+          "name": "password_hash",
+          "type": "TEXT",
+          "notnull": true,
+          "default_value": null,
+          "primary_key": false
+        },
+        {
+          "cid": 4,
+          "name": "role",
+          "type": "TEXT",
+          "notnull": true,
+          "default_value": "'user'",
+          "primary_key": false
+        },
+        {
+          "cid": 5,
+          "name": "created_at",
+          "type": "TEXT",
+          "notnull": true,
+          "default_value": "datetime('now')",
+          "primary_key": false
+        },
+        {
+          "cid": 6,
+          "name": "updated_at",
+          "type": "TEXT",
+          "notnull": true,
+          "default_value": "datetime('now')",
+          "primary_key": false
+        }
+      ],
+      "foreignKeys": [],
+      "indexes": [
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        },
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        },
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        },
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        },
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        },
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        },
+        {
+          "seq": null,
+          "unique": false,
+          "partial": false
+        }
+      ],
+      "rowCount": null,
+      "extractedAt": "2025-09-21T10:53:49.969Z"
+    }
+  },
+  "summary": {
+    "tableCount": 35,
+    "totalRows": null
+  }
+}

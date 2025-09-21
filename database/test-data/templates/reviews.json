@@ -1,0 +1,7 @@
+{
+  "tableName": "reviews",
+  "dataDistributions": {},
+  "customGenerators": {},
+  "relationships": {},
+  "constraints": {}
+}

@@ -23,7 +23,29 @@
     "clean": "pnpm --filter frontend clean && pnpm --filter backend clean",
     "db:create": "pnpm --filter backend db:create",
     "db:migrate": "pnpm --filter backend db:migrate",
-    "db:seed": "pnpm --filter backend db:seed"
+    "db:seed": "pnpm --filter backend db:seed",
+
+    "db:extract": "node database/tools/schema-extractor.cjs",
+    "db:validate": "node database/tools/schema-validator.cjs",
+    "db:sync": "node -e \"const {SchemaSyncer} = require('./database/tools/schema-validator.cjs'); new SchemaSyncer().syncToLocal()\"",
+    "db:generate-data": "node database/tools/data-generator.cjs",
+    "db:generate-data:small": "node -e \"const {DataGenerator} = require('./database/tools/data-generator.cjs'); new DataGenerator().generateTestData({recordCount: 10})\"",
+    "db:generate-data:large": "node -e \"const {DataGenerator} = require('./database/tools/data-generator.cjs'); new DataGenerator().generateTestData({recordCount: 1000})\"",
+    "db:pre-deploy-check": "npm run db:extract && npm run db:validate",
+    "db:post-deploy-validate": "npm run db:extract && npm run db:validate",
+    "db:full-sync": "npm run db:extract && npm run db:sync && npm run db:generate-data",
+    "db:validate-integrity": "node database/tools/data-integrity-validator.cjs",
+    "api:audit": "node database/tools/api-endpoint-auditor.cjs",
+    "api:audit-global": "node database/tools/global-api-endpoint-auditor.cjs",
+    "data:validate-mapping": "node -e \"const { validateMappingConfig } = require('./frontend/src/config/unifiedDataMapping.ts'); console.log(validateMappingConfig());\"",
+
+    "data:import": "cd database/test-data/generated && ./import.sh",
+    "data:clean": "wrangler d1 execute college-employment-survey --remote --command=\"DELETE FROM analytics_responses WHERE is_test_data = 1; DELETE FROM universal_questionnaire_responses WHERE response_data LIKE '%test_user_identifier%'; DELETE FROM users WHERE id LIKE 'test_%';\" --yes",
+    "data:status": "wrangler d1 execute college-employment-survey --remote --command=\"SELECT 'users' as table_name, COUNT(*) as count FROM users UNION ALL SELECT 'questionnaires', COUNT(*) FROM universal_questionnaire_responses UNION ALL SELECT 'analytics', COUNT(*) FROM analytics_responses;\"",
+
+    "workflow:setup": "npm run db:extract && npm run db:sync && npm run db:generate-data",
+    "workflow:deploy": "npm run db:pre-deploy-check && npm run build && npm run deploy && npm run db:post-deploy-validate",
+    "workflow:test-data": "npm run data:clean && npm run db:generate-data && npm run data:import && npm run data:status"
   },
   "workspaces": [
     "frontend",

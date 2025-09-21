@@ -261,21 +261,7 @@ async function getUserContentList(db: any, params: ContentFilterParams) {
     WHERE 1=1
   `;
 
-  // 添加心声数据
-  baseQuery += `
-    UNION ALL
-    SELECT 
-      'heart_voice' as content_type,
-      id as content_id,
-      user_id,
-      COALESCE(ip_address, '') as ip_address,
-      content,
-      SUBSTR(content, 1, 100) as content_summary,
-      created_at as submitted_at,
-      'active' as status
-    FROM valid_heart_voices
-    WHERE audit_status = 'approved'
-  `;
+
 
   // 添加故事数据
   baseQuery += `
@@ -380,24 +366,7 @@ async function searchUsersByContent(db: any, keyword: string, contentType?: Cont
     allResults.push(...(Array.isArray(questionnaireResults) ? questionnaireResults : (questionnaireResults as any).results || []));
   }
 
-  // 搜索心声
-  if (!contentType || contentType === ContentType.HEART_VOICE) {
-    const heartVoiceQuery = `
-      SELECT 
-        'heart_voice' as content_type,
-        id as content_id,
-        user_id,
-        content,
-        created_at as submitted_at,
-        ip_address
-      FROM valid_heart_voices
-      WHERE content ${operator} ? AND audit_status = 'approved'
-      ORDER BY created_at DESC
-      LIMIT 50
-    `;
-    const heartVoiceResults = await db.query(heartVoiceQuery, [searchPattern]);
-    allResults.push(...(Array.isArray(heartVoiceResults) ? heartVoiceResults : (heartVoiceResults as any).results || []));
-  }
+
 
   // 搜索故事
   if (!contentType || contentType === ContentType.STORY) {

@@ -130,12 +130,7 @@ const InternalFloatingStatusBar: React.FC = () => {
       label: '查看我的内容',
       onClick: handleViewContent
     },
-    {
-      key: 'publish-voice',
-      icon: <HeartOutlined />,
-      label: '发布心声',
-      onClick: () => handleQuickPublish('voice')
-    },
+
     {
       key: 'publish-story',
       icon: <FileTextOutlined />,

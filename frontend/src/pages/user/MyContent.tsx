@@ -41,7 +41,6 @@ interface ContentItem {
 const MyContent: React.FC = () => {
   const { currentUser, isAuthenticated } = useAuth();
   const [loading, setLoading] = useState<boolean>(true);
-  const [heartVoices, setHeartVoices] = useState<ContentItem[]>([]);
   const [stories, setStories] = useState<ContentItem[]>([]);
   const [searchText, setSearchText] = useState<string>('');
   const [selectedContent, setSelectedContent] = useState<ContentItem | null>(null);
@@ -73,11 +72,9 @@ const MyContent: React.FC = () => {
 
       if (response.ok) {
         const data = await response.json();
-        setHeartVoices(data.heartVoices || []);
         setStories(data.stories || []);
       } else {
         // API未配置或失败时显示空数据
-        setHeartVoices([]);
         setStories([]);
         message.warning('用户内容API未配置，请联系管理员');
       }
@@ -302,31 +299,7 @@ const MyContent: React.FC = () => {
         </div>
         
         <Spin spinning={loading}>
-          <Tabs defaultActiveKey="heart_voices">
-            <TabPane 
-              tab={
-                <span>
-                  <HeartOutlined />
-                  问卷心声 ({heartVoices.length})
-                </span>
-              } 
-              key="heart_voices"
-            >
-              <Table
-                columns={getColumns('heart_voice')}
-                dataSource={filterContent(heartVoices)}
-                rowKey="id"
-                pagination={{
-                  pageSize: 10,
-                  showSizeChanger: true,
-                  showQuickJumper: true,
-                  showTotal: (total) => `共 ${total} 条`
-                }}
-                locale={{
-                  emptyText: <Empty description="暂无问卷心声" />
-                }}
-              />
-            </TabPane>
+          <Tabs defaultActiveKey="stories">
             
             <TabPane 
               tab={

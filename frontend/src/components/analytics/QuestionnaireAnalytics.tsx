@@ -15,6 +15,29 @@ interface QuestionnaireData {
 
 const COLORS = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#06b6d4'];
 
+// 标签转换函数
+const getEducationLabel = (key: string): string => {
+  const labels: Record<string, string> = {
+    'high-school': '高中/中专及以下',
+    'junior-college': '大专',
+    'bachelor': '本科',
+    'master': '硕士研究生',
+    'phd': '博士研究生'
+  };
+  return labels[key] || key;
+};
+
+const getEmploymentStatusLabel = (key: string): string => {
+  const labels: Record<string, string> = {
+    'employed': '全职工作',
+    'unemployed': '失业/求职中',
+    'student': '在校学生',
+    'preparing': '备考/进修',
+    'other': '自由职业'
+  };
+  return labels[key] || key;
+};
+
 export default function QuestionnaireAnalytics() {
   const [data, setData] = useState<QuestionnaireData | null>(null);
   const [loading, setLoading] = useState(true);
@@ -26,16 +49,43 @@ export default function QuestionnaireAnalytics() {
   const fetchQuestionnaireData = async () => {
     try {
       setLoading(true);
-      const response = await fetch('/api/analytics/real-data');
+
+      // 使用正确的统计API端点
+      const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || 'https://employment-survey-api-prod.chrismarker89.workers.dev';
+      const response = await fetch(`${apiBaseUrl}/api/universal-questionnaire/statistics/employment-survey-2024?include_test_data=true`);
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
+
       const result = await response.json();
-      
+
       if (result.success) {
-        setData(result.data);
+        // 转换API数据格式为组件所需格式
+        const apiData = result.data;
+        const transformedData: QuestionnaireData = {
+          totalResponses: apiData.totalResponses || 0,
+          hasData: true,
+          educationDistribution: (apiData.educationLevel || []).map((item: any) => ({
+            label: getEducationLabel(item.name),
+            value: item.value,
+            percentage: item.percentage
+          })),
+          majorDistribution: [], // API暂未提供专业分布
+          employmentStatusDistribution: (apiData.employmentStatus || []).map((item: any) => ({
+            label: getEmploymentStatusLabel(item.name),
+            value: item.value,
+            percentage: item.percentage
+          })),
+          lastUpdated: apiData.cacheInfo?.lastUpdated || new Date().toISOString()
+        };
+        setData(transformedData);
       } else {
-        console.error('Failed to fetch questionnaire data:', result.message);
+        throw new Error(result.message || '获取数据失败');
       }
     } catch (error) {
       console.error('Error fetching questionnaire data:', error);
+      setData(null);
     } finally {
       setLoading(false);
     }

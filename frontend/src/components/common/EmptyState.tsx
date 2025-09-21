@@ -36,12 +36,7 @@ const DEFAULT_CONFIGS = {
     description: '还没有用户提交问卷。您可以：\n• 等待用户自然参与\n• 使用测试数据生成工具\n• 分享问卷链接给更多用户',
     actionText: '生成测试数据'
   },
-  heartVoices: {
-    icon: <HeartOutlined style={{ fontSize: 64, color: '#f5222d' }} />,
-    title: '暂无心声数据',
-    description: '还没有用户发布心声。鼓励用户：\n• 分享就业感受和心路历程\n• 表达对未来的期望\n• 记录求职过程中的感悟',
-    actionText: '查看发布指南'
-  },
+
   stories: {
     icon: <BookOutlined style={{ fontSize: 64, color: '#52c41a' }} />,
     title: '暂无故事数据',
@@ -132,9 +127,7 @@ export const QuestionnaireEmptyState: React.FC<Partial<EmptyStateProps>> = (prop
   <EmptyState type="questionnaires" {...props} />
 );
 
-export const HeartVoiceEmptyState: React.FC<Partial<EmptyStateProps>> = (props) => (
-  <EmptyState type="heartVoices" {...props} />
-);
+
 
 export const StoryEmptyState: React.FC<Partial<EmptyStateProps>> = (props) => (
   <EmptyState type="stories" {...props} />

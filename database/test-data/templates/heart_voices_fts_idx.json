@@ -1,0 +1,7 @@
+{
+  "tableName": "heart_voices_fts_idx",
+  "dataDistributions": {},
+  "customGenerators": {},
+  "relationships": {},
+  "constraints": {}
+}

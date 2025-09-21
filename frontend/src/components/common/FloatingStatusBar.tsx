@@ -18,7 +18,7 @@ import {
 } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import { useUniversalAuthStore } from '../../stores/universalAuthStore';
-import { heartVoiceService } from '../../services/heartVoiceService';
+
 import { storyService } from '../../services/storyService';
 import styles from './FloatingStatusBar.module.css';
 
@@ -109,21 +109,13 @@ export const FloatingStatusBar: React.FC = () => {
     setContentLoading(true);
     try {
       let result;
-      if (type === 'voices') {
-        result = await heartVoiceService.getUserHeartVoices(currentUser.id, {
-          page: 1,
-          pageSize: 10,
-          sortBy: 'created_at',
-          sortOrder: 'desc'
-        });
-      } else {
+      if (type === 'stories') {
         result = await storyService.getUserStories(currentUser.id, {
           page: 1,
           pageSize: 10,
           sortBy: 'created_at',
           sortOrder: 'desc'
         });
-      }
 
       if (result.success && result.data) {
         setUserContent(result.data.items || result.data.voices || result.data.stories || []);
@@ -164,33 +156,9 @@ export const FloatingStatusBar: React.FC = () => {
 
     setButtonState('loading');
     try {
-      if (publishType === 'voice') {
-        // 发布心声
-        const heartVoiceData = {
-          content: values.content,
-          category: values.category || 'employment-feedback',
-          emotion_score: values.emotionScore || 3,
-          tags: values.tags || [],
-          is_anonymous: values.isAnonymous !== false,
-          user_id: currentUser.id
-        };
-
-        const result = await heartVoiceService.createHeartVoice(heartVoiceData);
-        if (result.success) {
-          setButtonState('success');
-          message.success('心声发布成功！等待审核后将会展示');
-          setShowQuickPublish(false);
-          publishForm.resetFields();
-          setTimeout(() => setButtonState('normal'), 2000);
-        } else {
-          setButtonState('error');
-          message.error('发布失败: ' + result.error);
-          setTimeout(() => setButtonState('normal'), 2000);
-        }
-      } else {
-        // 发布故事
-        const storyData = {
-          title: values.title,
+      // 发布故事
+      const storyData = {
+        title: values.title,
           content: values.content,
           summary: values.summary || values.content.substring(0, 200) + '...',
           category: values.category || 'employment-experience',
@@ -238,12 +206,7 @@ export const FloatingStatusBar: React.FC = () => {
       icon: <FileTextOutlined />,
       label: '查看我的内容',
       children: [
-        {
-          key: 'my-voices',
-          icon: <HeartOutlined />,
-          label: '我的问卷心声',
-          onClick: () => handleViewContent('voices')
-        },
+
         {
           key: 'my-stories',
           icon: <FileTextOutlined />,
@@ -253,12 +216,7 @@ export const FloatingStatusBar: React.FC = () => {
         {
           type: 'divider'
         },
-        {
-          key: 'goto-voices',
-          icon: <EyeOutlined />,
-          label: '浏览所有心声',
-          onClick: () => navigate('/voices')
-        },
+
         {
           key: 'goto-stories',
           icon: <EyeOutlined />,

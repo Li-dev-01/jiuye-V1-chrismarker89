@@ -203,31 +203,46 @@ export function createParticipationStatsRoutes() {
     try {
       const db = createDatabaseService(c.env as Env);
 
-      // 直接查询数据库获取简单统计
-      const [questionnaireCount, storyCount, voiceCount] = await Promise.all([
-        db.queryFirst(`
-          SELECT
-            COUNT(DISTINCT COALESCE(user_uuid, session_id, id)) as participants,
-            COUNT(*) as responses
-          FROM universal_questionnaire_responses
-        `),
-        db.queryFirst(`SELECT COUNT(*) as published FROM valid_stories`),
-        db.queryFirst(`SELECT COUNT(*) as published FROM valid_heart_voices`)
-      ]);
+      // 查询问卷统计 - 使用analytics_responses表获取准确数据
+      const questionnaireStats = await db.queryFirst(`
+        SELECT
+          COUNT(DISTINCT user_id) as participants,
+          COUNT(*) as responses
+        FROM analytics_responses
+      `);
+
+      // 查询心声统计
+      const voiceStats = await db.queryFirst(`
+        SELECT COUNT(*) as published
+        FROM questionnaire_heart_voices
+      `);
+
+      // 查询故事统计 - 使用reviews表，如果失败则返回0
+      let storyStats;
+      try {
+        storyStats = await db.queryFirst(`
+          SELECT COUNT(*) as published
+          FROM reviews
+          WHERE content_type = 'story' AND status = 'approved'
+        `);
+      } catch (error) {
+        console.log('Reviews表查询失败，使用默认值');
+        storyStats = { published: 0 };
+      }
 
       return c.json({
         success: true,
         data: {
           questionnaire: {
-            participantCount: questionnaireCount?.participants || 0,
-            totalResponses: questionnaireCount?.responses || 0
+            participantCount: questionnaireStats?.participants || 0,
+            totalResponses: questionnaireStats?.responses || 0
           },
           stories: {
-            publishedCount: storyCount?.published || 0,
+            publishedCount: storyStats?.published || 0,
             authorCount: 0
           },
           voices: {
-            publishedCount: voiceCount?.published || 0,
+            publishedCount: voiceStats?.published || 0,
             authorCount: 0
           },
           lastUpdated: new Date().toISOString()
@@ -237,10 +252,11 @@ export function createParticipationStatsRoutes() {
 
     } catch (error) {
       console.error('获取简化统计失败:', error);
+      console.error('错误详情:', error);
       return c.json({
         success: false,
         error: 'Internal Server Error',
-        message: '获取简化统计失败'
+        message: `获取简化统计失败: ${error instanceof Error ? error.message : 'Unknown error'}`
       }, 500);
     }
   });
