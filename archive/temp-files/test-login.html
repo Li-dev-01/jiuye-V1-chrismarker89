@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登录测试</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .success { background-color: #d4edda; border-color: #c3e6cb; }
+        .error { background-color: #f8d7da; border-color: #f5c6cb; }
+        button {
+            padding: 10px 15px;
+            margin: 5px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        .btn-primary { background-color: #007bff; color: white; }
+        .btn-success { background-color: #28a745; color: white; }
+        .btn-danger { background-color: #dc3545; color: white; }
+        #results {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔐 管理员登录测试</h1>
+    
+    <div class="test-section">
+        <h3>📋 预置账号测试</h3>
+        <p>测试所有预置账号的登录功能</p>
+        <button class="btn-primary" onclick="testAccount('admin1', 'admin123', 'admin')">
+            👑 测试管理员账号
+        </button>
+        <button class="btn-primary" onclick="testAccount('superadmin', 'admin123', 'super_admin')">
+            🛡️ 测试超级管理员账号
+        </button>
+        <button class="btn-primary" onclick="testAccount('reviewerA', 'admin123', 'reviewer')">
+            👥 测试审核员账号
+        </button>
+    </div>
+
+    <div class="test-section">
+        <h3>🌐 前端API测试</h3>
+        <p>测试前端到后端的API连接</p>
+        <button class="btn-success" onclick="testFrontendAPI()">
+            🔗 测试前端API连接
+        </button>
+        <button class="btn-success" onclick="testHealthCheck()">
+            ❤️ 健康检查
+        </button>
+    </div>
+
+    <div class="test-section">
+        <h3>🎯 一键登录模拟</h3>
+        <p>模拟前端一键登录流程</p>
+        <button class="btn-danger" onclick="simulateQuickLogin()">
+            ⚡ 模拟一键登录
+        </button>
+    </div>
+
+    <div id="results">
+        <h4>📊 测试结果</h4>
+        <div id="log"></div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:8787/api';
+        const FRONTEND_BASE = 'http://localhost:5173';
+
+        function log(message, type = 'info') {
+            const logDiv = document.getElementById('log');
+            const timestamp = new Date().toLocaleTimeString();
+            const color = type === 'success' ? 'green' : type === 'error' ? 'red' : 'black';
+            logDiv.innerHTML += `<div style="color: ${color}; margin: 5px 0;">
+                [${timestamp}] ${message}
+            </div>`;
+            logDiv.scrollTop = logDiv.scrollHeight;
+        }
+
+        async function testAccount(username, password, userType) {
+            log(`🔄 测试账号: ${username} (${userType})`);
+            
+            try {
+                const response = await fetch(`${API_BASE}/uuid/auth/admin`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        username,
+                        password,
+                        userType
+                    })
+                });
+
+                const data = await response.json();
+                
+                if (data.success) {
+                    log(`✅ ${username} 登录成功! 用户类型: ${data.data.user.userType}`, 'success');
+                } else {
+                    log(`❌ ${username} 登录失败: ${data.error}`, 'error');
+                }
+            } catch (error) {
+                log(`❌ ${username} 请求失败: ${error.message}`, 'error');
+            }
+        }
+
+        async function testHealthCheck() {
+            log('🔄 执行健康检查...');
+            
+            try {
+                const response = await fetch(`${API_BASE.replace('/api', '')}/health`);
+                const data = await response.json();
+                
+                if (data.success) {
+                    log(`✅ 后端服务正常: ${data.data.status}`, 'success');
+                } else {
+                    log(`❌ 后端服务异常`, 'error');
+                }
+            } catch (error) {
+                log(`❌ 健康检查失败: ${error.message}`, 'error');
+            }
+        }
+
+        async function testFrontendAPI() {
+            log('🔄 测试前端API连接...');
+            
+            try {
+                const response = await fetch(FRONTEND_BASE);
+                if (response.ok) {
+                    log(`✅ 前端服务正常 (${response.status})`, 'success');
+                } else {
+                    log(`❌ 前端服务异常 (${response.status})`, 'error');
+                }
+            } catch (error) {
+                log(`❌ 前端连接失败: ${error.message}`, 'error');
+            }
+        }
+
+        async function simulateQuickLogin() {
+            log('🔄 模拟一键登录流程...');
+            
+            // 模拟前端一键登录的步骤
+            const account = {
+                username: 'admin1',
+                password: 'admin123',
+                userType: 'admin',
+                name: '管理员'
+            };
+
+            log(`📝 步骤1: 填充表单 - ${account.name}`);
+            log(`🔐 步骤2: 调用登录API...`);
+            
+            try {
+                const response = await fetch(`${API_BASE}/uuid/auth/admin`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        username: account.username,
+                        password: account.password,
+                        userType: account.userType
+                    })
+                });
+
+                const data = await response.json();
+                
+                if (data.success) {
+                    log(`✅ 步骤3: 登录成功!`, 'success');
+                    log(`👤 用户信息: ${data.data.user.display_name} (${data.data.user.userType})`, 'success');
+                    log(`🎯 步骤4: 应该跳转到 /admin`, 'success');
+                } else {
+                    log(`❌ 步骤3: 登录失败 - ${data.error}`, 'error');
+                }
+            } catch (error) {
+                log(`❌ 模拟登录失败: ${error.message}`, 'error');
+            }
+        }
+
+        // 页面加载时自动执行健康检查
+        window.onload = function() {
+            log('🚀 登录测试页面已加载');
+            testHealthCheck();
+        };
+    </script>
+</body>
+</html>

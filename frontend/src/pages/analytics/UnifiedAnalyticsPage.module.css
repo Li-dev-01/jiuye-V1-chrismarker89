@@ -1,0 +1,244 @@
+/* UnifiedAnalyticsPage 样式 */
+
+.unifiedAnalytics {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  padding: 24px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
+  background: white;
+  padding: 24px;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.headerContent h2 {
+  margin: 0 0 8px 0;
+  color: #1890ff;
+  font-size: 28px;
+  font-weight: 600;
+}
+
+.headerContent p {
+  margin: 0;
+  color: #666;
+  font-size: 16px;
+}
+
+.mainCard {
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border: none;
+}
+
+.mainTabs {
+  margin-bottom: 0;
+}
+
+.mainTabs .ant-tabs-nav {
+  margin-bottom: 0;
+  background: #fafafa;
+  border-radius: 8px 8px 0 0;
+  padding: 8px 16px 0;
+}
+
+.mainTabs .ant-tabs-tab {
+  border-radius: 8px 8px 0 0;
+  border: none;
+  background: transparent;
+  margin-right: 4px;
+}
+
+.mainTabs .ant-tabs-tab-active {
+  background: white;
+  border-bottom: 2px solid #1890ff;
+}
+
+.mainTabs .ant-tabs-tab:hover {
+  background: rgba(24, 144, 255, 0.1);
+}
+
+.tabContent {
+  min-height: 600px;
+  padding: 24px;
+  background: white;
+  border-radius: 0 0 8px 8px;
+}
+
+/* 综合概览样式 */
+.overviewContent {
+  padding: 0;
+}
+
+.tabGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+  margin-top: 24px;
+}
+
+.tabCard {
+  border-radius: 12px;
+  border: 2px solid #f0f0f0;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.tabCard:hover {
+  border-color: #1890ff;
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(24, 144, 255, 0.2);
+}
+
+.tabCardContent {
+  text-align: center;
+  padding: 16px;
+}
+
+.tabIcon {
+  font-size: 48px;
+  color: #1890ff;
+  margin-bottom: 16px;
+}
+
+.tabCard h4 {
+  margin: 0 0 12px 0;
+  color: #262626;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.tabCard p {
+  margin: 0;
+  color: #8c8c8c;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* 加载状态样式 */
+.loadingContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  color: #666;
+}
+
+.loadingContainer p {
+  margin-top: 16px;
+  font-size: 16px;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .unifiedAnalytics {
+    padding: 16px;
+  }
+  
+  .header {
+    flex-direction: column;
+    gap: 16px;
+    align-items: stretch;
+  }
+  
+  .headerContent h2 {
+    font-size: 24px;
+  }
+  
+  .tabGrid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  
+  .tabContent {
+    padding: 16px;
+  }
+  
+  .mainTabs .ant-tabs-nav {
+    padding: 4px 8px 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .headerContent h2 {
+    font-size: 20px;
+  }
+  
+  .headerContent p {
+    font-size: 14px;
+  }
+  
+  .tabIcon {
+    font-size: 36px;
+  }
+  
+  .tabCard h4 {
+    font-size: 16px;
+  }
+  
+  .tabCard p {
+    font-size: 13px;
+  }
+}
+
+/* Tab内容区域的通用样式 */
+.tabContent :global(.ant-card) {
+  border-radius: 8px;
+  margin-bottom: 16px;
+}
+
+.tabContent :global(.ant-statistic-title) {
+  color: #666;
+  font-size: 14px;
+}
+
+.tabContent :global(.ant-statistic-content) {
+  color: #262626;
+  font-weight: 600;
+}
+
+/* 确保子组件样式不冲突 */
+.tabContent > div {
+  width: 100%;
+}
+
+/* 动画效果 */
+.tabContent {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 滚动条样式 */
+.tabContent::-webkit-scrollbar {
+  width: 6px;
+}
+
+.tabContent::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.tabContent::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+
+.tabContent::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}

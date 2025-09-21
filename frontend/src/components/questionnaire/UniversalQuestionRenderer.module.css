@@ -1,0 +1,388 @@
+/* UniversalQuestionRenderer 样式 - 使用统一设计系统 */
+
+.questionCard {
+  background: var(--gray-50);
+  border: 1px solid var(--border-secondary);
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-lg);
+  transition: all var(--duration-base) var(--ease-out);
+}
+
+.questionCard:hover {
+  border-color: var(--primary-500);
+  box-shadow: var(--shadow-lg);
+}
+
+.questionHeader {
+  margin-bottom: var(--spacing-md);
+}
+
+.questionTitle {
+  margin-bottom: var(--spacing-2) !important;
+  color: var(--text-primary);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-medium);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-1);
+}
+
+.questionNumber {
+  color: var(--primary-500);
+  font-weight: var(--font-weight-semibold);
+}
+
+.required {
+  color: var(--error-color);
+  font-size: var(--font-size-base);
+  margin-left: var(--spacing-1);
+}
+
+.questionDescription {
+  display: block;
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-base);
+  margin-bottom: var(--spacing-md);
+}
+
+.inputContainer {
+  margin-bottom: 20px;
+}
+
+/* 标签选项容器 */
+.tagOptionsContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 16px;
+  align-items: flex-start;
+}
+
+/* 标签选项样式 */
+.tagOption {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 24px;
+  background: #fafafa;
+  border: 2px solid #e8e8e8;
+  border-radius: 28px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 14px;
+  font-weight: 500;
+  color: #666;
+  min-height: 48px;
+  text-align: center;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  word-break: break-word;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+  line-height: 1.5;
+  white-space: normal;
+  flex: 0 1 auto;
+  min-width: 120px;
+  max-width: 300px;
+}
+
+.tagOption:hover {
+  border-color: #1890ff;
+  background: #f6f9ff;
+  color: #1890ff;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(24, 144, 255, 0.2);
+}
+
+.tagOption:active {
+  transform: translateY(0);
+}
+
+.tagOptionSelected {
+  background: #1890ff;
+  border-color: #1890ff;
+  color: white;
+  box-shadow: 0 2px 8px rgba(24, 144, 255, 0.3);
+}
+
+.tagOptionSelected:hover {
+  background: #40a9ff;
+  border-color: #40a9ff;
+  color: white;
+}
+
+/* 下拉选择样式 */
+.select {
+  width: 100%;
+}
+
+/* 文本输入样式 */
+.textInput,
+.emailInput {
+  width: 100%;
+}
+
+.textarea {
+  width: 100%;
+  resize: vertical;
+}
+
+.numberInput {
+  width: 100%;
+}
+
+.datePicker {
+  width: 100%;
+}
+
+/* 评分组件样式 */
+.ratingContainer {
+  text-align: center;
+  padding: 16px 0;
+}
+
+.rating {
+  font-size: 24px;
+  margin-bottom: 12px;
+}
+
+.ratingLabels {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 8px;
+}
+
+.ratingLabel {
+  font-size: 12px;
+  color: #64748b;
+}
+
+/* 滑块组件样式 */
+.sliderContainer {
+  padding: 16px 0;
+}
+
+.slider {
+  margin-bottom: 16px;
+}
+
+.sliderValue {
+  text-align: center;
+  display: block;
+  color: #1890ff;
+  font-weight: 500;
+}
+
+/* 文件上传样式 */
+.upload {
+  width: 100%;
+}
+
+.uploadButton {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 32px;
+  border: 2px dashed #d9d9d9;
+  border-radius: 8px;
+  background: #fafafa;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.uploadButton:hover {
+  border-color: #1890ff;
+  background: #f6f9ff;
+}
+
+/* 错误提示样式 */
+.errorAlert {
+  margin-top: 12px;
+  border-radius: 8px;
+}
+
+/* 统计面板样式 */
+.statisticsPanel {
+  margin-top: 20px;
+  padding: 16px;
+  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+  border: 1px solid #bae6fd;
+  border-radius: 8px;
+}
+
+.statisticsHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.statisticsTitle {
+  font-weight: 600;
+  color: #0369a1;
+  margin: 0;
+  font-size: 13px;
+}
+
+.cacheInfo {
+  font-size: 11px;
+  color: #64748b;
+  background: rgba(255, 255, 255, 0.7);
+  padding: 2px 8px;
+  border-radius: 4px;
+  border: 1px solid rgba(100, 116, 139, 0.2);
+}
+
+.dataSourceInfo {
+  display: block;
+  margin-top: 8px;
+  font-size: 10px;
+  color: #64748b;
+  text-align: center;
+  font-style: italic;
+}
+
+.statisticsContent {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.statItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.statLabel {
+  flex: 0 0 120px;
+  font-size: 12px;
+  color: #475569;
+}
+
+.statBar {
+  flex: 1;
+  height: 6px;
+  background: #e2e8f0;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.statBarFill {
+  height: 100%;
+  background: linear-gradient(90deg, #3b82f6, #1d4ed8);
+  border-radius: 3px;
+  transition: width 0.3s ease;
+  min-width: 4px; /* 确保即使是很小的百分比也能显示 */
+}
+
+/* 特殊百分比样式 - 确保0%时不显示进度条 */
+.statBarFill[data-percentage="0"] {
+  width: 0%;
+  min-width: 0;
+}
+
+.statPercentage {
+  flex: 0 0 40px;
+  font-size: 12px;
+  color: #1d4ed8;
+  font-weight: 500;
+  text-align: right;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .questionCard {
+    padding: 16px;
+  }
+
+  .tagOptionsContainer {
+    gap: 8px;
+  }
+
+  .tagOption {
+    padding: 12px 18px;
+    font-size: 13px;
+    min-height: 44px;
+    min-width: calc(50% - 6px);
+    max-width: calc(50% - 6px);
+    flex: 0 1 calc(50% - 6px);
+  }
+
+  .ratingContainer {
+    padding: 12px 0;
+  }
+
+  .rating {
+    font-size: 20px;
+  }
+
+  .sliderContainer {
+    padding: 12px 0;
+  }
+
+  .uploadButton {
+    padding: 24px;
+  }
+
+  .statisticsPanel {
+    padding: 12px;
+  }
+
+  .statLabel {
+    flex: 0 0 100px;
+  }
+}
+
+@media (max-width: 480px) {
+  .questionCard {
+    padding: 12px;
+  }
+
+  .questionTitle {
+    font-size: 16px !important;
+  }
+
+  .tagOptionsContainer {
+    gap: 6px;
+  }
+
+  .tagOption {
+    padding: 10px 14px;
+    font-size: 12px;
+    min-height: 40px;
+    width: 100%;
+    min-width: auto;
+    max-width: 100%;
+    flex: 0 1 100%;
+  }
+
+  .ratingLabels {
+    flex-direction: column;
+    gap: 4px;
+    text-align: center;
+  }
+
+  .statItem {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 4px;
+  }
+
+  .statLabel {
+    flex: none;
+  }
+
+  .statPercentage {
+    flex: none;
+    text-align: left;
+  }
+}
+
+/* 懒加载统计组件包装器 */
+.statisticsWrapper {
+  margin-top: 16px;
+}

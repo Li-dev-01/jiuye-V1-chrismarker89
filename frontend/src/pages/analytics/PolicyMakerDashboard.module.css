@@ -1,0 +1,346 @@
+/* PolicyMakerDashboard 样式 */
+
+.container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+  padding: 0;
+}
+
+/* 页面头部 */
+.header {
+  background: rgba(255, 255, 255, 0.1);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 40px 0;
+}
+
+.headerContent {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 40px;
+}
+
+.titleSection {
+  flex: 1;
+}
+
+.title {
+  color: white !important;
+  margin-bottom: 16px !important;
+  font-size: 32px;
+  font-weight: 700;
+}
+
+.subtitle {
+  color: rgba(255, 255, 255, 0.9) !important;
+  font-size: 16px;
+  margin-bottom: 0 !important;
+  max-width: 600px;
+}
+
+.controls {
+  flex-shrink: 0;
+}
+
+/* KPI区域 */
+.kpiSection {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 40px 24px;
+}
+
+.kpiCard {
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border: none;
+  transition: all 0.3s ease;
+  background: white;
+}
+
+.kpiCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+.kpiTrend {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+  font-size: 14px;
+}
+
+/* 分析区域 */
+.analysisSection {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 24px 40px;
+  background: white;
+  border-radius: 16px 16px 0 0;
+  min-height: 600px;
+}
+
+.analysisCard {
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border: none;
+  height: 100%;
+}
+
+.analysisCard :global(.ant-card-head) {
+  border-bottom: 2px solid #f0f0f0;
+  padding: 20px 24px;
+}
+
+.analysisCard :global(.ant-card-head-title) {
+  font-size: 18px;
+  font-weight: 600;
+  color: #262626;
+}
+
+.analysisCard :global(.ant-card-body) {
+  padding: 24px;
+}
+
+/* 失业原因分析 */
+.reasonsList {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.reasonItem {
+  padding: 16px;
+  background: #fafafa;
+  border-radius: 8px;
+  border-left: 4px solid #1890ff;
+}
+
+.reasonHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.policyTag {
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.policyTag.high {
+  background: #fff2f0;
+  color: #ff4d4f;
+  border: 1px solid #ffccc7;
+}
+
+.policyTag.medium {
+  background: #fffbe6;
+  color: #faad14;
+  border: 1px solid #ffe58f;
+}
+
+.policyTag.low {
+  background: #f6ffed;
+  color: #52c41a;
+  border: 1px solid #b7eb8f;
+}
+
+/* 地区数据 */
+.regionalGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.regionalItem {
+  padding: 16px;
+  background: #fafafa;
+  border-radius: 8px;
+  border: 1px solid #f0f0f0;
+  transition: all 0.3s ease;
+}
+
+.regionalItem:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.regionalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.regionalMetrics {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.metric {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+/* 学历对比 */
+.educationGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 16px;
+}
+
+.educationItem {
+  padding: 20px;
+  background: #fafafa;
+  border-radius: 8px;
+  border: 1px solid #f0f0f0;
+  transition: all 0.3s ease;
+}
+
+.educationItem:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.educationHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.priorityTag {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.priorityTag.high {
+  background: #fff2f0;
+  color: #ff4d4f;
+  border: 1px solid #ffccc7;
+}
+
+.priorityTag.medium {
+  background: #fffbe6;
+  color: #faad14;
+  border: 1px solid #ffe58f;
+}
+
+.priorityTag.low {
+  background: #f6ffed;
+  color: #52c41a;
+  border: 1px solid #b7eb8f;
+}
+
+.educationMetrics {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.metricRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .headerContent {
+    flex-direction: column;
+    gap: 24px;
+    text-align: center;
+  }
+  
+  .titleSection {
+    flex: none;
+  }
+  
+  .controls {
+    flex: none;
+  }
+  
+  .title {
+    font-size: 24px !important;
+  }
+  
+  .kpiSection {
+    padding: 24px 16px;
+  }
+  
+  .analysisSection {
+    margin: 0 16px;
+    border-radius: 12px 12px 0 0;
+  }
+  
+  .regionalGrid {
+    grid-template-columns: 1fr;
+  }
+  
+  .educationGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .header {
+    padding: 24px 0;
+  }
+  
+  .headerContent {
+    padding: 0 16px;
+  }
+  
+  .kpiSection {
+    padding: 16px;
+  }
+  
+  .analysisSection {
+    margin: 0 8px;
+  }
+  
+  .controls {
+    flex-direction: column;
+    gap: 8px;
+  }
+}
+
+/* 控制按钮样式 */
+.controls .ant-btn {
+  border-radius: 8px;
+  font-weight: 500;
+}
+
+.controls .ant-btn-primary {
+  background: linear-gradient(135deg, #1890ff 0%, #096dd9 100%);
+  border: none;
+  box-shadow: 0 2px 8px rgba(24, 144, 255, 0.3);
+}
+
+.controls .ant-btn-primary:hover {
+  background: linear-gradient(135deg, #40a9ff 0%, #1890ff 100%);
+  box-shadow: 0 4px 12px rgba(24, 144, 255, 0.4);
+}
+
+/* 选择器样式 */
+.controls .ant-select {
+  border-radius: 8px;
+}
+
+.controls .ant-select-selector {
+  border-radius: 8px !important;
+  background: rgba(255, 255, 255, 0.9) !important;
+  backdrop-filter: blur(10px);
+}

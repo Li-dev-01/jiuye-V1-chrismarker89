@@ -1,0 +1,135 @@
+.container {
+  margin-top: 16px;
+}
+
+.promptCard {
+  background: linear-gradient(135deg, #f6f9fc 0%, #e9f4ff 100%);
+  border: 1px solid #d9e9ff;
+  border-radius: 8px;
+  margin-bottom: 8px;
+}
+
+.promptHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.promptIcon {
+  color: #1890ff;
+  font-size: 16px;
+}
+
+.promptText {
+  margin: 0;
+  color: #666;
+  font-size: 14px;
+}
+
+.actionButtons {
+  margin-top: 12px;
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.authCollapse {
+  background: transparent;
+}
+
+.authCard {
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  background: linear-gradient(135deg, #f6f9fc 0%, #e9f4ff 100%);
+  border: 1px solid #d9e9ff;
+}
+
+.authForm {
+  margin-top: 16px;
+}
+
+.authForm .ant-form-item {
+  margin-bottom: 16px;
+}
+
+.authForm .ant-input,
+.authForm .ant-input-password {
+  border-radius: 6px;
+  height: 40px;
+}
+
+.authForm .ant-btn {
+  border-radius: 6px;
+  height: 44px;
+  font-weight: 500;
+}
+
+.authTabs {
+  margin-bottom: 0;
+}
+
+.authTabs .ant-tabs-nav {
+  margin-bottom: 16px;
+}
+
+.tabContent {
+  padding: 0 8px;
+}
+
+.tabContent .ant-form-item:last-child {
+  margin-bottom: 0;
+}
+
+.tabContent .ant-input,
+.tabContent .ant-input-password {
+  border-radius: 6px;
+}
+
+.tabContent .ant-btn {
+  border-radius: 6px;
+  height: 40px;
+  font-weight: 500;
+}
+
+.tabContent .ant-alert {
+  border-radius: 6px;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .authCard {
+    margin: 0 -8px;
+  }
+  
+  .tabContent {
+    padding: 0 4px;
+  }
+  
+  .actionButtons {
+    flex-direction: column;
+  }
+  
+  .actionButtons .ant-btn {
+    width: 100%;
+  }
+}
+
+/* 动画效果 */
+.authCollapse .ant-collapse-content {
+  transition: all 0.3s ease;
+}
+
+.promptCard:hover {
+  border-color: #40a9ff;
+  box-shadow: 0 2px 8px rgba(24, 144, 255, 0.1);
+}
+
+.authTabs .ant-tabs-tab {
+  border-radius: 6px 6px 0 0;
+}
+
+.authTabs .ant-tabs-tab-active {
+  background: #f0f7ff;
+}

@@ -1,0 +1,362 @@
+/* 半匿名用户浮窗样式 */
+
+.floatingPanel {
+  width: 280px;
+  max-width: 90vw;
+  user-select: none;
+  cursor: default;
+  transition: all 0.3s ease;
+}
+
+.floatingPanel.minimized {
+  width: 60px;
+}
+
+.floatingPanel.expanded {
+  width: 320px;
+}
+
+.card {
+  border-radius: 12px !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.95) !important;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15) !important;
+  transform: translateY(-2px);
+}
+
+/* 头部控制区 */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  padding: 4px 0;
+}
+
+.dragHandle {
+  cursor: move;
+  color: #999;
+  padding: 4px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dragHandle:hover {
+  background: rgba(0, 0, 0, 0.05);
+  color: #666;
+}
+
+.dragHandle:active {
+  background: rgba(0, 0, 0, 0.1);
+  cursor: grabbing;
+}
+
+.controls {
+  display: flex;
+  gap: 2px;
+}
+
+.controlButton {
+  width: 24px !important;
+  height: 24px !important;
+  padding: 0 !important;
+  border-radius: 4px !important;
+  color: #999 !important;
+  transition: all 0.2s ease !important;
+}
+
+.controlButton:hover {
+  background: rgba(0, 0, 0, 0.05) !important;
+  color: #666 !important;
+}
+
+/* 内容区域 */
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.userInfo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.avatar {
+  flex-shrink: 0;
+  border: 2px solid #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.userDetails {
+  flex: 1;
+  min-width: 0;
+}
+
+.userName {
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 2px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.userType {
+  font-size: 12px;
+  color: #666;
+  margin-bottom: 2px;
+}
+
+.userStatus {
+  font-size: 11px;
+  color: #52c41a;
+  font-weight: 500;
+}
+
+/* 扩展内容 */
+.expandedContent {
+  border-top: 1px solid #f0f0f0;
+  padding-top: 12px;
+}
+
+.stats {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.statItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+}
+
+.statLabel {
+  font-size: 11px;
+  color: #999;
+  margin-bottom: 4px;
+}
+
+.statValue {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1890ff;
+}
+
+/* 操作按钮 */
+.actions {
+  margin-top: 8px;
+}
+
+.actions :global(.ant-btn) {
+  border-radius: 6px !important;
+  font-size: 12px !important;
+  height: 28px !important;
+}
+
+/* 最小化状态 */
+.minimizedContent {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 4px;
+}
+
+/* 拖拽状态 */
+.floatingPanel:global(.dragging) {
+  transform: rotate(2deg);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.2) !important;
+}
+
+.floatingPanel:global(.dragging) .card {
+  transform: scale(1.05);
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .floatingPanel {
+    width: 240px;
+    max-width: 85vw;
+  }
+  
+  .floatingPanel.expanded {
+    width: 280px;
+  }
+  
+  .floatingPanel.minimized {
+    width: 50px;
+  }
+  
+  .card {
+    border-radius: 8px !important;
+  }
+  
+  .userInfo {
+    gap: 8px;
+  }
+  
+  .userName {
+    font-size: 13px;
+  }
+  
+  .userType {
+    font-size: 11px;
+  }
+  
+  .statValue {
+    font-size: 14px;
+  }
+}
+
+/* 深色模式 */
+@media (prefers-color-scheme: dark) {
+  .card {
+    background: rgba(30, 30, 30, 0.95) !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+  }
+  
+  .userName {
+    color: #fff;
+  }
+  
+  .userType {
+    color: #ccc;
+  }
+  
+  .dragHandle {
+    color: #666;
+  }
+  
+  .dragHandle:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: #999;
+  }
+  
+  .controlButton {
+    color: #666 !important;
+  }
+  
+  .controlButton:hover {
+    background: rgba(255, 255, 255, 0.05) !important;
+    color: #999 !important;
+  }
+  
+  .expandedContent {
+    border-top-color: #333;
+  }
+  
+  .statLabel {
+    color: #666;
+  }
+}
+
+/* 高对比度模式 */
+@media (prefers-contrast: high) {
+  .card {
+    border: 2px solid #000 !important;
+    background: #fff !important;
+  }
+  
+  .userName {
+    color: #000;
+    font-weight: 700;
+  }
+  
+  .userType {
+    color: #333;
+  }
+  
+  .dragHandle {
+    border: 1px solid #000;
+  }
+  
+  .controlButton {
+    border: 1px solid #000 !important;
+  }
+}
+
+/* 动画效果 */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-2px);
+  }
+}
+
+.floatingPanel:hover {
+  animation: float 2s ease-in-out infinite;
+}
+
+/* 位置指示器 */
+.floatingPanel::before {
+  content: '';
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: #1890ff;
+  border-radius: 50%;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.floatingPanel:hover::before {
+  opacity: 1;
+}
+
+/* 根据位置调整指示器 */
+.floatingPanel[data-position="top-left"]::before {
+  top: -2px;
+  left: -2px;
+}
+
+.floatingPanel[data-position="top-right"]::before {
+  top: -2px;
+  right: -2px;
+}
+
+.floatingPanel[data-position="bottom-left"]::before {
+  bottom: -2px;
+  left: -2px;
+}
+
+.floatingPanel[data-position="bottom-right"]::before {
+  bottom: -2px;
+  right: -2px;
+}
+
+/* 平滑过渡 */
+.floatingPanel * {
+  transition: all 0.2s ease;
+}
+
+/* 焦点状态 */
+.floatingPanel:focus-within {
+  outline: 2px solid #1890ff;
+  outline-offset: 2px;
+}
+
+/* 无障碍支持 */
+@media (prefers-reduced-motion: reduce) {
+  .floatingPanel,
+  .floatingPanel *,
+  .card {
+    transition: none !important;
+    animation: none !important;
+  }
+}

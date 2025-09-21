@@ -1,0 +1,351 @@
+/* AI审核助手组件样式 */
+
+.container {
+  border: 1px solid #e6f7ff;
+  background: linear-gradient(135deg, #f0f9ff 0%, #ffffff 100%);
+  box-shadow: 0 2px 8px rgba(24, 144, 255, 0.1);
+  transition: all 0.3s ease;
+}
+
+.container:hover {
+  box-shadow: 0 4px 12px rgba(24, 144, 255, 0.15);
+}
+
+.container .ant-card-head {
+  background: rgba(24, 144, 255, 0.05);
+  border-bottom: 1px solid #e6f7ff;
+}
+
+.container .ant-card-head-title {
+  color: #1890ff;
+  font-weight: 600;
+}
+
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  color: #666;
+}
+
+.recommendation {
+  padding: 12px;
+  background: rgba(24, 144, 255, 0.03);
+  border: 1px solid #e6f7ff;
+  border-radius: 6px;
+  margin-bottom: 12px;
+}
+
+.recommendation .ant-tag {
+  font-weight: 500;
+  border: none;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.quickMetric {
+  text-align: center;
+  padding: 8px 4px;
+}
+
+.quickMetric .ant-progress {
+  margin-top: 4px;
+}
+
+.quickMetric .ant-progress-text {
+  font-size: 11px !important;
+  font-weight: 500;
+}
+
+.detailsPanel {
+  background: #fafafa;
+  border-radius: 4px;
+  padding: 12px;
+  margin-top: 8px;
+}
+
+.detailsPanel .ant-collapse {
+  background: transparent;
+  border: none;
+}
+
+.detailsPanel .ant-collapse-item {
+  border: none;
+}
+
+.detailsPanel .ant-collapse-header {
+  padding: 8px 0 !important;
+  font-size: 13px;
+  color: #666;
+}
+
+.detailsPanel .ant-collapse-content-box {
+  padding: 8px 0 !important;
+}
+
+/* 推荐标签样式 */
+.recommendation .ant-tag.ant-tag-green {
+  background: linear-gradient(135deg, #f6ffed 0%, #d9f7be 100%);
+  color: #389e0d;
+  border: 1px solid #b7eb8f;
+}
+
+.recommendation .ant-tag.ant-tag-red {
+  background: linear-gradient(135deg, #fff2f0 0%, #ffccc7 100%);
+  color: #cf1322;
+  border: 1px solid #ffa39e;
+}
+
+.recommendation .ant-tag.ant-tag-orange {
+  background: linear-gradient(135deg, #fff7e6 0%, #ffd591 100%);
+  color: #d46b08;
+  border: 1px solid #ffb366;
+}
+
+/* 进度条样式 */
+.quickMetric .ant-progress-bg {
+  transition: all 0.3s ease;
+}
+
+.quickMetric .ant-progress-success-bg {
+  background: linear-gradient(90deg, #52c41a 0%, #73d13d 100%);
+}
+
+.quickMetric .ant-progress-bg[style*="rgb(250, 173, 20)"] {
+  background: linear-gradient(90deg, #faad14 0%, #ffc53d 100%) !important;
+}
+
+.quickMetric .ant-progress-bg[style*="rgb(255, 77, 79)"] {
+  background: linear-gradient(90deg, #ff4d4f 0%, #ff7875 100%) !important;
+}
+
+/* 警告框样式 */
+.container .ant-alert {
+  border-radius: 4px;
+  font-size: 12px;
+}
+
+.container .ant-alert-warning {
+  background: linear-gradient(135deg, #fffbe6 0%, #fff1b8 100%);
+  border: 1px solid #ffe58f;
+}
+
+.container .ant-alert-error {
+  background: linear-gradient(135deg, #fff2f0 0%, #ffccc7 100%);
+  border: 1px solid #ffa39e;
+}
+
+/* 标签样式 */
+.container .ant-tag {
+  border-radius: 12px;
+  font-size: 11px;
+  padding: 2px 8px;
+  margin: 2px;
+  transition: all 0.2s ease;
+}
+
+.container .ant-tag:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.container .ant-tag.ant-tag-red {
+  background: #fff2f0;
+  color: #cf1322;
+  border: 1px solid #ffa39e;
+}
+
+.container .ant-tag.ant-tag-orange {
+  background: #fff7e6;
+  color: #d46b08;
+  border: 1px solid #ffb366;
+}
+
+.container .ant-tag.ant-tag-green {
+  background: #f6ffed;
+  color: #389e0d;
+  border: 1px solid #b7eb8f;
+}
+
+.container .ant-tag.ant-tag-blue {
+  background: #f0f9ff;
+  color: #1890ff;
+  border: 1px solid #91d5ff;
+}
+
+/* 紧凑模式样式 */
+.container.compact {
+  margin-bottom: 12px;
+}
+
+.container.compact .ant-card-body {
+  padding: 12px;
+}
+
+.container.compact .recommendation {
+  padding: 8px;
+  margin-bottom: 8px;
+}
+
+.container.compact .ant-tag {
+  font-size: 10px;
+  padding: 1px 6px;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .container {
+    margin-bottom: 12px;
+  }
+  
+  .container .ant-card-body {
+    padding: 12px;
+  }
+  
+  .recommendation {
+    padding: 8px;
+  }
+  
+  .quickMetric {
+    padding: 6px 2px;
+  }
+  
+  .quickMetric .ant-progress {
+    margin-top: 2px;
+  }
+  
+  .container .ant-tag {
+    font-size: 10px;
+    padding: 1px 6px;
+    margin: 1px;
+  }
+}
+
+/* 深色主题适配 */
+@media (prefers-color-scheme: dark) {
+  .container {
+    background: linear-gradient(135deg, #1f1f1f 0%, #262626 100%);
+    border: 1px solid #434343;
+  }
+  
+  .container .ant-card-head {
+    background: rgba(24, 144, 255, 0.1);
+    border-bottom: 1px solid #434343;
+  }
+  
+  .recommendation {
+    background: rgba(24, 144, 255, 0.05);
+    border: 1px solid #434343;
+  }
+  
+  .detailsPanel {
+    background: #1a1a1a;
+  }
+  
+  .container .ant-alert-warning {
+    background: rgba(250, 173, 20, 0.1);
+    border: 1px solid rgba(250, 173, 20, 0.3);
+    color: #faad14;
+  }
+  
+  .container .ant-alert-error {
+    background: rgba(255, 77, 79, 0.1);
+    border: 1px solid rgba(255, 77, 79, 0.3);
+    color: #ff4d4f;
+  }
+}
+
+/* 动画效果 */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.container {
+  animation: fadeIn 0.3s ease-out;
+}
+
+.recommendation {
+  animation: fadeIn 0.4s ease-out 0.1s both;
+}
+
+.quickMetric {
+  animation: fadeIn 0.4s ease-out 0.2s both;
+}
+
+/* 加载动画 */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.loading .ant-spin {
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+/* 按钮样式 */
+.container .ant-btn {
+  border-radius: 4px;
+  font-size: 12px;
+  height: 28px;
+  padding: 0 12px;
+  transition: all 0.2s ease;
+}
+
+.container .ant-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.container .ant-btn-primary {
+  background: linear-gradient(135deg, #1890ff 0%, #40a9ff 100%);
+  border: none;
+}
+
+.container .ant-btn-primary:hover {
+  background: linear-gradient(135deg, #40a9ff 0%, #69c0ff 100%);
+}
+
+/* 列表样式 */
+.detailsPanel ul {
+  margin: 4px 0;
+  padding-left: 16px;
+}
+
+.detailsPanel li {
+  margin: 2px 0;
+  line-height: 1.4;
+}
+
+/* 技术信息样式 */
+.detailsPanel .tech-info {
+  font-size: 11px;
+  color: #999;
+  border-top: 1px solid #f0f0f0;
+  padding-top: 8px;
+  margin-top: 8px;
+}
+
+.detailsPanel .tech-info span {
+  margin: 0 4px;
+}
+
+/* 空状态样式 */
+.container .ant-empty {
+  margin: 16px 0;
+}
+
+.container .ant-empty-description {
+  color: #666;
+  font-size: 12px;
+}

@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>大学生就业调查问卷 - 示例</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+        
+        .questionnaire-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin: 0 0 16px 0;
+        }
+        
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            margin: 0;
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        .question-card {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+            transition: all 0.3s ease;
+        }
+        
+        .question-card:hover {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+        }
+        
+        .question-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .required {
+            color: #ef4444;
+            font-size: 0.9rem;
+        }
+        
+        .question-description {
+            color: #64748b;
+            font-size: 0.9rem;
+            margin-bottom: 16px;
+        }
+        
+        .option-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .option-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .option-item:hover {
+            background: #f1f5f9;
+            border-color: #cbd5e1;
+        }
+        
+        .option-item.selected {
+            background: #eff6ff;
+            border-color: #3b82f6;
+            color: #1d4ed8;
+        }
+        
+        .statistics-panel {
+            background: #f0f9ff;
+            border: 1px solid #bae6fd;
+            border-radius: 8px;
+            padding: 16px;
+            margin-top: 16px;
+        }
+        
+        .statistics-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #0369a1;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .stat-item {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        
+        .stat-label {
+            flex: 1;
+            font-size: 0.85rem;
+            color: #475569;
+        }
+        
+        .stat-bar {
+            width: 100px;
+            height: 6px;
+            background: #e2e8f0;
+            border-radius: 3px;
+            overflow: hidden;
+            margin: 0 8px;
+        }
+        
+        .stat-fill {
+            height: 100%;
+            background: #3b82f6;
+            transition: width 0.3s ease;
+        }
+        
+        .stat-percentage {
+            font-size: 0.8rem;
+            color: #64748b;
+            min-width: 32px;
+            text-align: right;
+        }
+        
+        .progress-bar {
+            background: #e2e8f0;
+            height: 8px;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #3b82f6 0%, #1d4ed8 100%);
+            transition: width 0.3s ease;
+        }
+        
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 40px;
+            padding-top: 24px;
+            border-top: 1px solid #e2e8f0;
+        }
+        
+        .btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: none;
+            outline: none;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+        }
+        
+        .btn-secondary {
+            background: white;
+            color: #64748b;
+            border: 1px solid #d1d5db;
+        }
+        
+        .btn-secondary:hover {
+            background: #f9fafb;
+            border-color: #9ca3af;
+        }
+        
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+            box-shadow: none !important;
+        }
+        
+        .completion-message {
+            text-align: center;
+            padding: 60px 40px;
+        }
+        
+        .completion-icon {
+            width: 80px;
+            height: 80px;
+            background: #10b981;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+            color: white;
+            font-size: 2rem;
+        }
+        
+        .completion-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 12px;
+        }
+        
+        .completion-description {
+            color: #64748b;
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <div id="questionnaire-root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useCallback } = React;
+
+        // 问卷数据配置
+        const questionnaireData = {
+            id: 'employment-survey-2024',
+            title: '2024年大学生就业调查',
+            description: '了解大学生就业现状、期望和挑战，为教育政策制定提供数据支持',
+            sections: [
+                {
+                    id: 'personal-info',
+                    title: '个人基本信息',
+                    description: '请填写您的基本信息，所有信息将严格保密',
+                    questions: [
+                        {
+                            id: 'education',
+                            type: 'radio',
+                            title: '您的最高学历是？',
+                            required: true,
+                            options: [
+                                { value: 'bachelor', label: '本科' },
+                                { value: 'master', label: '硕士研究生' },
+                                { value: 'phd', label: '博士研究生' }
+                            ],
+                            statistics: {
+                                totalResponses: 1247,
+                                options: [
+                                    { value: 'bachelor', label: '本科', count: 856, percentage: 68.6 },
+                                    { value: 'master', label: '硕士研究生', count: 312, percentage: 25.0 },
+                                    { value: 'phd', label: '博士研究生', count: 79, percentage: 6.3 }
+                                ]
+                            }
+                        },
+                        {
+                            id: 'major',
+                            type: 'select',
+                            title: '您的专业领域是？',
+                            required: true,
+                            placeholder: '请选择专业领域',
+                            options: [
+                                { value: 'engineering', label: '工程技术' },
+                                { value: 'business', label: '商科管理' },
+                                { value: 'science', label: '理学' },
+                                { value: 'liberal-arts', label: '文学' },
+                                { value: 'medicine', label: '医学' },
+                                { value: 'education', label: '教育学' },
+                                { value: 'art', label: '艺术设计' },
+                                { value: 'law', label: '法学' },
+                                { value: 'other', label: '其他' }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    id: 'employment-status',
+                    title: '就业现状',
+                    description: '请如实填写您当前的就业状况',
+                    questions: [
+                        {
+                            id: 'current-status',
+                            type: 'radio',
+                            title: '您目前的就业状态是？',
+                            required: true,
+                            options: [
+                                { value: 'employed', label: '已就业' },
+                                { value: 'seeking', label: '正在求职' },
+                                { value: 'preparing', label: '准备考研/考公' },
+                                { value: 'entrepreneurship', label: '自主创业' },
+                                { value: 'other', label: '其他' }
+                            ],
+                            statistics: {
+                                totalResponses: 1247,
+                                options: [
+                                    { value: 'employed', label: '已就业', count: 623, percentage: 49.9 },
+                                    { value: 'seeking', label: '正在求职', count: 374, percentage: 30.0 },
+                                    { value: 'preparing', label: '准备考研/考公', count: 187, percentage: 15.0 },
+                                    { value: 'entrepreneurship', label: '自主创业', count: 37, percentage: 3.0 },
+                                    { value: 'other', label: '其他', count: 26, percentage: 2.1 }
+                                ]
+                            }
+                        },
+                        {
+                            id: 'job-satisfaction',
+                            type: 'rating',
+                            title: '如果您已就业，对当前工作的满意度是？',
+                            required: false,
+                            config: {
+                                maxRating: 5,
+                                allowHalf: false,
+                                showLabels: true,
+                                labels: ['很不满意', '不满意', '一般', '满意', '很满意']
+                            }
+                        }
+                    ]
+                },
+                {
+                    id: 'expectations',
+                    title: '就业期望',
+                    description: '请告诉我们您对未来工作的期望',
+                    questions: [
+                        {
+                            id: 'preferred-industry',
+                            type: 'checkbox',
+                            title: '您希望从事哪些行业？（可多选）',
+                            required: true,
+                            options: [
+                                { value: 'tech', label: '互联网/科技' },
+                                { value: 'finance', label: '金融' },
+                                { value: 'education', label: '教育' },
+                                { value: 'healthcare', label: '医疗健康' },
+                                { value: 'manufacturing', label: '制造业' },
+                                { value: 'consulting', label: '咨询服务' },
+                                { value: 'government', label: '政府机关' },
+                                { value: 'media', label: '传媒娱乐' }
+                            ],
+                            config: {
+                                maxSelections: 3
+                            }
+                        },
+                        {
+                            id: 'salary-expectation',
+                            type: 'slider',
+                            title: '您期望的月薪范围是？（单位：千元）',
+                            required: true,
+                            config: {
+                                min: 3,
+                                max: 30,
+                                step: 1,
+                                marks: {
+                                    3: '3K',
+                                    8: '8K',
+                                    15: '15K',
+                                    25: '25K',
+                                    30: '30K+'
+                                },
+                                showValue: true
+                            }
+                        }
+                    ]
+                }
+            ]
+        };
+
+        // 主问卷组件
+        function EmploymentSurvey() {
+            const [currentSectionIndex, setCurrentSectionIndex] = useState(0);
+            const [responses, setResponses] = useState({});
+            const [isCompleted, setIsCompleted] = useState(false);
+
+            const currentSection = questionnaireData.sections[currentSectionIndex];
+            const totalSections = questionnaireData.sections.length;
+            const progress = ((currentSectionIndex + 1) / totalSections) * 100;
+
+            // 处理问题回答
+            const handleQuestionAnswer = useCallback((questionId, value) => {
+                setResponses(prev => ({
+                    ...prev,
+                    [questionId]: value
+                }));
+            }, []);
+
+            // 检查当前节是否完成
+            const isSectionComplete = useCallback(() => {
+                return currentSection.questions.every(question => {
+                    if (!question.required) return true;
+                    const value = responses[question.id];
+                    return value !== undefined && value !== '' && value !== null;
+                });
+            }, [currentSection, responses]);
+
+            // 下一步
+            const handleNext = () => {
+                if (currentSectionIndex < totalSections - 1) {
+                    setCurrentSectionIndex(currentSectionIndex + 1);
+                } else {
+                    setIsCompleted(true);
+                }
+            };
+
+            // 上一步
+            const handlePrevious = () => {
+                if (currentSectionIndex > 0) {
+                    setCurrentSectionIndex(currentSectionIndex - 1);
+                }
+            };
+
+            // 渲染完成页面
+            if (isCompleted) {
+                return (
+                    <div className="questionnaire-container">
+                        <div className="completion-message">
+                            <div className="completion-icon">✓</div>
+                            <h2 className="completion-title">问卷提交成功！</h2>
+                            <p className="completion-description">
+                                感谢您参与本次大学生就业调查！<br/>
+                                您的回答对我们的研究非常宝贵，将有助于改善大学生就业环境。
+                            </p>
+                        </div>
+                    </div>
+                );
+            }
+
+            return (
+                <div className="questionnaire-container">
+                    <div className="header">
+                        <h1>{questionnaireData.title}</h1>
+                        <p>{questionnaireData.description}</p>
+                    </div>
+
+                    <div className="content">
+                        {/* 进度条 */}
+                        <div className="progress-bar">
+                            <div className="progress-fill" style={{ width: `${progress}%` }}></div>
+                        </div>
+                        <div style={{ textAlign: 'center', marginBottom: '32px', color: '#64748b' }}>
+                            第 {currentSectionIndex + 1} 部分，共 {totalSections} 部分 ({Math.round(progress)}%)
+                        </div>
+
+                        {/* 节标题 */}
+                        <div style={{ marginBottom: '32px' }}>
+                            <h2 style={{ fontSize: '1.5rem', fontWeight: '700', color: '#1e293b', marginBottom: '8px' }}>
+                                {currentSection.title}
+                            </h2>
+                            {currentSection.description && (
+                                <p style={{ color: '#64748b', fontSize: '1rem' }}>
+                                    {currentSection.description}
+                                </p>
+                            )}
+                        </div>
+
+                        {/* 问题列表 */}
+                        {currentSection.questions.map(question => (
+                            <QuestionRenderer
+                                key={question.id}
+                                question={question}
+                                value={responses[question.id]}
+                                onChange={(value) => handleQuestionAnswer(question.id, value)}
+                            />
+                        ))}
+
+                        {/* 导航按钮 */}
+                        <div className="navigation">
+                            <button
+                                className="btn btn-secondary"
+                                onClick={handlePrevious}
+                                disabled={currentSectionIndex === 0}
+                            >
+                                上一步
+                            </button>
+
+                            <button
+                                className="btn btn-primary"
+                                onClick={handleNext}
+                                disabled={!isSectionComplete()}
+                            >
+                                {currentSectionIndex === totalSections - 1 ? '提交问卷' : '下一步'}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        // 问题渲染器组件
+        function QuestionRenderer({ question, value, onChange }) {
+            const renderInput = () => {
+                switch (question.type) {
+                    case 'radio':
+                        return (
+                            <div className="option-group">
+                                {question.options.map(option => (
+                                    <div
+                                        key={option.value}
+                                        className={`option-item ${value === option.value ? 'selected' : ''}`}
+                                        onClick={() => onChange(option.value)}
+                                    >
+                                        <input
+                                            type="radio"
+                                            name={question.id}
+                                            value={option.value}
+                                            checked={value === option.value}
+                                            onChange={() => onChange(option.value)}
+                                        />
+                                        <span>{option.label}</span>
+                                    </div>
+                                ))}
+                            </div>
+                        );
+
+                    case 'checkbox':
+                        const checkboxValues = Array.isArray(value) ? value : [];
+                        return (
+                            <div className="option-group">
+                                {question.options.map(option => (
+                                    <div
+                                        key={option.value}
+                                        className={`option-item ${checkboxValues.includes(option.value) ? 'selected' : ''}`}
+                                        onClick={() => {
+                                            const newValues = checkboxValues.includes(option.value)
+                                                ? checkboxValues.filter(v => v !== option.value)
+                                                : [...checkboxValues, option.value];
+                                            onChange(newValues);
+                                        }}
+                                    >
+                                        <input
+                                            type="checkbox"
+                                            checked={checkboxValues.includes(option.value)}
+                                            onChange={() => {}}
+                                        />
+                                        <span>{option.label}</span>
+                                    </div>
+                                ))}
+                            </div>
+                        );
+
+                    case 'select':
+                        return (
+                            <select
+                                value={value || ''}
+                                onChange={(e) => onChange(e.target.value)}
+                                style={{
+                                    width: '100%',
+                                    padding: '12px',
+                                    border: '1px solid #d1d5db',
+                                    borderRadius: '8px',
+                                    fontSize: '1rem'
+                                }}
+                            >
+                                <option value="">{question.placeholder || '请选择...'}</option>
+                                {question.options.map(option => (
+                                    <option key={option.value} value={option.value}>
+                                        {option.label}
+                                    </option>
+                                ))}
+                            </select>
+                        );
+
+                    case 'rating':
+                        const maxRating = question.config?.maxRating || 5;
+                        return (
+                            <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                                {Array.from({ length: maxRating }, (_, index) => (
+                                    <button
+                                        key={index}
+                                        onClick={() => onChange(index + 1)}
+                                        style={{
+                                            background: 'none',
+                                            border: 'none',
+                                            fontSize: '1.5rem',
+                                            color: index < (value || 0) ? '#fbbf24' : '#d1d5db',
+                                            cursor: 'pointer'
+                                        }}
+                                    >
+                                        ★
+                                    </button>
+                                ))}
+                                {value && (
+                                    <span style={{ marginLeft: '12px', color: '#64748b' }}>
+                                        {value} / {maxRating}
+                                    </span>
+                                )}
+                            </div>
+                        );
+
+                    case 'slider':
+                        const min = question.config?.min || 0;
+                        const max = question.config?.max || 100;
+                        return (
+                            <div>
+                                <input
+                                    type="range"
+                                    min={min}
+                                    max={max}
+                                    value={value || min}
+                                    onChange={(e) => onChange(Number(e.target.value))}
+                                    style={{ width: '100%', marginBottom: '8px' }}
+                                />
+                                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.9rem', color: '#64748b' }}>
+                                    <span>{min}</span>
+                                    <span style={{ fontWeight: '600', color: '#1e293b' }}>{value || min}</span>
+                                    <span>{max}</span>
+                                </div>
+                            </div>
+                        );
+
+                    default:
+                        return <div>不支持的问题类型: {question.type}</div>;
+                }
+            };
+
+            return (
+                <div className="question-card">
+                    <div className="question-title">
+                        {question.title}
+                        {question.required && <span className="required">*</span>}
+                    </div>
+                    
+                    {question.description && (
+                        <div className="question-description">
+                            {question.description}
+                        </div>
+                    )}
+
+                    {renderInput()}
+
+                    {/* 统计信息 */}
+                    {question.statistics && (
+                        <div className="statistics-panel">
+                            <div className="statistics-title">
+                                📊 其他人的选择 ({question.statistics.totalResponses} 人参与)
+                            </div>
+                            {question.statistics.options?.map(option => (
+                                <div key={option.value} className="stat-item">
+                                    <span className="stat-label">{option.label}</span>
+                                    <div className="stat-bar">
+                                        <div 
+                                            className="stat-fill" 
+                                            style={{ width: `${option.percentage}%` }}
+                                        ></div>
+                                    </div>
+                                    <span className="stat-percentage">{option.percentage}%</span>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </div>
+            );
+        }
+
+        // 渲染应用
+        ReactDOM.render(<EmploymentSurvey />, document.getElementById('questionnaire-root'));
+    </script>
+</body>
+</html>

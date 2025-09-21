@@ -1,0 +1,349 @@
+/* QuestionnaireVisualizationPage 样式 */
+
+.container {
+  padding: 24px;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  min-height: 100vh;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 32px;
+  padding: 32px;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.header h1 {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 16px !important;
+}
+
+.overviewContainer {
+  background: white;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.statCard {
+  border-radius: 16px;
+  border: none;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+  transition: all 0.3s ease;
+  overflow: hidden;
+  position: relative;
+}
+
+.statCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  z-index: 1;
+}
+
+.statCard .ant-card-body {
+  position: relative;
+  z-index: 2;
+  padding: 24px;
+}
+
+.statCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+}
+
+.chartCard {
+  border-radius: 16px;
+  border: none;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+}
+
+.chartCard:hover {
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+}
+
+.chartCard .ant-card-head {
+  border-bottom: 1px solid #f0f0f0;
+  border-radius: 16px 16px 0 0;
+}
+
+.chartCard .ant-card-head-title {
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.chartDescription {
+  text-align: center;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid #f0f0f0;
+}
+
+.loadingContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 60vh;
+  background: white;
+  border-radius: 16px;
+  margin: 24px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.emptyContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 60vh;
+  background: white;
+  border-radius: 16px;
+  margin: 24px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+/* Tab 样式优化 */
+.container :global(.ant-tabs) {
+  background: white;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.container :global(.ant-tabs-tab) {
+  padding: 12px 24px;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.container :global(.ant-tabs-tab:hover) {
+  background: rgba(102, 126, 234, 0.1);
+}
+
+.container :global(.ant-tabs-tab-active) {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white !important;
+}
+
+.container :global(.ant-tabs-tab-active .anticon) {
+  color: white !important;
+}
+
+.container :global(.ant-tabs-content-holder) {
+  padding-top: 24px;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .container {
+    padding: 16px;
+  }
+  
+  .header {
+    padding: 24px 16px;
+    margin-bottom: 24px;
+  }
+  
+  .overviewContainer {
+    padding: 16px;
+  }
+  
+  .statCard .ant-card-body {
+    padding: 16px;
+  }
+  
+  .container :global(.ant-tabs) {
+    padding: 16px;
+  }
+}
+
+/* 图表容器样式 */
+.chartContainer {
+  padding: 16px;
+  background: #fafafa;
+  border-radius: 12px;
+  margin: 16px 0;
+}
+
+/* 数据标签样式 */
+.dataLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 12px;
+  background: rgba(102, 126, 234, 0.1);
+  border-radius: 16px;
+  font-size: 14px;
+  font-weight: 500;
+  margin: 4px;
+}
+
+/* 趋势指示器 */
+.trendUp {
+  color: #52c41a;
+}
+
+.trendDown {
+  color: #ff4d4f;
+}
+
+.trendStable {
+  color: #faad14;
+}
+
+/* 温度指示器 */
+.temperatureHot {
+  background: linear-gradient(135deg, #ff6b6b, #ffa500);
+  color: white;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+}
+
+.temperatureWarm {
+  background: linear-gradient(135deg, #ffa500, #ffeb3b);
+  color: white;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+}
+
+.temperatureNormal {
+  background: linear-gradient(135deg, #4caf50, #8bc34a);
+  color: white;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+}
+
+/* 动画效果 */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.chartCard {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.statCard {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+/* 自定义滚动条 */
+.container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.container::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 4px;
+}
+
+.container::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
+}
+
+/* 行业气泡样式 */
+.industryBubble {
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.industryBubble:hover {
+  transform: scale(1.05) !important;
+}
+
+/* 专业列表样式 */
+.majorList {
+  padding: 16px 0;
+}
+
+.majorItem {
+  margin-bottom: 20px;
+}
+
+.majorName {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+/* 求职时长样式 */
+.durationList {
+  padding: 16px 0;
+}
+
+.durationItem {
+  margin-bottom: 20px;
+}
+
+.durationHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.durationMood {
+  font-size: 20px;
+}
+
+.durationPeriod {
+  font-weight: 600;
+  flex: 1;
+  margin-left: 12px;
+}
+
+.durationValue {
+  font-weight: bold;
+  color: #1890ff;
+}
+
+/* 图表容器增强 */
+.chartCard .ant-card-body {
+  padding: 24px;
+}
+
+/* 响应式优化 */
+@media (max-width: 768px) {
+  .industryBubble {
+    font-size: 12px !important;
+    padding: 12px 16px !important;
+  }
+
+  .majorName {
+    font-size: 12px;
+  }
+
+  .durationHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+}

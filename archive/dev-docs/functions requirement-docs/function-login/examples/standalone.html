@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>独立登录页面示例</title>
+    <link rel="stylesheet" href="../components/AdminLoginPage.css">
+    <style>
+        /* 页面特定样式 */
+        .page-header {
+            text-align: center;
+            padding: 2rem 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            margin-bottom: 2rem;
+        }
+        
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        
+        .page-subtitle {
+            font-size: 1.125rem;
+            opacity: 0.9;
+        }
+        
+        .page-footer {
+            text-align: center;
+            padding: 2rem;
+            color: #6b7280;
+            font-size: 0.875rem;
+            border-top: 1px solid #e5e7eb;
+            margin-top: 3rem;
+        }
+        
+        .success-page {
+            display: none;
+            text-align: center;
+            padding: 3rem 2rem;
+        }
+        
+        .success-icon {
+            width: 4rem;
+            height: 4rem;
+            background: #10b981;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .success-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 0.5rem;
+        }
+        
+        .success-description {
+            color: #6b7280;
+            margin-bottom: 2rem;
+        }
+        
+        .user-info-card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            margin: 1rem auto;
+            max-width: 24rem;
+            text-align: left;
+        }
+        
+        .user-info-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #f3f4f6;
+        }
+        
+        .user-info-item:last-child {
+            border-bottom: none;
+        }
+        
+        .user-info-label {
+            font-weight: 500;
+            color: #374151;
+        }
+        
+        .user-info-value {
+            color: #6b7280;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 0.875rem;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+        
+        .action-button {
+            padding: 0.75rem 1.5rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.375rem;
+            background: white;
+            color: #374151;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.15s ease-in-out;
+            cursor: pointer;
+        }
+        
+        .action-button:hover {
+            background: #f9fafb;
+            border-color: #9ca3af;
+        }
+        
+        .action-button.primary {
+            background: #3b82f6;
+            color: white;
+            border-color: #3b82f6;
+        }
+        
+        .action-button.primary:hover {
+            background: #2563eb;
+            border-color: #2563eb;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 640px) {
+            .page-title {
+                font-size: 2rem;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 页面头部 -->
+    <div class="page-header">
+        <h1 class="page-title">大学生就业调研平台</h1>
+        <p class="page-subtitle">管理员登录系统</p>
+    </div>
+    
+    <!-- 登录页面 -->
+    <div id="login-page">
+        <div id="login-container"></div>
+    </div>
+    
+    <!-- 登录成功页面 -->
+    <div id="success-page" class="success-page">
+        <div class="success-icon">
+            <svg width="24" height="24" fill="none" stroke="white" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+            </svg>
+        </div>
+        
+        <h2 class="success-title">登录成功！</h2>
+        <p class="success-description">欢迎使用大学生就业调研平台管理系统</p>
+        
+        <div class="user-info-card" id="user-info-card">
+            <!-- 用户信息将在这里动态填充 -->
+        </div>
+        
+        <div class="action-buttons">
+            <button class="action-button" onclick="logout()">退出登录</button>
+            <button class="action-button primary" onclick="goToDashboard()">进入系统</button>
+        </div>
+    </div>
+    
+    <!-- 页面底部 -->
+    <div class="page-footer">
+        <p>&copy; 2025 大学生就业调研平台. 保留所有权利.</p>
+        <p>如有问题，请联系系统管理员</p>
+    </div>
+    
+    <!-- 引入脚本 -->
+    <script src="../services/authService.js"></script>
+    <script src="../components/AdminLoginPage.js"></script>
+    
+    <script>
+        let loginPageInstance = null;
+        let currentUser = null;
+        
+        // 初始化页面
+        function initPage() {
+            // 检查是否已经登录
+            if (AuthService.isAuthenticated()) {
+                const user = AuthService.getCurrentUser();
+                if (user) {
+                    showSuccessPage(user);
+                    return;
+                }
+            }
+            
+            // 显示登录页面
+            showLoginPage();
+        }
+        
+        // 显示登录页面
+        function showLoginPage() {
+            document.getElementById('login-page').style.display = 'block';
+            document.getElementById('success-page').style.display = 'none';
+            
+            // 创建登录实例
+            if (!loginPageInstance) {
+                loginPageInstance = new AdminLoginPage({
+                    container: '#login-container',
+                    redirectEnabled: false, // 禁用自动重定向
+                    onSuccess: (user) => {
+                        console.log('登录成功:', user);
+                        currentUser = user;
+                        showSuccessPage(user);
+                    },
+                    onError: (error) => {
+                        console.error('登录失败:', error);
+                        // 错误处理已经在组件内部完成
+                    }
+                });
+            }
+        }
+        
+        // 显示成功页面
+        function showSuccessPage(user) {
+            document.getElementById('login-page').style.display = 'none';
+            document.getElementById('success-page').style.display = 'block';
+            
+            // 填充用户信息
+            fillUserInfo(user);
+            currentUser = user;
+        }
+        
+        // 填充用户信息
+        function fillUserInfo(user) {
+            const userInfoCard = document.getElementById('user-info-card');
+            
+            const userInfo = [
+                { label: '用户名', value: user.username },
+                { label: '姓名', value: user.name },
+                { label: '角色', value: getRoleDisplayName(user.role) },
+                { label: '用户ID', value: user.id },
+                { label: '权限', value: user.permissions ? user.permissions.join(', ') : '无' },
+                { label: '登录时间', value: user.loginTime ? new Date(user.loginTime).toLocaleString() : '刚刚' }
+            ];
+            
+            // 如果是审核员，显示专长信息
+            if (user.specialties && user.specialties.length > 0) {
+                userInfo.splice(5, 0, { label: '专长', value: user.specialties.join(', ') });
+            }
+            
+            const html = userInfo.map(item => `
+                <div class="user-info-item">
+                    <span class="user-info-label">${item.label}:</span>
+                    <span class="user-info-value">${item.value}</span>
+                </div>
+            `).join('');
+            
+            userInfoCard.innerHTML = html;
+        }
+        
+        // 获取角色显示名称
+        function getRoleDisplayName(role) {
+            const roleNames = {
+                'admin': '管理员',
+                'superadmin': '超级管理员',
+                'reviewer': '审核员',
+                'user': '普通用户'
+            };
+            return roleNames[role] || role;
+        }
+        
+        // 退出登录
+        function logout() {
+            if (confirm('确定要退出登录吗？')) {
+                AuthService.logout();
+                currentUser = null;
+                showLoginPage();
+                
+                // 显示退出成功提示
+                setTimeout(() => {
+                    if (loginPageInstance) {
+                        loginPageInstance.showToast('退出成功', '您已成功退出登录', 'success');
+                    }
+                }, 100);
+            }
+        }
+        
+        // 进入系统
+        function goToDashboard() {
+            if (!currentUser) {
+                alert('用户信息丢失，请重新登录');
+                logout();
+                return;
+            }
+            
+            // 根据角色跳转到对应的仪表盘
+            const redirectPaths = {
+                'admin': '/admin/dashboard',
+                'reviewer': '/reviewer/dashboard',
+                'superadmin': '/superadmin/dashboard'
+            };
+            
+            const path = redirectPaths[currentUser.role] || '/admin/dashboard';
+            
+            // 在实际项目中，这里应该跳转到对应的页面
+            // window.location.href = path;
+            
+            // 在演示中，显示一个提示
+            alert(`即将跳转到: ${path}\n\n在实际项目中，这里会跳转到对应的管理页面。`);
+        }
+        
+        // 键盘快捷键支持
+        document.addEventListener('keydown', function(event) {
+            // ESC键退出登录（仅在成功页面）
+            if (event.key === 'Escape' && document.getElementById('success-page').style.display !== 'none') {
+                logout();
+            }
+            
+            // Enter键进入系统（仅在成功页面）
+            if (event.key === 'Enter' && document.getElementById('success-page').style.display !== 'none') {
+                goToDashboard();
+            }
+        });
+        
+        // 页面可见性变化时检查登录状态
+        document.addEventListener('visibilitychange', function() {
+            if (!document.hidden) {
+                // 页面变为可见时检查登录状态
+                if (currentUser && !AuthService.isAuthenticated()) {
+                    // 登录状态已失效
+                    alert('登录状态已过期，请重新登录');
+                    logout();
+                }
+            }
+        });
+        
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            initPage();
+            
+            // 添加一些调试信息
+            console.log('=== 独立登录页面已加载 ===');
+            console.log('AuthService:', AuthService);
+            console.log('可用的测试账号:', AuthService.getTestAccountsList());
+            console.log('当前认证状态:', AuthService.isAuthenticated());
+            
+            // 添加全局调试函数
+            window.debugLogin = {
+                showLoginPage,
+                showSuccessPage,
+                logout,
+                getCurrentUser: () => currentUser,
+                getAuthService: () => AuthService
+            };
+        });
+        
+        // 页面卸载前清理
+        window.addEventListener('beforeunload', function() {
+            if (loginPageInstance) {
+                loginPageInstance.destroy();
+            }
+        });
+    </script>
+</body>
+</html>

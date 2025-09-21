@@ -1,0 +1,291 @@
+.dataGenerator {
+  padding: 24px;
+  background: #f5f5f5;
+  min-height: 100vh;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  padding: 16px 0;
+  border-bottom: 1px solid #e8e8e8;
+}
+
+.header h3 {
+  margin: 0;
+  color: #262626;
+}
+
+.previewSection {
+  background: #fafafa;
+  padding: 16px;
+  border-radius: 6px;
+  border: 1px solid #e8e8e8;
+}
+
+.previewSection h5 {
+  margin-bottom: 12px;
+  color: #262626;
+}
+
+.previewSection p {
+  margin-bottom: 8px;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.statisticCard {
+  text-align: center;
+  padding: 16px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-radius: 8px;
+}
+
+.statisticCard .ant-statistic-title {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.statisticCard .ant-statistic-content {
+  color: white;
+}
+
+.progressSection {
+  margin-top: 16px;
+}
+
+.progressItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: white;
+  border: 1px solid #e8e8e8;
+  border-radius: 6px;
+  margin-bottom: 8px;
+}
+
+.progressItem:hover {
+  border-color: #1890ff;
+  box-shadow: 0 2px 8px rgba(24, 144, 255, 0.1);
+}
+
+.progressInfo {
+  flex: 1;
+  margin-right: 16px;
+}
+
+.progressInfo h5 {
+  margin: 0 0 4px 0;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.progressInfo p {
+  margin: 0;
+  font-size: 12px;
+  color: #666;
+}
+
+.progressBar {
+  flex: 2;
+  margin-right: 16px;
+}
+
+.progressActions {
+  flex-shrink: 0;
+}
+
+.configModal .ant-form-item {
+  margin-bottom: 16px;
+}
+
+.configModal .ant-slider {
+  margin: 8px 0;
+}
+
+.templateCard {
+  border: 1px solid #e8e8e8;
+  border-radius: 6px;
+  padding: 16px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.templateCard:hover {
+  border-color: #1890ff;
+  box-shadow: 0 2px 8px rgba(24, 144, 255, 0.1);
+}
+
+.templateCard.selected {
+  border-color: #1890ff;
+  background: #f0f9ff;
+}
+
+.templateCard h5 {
+  margin: 0 0 8px 0;
+  color: #262626;
+}
+
+.templateCard p {
+  margin: 0;
+  font-size: 12px;
+  color: #666;
+}
+
+.generationTypeCard {
+  text-align: center;
+  padding: 24px 16px;
+  border: 2px solid #e8e8e8;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  height: 120px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.generationTypeCard:hover {
+  border-color: #1890ff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(24, 144, 255, 0.15);
+}
+
+.generationTypeCard.selected {
+  border-color: #1890ff;
+  background: #f0f9ff;
+}
+
+.generationTypeCard .anticon {
+  font-size: 32px;
+  margin-bottom: 8px;
+  color: #1890ff;
+}
+
+.generationTypeCard h5 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.generationTypeCard p {
+  margin: 4px 0 0 0;
+  font-size: 12px;
+  color: #666;
+}
+
+.qualitySelector {
+  display: flex;
+  gap: 12px;
+  margin: 16px 0;
+}
+
+.qualityOption {
+  flex: 1;
+  text-align: center;
+  padding: 16px 12px;
+  border: 1px solid #e8e8e8;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.qualityOption:hover {
+  border-color: #1890ff;
+}
+
+.qualityOption.selected {
+  border-color: #1890ff;
+  background: #f0f9ff;
+}
+
+.qualityOption h6 {
+  margin: 0 0 4px 0;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.qualityOption p {
+  margin: 0;
+  font-size: 12px;
+  color: #666;
+}
+
+.advancedOptions {
+  background: #fafafa;
+  padding: 16px;
+  border-radius: 6px;
+  margin-top: 16px;
+}
+
+.advancedOptions h5 {
+  margin: 0 0 16px 0;
+  color: #262626;
+}
+
+.sliderGroup {
+  margin-bottom: 16px;
+}
+
+.sliderGroup label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #262626;
+}
+
+.sliderGroup .ant-slider {
+  margin-bottom: 4px;
+}
+
+.sliderGroup .sliderValue {
+  text-align: right;
+  font-size: 12px;
+  color: #666;
+}
+
+.actionButtons {
+  display: flex;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.actionButtons .ant-btn {
+  flex: 1;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .dataGenerator {
+    padding: 16px;
+  }
+  
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  
+  .generationTypeCard {
+    height: 100px;
+    padding: 16px 12px;
+  }
+  
+  .generationTypeCard .anticon {
+    font-size: 24px;
+  }
+  
+  .qualitySelector {
+    flex-direction: column;
+  }
+  
+  .actionButtons {
+    flex-direction: column;
+  }
+}

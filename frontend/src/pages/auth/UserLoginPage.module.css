@@ -1,0 +1,226 @@
+/* 用户登录页面样式 */
+
+.container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 20px;
+}
+
+.loginCard {
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.loginCard .ant-card {
+  border: none;
+  border-radius: 12px;
+}
+
+.loginCard .ant-card-body {
+  padding: 40px 32px;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.icon {
+  font-size: 48px;
+  color: #1890ff;
+  margin-bottom: 16px;
+  display: block;
+}
+
+.header .ant-typography-title {
+  margin-bottom: 8px;
+  color: #262626;
+}
+
+.header .ant-typography-paragraph {
+  margin-bottom: 0;
+  font-size: 14px;
+}
+
+/* 表单样式 */
+.container .ant-form-item-label > label {
+  font-weight: 500;
+  color: #595959;
+}
+
+.container .ant-input-affix-wrapper {
+  border-radius: 8px;
+  border: 1px solid #d9d9d9;
+  transition: all 0.3s ease;
+}
+
+.container .ant-input-affix-wrapper:hover {
+  border-color: #40a9ff;
+}
+
+.container .ant-input-affix-wrapper-focused {
+  border-color: #1890ff;
+  box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+}
+
+.container .ant-btn-primary {
+  height: 48px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 500;
+  background: linear-gradient(135deg, #1890ff 0%, #096dd9 100%);
+  border: none;
+  box-shadow: 0 4px 12px rgba(24, 144, 255, 0.3);
+  transition: all 0.3s ease;
+}
+
+.container .ant-btn-primary:hover {
+  background: linear-gradient(135deg, #40a9ff 0%, #1890ff 100%);
+  box-shadow: 0 6px 16px rgba(24, 144, 255, 0.4);
+  transform: translateY(-1px);
+}
+
+.container .ant-btn-primary:active {
+  transform: translateY(0);
+}
+
+/* 信息提示区域 */
+.info {
+  margin-top: 24px;
+}
+
+.info .ant-alert {
+  border-radius: 8px;
+  border: 1px solid #e6f7ff;
+}
+
+.info .ant-alert-info {
+  background-color: #f6ffed;
+  border-color: #b7eb8f;
+}
+
+.info .ant-alert-info .ant-alert-icon {
+  color: #52c41a;
+}
+
+/* 操作区域 */
+.actions {
+  text-align: center;
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid #f0f0f0;
+}
+
+.actions .ant-btn-link {
+  color: #8c8c8c;
+  font-size: 14px;
+}
+
+.actions .ant-btn-link:hover {
+  color: #1890ff;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .container {
+    padding: 16px;
+  }
+  
+  .loginCard .ant-card-body {
+    padding: 32px 24px;
+  }
+  
+  .header {
+    margin-bottom: 24px;
+  }
+  
+  .icon {
+    font-size: 40px;
+    margin-bottom: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .loginCard {
+    max-width: 100%;
+  }
+  
+  .loginCard .ant-card-body {
+    padding: 24px 20px;
+  }
+  
+  .header {
+    margin-bottom: 20px;
+  }
+  
+  .icon {
+    font-size: 36px;
+    margin-bottom: 8px;
+  }
+}
+
+/* 加载状态 */
+.container .ant-btn-loading {
+  pointer-events: none;
+}
+
+/* 错误状态 */
+.container .ant-form-item-has-error .ant-input-affix-wrapper {
+  border-color: #ff4d4f;
+}
+
+.container .ant-form-item-has-error .ant-input-affix-wrapper:hover {
+  border-color: #ff4d4f;
+}
+
+.container .ant-form-item-has-error .ant-input-affix-wrapper-focused {
+  border-color: #ff4d4f;
+  box-shadow: 0 0 0 2px rgba(255, 77, 79, 0.2);
+}
+
+/* 成功状态 */
+.container .ant-alert-success {
+  border-color: #b7eb8f;
+  background-color: #f6ffed;
+}
+
+/* 动画效果 */
+.loginCard {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 输入框聚焦效果 */
+.container .ant-input-affix-wrapper-focused .ant-input {
+  box-shadow: none;
+}
+
+/* 表单验证样式 */
+.container .ant-form-item-explain-error {
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+/* 按钮禁用状态 */
+.container .ant-btn-primary[disabled] {
+  background: #f5f5f5;
+  border-color: #d9d9d9;
+  color: #bfbfbf;
+  box-shadow: none;
+}

@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>数据生成器中心</title>
+    <link rel="stylesheet" href="DataGeneratorPanel.css">
+</head>
+<body>
+    <!-- 数据生成器主容器 -->
+    <div id="data-generator-container" class="generator-container">
+        <!-- 头部导航 -->
+        <div class="generator-header">
+            <h1 class="generator-title">
+                <span class="title-icon">🤖</span>
+                数据生成器中心
+            </h1>
+            <div class="header-actions">
+                <button class="btn btn-secondary" id="refresh-stats-btn">
+                    <span class="btn-icon">🔄</span>
+                    刷新统计
+                </button>
+                <button class="btn btn-primary" id="export-data-btn">
+                    <span class="btn-icon">📊</span>
+                    导出数据
+                </button>
+            </div>
+        </div>
+
+        <!-- 配置调整提醒 -->
+        <div class="alert alert-warning">
+            <div class="alert-icon">⚠️</div>
+            <div class="alert-content">
+                <h4>配置调整说明</h4>
+                <p><strong>重要更新：</strong>Grok AI暂时失效，数据生成量已降低到原来的1/5，主要使用OpenAI GPT-4</p>
+                <ul>
+                    <li>生成数量：72条 → 15条 (减少79%)</li>
+                    <li>生成间隔：30分钟 → 60分钟 (增加100%)</li>
+                    <li>批次大小：10条 → 3条 (减少70%)</li>
+                    <li>AI提供商：Grok + OpenAI → 仅OpenAI GPT-4</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- 标签页导航 -->
+        <div class="tab-navigation">
+            <button class="tab-btn active" data-tab="dashboard">
+                <span class="tab-icon">📊</span>
+                仪表板
+            </button>
+            <button class="tab-btn" data-tab="questionnaire">
+                <span class="tab-icon">🤖</span>
+                问卷生成
+            </button>
+            <button class="tab-btn" data-tab="story">
+                <span class="tab-icon">📝</span>
+                故事生成
+            </button>
+            <button class="tab-btn" data-tab="user">
+                <span class="tab-icon">👤</span>
+                用户生成
+            </button>
+            <button class="tab-btn" data-tab="local-test">
+                <span class="tab-icon">⚡</span>
+                本地测试
+            </button>
+            <button class="tab-btn" data-tab="history">
+                <span class="tab-icon">📋</span>
+                生成历史
+            </button>
+        </div>
+
+        <!-- 仪表板标签页 -->
+        <div id="dashboard-tab" class="tab-content active">
+            <div class="dashboard-grid">
+                <!-- 系统统计卡片 -->
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <h3>系统统计</h3>
+                        <span class="stat-icon">📈</span>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-item">
+                            <span class="stat-label">今日生成</span>
+                            <span class="stat-value" id="today-generated">0</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">待审核</span>
+                            <span class="stat-value" id="pending-review">0</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">通过率</span>
+                            <span class="stat-value" id="pass-rate">0%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AI提供商状态 -->
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <h3>AI提供商状态</h3>
+                        <span class="stat-icon">🧠</span>
+                    </div>
+                    <div class="stat-content">
+                        <div class="provider-status">
+                            <div class="provider-item">
+                                <span class="provider-name">OpenAI GPT-4</span>
+                                <span class="provider-status-badge active">活跃</span>
+                            </div>
+                            <div class="provider-item">
+                                <span class="provider-name">Grok AI</span>
+                                <span class="provider-status-badge disabled">已禁用</span>
+                            </div>
+                            <div class="provider-item">
+                                <span class="provider-name">Claude</span>
+                                <span class="provider-status-badge inactive">未激活</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 性能监控 -->
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <h3>性能监控</h3>
+                        <span class="stat-icon">⚡</span>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-item">
+                            <span class="stat-label">响应时间</span>
+                            <span class="stat-value" id="response-time">0ms</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">成功率</span>
+                            <span class="stat-value" id="success-rate">0%</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">错误率</span>
+                            <span class="stat-value" id="error-rate">0%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 最近活动 -->
+                <div class="activity-card">
+                    <div class="activity-header">
+                        <h3>最近活动</h3>
+                        <span class="activity-icon">📋</span>
+                    </div>
+                    <div class="activity-content" id="recent-activities">
+                        <!-- 动态生成活动列表 -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 问卷生成标签页 -->
+        <div id="questionnaire-tab" class="tab-content">
+            <div class="generation-panel">
+                <div class="panel-left">
+                    <div class="config-card">
+                        <h3>问卷生成配置</h3>
+                        <form id="questionnaire-config-form" class="config-form">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="q-count">生成数量</label>
+                                    <input type="number" id="q-count" min="1" max="40" value="15">
+                                    <small>推荐: 15 (已调整到1/5)</small>
+                                </div>
+                                <div class="form-group">
+                                    <label for="q-quality">质量等级</label>
+                                    <select id="q-quality">
+                                        <option value="basic">基础质量</option>
+                                        <option value="standard" selected>标准质量</option>
+                                        <option value="premium">高级质量</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="q-interval">生成间隔 (分钟)</label>
+                                    <input type="number" id="q-interval" min="30" max="120" value="60">
+                                </div>
+                                <div class="form-group">
+                                    <label for="q-batch-size">批次大小</label>
+                                    <input type="number" id="q-batch-size" min="1" max="8" value="3">
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="q-ai-provider">AI提供商</label>
+                                    <select id="q-ai-provider">
+                                        <option value="openai" selected>OpenAI GPT-4</option>
+                                        <option value="grok" disabled>Grok AI (已禁用)</option>
+                                        <option value="claude" disabled>Claude (未激活)</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="q-template">数据模板</label>
+                                    <select id="q-template">
+                                        <option value="basic" selected>基础模板</option>
+                                        <option value="detailed">详细模板</option>
+                                        <option value="custom">自定义模板</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-actions">
+                                <button type="button" class="btn btn-primary" id="start-ai-generation">
+                                    <span class="btn-icon">🤖</span>
+                                    AI生成问卷 (需要API)
+                                </button>
+                                <button type="button" class="btn btn-success" id="start-local-generation">
+                                    <span class="btn-icon">⚡</span>
+                                    本地测试数据生成
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="panel-right">
+                    <div class="preview-card">
+                        <h3>生成预览</h3>
+                        <div class="preview-content">
+                            <div class="preview-item">
+                                <span class="preview-label">数量:</span>
+                                <span class="preview-value" id="preview-count">15 条问卷</span>
+                            </div>
+                            <div class="preview-item">
+                                <span class="preview-label">质量:</span>
+                                <span class="preview-value" id="preview-quality">标准质量</span>
+                            </div>
+                            <div class="preview-item">
+                                <span class="preview-label">预计耗时:</span>
+                                <span class="preview-value" id="preview-time">5 分钟</span>
+                            </div>
+                            <div class="preview-item">
+                                <span class="preview-label">预计成本:</span>
+                                <span class="preview-value" id="preview-cost">$0.45</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stats-card">
+                        <h3>实时统计</h3>
+                        <div class="stats-content">
+                            <div class="stats-item">
+                                <div class="stats-number" id="questionnaire-today">0</div>
+                                <div class="stats-label">今日问卷生成</div>
+                                <div class="stats-suffix">/ 500</div>
+                            </div>
+                            <div class="stats-divider"></div>
+                            <div class="stats-item">
+                                <div class="stats-number" id="questionnaire-pass-rate">0%</div>
+                                <div class="stats-label">问卷审核通过率</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 故事生成标签页 -->
+        <div id="story-tab" class="tab-content">
+            <div class="generation-panel">
+                <div class="panel-left">
+                    <div class="config-card">
+                        <h3>故事生成配置</h3>
+                        <form id="story-config-form" class="config-form">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="s-count">生成数量</label>
+                                    <input type="number" id="s-count" min="1" max="20" value="8">
+                                    <small>推荐: 8 (已调整到1/5)</small>
+                                </div>
+                                <div class="form-group">
+                                    <label for="s-category">故事类型</label>
+                                    <select id="s-category">
+                                        <option value="job-hunting">求职经历</option>
+                                        <option value="career-change">职业转换</option>
+                                        <option value="entrepreneurship">创业经历</option>
+                                        <option value="internship">实习体验</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="s-length">内容长度</label>
+                                    <select id="s-length">
+                                        <option value="short">短篇 (200-500字)</option>
+                                        <option value="medium" selected>中篇 (500-1000字)</option>
+                                        <option value="long">长篇 (1000-2000字)</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="s-creativity">创意度</label>
+                                    <input type="range" id="s-creativity" min="0.1" max="1.0" step="0.1" value="0.7">
+                                    <small>当前: <span id="creativity-value">0.7</span></small>
+                                </div>
+                            </div>
+                            <div class="form-actions">
+                                <button type="button" class="btn btn-primary" id="start-story-generation">
+                                    <span class="btn-icon">📝</span>
+                                    生成故事内容
+                                </button>
+                                <button type="button" class="btn btn-secondary" id="preview-story">
+                                    <span class="btn-icon">👁️</span>
+                                    预览模板
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="panel-right">
+                    <div class="preview-card">
+                        <h3>故事预览</h3>
+                        <div class="story-preview" id="story-preview">
+                            <div class="story-title">我的求职之路：从迷茫到收获心仪offer</div>
+                            <div class="story-content">
+                                回想起自己的求职经历，真是五味杂陈。作为一名应届毕业生，求职路上充满了挑战...
+                            </div>
+                            <div class="story-meta">
+                                <span class="story-category">求职经历</span>
+                                <span class="story-length">约800字</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 用户生成标签页 -->
+        <div id="user-tab" class="tab-content">
+            <div class="generation-panel">
+                <div class="panel-left">
+                    <div class="config-card">
+                        <h3>用户生成配置</h3>
+                        <form id="user-config-form" class="config-form">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="u-count">生成数量</label>
+                                    <input type="number" id="u-count" min="1" max="30" value="14">
+                                    <small>推荐: 14 (已调整到1/5)</small>
+                                </div>
+                                <div class="form-group">
+                                    <label for="u-type">用户类型</label>
+                                    <select id="u-type">
+                                        <option value="anonymous">半匿名用户</option>
+                                        <option value="verified">实名用户</option>
+                                        <option value="mixed" selected>混合类型</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>教育背景</label>
+                                    <div class="checkbox-group">
+                                        <label class="checkbox-item">
+                                            <input type="checkbox" value="undergraduate" checked>
+                                            <span>本科</span>
+                                        </label>
+                                        <label class="checkbox-item">
+                                            <input type="checkbox" value="graduate" checked>
+                                            <span>研究生</span>
+                                        </label>
+                                        <label class="checkbox-item">
+                                            <input type="checkbox" value="phd">
+                                            <span>博士</span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>专业领域</label>
+                                    <div class="checkbox-group">
+                                        <label class="checkbox-item">
+                                            <input type="checkbox" value="cs" checked>
+                                            <span>计算机</span>
+                                        </label>
+                                        <label class="checkbox-item">
+                                            <input type="checkbox" value="engineering" checked>
+                                            <span>工程</span>
+                                        </label>
+                                        <label class="checkbox-item">
+                                            <input type="checkbox" value="business">
+                                            <span>商科</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-actions">
+                                <button type="button" class="btn btn-primary" id="start-user-generation">
+                                    <span class="btn-icon">👤</span>
+                                    生成半匿名用户
+                                </button>
+                                <button type="button" class="btn btn-secondary" id="batch-import-users">
+                                    <span class="btn-icon">👥</span>
+                                    批量导入
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="panel-right">
+                    <div class="stats-card">
+                        <h3>用户生成统计</h3>
+                        <div class="stats-content">
+                            <div class="stats-item">
+                                <div class="stats-number" id="users-today">0</div>
+                                <div class="stats-label">今日生成用户</div>
+                                <div class="stats-suffix">个</div>
+                            </div>
+                            <div class="stats-divider"></div>
+                            <div class="stats-item">
+                                <div class="stats-number" id="users-active-rate">0%</div>
+                                <div class="stats-label">活跃用户率</div>
+                            </div>
+                        </div>
+                        <div class="user-id-preview">
+                            <h4>用户ID格式预览:</h4>
+                            <code>12345678901-ABCD</code>
+                            <p>11位数字 + 4位字母组合</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 本地测试标签页 -->
+        <div id="local-test-tab" class="tab-content">
+            <div class="local-test-panel">
+                <div class="test-info-card">
+                    <h3>本地测试数据生成</h3>
+                    <p>使用本地脚本快速生成测试数据，无需API调用，适合开发和测试环境。</p>
+                </div>
+
+                <div class="test-config-card">
+                    <h4>生成配置</h4>
+                    <form id="local-test-form" class="config-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="lt-count">生成数量</label>
+                                <input type="number" id="lt-count" min="10" max="1000" value="100">
+                            </div>
+                            <div class="form-group">
+                                <label for="lt-type">数据类型</label>
+                                <select id="lt-type">
+                                    <option value="questionnaire" selected>问卷数据</option>
+                                    <option value="story">故事数据</option>
+                                    <option value="user">用户数据</option>
+                                    <option value="mixed">混合数据</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>包含功能</label>
+                                <div class="checkbox-group">
+                                    <label class="checkbox-item">
+                                        <input type="checkbox" id="include-voices" checked>
+                                        <span>包含语音文件</span>
+                                    </label>
+                                    <label class="checkbox-item">
+                                        <input type="checkbox" id="include-metadata" checked>
+                                        <span>包含元数据</span>
+                                    </label>
+                                    <label class="checkbox-item">
+                                        <input type="checkbox" id="enable-deidentification">
+                                        <span>启用去标识化</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-success" id="start-local-test">
+                                <span class="btn-icon">⚡</span>
+                                开始本地生成
+                            </button>
+                            <button type="button" class="btn btn-secondary" id="verify-local-data">
+                                <span class="btn-icon">✅</span>
+                                验证数据
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="test-results-card" id="local-test-results" style="display: none;">
+                    <h4>生成结果</h4>
+                    <div class="results-content">
+                        <!-- 动态生成结果内容 -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 生成历史标签页 -->
+        <div id="history-tab" class="tab-content">
+            <div class="history-panel">
+                <div class="history-header">
+                    <h3>生成历史</h3>
+                    <div class="history-actions">
+                        <button class="btn btn-secondary" id="refresh-history">
+                            <span class="btn-icon">🔄</span>
+                            刷新
+                        </button>
+                        <button class="btn btn-primary" id="export-history">
+                            <span class="btn-icon">📊</span>
+                            导出历史
+                        </button>
+                    </div>
+                </div>
+
+                <div class="history-filters">
+                    <select id="history-type-filter">
+                        <option value="">所有类型</option>
+                        <option value="questionnaire">问卷生成</option>
+                        <option value="story">故事生成</option>
+                        <option value="user">用户生成</option>
+                        <option value="local">本地测试</option>
+                    </select>
+                    <select id="history-status-filter">
+                        <option value="">所有状态</option>
+                        <option value="completed">已完成</option>
+                        <option value="running">进行中</option>
+                        <option value="failed">失败</option>
+                        <option value="stopped">已停止</option>
+                    </select>
+                    <input type="date" id="history-date-filter">
+                </div>
+
+                <div class="history-list" id="history-list">
+                    <!-- 动态生成历史记录 -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 进度监控模态框 -->
+    <div id="progress-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>生成进度监控</h3>
+                <button class="modal-close" id="close-progress-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="progress-info">
+                    <div class="progress-item">
+                        <span class="progress-label">任务ID:</span>
+                        <span class="progress-value" id="task-id">-</span>
+                    </div>
+                    <div class="progress-item">
+                        <span class="progress-label">状态:</span>
+                        <span class="progress-value" id="task-status">-</span>
+                    </div>
+                    <div class="progress-item">
+                        <span class="progress-label">进度:</span>
+                        <span class="progress-value" id="task-progress">0/0</span>
+                    </div>
+                </div>
+                <div class="progress-bar-container">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
+                    </div>
+                    <div class="progress-percentage" id="progress-percentage">0%</div>
+                </div>
+                <div class="progress-details" id="progress-details">
+                    <!-- 动态生成进度详情 -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="stop-generation">停止生成</button>
+                <button class="btn btn-primary" id="close-modal">关闭</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 引入脚本 -->
+    <script src="../services/dataGenerationService.js"></script>
+    <script src="../services/aiProviderService.js"></script>
+    <script src="../services/localGeneratorService.js"></script>
+    <script src="../utils/chunkProcessor.js"></script>
+    <script src="../utils/performanceMonitor.js"></script>
+    <script src="DataGeneratorPanel.js"></script>
+</body>
+</html>

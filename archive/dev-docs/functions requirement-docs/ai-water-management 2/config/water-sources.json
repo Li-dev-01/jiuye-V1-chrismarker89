@@ -1,0 +1,361 @@
+{
+  "waterSources": {
+    "openai": {
+      "id": "openai",
+      "name": "OpenAI GPT-4",
+      "type": "primary",
+      "status": "active",
+      "config": {
+        "apiKey": "sk-proj-...",
+        "endpoint": "https://api.openai.com/v1/chat/completions",
+        "model": "gpt-4",
+        "thinkingModel": "gpt-4-turbo",
+        "maxConcurrent": 10,
+        "rateLimit": 60,
+        "costPerToken": 0.000030,
+        "timeout": 30000,
+        "retryAttempts": 3,
+        "retryDelay": 1000
+      },
+      "health": {
+        "lastCheck": "2024-01-20T10:30:00Z",
+        "responseTime": 500,
+        "successRate": 98.5,
+        "errorCount": 0,
+        "uptime": 99.9,
+        "totalChecks": 1000,
+        "healthyChecks": 985
+      },
+      "usage": {
+        "requestsToday": 150,
+        "tokensUsed": 75000,
+        "costToday": 2.45,
+        "lastUsed": "2024-01-20T10:25:00Z",
+        "monthlyRequests": 4500,
+        "monthlyTokens": 2250000,
+        "monthlyCost": 67.50
+      },
+      "features": {
+        "streaming": true,
+        "functionCalling": true,
+        "imageGeneration": false,
+        "codeExecution": false,
+        "multimodal": true
+      },
+      "limits": {
+        "maxTokensPerRequest": 4096,
+        "maxRequestsPerMinute": 60,
+        "maxTokensPerMinute": 150000,
+        "maxRequestsPerDay": 86400
+      }
+    },
+    "grok": {
+      "id": "grok",
+      "name": "Grok AI",
+      "type": "backup",
+      "status": "inactive",
+      "config": {
+        "apiKey": "grok-...",
+        "endpoint": "https://api.x.ai/v1/chat/completions",
+        "model": "grok-beta",
+        "maxConcurrent": 5,
+        "rateLimit": 30,
+        "costPerToken": 0.000020,
+        "timeout": 30000,
+        "retryAttempts": 3,
+        "retryDelay": 1000
+      },
+      "health": {
+        "lastCheck": "2024-01-20T10:30:00Z",
+        "responseTime": 0,
+        "successRate": 0,
+        "errorCount": 5,
+        "uptime": 0,
+        "totalChecks": 100,
+        "healthyChecks": 0
+      },
+      "usage": {
+        "requestsToday": 0,
+        "tokensUsed": 0,
+        "costToday": 0,
+        "lastUsed": "2024-01-19T15:30:00Z",
+        "monthlyRequests": 0,
+        "monthlyTokens": 0,
+        "monthlyCost": 0
+      },
+      "features": {
+        "streaming": true,
+        "functionCalling": false,
+        "imageGeneration": false,
+        "codeExecution": false,
+        "multimodal": false
+      },
+      "limits": {
+        "maxTokensPerRequest": 2048,
+        "maxRequestsPerMinute": 30,
+        "maxTokensPerMinute": 60000,
+        "maxRequestsPerDay": 43200
+      }
+    },
+    "gemini": {
+      "id": "gemini",
+      "name": "Google Gemini",
+      "type": "secondary",
+      "status": "inactive",
+      "config": {
+        "apiKey": "AIza...",
+        "endpoint": "https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent",
+        "model": "gemini-pro",
+        "maxConcurrent": 8,
+        "rateLimit": 40,
+        "costPerToken": 0.000025,
+        "timeout": 30000,
+        "retryAttempts": 3,
+        "retryDelay": 1000
+      },
+      "health": {
+        "lastCheck": "2024-01-20T10:30:00Z",
+        "responseTime": 0,
+        "successRate": 0,
+        "errorCount": 0,
+        "uptime": 0,
+        "totalChecks": 50,
+        "healthyChecks": 0
+      },
+      "usage": {
+        "requestsToday": 0,
+        "tokensUsed": 0,
+        "costToday": 0,
+        "lastUsed": "never",
+        "monthlyRequests": 0,
+        "monthlyTokens": 0,
+        "monthlyCost": 0
+      },
+      "features": {
+        "streaming": false,
+        "functionCalling": true,
+        "imageGeneration": false,
+        "codeExecution": false,
+        "multimodal": true
+      },
+      "limits": {
+        "maxTokensPerRequest": 8192,
+        "maxRequestsPerMinute": 40,
+        "maxTokensPerMinute": 100000,
+        "maxRequestsPerDay": 57600
+      }
+    },
+    "claude": {
+      "id": "claude",
+      "name": "Anthropic Claude",
+      "type": "secondary",
+      "status": "inactive",
+      "config": {
+        "apiKey": "claude-...",
+        "endpoint": "https://api.anthropic.com/v1/messages",
+        "model": "claude-3-sonnet",
+        "maxConcurrent": 5,
+        "rateLimit": 25,
+        "costPerToken": 0.000015,
+        "timeout": 30000,
+        "retryAttempts": 3,
+        "retryDelay": 1000
+      },
+      "health": {
+        "lastCheck": "2024-01-20T10:30:00Z",
+        "responseTime": 0,
+        "successRate": 0,
+        "errorCount": 0,
+        "uptime": 0,
+        "totalChecks": 0,
+        "healthyChecks": 0
+      },
+      "usage": {
+        "requestsToday": 0,
+        "tokensUsed": 0,
+        "costToday": 0,
+        "lastUsed": "never",
+        "monthlyRequests": 0,
+        "monthlyTokens": 0,
+        "monthlyCost": 0
+      },
+      "features": {
+        "streaming": true,
+        "functionCalling": false,
+        "imageGeneration": false,
+        "codeExecution": false,
+        "multimodal": true
+      },
+      "limits": {
+        "maxTokensPerRequest": 4096,
+        "maxRequestsPerMinute": 25,
+        "maxTokensPerMinute": 75000,
+        "maxRequestsPerDay": 36000
+      }
+    }
+  },
+  "metadata": {
+    "version": "1.0.0",
+    "lastUpdated": "2024-01-20T10:30:00Z",
+    "totalSources": 4,
+    "activeSources": 1,
+    "supportedModels": [
+      "gpt-4",
+      "gpt-4-turbo",
+      "grok-beta",
+      "gemini-pro",
+      "claude-3-sonnet"
+    ],
+    "supportedFeatures": [
+      "streaming",
+      "functionCalling",
+      "multimodal",
+      "imageGeneration",
+      "codeExecution"
+    ]
+  },
+  "globalSettings": {
+    "defaultTimeout": 30000,
+    "defaultRetryAttempts": 3,
+    "defaultRetryDelay": 1000,
+    "healthCheckInterval": 300000,
+    "maxConcurrentRequests": 50,
+    "requestLogging": true,
+    "errorLogging": true,
+    "performanceMonitoring": true,
+    "costTracking": true
+  },
+  "qualityProfiles": {
+    "premium": {
+      "name": "顶级质量",
+      "description": "最高质量的AI服务，适用于关键业务",
+      "preferredSources": ["openai", "claude"],
+      "minSuccessRate": 99.0,
+      "maxResponseTime": 2000,
+      "maxCostPerToken": 0.000050
+    },
+    "high": {
+      "name": "高质量",
+      "description": "高质量的AI服务，适用于重要任务",
+      "preferredSources": ["openai", "gemini", "claude"],
+      "minSuccessRate": 95.0,
+      "maxResponseTime": 3000,
+      "maxCostPerToken": 0.000035
+    },
+    "medium": {
+      "name": "中等质量",
+      "description": "平衡质量和成本的AI服务",
+      "preferredSources": ["openai", "gemini", "grok"],
+      "minSuccessRate": 90.0,
+      "maxResponseTime": 5000,
+      "maxCostPerToken": 0.000025
+    },
+    "low": {
+      "name": "低成本",
+      "description": "成本优先的AI服务，适用于非关键任务",
+      "preferredSources": ["grok", "gemini"],
+      "minSuccessRate": 85.0,
+      "maxResponseTime": 8000,
+      "maxCostPerToken": 0.000020
+    }
+  },
+  "costOptimization": {
+    "enabled": true,
+    "strategies": [
+      {
+        "name": "peak_hour_switching",
+        "description": "在高峰时段切换到低成本水源",
+        "enabled": true,
+        "peakHours": ["09:00-12:00", "14:00-18:00"],
+        "peakSources": ["grok", "gemini"],
+        "offPeakSources": ["openai", "claude"]
+      },
+      {
+        "name": "batch_optimization",
+        "description": "批量处理请求以降低成本",
+        "enabled": true,
+        "minBatchSize": 3,
+        "maxBatchSize": 10,
+        "batchTimeout": 5000
+      },
+      {
+        "name": "cache_optimization",
+        "description": "缓存相似请求的响应",
+        "enabled": false,
+        "cacheSize": 1000,
+        "cacheTTL": 3600000,
+        "similarityThreshold": 0.8
+      }
+    ]
+  },
+  "monitoring": {
+    "healthCheck": {
+      "enabled": true,
+      "interval": 300000,
+      "timeout": 10000,
+      "retryAttempts": 3,
+      "checks": [
+        "api_connectivity",
+        "response_time",
+        "error_rate",
+        "rate_limit",
+        "model_availability"
+      ]
+    },
+    "performance": {
+      "enabled": true,
+      "metricsInterval": 60000,
+      "retentionDays": 30,
+      "alertThresholds": {
+        "responseTime": {
+          "warning": 3000,
+          "critical": 5000
+        },
+        "errorRate": {
+          "warning": 0.05,
+          "critical": 0.10
+        },
+        "throughput": {
+          "warning": 10,
+          "critical": 5
+        }
+      }
+    },
+    "cost": {
+      "enabled": true,
+      "trackingInterval": 60000,
+      "budgetAlerts": true,
+      "dailyBudget": 50.00,
+      "monthlyBudget": 1500.00,
+      "alertThresholds": {
+        "daily": 40.00,
+        "monthly": 1200.00
+      }
+    }
+  },
+  "security": {
+    "apiKeyEncryption": true,
+    "requestSigning": false,
+    "rateLimiting": {
+      "enabled": true,
+      "globalLimit": 1000,
+      "perSourceLimit": 500,
+      "windowMs": 60000
+    },
+    "accessControl": {
+      "enabled": false,
+      "allowedIPs": [],
+      "blockedIPs": [],
+      "requireAuth": false
+    }
+  },
+  "backup": {
+    "enabled": true,
+    "interval": 86400000,
+    "retentionDays": 7,
+    "location": "local",
+    "includeMetrics": true,
+    "includeConfigs": true,
+    "includeLogs": false
+  }
+}

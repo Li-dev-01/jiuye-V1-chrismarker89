@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A+B登录模态框示例</title>
+    <link rel="stylesheet" href="../components/ABLoginModal.css">
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: white;
+        }
+        
+        .demo-container {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        .demo-header {
+            margin-bottom: 40px;
+        }
+        
+        .demo-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .demo-subtitle {
+            font-size: 1.125rem;
+            opacity: 0.9;
+            margin-bottom: 2rem;
+        }
+        
+        .demo-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 30px 0;
+        }
+        
+        .demo-btn {
+            padding: 12px 24px;
+            border: 2px solid white;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+        
+        .demo-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+        
+        .demo-btn.primary {
+            background: rgba(255, 255, 255, 0.9);
+            color: #667eea;
+        }
+        
+        .demo-btn.primary:hover {
+            background: white;
+        }
+        
+        .demo-info {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 30px;
+            margin: 40px 0;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .demo-info h3 {
+            margin-top: 0;
+            color: #fff;
+        }
+        
+        .test-accounts {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .account-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+        }
+        
+        .account-title {
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #fff;
+        }
+        
+        .account-details {
+            font-family: monospace;
+            font-size: 14px;
+            margin-bottom: 15px;
+            opacity: 0.9;
+        }
+        
+        .quick-login-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.2s;
+        }
+        
+        .quick-login-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        .status-display {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            padding: 20px;
+            margin: 30px 0;
+            text-align: left;
+        }
+        
+        .status-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding: 5px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .status-label {
+            font-weight: 500;
+        }
+        
+        .status-value {
+            font-family: monospace;
+            opacity: 0.8;
+        }
+        
+        @media (max-width: 640px) {
+            .demo-title {
+                font-size: 2rem;
+            }
+            
+            .demo-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .demo-btn {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-container">
+        <div class="demo-header">
+            <h1 class="demo-title">A+B半匿名登录</h1>
+            <p class="demo-subtitle">体验安全的半匿名身份验证系统</p>
+        </div>
+
+        <div class="demo-buttons">
+            <button class="demo-btn primary" onclick="showBasicModal()">
+                基础登录模态框
+            </button>
+            <button class="demo-btn" onclick="showCustomModal()">
+                自定义配置模态框
+            </button>
+            <button class="demo-btn" onclick="showWithCallbacks()">
+                带回调的模态框
+            </button>
+            <button class="demo-btn" onclick="clearCurrentIdentity()">
+                清除当前身份
+            </button>
+        </div>
+
+        <div class="demo-info">
+            <h3>💡 使用说明</h3>
+            <p>A+B半匿名登录系统允许用户通过A值（11位数字，如手机号）和B值（4或6位密码）进行身份验证，同时保护用户隐私。</p>
+            <ul style="text-align: left; max-width: 600px; margin: 0 auto;">
+                <li><strong>A值</strong>：11位数字，通常使用手机号码</li>
+                <li><strong>B值</strong>：4位或6位数字密码</li>
+                <li><strong>安全性</strong>：系统不存储原始A+B值，只保存加密哈希</li>
+                <li><strong>匿名性</strong>：生成唯一UUID标识，保护真实身份</li>
+            </ul>
+        </div>
+
+        <div class="demo-info">
+            <h3>🧪 测试账号</h3>
+            <p>以下是预设的测试账号，您可以直接使用这些组合进行登录测试：</p>
+            
+            <div class="test-accounts" id="test-accounts">
+                <!-- 动态生成测试账号 -->
+            </div>
+        </div>
+
+        <div class="demo-info">
+            <h3>📊 当前状态</h3>
+            <div class="status-display" id="status-display">
+                <!-- 动态生成状态信息 -->
+            </div>
+            <div style="text-align: center; margin-top: 20px;">
+                <button class="demo-btn" onclick="refreshStatus()">刷新状态</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 引入脚本 -->
+    <script src="../services/cryptoUtils.js"></script>
+    <script src="../services/identityManager.js"></script>
+    <script src="../services/anonymousAuthService.js"></script>
+    <script src="../components/ABLoginModal.js"></script>
+
+    <script>
+        // 显示基础模态框
+        function showBasicModal() {
+            showABLoginModal({
+                title: "半匿名身份验证",
+                description: "请输入您的A+B组合以验证身份",
+                onSuccess: (result) => {
+                    alert(`登录成功！\n用户ID: ${result.user.id}\n用户名: ${result.user.displayName}`);
+                    refreshStatus();
+                },
+                onError: (error) => {
+                    alert(`登录失败：${error}`);
+                }
+            });
+        }
+
+        // 显示自定义配置模态框
+        function showCustomModal() {
+            showABLoginModal({
+                title: "🔐 自定义登录",
+                description: "这是一个自定义配置的登录模态框示例",
+                autoClose: false, // 不自动关闭
+                onSuccess: (result) => {
+                    console.log('自定义登录成功:', result);
+                    
+                    // 手动显示成功信息
+                    const successMsg = `
+                        🎉 登录成功！
+                        
+                        用户信息：
+                        • ID: ${result.user.id}
+                        • 显示名: ${result.user.displayName}
+                        • 类型: ${result.user.type}
+                        • 登录时间: ${new Date(result.user.loginTime).toLocaleString()}
+                        
+                        Token: ${result.token.substring(0, 20)}...
+                    `;
+                    
+                    alert(successMsg);
+                    hideABLoginModal(); // 手动关闭
+                    refreshStatus();
+                },
+                onError: (error) => {
+                    console.error('自定义登录失败:', error);
+                    alert(`❌ 登录失败：${error}`);
+                },
+                onClose: () => {
+                    console.log('自定义模态框已关闭');
+                }
+            });
+        }
+
+        // 显示带回调的模态框
+        function showWithCallbacks() {
+            showABLoginModal({
+                title: "📱 回调示例",
+                description: "演示各种回调函数的使用",
+                onSuccess: (result) => {
+                    // 复杂的成功处理逻辑
+                    console.log('=== 登录成功回调 ===');
+                    console.log('用户信息:', result.user);
+                    console.log('Token信息:', result.token);
+                    console.log('UUID:', result.uuid);
+                    
+                    // 保存到自定义存储
+                    sessionStorage.setItem('demo_user', JSON.stringify(result.user));
+                    sessionStorage.setItem('demo_login_time', new Date().toISOString());
+                    
+                    // 显示详细信息
+                    showSuccessDetails(result);
+                    refreshStatus();
+                },
+                onError: (error) => {
+                    console.error('=== 登录失败回调 ===');
+                    console.error('错误信息:', error);
+                    
+                    // 记录错误
+                    const errorLog = {
+                        error: error,
+                        timestamp: new Date().toISOString(),
+                        userAgent: navigator.userAgent
+                    };
+                    
+                    console.log('错误日志:', errorLog);
+                    
+                    // 显示友好的错误信息
+                    showErrorDetails(error);
+                },
+                onClose: () => {
+                    console.log('=== 模态框关闭回调 ===');
+                    console.log('模态框已关闭，清理资源...');
+                }
+            });
+        }
+
+        // 显示成功详情
+        function showSuccessDetails(result) {
+            const details = `
+🎉 登录成功详情
+
+👤 用户信息
+• ID: ${result.user.id}
+• 显示名: ${result.user.displayName}
+• 用户名: ${result.user.username}
+• 类型: ${result.user.type}
+
+🔑 认证信息
+• Token: ${result.token.substring(0, 30)}...
+• UUID: ${result.uuid}
+• 过期时间: ${new Date(result.expiresAt).toLocaleString()}
+
+⏰ 时间信息
+• 登录时间: ${new Date(result.user.loginTime).toLocaleString()}
+• 当前时间: ${new Date().toLocaleString()}
+
+🔒 安全信息
+• 身份哈希: ${result.user.identityHash.substring(0, 16)}...
+• 认证类型: 半匿名登录
+            `.trim();
+            
+            alert(details);
+        }
+
+        // 显示错误详情
+        function showErrorDetails(error) {
+            const details = `
+❌ 登录失败详情
+
+错误信息: ${error}
+
+💡 可能的解决方案：
+• 检查A值是否为11位数字
+• 检查B值是否为4位或6位数字
+• 确认A+B组合是否正确
+• 尝试使用测试账号进行验证
+
+🧪 测试账号：
+• A: 13812345678, B: 1234
+• A: 13987654321, B: 123456
+• A: 15612345678, B: 0000
+
+如果问题持续，请联系技术支持。
+            `.trim();
+            
+            alert(details);
+        }
+
+        // 清除当前身份
+        function clearCurrentIdentity() {
+            if (window.IdentityManager) {
+                const current = window.IdentityManager.getCurrentIdentity();
+                if (current) {
+                    if (confirm(`确定要清除当前身份吗？\n\n当前身份: ${current.user?.displayName || '匿名用户'}\n身份类型: ${current.type}`)) {
+                        window.IdentityManager.clearCurrentIdentity();
+                        alert('✅ 当前身份已清除');
+                        refreshStatus();
+                    }
+                } else {
+                    alert('ℹ️ 当前没有已登录的身份');
+                }
+            } else {
+                // 简单清除
+                localStorage.clear();
+                sessionStorage.clear();
+                alert('✅ 所有身份信息已清除');
+                refreshStatus();
+            }
+        }
+
+        // 刷新状态显示
+        function refreshStatus() {
+            const statusContainer = document.getElementById('status-display');
+            
+            // 获取各种状态信息
+            const isAuth = window.AnonymousAuthService ? window.AnonymousAuthService.isAuthenticated() : false;
+            const currentIdentity = window.IdentityManager ? window.IdentityManager.getCurrentIdentity() : null;
+            const cryptoInfo = window.CryptoUtils ? window.CryptoUtils.getCryptoInfo() : null;
+            
+            const statusItems = [
+                { label: '认证状态', value: isAuth ? '✅ 已认证' : '❌ 未认证' },
+                { label: '当前用户', value: currentIdentity?.user?.displayName || '无' },
+                { label: '身份类型', value: currentIdentity?.type || '无' },
+                { label: '用户ID', value: currentIdentity?.user?.id?.substring(0, 16) + '...' || '无' },
+                { label: 'Token状态', value: currentIdentity?.token ? '✅ 有效' : '❌ 无' },
+                { label: '登录时间', value: currentIdentity?.user?.loginTime ? new Date(currentIdentity.user.loginTime).toLocaleString() : '无' },
+                { label: 'WebCrypto支持', value: cryptoInfo?.webCryptoSupported ? '✅ 支持' : '❌ 不支持' },
+                { label: '安全随机数', value: cryptoInfo?.secureRandomSupported ? '✅ 支持' : '❌ 不支持' }
+            ];
+            
+            const html = statusItems.map(item => `
+                <div class="status-item">
+                    <span class="status-label">${item.label}:</span>
+                    <span class="status-value">${item.value}</span>
+                </div>
+            `).join('');
+            
+            statusContainer.innerHTML = html;
+        }
+
+        // 显示测试账号
+        function showTestAccounts() {
+            const container = document.getElementById('test-accounts');
+            const accounts = window.AnonymousAuthService ? window.AnonymousAuthService.getTestCombinations() : [];
+            
+            const html = accounts.map(account => `
+                <div class="account-card">
+                    <div class="account-title">${account.name}</div>
+                    <div class="account-details">
+                        A值: ${account.a}<br>
+                        B值: ${account.b}
+                    </div>
+                    <button class="quick-login-btn" onclick="quickLogin('${account.a}', '${account.b}', '${account.name}')">
+                        快速登录
+                    </button>
+                </div>
+            `).join('');
+            
+            container.innerHTML = html || '<p>无测试账号数据</p>';
+        }
+
+        // 快速登录
+        async function quickLogin(a, b, name) {
+            try {
+                console.log(`快速登录: ${name}`);
+                const result = await window.AnonymousAuthService.login(a, b);
+                
+                if (result.success) {
+                    alert(`✅ ${name} 登录成功！\n\n用户ID: ${result.data.user.id}\n显示名: ${result.data.user.displayName}`);
+                    refreshStatus();
+                } else {
+                    alert(`❌ ${name} 登录失败：${result.error}`);
+                }
+            } catch (error) {
+                alert(`❌ ${name} 登录异常：${error.message}`);
+            }
+        }
+
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('A+B登录模态框示例页面已加载');
+            
+            // 初始化显示
+            refreshStatus();
+            showTestAccounts();
+            
+            // 定期刷新状态
+            setInterval(refreshStatus, 10000);
+            
+            // 添加键盘快捷键
+            document.addEventListener('keydown', function(e) {
+                if (e.ctrlKey && e.key === 'l') {
+                    e.preventDefault();
+                    showBasicModal();
+                }
+                
+                if (e.ctrlKey && e.key === 'r') {
+                    e.preventDefault();
+                    refreshStatus();
+                }
+            });
+            
+            console.log('快捷键提示: Ctrl+L 打开登录框, Ctrl+R 刷新状态');
+        });
+    </script>
+</body>
+</html>

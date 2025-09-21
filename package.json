@@ -1,0 +1,61 @@
+{
+  "name": "college-employment-survey-v1",
+  "version": "1.0.0",
+  "description": "大学生就业问卷调查平台 V1 - 基于现代化技术栈的重构版本",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "concurrently \"pnpm dev:frontend\" \"pnpm dev:backend\"",
+    "dev:frontend": "pnpm --filter frontend dev",
+    "dev:backend": "pnpm --filter backend dev",
+    "build": "pnpm --filter frontend build && pnpm --filter backend build",
+    "build:frontend": "pnpm --filter frontend build",
+    "build:backend": "pnpm --filter backend build",
+    "test": "pnpm --filter frontend test && pnpm --filter backend test",
+    "test:frontend": "pnpm --filter frontend test",
+    "test:backend": "pnpm --filter backend test",
+    "lint": "pnpm --filter frontend lint && pnpm --filter backend lint",
+    "lint:fix": "pnpm --filter frontend lint:fix && pnpm --filter backend lint:fix",
+    "type-check": "pnpm --filter frontend type-check && pnpm --filter backend type-check",
+    "deploy": "pnpm build && pnpm deploy:frontend && pnpm deploy:backend",
+    "deploy:frontend": "pnpm --filter frontend deploy",
+    "deploy:backend": "pnpm --filter backend deploy",
+    "clean": "pnpm --filter frontend clean && pnpm --filter backend clean",
+    "db:create": "pnpm --filter backend db:create",
+    "db:migrate": "pnpm --filter backend db:migrate",
+    "db:seed": "pnpm --filter backend db:seed"
+  },
+  "workspaces": [
+    "frontend",
+    "backend",
+    "shared"
+  ],
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "concurrently": "^8.2.2",
+    "typescript": "^5.5.4"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "pnpm": ">=8.0.0"
+  },
+  "packageManager": "pnpm@10.8.0",
+  "keywords": [
+    "employment-survey",
+    "questionnaire",
+    "react",
+    "cloudflare-workers",
+    "typescript",
+    "college-students"
+  ],
+  "author": "V1 Development Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-username/college-employment-survey-v1.git"
+  },
+  "bugs": {
+    "url": "https://github.com/your-username/college-employment-survey-v1/issues"
+  },
+  "homepage": "https://github.com/your-username/college-employment-survey-v1#readme"
+}

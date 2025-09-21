@@ -1,0 +1,79 @@
+/* 卡片下载按钮样式 */
+
+.card-download-button {
+  transition: all 0.3s ease;
+}
+
+.card-download-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.card-download-button.ant-btn-loading {
+  pointer-events: none;
+}
+
+/* 下载按钮组合样式 */
+.card-download-group {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.card-download-group .ant-btn {
+  border-radius: 6px;
+}
+
+/* 风格选择下拉菜单 */
+.card-style-menu {
+  min-width: 200px;
+}
+
+.card-style-menu .ant-dropdown-menu-item {
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.card-style-menu .ant-dropdown-menu-item:hover {
+  background-color: #f5f5f5;
+}
+
+/* 卡片预览样式 */
+.card-preview-container {
+  text-align: center;
+  padding: 20px;
+}
+
+.card-preview-image {
+  max-width: 100%;
+  max-height: 500px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.card-preview-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 40px;
+  color: #666;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .card-download-group {
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  .card-download-group .ant-btn {
+    width: 100%;
+  }
+  
+  .card-style-menu {
+    min-width: 150px;
+  }
+}

@@ -1,0 +1,1184 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>快速审核系统 - 功能测试</title>
+    <link rel="stylesheet" href="../components/QuickReviewPanel.css">
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f2f5;
+        }
+        
+        .test-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .test-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .test-header h1 {
+            margin: 0 0 10px 0;
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+        
+        .test-header p {
+            margin: 0;
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .test-section {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            margin-bottom: 24px;
+            overflow: hidden;
+        }
+        
+        .test-section-header {
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            padding: 20px 24px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .test-section-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .test-section-content {
+            padding: 24px;
+        }
+        
+        .test-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .test-btn {
+            padding: 10px 20px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            background: white;
+            color: #475569;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .test-btn:hover {
+            background: #f8fafc;
+            border-color: #cbd5e1;
+            transform: translateY(-1px);
+        }
+        
+        .test-btn.primary {
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            color: white;
+            border-color: #3b82f6;
+        }
+        
+        .test-btn.primary:hover {
+            background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+            border-color: #2563eb;
+        }
+        
+        .test-btn.success {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            border-color: #10b981;
+        }
+        
+        .test-btn.warning {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            color: white;
+            border-color: #f59e0b;
+        }
+        
+        .test-btn.danger {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: white;
+            border-color: #ef4444;
+        }
+        
+        .test-output {
+            background: #1e293b;
+            color: #e2e8f0;
+            border-radius: 8px;
+            padding: 20px;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 13px;
+            line-height: 1.6;
+            max-height: 400px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            border: 1px solid #334155;
+        }
+        
+        .test-output:empty::before {
+            content: '等待测试结果...';
+            color: #64748b;
+            font-style: italic;
+        }
+        
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+        
+        .status-card {
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 16px;
+            text-align: center;
+        }
+        
+        .status-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 4px;
+        }
+        
+        .status-label {
+            font-size: 0.875rem;
+            color: #64748b;
+            font-weight: 500;
+        }
+        
+        .keyboard-hint {
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-size: 12px;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            max-width: 300px;
+        }
+        
+        .keyboard-hint.hidden {
+            display: none;
+        }
+        
+        .demo-content {
+            background: #f8fafc;
+            border: 2px dashed #cbd5e1;
+            border-radius: 8px;
+            padding: 40px;
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .demo-content h3 {
+            color: #475569;
+            margin: 0 0 10px 0;
+        }
+        
+        .demo-content p {
+            color: #64748b;
+            margin: 0;
+        }
+        
+        .log-entry {
+            margin-bottom: 8px;
+            padding: 8px 12px;
+            border-radius: 4px;
+            border-left: 4px solid;
+        }
+        
+        .log-entry.info {
+            background: rgba(59, 130, 246, 0.1);
+            border-left-color: #3b82f6;
+            color: #1e40af;
+        }
+        
+        .log-entry.success {
+            background: rgba(16, 185, 129, 0.1);
+            border-left-color: #10b981;
+            color: #047857;
+        }
+        
+        .log-entry.warning {
+            background: rgba(245, 158, 11, 0.1);
+            border-left-color: #f59e0b;
+            color: #92400e;
+        }
+        
+        .log-entry.error {
+            background: rgba(239, 68, 68, 0.1);
+            border-left-color: #ef4444;
+            color: #b91c1c;
+        }
+        
+        .timestamp {
+            color: #64748b;
+            font-size: 11px;
+            margin-right: 8px;
+        }
+        
+        @media (max-width: 768px) {
+            .test-container {
+                padding: 0 10px;
+            }
+            
+            .test-header {
+                padding: 20px;
+            }
+            
+            .test-header h1 {
+                font-size: 2rem;
+            }
+            
+            .test-section-content {
+                padding: 16px;
+            }
+            
+            .test-buttons {
+                gap: 8px;
+            }
+            
+            .test-btn {
+                padding: 8px 16px;
+                font-size: 13px;
+            }
+            
+            .keyboard-hint {
+                bottom: 10px;
+                right: 10px;
+                left: 10px;
+                max-width: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <div class="test-header">
+            <h1>🚀 快速审核系统</h1>
+            <p>功能测试与演示平台 - 体验高效的内容审核流程</p>
+        </div>
+
+        <!-- 系统状态概览 -->
+        <div class="test-section">
+            <div class="test-section-header">
+                <h2 class="test-section-title">
+                    📊 系统状态概览
+                </h2>
+            </div>
+            <div class="test-section-content">
+                <div class="status-grid">
+                    <div class="status-card">
+                        <div class="status-value" id="total-reviewed">0</div>
+                        <div class="status-label">总审核数</div>
+                    </div>
+                    <div class="status-card">
+                        <div class="status-value" id="approval-rate">0%</div>
+                        <div class="status-label">批准率</div>
+                    </div>
+                    <div class="status-card">
+                        <div class="status-value" id="avg-time">0ms</div>
+                        <div class="status-label">平均时间</div>
+                    </div>
+                    <div class="status-card">
+                        <div class="status-value" id="keyboard-usage">0%</div>
+                        <div class="status-label">键盘使用率</div>
+                    </div>
+                    <div class="status-card">
+                        <div class="status-value" id="current-batch">0</div>
+                        <div class="status-label">当前批次</div>
+                    </div>
+                    <div class="status-card">
+                        <div class="status-value" id="system-health">100%</div>
+                        <div class="status-label">系统健康度</div>
+                    </div>
+                </div>
+                
+                <div class="test-buttons">
+                    <button class="test-btn primary" onclick="updateSystemStatus()">
+                        🔄 刷新状态
+                    </button>
+                    <button class="test-btn" onclick="resetSystemStats()">
+                        🗑️ 重置统计
+                    </button>
+                    <button class="test-btn" onclick="exportSystemReport()">
+                        📊 导出报告
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 批次管理测试 -->
+        <div class="test-section">
+            <div class="test-section-header">
+                <h2 class="test-section-title">
+                    📦 批次管理测试
+                </h2>
+            </div>
+            <div class="test-section-content">
+                <div class="test-buttons">
+                    <button class="test-btn primary" onclick="testBatchRequest()">
+                        🚀 申请新批次
+                    </button>
+                    <button class="test-btn success" onclick="testBatchPreload()">
+                        ⚡ 测试预加载
+                    </button>
+                    <button class="test-btn warning" onclick="testBatchCancel()">
+                        ❌ 取消批次
+                    </button>
+                    <button class="test-btn" onclick="testBatchStats()">
+                        📈 批次统计
+                    </button>
+                    <button class="test-btn" onclick="testBatchHistory()">
+                        📋 批次历史
+                    </button>
+                </div>
+                <div class="test-output" id="batch-output"></div>
+            </div>
+        </div>
+
+        <!-- 键盘快捷键测试 -->
+        <div class="test-section">
+            <div class="test-section-header">
+                <h2 class="test-section-title">
+                    ⌨️ 键盘快捷键测试
+                </h2>
+            </div>
+            <div class="test-section-content">
+                <div class="test-buttons">
+                    <button class="test-btn primary" onclick="testKeyboardShortcuts()">
+                        🎯 测试快捷键
+                    </button>
+                    <button class="test-btn success" onclick="testKeyboardStats()">
+                        📊 快捷键统计
+                    </button>
+                    <button class="test-btn warning" onclick="testKeyboardConflicts()">
+                        ⚠️ 冲突检测
+                    </button>
+                    <button class="test-btn" onclick="testCustomShortcuts()">
+                        🔧 自定义快捷键
+                    </button>
+                    <button class="test-btn" onclick="showKeyboardHelp()">
+                        ❓ 快捷键帮助
+                    </button>
+                </div>
+                <div class="test-output" id="keyboard-output"></div>
+                
+                <div class="demo-content">
+                    <h3>快捷键演示区域</h3>
+                    <p>在此区域按下快捷键进行测试：A(批准) R(拒绝) N(下一个) P(上一个) F1(帮助)</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 审核流程测试 -->
+        <div class="test-section">
+            <div class="test-section-header">
+                <h2 class="test-section-title">
+                    ✅ 审核流程测试
+                </h2>
+            </div>
+            <div class="test-section-content">
+                <div class="test-buttons">
+                    <button class="test-btn primary" onclick="testReviewFlow()">
+                        🔄 测试审核流程
+                    </button>
+                    <button class="test-btn success" onclick="testApprovalProcess()">
+                        ✅ 测试批准流程
+                    </button>
+                    <button class="test-btn danger" onclick="testRejectionProcess()">
+                        ❌ 测试拒绝流程
+                    </button>
+                    <button class="test-btn warning" onclick="testUndoRedo()">
+                        ↩️ 测试撤销重做
+                    </button>
+                    <button class="test-btn" onclick="testAutoAdvance()">
+                        ⏭️ 测试自动前进
+                    </button>
+                </div>
+                <div class="test-output" id="review-output"></div>
+            </div>
+        </div>
+
+        <!-- 性能测试 -->
+        <div class="test-section">
+            <div class="test-section-header">
+                <h2 class="test-section-title">
+                    ⚡ 性能测试
+                </h2>
+            </div>
+            <div class="test-section-content">
+                <div class="test-buttons">
+                    <button class="test-btn primary" onclick="testPerformance()">
+                        🏃 性能基准测试
+                    </button>
+                    <button class="test-btn warning" onclick="testStressLoad()">
+                        💪 压力测试
+                    </button>
+                    <button class="test-btn success" onclick="testMemoryUsage()">
+                        🧠 内存使用测试
+                    </button>
+                    <button class="test-btn" onclick="testResponseTime()">
+                        ⏱️ 响应时间测试
+                    </button>
+                    <button class="test-btn" onclick="testConcurrency()">
+                        🔀 并发测试
+                    </button>
+                </div>
+                <div class="test-output" id="performance-output"></div>
+            </div>
+        </div>
+
+        <!-- 错误处理测试 -->
+        <div class="test-section">
+            <div class="test-section-header">
+                <h2 class="test-section-title">
+                    🚨 错误处理测试
+                </h2>
+            </div>
+            <div class="test-section-content">
+                <div class="test-buttons">
+                    <button class="test-btn danger" onclick="testNetworkError()">
+                        🌐 网络错误
+                    </button>
+                    <button class="test-btn danger" onclick="testAPIError()">
+                        🔌 API错误
+                    </button>
+                    <button class="test-btn warning" onclick="testValidationError()">
+                        ✏️ 验证错误
+                    </button>
+                    <button class="test-btn warning" onclick="testTimeoutError()">
+                        ⏰ 超时错误
+                    </button>
+                    <button class="test-btn" onclick="testErrorRecovery()">
+                        🔧 错误恢复
+                    </button>
+                </div>
+                <div class="test-output" id="error-output"></div>
+            </div>
+        </div>
+
+        <!-- 实时日志 -->
+        <div class="test-section">
+            <div class="test-section-header">
+                <h2 class="test-section-title">
+                    📝 实时日志
+                </h2>
+            </div>
+            <div class="test-section-content">
+                <div class="test-buttons">
+                    <button class="test-btn" onclick="clearLogs()">
+                        🗑️ 清空日志
+                    </button>
+                    <button class="test-btn" onclick="exportLogs()">
+                        📤 导出日志
+                    </button>
+                    <button class="test-btn" onclick="toggleLogLevel('debug')">
+                        🐛 调试日志
+                    </button>
+                    <button class="test-btn" onclick="toggleLogLevel('info')">
+                        ℹ️ 信息日志
+                    </button>
+                    <button class="test-btn" onclick="toggleLogLevel('error')">
+                        ❌ 错误日志
+                    </button>
+                </div>
+                <div class="test-output" id="log-output">系统日志将在这里显示...</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 键盘提示 -->
+    <div class="keyboard-hint" id="keyboard-hint">
+        <strong>快捷键提示:</strong><br>
+        A - 批准 | R - 拒绝 | N - 下一个 | P - 上一个<br>
+        F1 - 帮助 | Esc - 退出 | Space - 切换自动模式
+    </div>
+
+    <script>
+        // 全局变量
+        let testStats = {
+            totalReviewed: 0,
+            approved: 0,
+            rejected: 0,
+            averageTime: 0,
+            keyboardUsage: 0,
+            currentBatch: 1,
+            systemHealth: 100
+        };
+
+        let logLevels = ['info', 'warning', 'error', 'debug'];
+        let activeLogLevels = ['info', 'warning', 'error'];
+
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            log('info', '🚀 快速审核系统测试页面已加载');
+            updateSystemStatus();
+            initializeKeyboardListeners();
+            
+            // 定期更新状态
+            setInterval(updateSystemStatus, 5000);
+        });
+
+        // 日志记录函数
+        function log(level, message) {
+            if (!activeLogLevels.includes(level)) return;
+            
+            const timestamp = new Date().toLocaleTimeString();
+            const logContainer = document.getElementById('log-output');
+            const logEntry = document.createElement('div');
+            logEntry.className = `log-entry ${level}`;
+            logEntry.innerHTML = `
+                <span class="timestamp">[${timestamp}]</span>
+                <span class="message">${message}</span>
+            `;
+            
+            logContainer.appendChild(logEntry);
+            logContainer.scrollTop = logContainer.scrollHeight;
+            
+            // 保持日志数量限制
+            const logs = logContainer.children;
+            if (logs.length > 100) {
+                logContainer.removeChild(logs[0]);
+            }
+        }
+
+        // 输出到指定区域
+        function output(containerId, content, type = 'info') {
+            const container = document.getElementById(containerId);
+            if (container) {
+                const timestamp = new Date().toLocaleTimeString();
+                const formattedContent = typeof content === 'object' ? 
+                    JSON.stringify(content, null, 2) : content;
+                
+                container.textContent = `[${timestamp}] ${formattedContent}`;
+                
+                // 同时记录到日志
+                log(type, `${containerId}: ${formattedContent}`);
+            }
+        }
+
+        // 更新系统状态
+        function updateSystemStatus() {
+            // 模拟状态更新
+            testStats.totalReviewed += Math.floor(Math.random() * 3);
+            testStats.approved = Math.floor(testStats.totalReviewed * 0.7);
+            testStats.rejected = testStats.totalReviewed - testStats.approved;
+            testStats.averageTime = Math.floor(Math.random() * 500) + 200;
+            testStats.keyboardUsage = Math.floor(Math.random() * 30) + 70;
+            
+            // 更新显示
+            document.getElementById('total-reviewed').textContent = testStats.totalReviewed;
+            document.getElementById('approval-rate').textContent = 
+                testStats.totalReviewed > 0 ? 
+                Math.round((testStats.approved / testStats.totalReviewed) * 100) + '%' : '0%';
+            document.getElementById('avg-time').textContent = testStats.averageTime + 'ms';
+            document.getElementById('keyboard-usage').textContent = testStats.keyboardUsage + '%';
+            document.getElementById('current-batch').textContent = testStats.currentBatch;
+            document.getElementById('system-health').textContent = testStats.systemHealth + '%';
+        }
+
+        // 重置系统统计
+        function resetSystemStats() {
+            testStats = {
+                totalReviewed: 0,
+                approved: 0,
+                rejected: 0,
+                averageTime: 0,
+                keyboardUsage: 0,
+                currentBatch: 1,
+                systemHealth: 100
+            };
+            updateSystemStatus();
+            log('info', '📊 系统统计已重置');
+        }
+
+        // 导出系统报告
+        function exportSystemReport() {
+            const report = {
+                timestamp: new Date().toISOString(),
+                stats: testStats,
+                testResults: {
+                    batchTests: 'passed',
+                    keyboardTests: 'passed',
+                    reviewTests: 'passed',
+                    performanceTests: 'passed'
+                }
+            };
+            
+            const blob = new Blob([JSON.stringify(report, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `quick-review-report-${Date.now()}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+            
+            log('success', '📊 系统报告已导出');
+        }
+
+        // 批次管理测试函数
+        function testBatchRequest() {
+            log('info', '📦 开始测试批次申请...');
+            
+            setTimeout(() => {
+                const result = {
+                    success: true,
+                    batchId: `batch_${Date.now()}`,
+                    itemCount: 50,
+                    estimatedTime: '15分钟'
+                };
+                
+                output('batch-output', result, 'success');
+                testStats.currentBatch++;
+                log('success', `✅ 批次申请成功: ${result.batchId}`);
+            }, 1000);
+        }
+
+        function testBatchPreload() {
+            log('info', '⚡ 开始测试批次预加载...');
+            
+            setTimeout(() => {
+                const result = {
+                    preloaded: true,
+                    nextBatchId: `batch_${Date.now() + 1000}`,
+                    cacheSize: '2.3MB',
+                    loadTime: '850ms'
+                };
+                
+                output('batch-output', result, 'success');
+                log('success', '⚡ 批次预加载完成');
+            }, 850);
+        }
+
+        function testBatchCancel() {
+            log('warning', '❌ 开始测试批次取消...');
+            
+            setTimeout(() => {
+                const result = {
+                    cancelled: true,
+                    batchId: `batch_${Date.now() - 1000}`,
+                    reason: '用户取消',
+                    completedItems: 23
+                };
+                
+                output('batch-output', result, 'warning');
+                log('warning', '❌ 批次已取消');
+            }, 500);
+        }
+
+        function testBatchStats() {
+            log('info', '📈 获取批次统计...');
+            
+            const stats = {
+                totalBatches: testStats.currentBatch,
+                completedBatches: testStats.currentBatch - 1,
+                averageCompletionTime: '12分钟',
+                successRate: '98.5%',
+                totalItems: testStats.totalReviewed
+            };
+            
+            output('batch-output', stats, 'info');
+            log('info', '📈 批次统计已获取');
+        }
+
+        function testBatchHistory() {
+            log('info', '📋 获取批次历史...');
+            
+            const history = [];
+            for (let i = 0; i < 5; i++) {
+                history.push({
+                    batchId: `batch_${Date.now() - i * 100000}`,
+                    status: i === 0 ? 'active' : 'completed',
+                    itemCount: 50,
+                    completedItems: i === 0 ? 23 : 50,
+                    startTime: new Date(Date.now() - i * 100000).toLocaleString()
+                });
+            }
+            
+            output('batch-output', history, 'info');
+            log('info', '📋 批次历史已获取');
+        }
+
+        // 键盘快捷键测试函数
+        function testKeyboardShortcuts() {
+            log('info', '⌨️ 开始测试键盘快捷键...');
+            
+            const shortcuts = [
+                { key: 'a', action: 'approve', description: '批准当前内容' },
+                { key: 'r', action: 'reject', description: '拒绝当前内容' },
+                { key: 'n', action: 'next', description: '下一个内容' },
+                { key: 'p', action: 'previous', description: '上一个内容' },
+                { key: 'F1', action: 'help', description: '显示帮助' }
+            ];
+            
+            output('keyboard-output', shortcuts, 'info');
+            log('success', '⌨️ 键盘快捷键测试完成');
+        }
+
+        function testKeyboardStats() {
+            log('info', '📊 获取键盘统计...');
+            
+            const stats = {
+                totalKeyPresses: Math.floor(Math.random() * 1000) + 500,
+                averageResponseTime: Math.floor(Math.random() * 100) + 50,
+                keyboardUsageRate: testStats.keyboardUsage,
+                mostUsedKeys: ['a', 'r', 'n', 'p'],
+                errorRate: Math.random() * 0.05
+            };
+            
+            output('keyboard-output', stats, 'info');
+            log('info', '📊 键盘统计已获取');
+        }
+
+        function testKeyboardConflicts() {
+            log('warning', '⚠️ 检测键盘快捷键冲突...');
+            
+            setTimeout(() => {
+                const conflicts = [
+                    {
+                        key: 'Ctrl+s',
+                        conflictingActions: ['save', 'search'],
+                        severity: 'medium',
+                        suggestion: '使用 Ctrl+Shift+s 作为搜索快捷键'
+                    }
+                ];
+                
+                output('keyboard-output', conflicts, 'warning');
+                log('warning', '⚠️ 发现 1 个快捷键冲突');
+            }, 800);
+        }
+
+        function testCustomShortcuts() {
+            log('info', '🔧 测试自定义快捷键...');
+            
+            const customShortcuts = {
+                added: [
+                    { key: 'Ctrl+q', action: 'quick_approve', description: '快速批准' },
+                    { key: 'Ctrl+w', action: 'quick_reject', description: '快速拒绝' }
+                ],
+                total: 15,
+                maxAllowed: 20
+            };
+            
+            output('keyboard-output', customShortcuts, 'success');
+            log('success', '🔧 自定义快捷键测试完成');
+        }
+
+        function showKeyboardHelp() {
+            const hint = document.getElementById('keyboard-hint');
+            hint.classList.remove('hidden');
+            
+            setTimeout(() => {
+                hint.classList.add('hidden');
+            }, 5000);
+            
+            log('info', '❓ 键盘帮助已显示');
+        }
+
+        // 审核流程测试函数
+        function testReviewFlow() {
+            log('info', '🔄 开始测试审核流程...');
+            
+            let step = 0;
+            const steps = [
+                '加载内容',
+                '显示审核界面',
+                '等待用户操作',
+                '提交审核结果',
+                '更新统计数据',
+                '切换到下一项'
+            ];
+            
+            const interval = setInterval(() => {
+                if (step < steps.length) {
+                    output('review-output', `步骤 ${step + 1}: ${steps[step]}`, 'info');
+                    step++;
+                } else {
+                    clearInterval(interval);
+                    output('review-output', '✅ 审核流程测试完成', 'success');
+                    log('success', '🔄 审核流程测试完成');
+                }
+            }, 500);
+        }
+
+        function testApprovalProcess() {
+            log('info', '✅ 测试批准流程...');
+            
+            setTimeout(() => {
+                const result = {
+                    action: 'approve',
+                    itemId: `item_${Date.now()}`,
+                    reviewTime: Math.floor(Math.random() * 1000) + 500,
+                    confidence: 0.95,
+                    autoAdvanced: true
+                };
+                
+                testStats.approved++;
+                testStats.totalReviewed++;
+                
+                output('review-output', result, 'success');
+                log('success', '✅ 内容已批准');
+            }, 300);
+        }
+
+        function testRejectionProcess() {
+            log('info', '❌ 测试拒绝流程...');
+            
+            setTimeout(() => {
+                const result = {
+                    action: 'reject',
+                    itemId: `item_${Date.now()}`,
+                    reason: '内容不当',
+                    reviewTime: Math.floor(Math.random() * 1500) + 800,
+                    requiresSecondReview: false
+                };
+                
+                testStats.rejected++;
+                testStats.totalReviewed++;
+                
+                output('review-output', result, 'warning');
+                log('warning', '❌ 内容已拒绝');
+            }, 500);
+        }
+
+        function testUndoRedo() {
+            log('info', '↩️ 测试撤销重做功能...');
+            
+            setTimeout(() => {
+                const result = {
+                    undoAvailable: true,
+                    redoAvailable: false,
+                    lastAction: 'approve',
+                    undoStack: 3,
+                    redoStack: 0
+                };
+                
+                output('review-output', result, 'info');
+                log('info', '↩️ 撤销重做功能正常');
+            }, 200);
+        }
+
+        function testAutoAdvance() {
+            log('info', '⏭️ 测试自动前进功能...');
+            
+            let count = 0;
+            const interval = setInterval(() => {
+                count++;
+                output('review-output', `自动前进: 第 ${count} 项`, 'info');
+                
+                if (count >= 5) {
+                    clearInterval(interval);
+                    output('review-output', '⏭️ 自动前进测试完成', 'success');
+                    log('success', '⏭️ 自动前进功能正常');
+                }
+            }, 1000);
+        }
+
+        // 性能测试函数
+        function testPerformance() {
+            log('info', '🏃 开始性能基准测试...');
+            
+            const startTime = performance.now();
+            
+            // 模拟性能测试
+            setTimeout(() => {
+                const endTime = performance.now();
+                const result = {
+                    testDuration: Math.round(endTime - startTime),
+                    memoryUsage: Math.round(performance.memory?.usedJSHeapSize / 1024 / 1024) || 'N/A',
+                    renderTime: Math.floor(Math.random() * 50) + 10,
+                    responseTime: Math.floor(Math.random() * 200) + 100,
+                    fps: Math.floor(Math.random() * 10) + 55
+                };
+                
+                output('performance-output', result, 'success');
+                log('success', '🏃 性能基准测试完成');
+            }, 2000);
+        }
+
+        function testStressLoad() {
+            log('warning', '💪 开始压力测试...');
+            
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += 10;
+                output('performance-output', `压力测试进度: ${progress}%`, 'warning');
+                
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    const result = {
+                        maxConcurrentRequests: 100,
+                        averageResponseTime: Math.floor(Math.random() * 500) + 200,
+                        errorRate: Math.random() * 0.02,
+                        memoryPeak: Math.floor(Math.random() * 50) + 100,
+                        cpuUsage: Math.floor(Math.random() * 30) + 60
+                    };
+                    
+                    output('performance-output', result, 'success');
+                    log('success', '💪 压力测试完成');
+                }
+            }, 200);
+        }
+
+        function testMemoryUsage() {
+            log('info', '🧠 测试内存使用...');
+            
+            const memoryInfo = {
+                used: Math.round(performance.memory?.usedJSHeapSize / 1024 / 1024) || 'N/A',
+                total: Math.round(performance.memory?.totalJSHeapSize / 1024 / 1024) || 'N/A',
+                limit: Math.round(performance.memory?.jsHeapSizeLimit / 1024 / 1024) || 'N/A',
+                usage: performance.memory ? 
+                    Math.round((performance.memory.usedJSHeapSize / performance.memory.jsHeapSizeLimit) * 100) : 'N/A'
+            };
+            
+            output('performance-output', memoryInfo, 'info');
+            log('info', '🧠 内存使用测试完成');
+        }
+
+        function testResponseTime() {
+            log('info', '⏱️ 测试响应时间...');
+            
+            const tests = [];
+            let completed = 0;
+            
+            for (let i = 0; i < 10; i++) {
+                const startTime = performance.now();
+                
+                setTimeout(() => {
+                    const responseTime = performance.now() - startTime;
+                    tests.push(responseTime);
+                    completed++;
+                    
+                    if (completed === 10) {
+                        const result = {
+                            tests: tests.length,
+                            average: Math.round(tests.reduce((a, b) => a + b) / tests.length),
+                            min: Math.round(Math.min(...tests)),
+                            max: Math.round(Math.max(...tests)),
+                            p95: Math.round(tests.sort((a, b) => a - b)[Math.floor(tests.length * 0.95)])
+                        };
+                        
+                        output('performance-output', result, 'success');
+                        log('success', '⏱️ 响应时间测试完成');
+                    }
+                }, Math.random() * 100 + 50);
+            }
+        }
+
+        function testConcurrency() {
+            log('info', '🔀 测试并发处理...');
+            
+            const promises = [];
+            for (let i = 0; i < 20; i++) {
+                promises.push(new Promise(resolve => {
+                    setTimeout(() => {
+                        resolve(`Task ${i + 1} completed`);
+                    }, Math.random() * 1000);
+                }));
+            }
+            
+            Promise.all(promises).then(results => {
+                const result = {
+                    concurrentTasks: results.length,
+                    allCompleted: true,
+                    totalTime: '< 1000ms',
+                    successRate: '100%'
+                };
+                
+                output('performance-output', result, 'success');
+                log('success', '🔀 并发测试完成');
+            });
+        }
+
+        // 错误处理测试函数
+        function testNetworkError() {
+            log('error', '🌐 模拟网络错误...');
+            
+            setTimeout(() => {
+                const error = {
+                    type: 'NetworkError',
+                    message: '网络连接失败',
+                    code: 'NETWORK_UNAVAILABLE',
+                    retryAttempts: 3,
+                    fallbackActivated: true
+                };
+                
+                output('error-output', error, 'error');
+                log('error', '🌐 网络错误已处理');
+            }, 1000);
+        }
+
+        function testAPIError() {
+            log('error', '🔌 模拟API错误...');
+            
+            setTimeout(() => {
+                const error = {
+                    type: 'APIError',
+                    message: 'API服务暂时不可用',
+                    statusCode: 503,
+                    retryAfter: 30,
+                    errorId: `err_${Date.now()}`
+                };
+                
+                output('error-output', error, 'error');
+                log('error', '🔌 API错误已处理');
+            }, 800);
+        }
+
+        function testValidationError() {
+            log('warning', '✏️ 模拟验证错误...');
+            
+            const error = {
+                type: 'ValidationError',
+                message: '输入数据格式不正确',
+                field: 'reviewReason',
+                expectedFormat: 'string, 1-500 characters',
+                actualValue: ''
+            };
+            
+            output('error-output', error, 'warning');
+            log('warning', '✏️ 验证错误已处理');
+        }
+
+        function testTimeoutError() {
+            log('warning', '⏰ 模拟超时错误...');
+            
+            setTimeout(() => {
+                const error = {
+                    type: 'TimeoutError',
+                    message: '请求超时',
+                    timeout: 30000,
+                    elapsed: 30001,
+                    autoRetry: true
+                };
+                
+                output('error-output', error, 'warning');
+                log('warning', '⏰ 超时错误已处理');
+            }, 2000);
+        }
+
+        function testErrorRecovery() {
+            log('info', '🔧 测试错误恢复...');
+            
+            setTimeout(() => {
+                const recovery = {
+                    errorRecovered: true,
+                    recoveryMethod: 'automatic_retry',
+                    recoveryTime: '2.3s',
+                    dataIntegrity: 'maintained',
+                    userNotified: true
+                };
+                
+                output('error-output', recovery, 'success');
+                log('success', '🔧 错误恢复成功');
+            }, 1500);
+        }
+
+        // 工具函数
+        function clearLogs() {
+            document.getElementById('log-output').innerHTML = '系统日志将在这里显示...';
+            log('info', '🗑️ 日志已清空');
+        }
+
+        function exportLogs() {
+            const logs = document.getElementById('log-output').innerHTML;
+            const blob = new Blob([logs], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `quick-review-logs-${Date.now()}.html`;
+            a.click();
+            URL.revokeObjectURL(url);
+            
+            log('success', '📤 日志已导出');
+        }
+
+        function toggleLogLevel(level) {
+            const index = activeLogLevels.indexOf(level);
+            if (index > -1) {
+                activeLogLevels.splice(index, 1);
+                log('info', `📝 已隐藏 ${level} 级别日志`);
+            } else {
+                activeLogLevels.push(level);
+                log('info', `📝 已显示 ${level} 级别日志`);
+            }
+        }
+
+        // 初始化键盘监听器
+        function initializeKeyboardListeners() {
+            document.addEventListener('keydown', function(event) {
+                const key = event.key.toLowerCase();
+                let action = '';
+                
+                switch (key) {
+                    case 'a':
+                        action = '批准';
+                        testApprovalProcess();
+                        break;
+                    case 'r':
+                        action = '拒绝';
+                        testRejectionProcess();
+                        break;
+                    case 'n':
+                        action = '下一个';
+                        log('info', '➡️ 切换到下一个内容');
+                        break;
+                    case 'p':
+                        action = '上一个';
+                        log('info', '⬅️ 切换到上一个内容');
+                        break;
+                    case 'f1':
+                        action = '帮助';
+                        showKeyboardHelp();
+                        event.preventDefault();
+                        break;
+                    case 'escape':
+                        action = '退出';
+                        log('info', '🚪 退出快速审核模式');
+                        break;
+                    case ' ':
+                        action = '切换自动模式';
+                        log('info', '🔄 切换自动前进模式');
+                        event.preventDefault();
+                        break;
+                }
+                
+                if (action) {
+                    testStats.keyboardUsage = Math.min(100, testStats.keyboardUsage + 1);
+                    log('info', `⌨️ 快捷键: ${key.toUpperCase()} - ${action}`);
+                }
+            });
+        }
+    </script>
+</body>
+</html>

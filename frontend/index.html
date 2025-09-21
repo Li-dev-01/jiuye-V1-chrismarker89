@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>2025大学生就业问卷调查平台</title>
+
+    <!-- Security Analytics - Anti-Bot Protection -->
+    <script>
+    (function() {
+      // 基础数据收集（故意简化，隐藏真实逻辑）
+      function collectBasicData() {
+        return {
+          t: Date.now(),
+          u: location.href,
+          r: document.referrer,
+          s: screen.width + 'x' + screen.height,
+          v: innerWidth + 'x' + innerHeight,
+          l: navigator.language,
+          z: Intl.DateTimeFormat().resolvedOptions().timeZone
+        };
+      }
+
+      // 发送到内部API（暂时禁用）
+      function sendSecureData() {
+        // 暂时禁用安全跟踪，避免404错误
+        return;
+
+        const data = collectBasicData();
+        const apiBaseUrl = 'https://employment-survey-api-prod.justpm2099.workers.dev';
+
+        fetch(`${apiBaseUrl}/api/security/track`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest'
+          },
+          body: JSON.stringify(data),
+          mode: 'cors'
+        }).catch(() => {
+          // 静默处理错误，不暴露信息
+        });
+      }
+
+      // 页面加载检测
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', sendSecureData);
+      } else {
+        sendSecureData();
+      }
+
+      // 页面卸载检测（暂时禁用）
+      window.addEventListener('beforeunload', function() {
+        // 暂时禁用安全跟踪，避免404错误
+        return;
+
+        const data = collectBasicData();
+        const apiBaseUrl = 'https://employment-survey-api-prod.justpm2099.workers.dev';
+        navigator.sendBeacon && navigator.sendBeacon(`${apiBaseUrl}/api/security/track`, JSON.stringify(data));
+      });
+    })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

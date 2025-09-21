@@ -1,0 +1,30 @@
+# Python依赖包
+# 用于PNG卡片生成API和相关服务
+
+# Web框架
+Flask==2.3.3
+Flask-CORS==4.0.0
+
+# 数据库
+mysql-connector-python==8.1.0
+
+# 图像处理
+Pillow==10.0.1
+
+# HTTP请求
+requests==2.31.0
+
+# 日期时间处理
+python-dateutil==2.8.2
+
+# JSON处理
+jsonschema==4.19.1
+
+# 云存储 (Cloudflare R2)
+boto3==1.28.85
+
+# 缓存
+redis==4.6.0
+
+# 开发工具
+python-dotenv==1.0.0

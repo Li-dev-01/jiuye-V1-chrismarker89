@@ -1,0 +1,150 @@
+{
+  "presetAccounts": [
+    {
+      "username": "admin1",
+      "password": "admin123",
+      "role": "admin",
+      "name": "管理员",
+      "id": "admin-001",
+      "permissions": [
+        "content_review",
+        "user_management", 
+        "data_analysis"
+      ],
+      "redirectPath": "/admin/dashboard",
+      "description": "系统管理员，拥有内容审核、用户管理和数据分析权限"
+    },
+    {
+      "username": "superadmin",
+      "password": "admin123", 
+      "role": "superadmin",
+      "name": "超级管理员",
+      "id": "superadmin-001",
+      "permissions": [
+        "content_review",
+        "user_management",
+        "data_analysis", 
+        "system_config",
+        "security_management"
+      ],
+      "redirectPath": "/superadmin/dashboard",
+      "description": "超级管理员，拥有所有系统权限"
+    },
+    {
+      "username": "reviewer1",
+      "password": "admin123",
+      "role": "reviewer", 
+      "name": "审核员",
+      "id": "reviewer-001",
+      "permissions": [
+        "content_review"
+      ],
+      "redirectPath": "/reviewer/dashboard",
+      "description": "基础审核员，只能进行内容审核"
+    },
+    {
+      "username": "reviewerA",
+      "password": "admin123",
+      "role": "reviewer",
+      "name": "审核员A", 
+      "id": "reviewer-A",
+      "specialties": [
+        "content",
+        "voice", 
+        "all"
+      ],
+      "permissions": [
+        "content_review"
+      ],
+      "redirectPath": "/reviewer/dashboard",
+      "description": "专业审核员A，专长于内容、语音和综合审核"
+    },
+    {
+      "username": "reviewerB",
+      "password": "admin123",
+      "role": "reviewer",
+      "name": "审核员B",
+      "id": "reviewer-B", 
+      "specialties": [
+        "voice",
+        "all"
+      ],
+      "permissions": [
+        "content_review"
+      ],
+      "redirectPath": "/reviewer/dashboard",
+      "description": "专业审核员B，专长于语音和综合审核"
+    },
+    {
+      "username": "reviewerC", 
+      "password": "admin123",
+      "role": "reviewer",
+      "name": "审核员C",
+      "id": "reviewer-C",
+      "specialties": [
+        "all"
+      ],
+      "permissions": [
+        "content_review"
+      ],
+      "redirectPath": "/reviewer/dashboard",
+      "description": "专业审核员C，专长于综合审核"
+    }
+  ],
+  "roleDefinitions": {
+    "superadmin": {
+      "displayName": "超级管理员",
+      "level": 1,
+      "color": "#f59e0b",
+      "description": "拥有系统最高权限，可以管理所有功能和用户"
+    },
+    "admin": {
+      "displayName": "管理员", 
+      "level": 2,
+      "color": "#3b82f6",
+      "description": "拥有大部分管理权限，可以管理内容和用户"
+    },
+    "reviewer": {
+      "displayName": "审核员",
+      "level": 3, 
+      "color": "#10b981",
+      "description": "专门负责内容审核工作"
+    },
+    "user": {
+      "displayName": "普通用户",
+      "level": 4,
+      "color": "#6b7280", 
+      "description": "普通用户，只能访问基础功能"
+    }
+  },
+  "permissionDefinitions": {
+    "content_review": {
+      "displayName": "内容审核",
+      "description": "审核用户提交的内容"
+    },
+    "user_management": {
+      "displayName": "用户管理", 
+      "description": "管理系统用户"
+    },
+    "data_analysis": {
+      "displayName": "数据分析",
+      "description": "查看和分析系统数据"
+    },
+    "system_config": {
+      "displayName": "系统配置",
+      "description": "配置系统参数"
+    },
+    "security_management": {
+      "displayName": "安全管理",
+      "description": "管理系统安全设置"
+    }
+  },
+  "loginSettings": {
+    "sessionTimeout": 86400000,
+    "maxLoginAttempts": 5,
+    "lockoutDuration": 900000,
+    "passwordMinLength": 6,
+    "enableRememberMe": true,
+    "enableQuickLogin": true
+  }
+}

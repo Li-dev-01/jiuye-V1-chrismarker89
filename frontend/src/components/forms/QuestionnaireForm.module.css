@@ -1,0 +1,196 @@
+.container {
+  min-height: 100vh;
+  background: #fff;
+  padding: 32px 0;
+}
+
+.content {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* 移动端容器优化 */
+@media (max-width: 768px) {
+  .container {
+    padding: 16px 0;
+  }
+
+  .content {
+    padding: 0 12px;
+  }
+}
+
+.progressCard {
+  margin-bottom: 32px;
+  border: 1px solid #e8e8e8;
+  border-radius: 4px;
+  box-shadow: none;
+}
+
+.progressCard .ant-card-body {
+  padding: 32px;
+}
+
+/* 移动端进度卡片优化 */
+@media (max-width: 768px) {
+  .progressCard {
+    margin-bottom: 16px;
+    border-radius: 8px;
+  }
+
+  .progressCard .ant-card-body {
+    padding: 16px;
+  }
+}
+
+.steps {
+  margin-bottom: 24px;
+}
+
+.progressText {
+  text-align: center;
+  font-size: 14px;
+  color: #666;
+}
+
+.formCard {
+  border: 1px solid #e8e8e8;
+  border-radius: 4px;
+  box-shadow: none;
+}
+
+.formCard .ant-card-body {
+  padding: 40px;
+}
+
+/* 移动端表单卡片优化 */
+@media (max-width: 768px) {
+  .formCard {
+    border-radius: 8px;
+    margin-bottom: 16px;
+  }
+
+  .formCard .ant-card-body {
+    padding: 20px 16px;
+  }
+
+  .steps {
+    margin-bottom: 16px;
+  }
+
+  /* 移动端步骤条优化 */
+  .steps :global(.ant-steps-item-title) {
+    font-size: 12px !important;
+  }
+
+  .steps :global(.ant-steps-item-description) {
+    display: none;
+  }
+}
+
+.errorMessage {
+  margin-top: 24px;
+  padding: 16px;
+  background: #fff2f0;
+  border: 1px solid #ffccc7;
+  border-radius: 4px;
+}
+
+.errorMessage p {
+  margin: 0;
+  color: #cf1322;
+  font-size: 14px;
+}
+
+.buttonContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid #e8e8e8;
+}
+
+.stepCounter {
+  color: #666;
+  font-size: 14px;
+}
+
+.primaryButton {
+  background: #1890ff;
+  border-color: #1890ff;
+  color: #fff;
+  height: 40px;
+  padding: 0 24px;
+  font-size: 14px;
+  font-weight: 400;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+.primaryButton:hover {
+  background: #40a9ff;
+  border-color: #40a9ff;
+  color: #fff;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(24, 144, 255, 0.3);
+}
+
+.secondaryButton {
+  background: #fff;
+  color: #000;
+  border: 1px solid #d9d9d9;
+  height: 40px;
+  padding: 0 24px;
+  font-size: 14px;
+  font-weight: 400;
+  border-radius: 4px;
+}
+
+.secondaryButton:hover {
+  border-color: #000;
+  color: #000;
+}
+
+.secondaryButton:disabled {
+  background: #f5f5f5;
+  border-color: #d9d9d9;
+  color: #bfbfbf;
+}
+
+.helpInfo {
+  margin-top: 24px;
+  text-align: center;
+  font-size: 14px;
+  color: #666;
+}
+
+.helpInfo p {
+  margin: 4px 0;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .content {
+    padding: 0 16px;
+  }
+  
+  .progressCard .ant-card-body {
+    padding: 24px 16px;
+  }
+  
+  .formCard .ant-card-body {
+    padding: 24px 16px;
+  }
+  
+  .buttonContainer {
+    flex-direction: column;
+    gap: 16px;
+    align-items: stretch;
+  }
+  
+  .stepCounter {
+    text-align: center;
+  }
+}

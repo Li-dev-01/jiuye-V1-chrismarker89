@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登录功能测试页面</title>
+    <link rel="stylesheet" href="components/AdminLoginPage.css">
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        
+        .test-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .test-section {
+            background: white;
+            margin: 20px 0;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .test-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin: 15px 0;
+        }
+        
+        .test-btn {
+            padding: 8px 16px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background: white;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+        
+        .test-btn:hover {
+            background: #f0f0f0;
+        }
+        
+        .test-btn.primary {
+            background: #007bff;
+            color: white;
+            border-color: #007bff;
+        }
+        
+        .test-btn.primary:hover {
+            background: #0056b3;
+        }
+        
+        .test-result {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            padding: 15px;
+            margin: 10px 0;
+            font-family: monospace;
+            font-size: 12px;
+            white-space: pre-wrap;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        
+        .status-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        
+        .status-success { background: #28a745; }
+        .status-error { background: #dc3545; }
+        .status-warning { background: #ffc107; }
+        .status-info { background: #17a2b8; }
+        
+        #login-container {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-header">
+        <h1>🔐 管理员登录功能测试</h1>
+        <p>测试登录功能的各项特性和API接口</p>
+    </div>
+
+    <!-- 登录组件测试 -->
+    <div class="test-section">
+        <h3>📱 登录组件测试</h3>
+        <div class="test-buttons">
+            <button class="test-btn primary" onclick="showLoginComponent()">显示登录组件</button>
+            <button class="test-btn" onclick="hideLoginComponent()">隐藏登录组件</button>
+            <button class="test-btn" onclick="resetLoginComponent()">重置组件</button>
+        </div>
+        <div id="login-container" style="display: none;"></div>
+    </div>
+
+    <!-- API测试 -->
+    <div class="test-section">
+        <h3>🔧 API接口测试</h3>
+        <div class="test-buttons">
+            <button class="test-btn primary" onclick="testAllAccounts()">测试所有账号</button>
+            <button class="test-btn" onclick="testSingleLogin()">测试单个登录</button>
+            <button class="test-btn" onclick="testTokenValidation()">测试Token验证</button>
+            <button class="test-btn" onclick="testPermissionCheck()">测试权限检查</button>
+        </div>
+        <div class="test-result" id="api-test-result">等待测试...</div>
+    </div>
+
+    <!-- 状态监控 -->
+    <div class="test-section">
+        <h3>📊 状态监控</h3>
+        <div class="test-buttons">
+            <button class="test-btn primary" onclick="refreshStatus()">刷新状态</button>
+            <button class="test-btn" onclick="clearAuthState()">清除认证</button>
+            <button class="test-btn" onclick="showDebugInfo()">调试信息</button>
+        </div>
+        <div id="status-display">
+            <p><span class="status-indicator status-info"></span>认证状态: <span id="auth-status">检查中...</span></p>
+            <p><span class="status-indicator status-info"></span>当前用户: <span id="current-user">无</span></p>
+            <p><span class="status-indicator status-info"></span>用户角色: <span id="user-role">无</span></p>
+            <p><span class="status-indicator status-info"></span>Token状态: <span id="token-status">无</span></p>
+        </div>
+    </div>
+
+    <!-- 预置账号信息 -->
+    <div class="test-section">
+        <h3>👥 预置账号信息</h3>
+        <div id="accounts-info"></div>
+    </div>
+
+    <!-- 测试日志 -->
+    <div class="test-section">
+        <h3>📝 测试日志</h3>
+        <div class="test-buttons">
+            <button class="test-btn" onclick="clearTestLog()">清除日志</button>
+            <button class="test-btn" onclick="exportTestLog()">导出日志</button>
+        </div>
+        <div class="test-result" id="test-log">测试日志将显示在这里...</div>
+    </div>
+
+    <!-- 引入脚本 -->
+    <script src="services/authService.js"></script>
+    <script src="services/mockData.js"></script>
+    <script src="components/AdminLoginPage.js"></script>
+
+    <script>
+        let loginInstance = null;
+        let testLog = [];
+
+        // 添加日志
+        function addLog(message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            const logEntry = `[${timestamp}] ${type.toUpperCase()}: ${message}`;
+            testLog.push(logEntry);
+            
+            const logElement = document.getElementById('test-log');
+            logElement.textContent = testLog.slice(-50).join('\n'); // 只显示最近50条
+            logElement.scrollTop = logElement.scrollHeight;
+            
+            console.log(logEntry);
+        }
+
+        // 显示登录组件
+        function showLoginComponent() {
+            const container = document.getElementById('login-container');
+            container.style.display = 'block';
+            
+            if (!loginInstance) {
+                loginInstance = new AdminLoginPage({
+                    container: '#login-container',
+                    redirectEnabled: false,
+                    onSuccess: (user) => {
+                        addLog(`登录成功: ${user.name} (${user.role})`, 'success');
+                        refreshStatus();
+                    },
+                    onError: (error) => {
+                        addLog(`登录失败: ${error}`, 'error');
+                        refreshStatus();
+                    }
+                });
+                addLog('登录组件已创建');
+            }
+        }
+
+        // 隐藏登录组件
+        function hideLoginComponent() {
+            const container = document.getElementById('login-container');
+            container.style.display = 'none';
+            addLog('登录组件已隐藏');
+        }
+
+        // 重置登录组件
+        function resetLoginComponent() {
+            if (loginInstance) {
+                loginInstance.destroy();
+                loginInstance = null;
+                addLog('登录组件已销毁');
+            }
+            
+            const container = document.getElementById('login-container');
+            container.innerHTML = '';
+            container.style.display = 'none';
+        }
+
+        // 测试所有账号
+        async function testAllAccounts() {
+            addLog('开始测试所有预置账号...');
+            const resultElement = document.getElementById('api-test-result');
+            let results = [];
+            
+            const accounts = AuthService.getTestAccountsList();
+            
+            for (const account of accounts) {
+                try {
+                    const result = await AuthService.adminLogin(account.username, 'admin123');
+                    const status = result.success ? '✅' : '❌';
+                    const message = `${status} ${account.name} (${account.username}): ${result.success ? '成功' : result.error}`;
+                    results.push(message);
+                    addLog(message, result.success ? 'success' : 'error');
+                    
+                    // 如果登录成功，立即登出以便测试下一个账号
+                    if (result.success) {
+                        AuthService.logout();
+                    }
+                } catch (error) {
+                    const message = `❌ ${account.name}: ${error.message}`;
+                    results.push(message);
+                    addLog(message, 'error');
+                }
+            }
+            
+            resultElement.textContent = results.join('\n');
+            addLog('所有账号测试完成');
+            refreshStatus();
+        }
+
+        // 测试单个登录
+        async function testSingleLogin() {
+            addLog('测试单个账号登录...');
+            try {
+                const result = await AuthService.adminLogin('admin1', 'admin123');
+                const resultElement = document.getElementById('api-test-result');
+                resultElement.textContent = JSON.stringify(result, null, 2);
+                
+                if (result.success) {
+                    addLog(`单个登录测试成功: ${result.data.user.name}`, 'success');
+                } else {
+                    addLog(`单个登录测试失败: ${result.error}`, 'error');
+                }
+            } catch (error) {
+                addLog(`单个登录测试异常: ${error.message}`, 'error');
+            }
+            refreshStatus();
+        }
+
+        // 测试Token验证
+        async function testTokenValidation() {
+            addLog('测试Token验证...');
+            const token = AuthService.getCurrentToken();
+            
+            if (!token) {
+                addLog('没有可用的Token，请先登录', 'warning');
+                return;
+            }
+            
+            try {
+                const result = await AuthService.validateToken(token);
+                const resultElement = document.getElementById('api-test-result');
+                resultElement.textContent = JSON.stringify(result, null, 2);
+                
+                if (result.valid) {
+                    addLog('Token验证成功', 'success');
+                } else {
+                    addLog(`Token验证失败: ${result.error}`, 'error');
+                }
+            } catch (error) {
+                addLog(`Token验证异常: ${error.message}`, 'error');
+            }
+        }
+
+        // 测试权限检查
+        function testPermissionCheck() {
+            addLog('测试权限检查...');
+            const permissions = ['content_review', 'user_management', 'data_analysis', 'system_config'];
+            let results = [];
+            
+            permissions.forEach(permission => {
+                const hasPermission = AuthService.hasPermission(permission);
+                const status = hasPermission ? '✅' : '❌';
+                const message = `${status} ${permission}: ${hasPermission ? '有权限' : '无权限'}`;
+                results.push(message);
+            });
+            
+            const resultElement = document.getElementById('api-test-result');
+            resultElement.textContent = results.join('\n');
+            addLog('权限检查完成');
+        }
+
+        // 刷新状态
+        function refreshStatus() {
+            const isAuth = AuthService.isAuthenticated();
+            const user = AuthService.getCurrentUser();
+            const token = AuthService.getCurrentToken();
+            
+            document.getElementById('auth-status').textContent = isAuth ? '已登录' : '未登录';
+            document.getElementById('current-user').textContent = user ? user.name : '无';
+            document.getElementById('user-role').textContent = user ? user.role : '无';
+            document.getElementById('token-status').textContent = token ? '有效' : '无';
+            
+            // 更新状态指示器
+            const authIndicator = document.querySelector('#status-display .status-indicator');
+            authIndicator.className = `status-indicator ${isAuth ? 'status-success' : 'status-error'}`;
+            
+            addLog(`状态已刷新 - 认证: ${isAuth ? '是' : '否'}, 用户: ${user ? user.name : '无'}`);
+        }
+
+        // 清除认证状态
+        function clearAuthState() {
+            AuthService.logout();
+            refreshStatus();
+            addLog('认证状态已清除', 'warning');
+        }
+
+        // 显示调试信息
+        function showDebugInfo() {
+            const debugInfo = {
+                authService: !!window.AuthService,
+                mockDataService: !!window.MockDataService,
+                debugAuth: !!window.debugAuth,
+                debugMockData: !!window.debugMockData,
+                currentUser: AuthService.getCurrentUser(),
+                currentToken: AuthService.getCurrentToken(),
+                isAuthenticated: AuthService.isAuthenticated(),
+                testAccounts: AuthService.getTestAccountsList()
+            };
+            
+            const resultElement = document.getElementById('api-test-result');
+            resultElement.textContent = JSON.stringify(debugInfo, null, 2);
+            addLog('调试信息已显示');
+        }
+
+        // 清除测试日志
+        function clearTestLog() {
+            testLog = [];
+            document.getElementById('test-log').textContent = '测试日志已清除';
+        }
+
+        // 导出测试日志
+        function exportTestLog() {
+            const logContent = testLog.join('\n');
+            const blob = new Blob([logContent], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `login-test-log-${new Date().toISOString().slice(0, 19).replace(/:/g, '-')}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            addLog('测试日志已导出');
+        }
+
+        // 显示预置账号信息
+        function showAccountsInfo() {
+            const accounts = AuthService.getTestAccountsList();
+            const container = document.getElementById('accounts-info');
+            
+            const html = accounts.map(account => `
+                <div style="border: 1px solid #ddd; border-radius: 4px; padding: 10px; margin: 5px 0; background: #f9f9f9;">
+                    <strong>${account.name}</strong> (${account.role})
+                    <br>
+                    <small>用户名: ${account.username} | 密码: admin123</small>
+                </div>
+            `).join('');
+            
+            container.innerHTML = html;
+        }
+
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            addLog('测试页面已加载');
+            refreshStatus();
+            showAccountsInfo();
+            
+            // 定期刷新状态
+            setInterval(refreshStatus, 10000);
+            
+            addLog('自动状态刷新已启用 (每10秒)');
+        });
+    </script>
+</body>
+</html>

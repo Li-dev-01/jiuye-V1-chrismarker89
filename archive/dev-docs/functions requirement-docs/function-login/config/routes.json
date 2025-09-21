@@ -1,0 +1,193 @@
+{
+  "redirectPaths": {
+    "admin": "/admin/dashboard",
+    "reviewer": "/reviewer/dashboard", 
+    "superadmin": "/superadmin/dashboard",
+    "user": "/dashboard"
+  },
+  "protectedRoutes": {
+    "admin": [
+      "/admin/dashboard",
+      "/admin/story-review",
+      "/admin/content-review", 
+      "/admin/comment-review",
+      "/admin/user-management",
+      "/admin/reviewer-management",
+      "/admin/settings"
+    ],
+    "reviewer": [
+      "/reviewer/dashboard",
+      "/reviewer/story-review",
+      "/reviewer/content-review",
+      "/reviewer/quick-review", 
+      "/reviewer/settings"
+    ],
+    "superadmin": [
+      "/superadmin/dashboard",
+      "/superadmin/user-management",
+      "/superadmin/system-config",
+      "/superadmin/security-logs",
+      "/superadmin/settings",
+      "/superadmin/system-monitor",
+      "/superadmin/data-restore", 
+      "/superadmin/documentation",
+      "/superadmin/security"
+    ]
+  },
+  "publicRoutes": [
+    "/",
+    "/questionnaire",
+    "/visualization", 
+    "/story-wall",
+    "/story",
+    "/admin/login",
+    "/reviewer/login"
+  ],
+  "apiEndpoints": {
+    "login": "/api/admin/login",
+    "logout": "/api/admin/logout",
+    "validate": "/api/admin/validate",
+    "refresh": "/api/admin/refresh"
+  },
+  "routePermissions": {
+    "/admin/dashboard": ["content_review", "user_management", "data_analysis"],
+    "/admin/story-review": ["content_review"],
+    "/admin/content-review": ["content_review"],
+    "/admin/comment-review": ["content_review"],
+    "/admin/user-management": ["user_management"],
+    "/admin/reviewer-management": ["user_management"],
+    "/admin/settings": ["user_management"],
+    "/reviewer/dashboard": ["content_review"],
+    "/reviewer/story-review": ["content_review"],
+    "/reviewer/content-review": ["content_review"],
+    "/reviewer/quick-review": ["content_review"],
+    "/reviewer/settings": ["content_review"],
+    "/superadmin/dashboard": ["system_config"],
+    "/superadmin/user-management": ["user_management", "security_management"],
+    "/superadmin/system-config": ["system_config"],
+    "/superadmin/security-logs": ["security_management"],
+    "/superadmin/settings": ["system_config"],
+    "/superadmin/system-monitor": ["system_config"],
+    "/superadmin/data-restore": ["system_config", "security_management"],
+    "/superadmin/documentation": ["system_config"],
+    "/superadmin/security": ["security_management"]
+  },
+  "menuStructure": {
+    "admin": [
+      {
+        "title": "仪表盘",
+        "path": "/admin/dashboard",
+        "icon": "dashboard"
+      },
+      {
+        "title": "内容管理",
+        "children": [
+          {
+            "title": "故事审核",
+            "path": "/admin/story-review"
+          },
+          {
+            "title": "内容审核", 
+            "path": "/admin/content-review"
+          },
+          {
+            "title": "评论审核",
+            "path": "/admin/comment-review"
+          }
+        ]
+      },
+      {
+        "title": "用户管理",
+        "children": [
+          {
+            "title": "用户管理",
+            "path": "/admin/user-management"
+          },
+          {
+            "title": "审核员管理",
+            "path": "/admin/reviewer-management"
+          }
+        ]
+      },
+      {
+        "title": "设置",
+        "path": "/admin/settings",
+        "icon": "settings"
+      }
+    ],
+    "reviewer": [
+      {
+        "title": "仪表盘",
+        "path": "/reviewer/dashboard",
+        "icon": "dashboard"
+      },
+      {
+        "title": "审核工作",
+        "children": [
+          {
+            "title": "故事审核",
+            "path": "/reviewer/story-review"
+          },
+          {
+            "title": "内容审核",
+            "path": "/reviewer/content-review"
+          },
+          {
+            "title": "快速审核",
+            "path": "/reviewer/quick-review"
+          }
+        ]
+      },
+      {
+        "title": "设置",
+        "path": "/reviewer/settings",
+        "icon": "settings"
+      }
+    ],
+    "superadmin": [
+      {
+        "title": "仪表盘",
+        "path": "/superadmin/dashboard",
+        "icon": "dashboard"
+      },
+      {
+        "title": "用户管理",
+        "path": "/superadmin/user-management",
+        "icon": "users"
+      },
+      {
+        "title": "系统配置",
+        "path": "/superadmin/system-config",
+        "icon": "settings"
+      },
+      {
+        "title": "安全管理",
+        "children": [
+          {
+            "title": "安全日志",
+            "path": "/superadmin/security-logs"
+          },
+          {
+            "title": "安全设置",
+            "path": "/superadmin/security"
+          }
+        ]
+      },
+      {
+        "title": "系统监控",
+        "path": "/superadmin/system-monitor",
+        "icon": "monitor"
+      },
+      {
+        "title": "数据恢复",
+        "path": "/superadmin/data-restore",
+        "icon": "database"
+      },
+      {
+        "title": "文档",
+        "path": "/superadmin/documentation",
+        "icon": "book"
+      }
+    ]
+  }
+}

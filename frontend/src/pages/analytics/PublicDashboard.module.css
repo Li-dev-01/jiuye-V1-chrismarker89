@@ -1,0 +1,391 @@
+/* PublicDashboard 样式 */
+
+.container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  padding: 0;
+}
+
+/* 页面头部 */
+.header {
+  background: rgba(255, 255, 255, 0.9);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(103, 126, 234, 0.2);
+  padding: 40px 0;
+  border-radius: 16px;
+  margin: 24px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.headerContent {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 40px;
+}
+
+.titleSection {
+  flex: 1;
+}
+
+.title {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 16px !important;
+  font-size: 32px;
+  font-weight: 700;
+}
+
+.subtitle {
+  color: #666 !important;
+  font-size: 16px;
+  margin-bottom: 0 !important;
+  max-width: 600px;
+}
+
+.controls {
+  flex-shrink: 0;
+}
+
+/* 热点区域 */
+.hotspotsSection {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 40px 24px;
+}
+
+.hotspotCard {
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border: none;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  height: 100%;
+}
+
+.hotspotCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+.hotspotCard.selected {
+  border: 2px solid #ff4d4f;
+  box-shadow: 0 8px 24px rgba(255, 77, 79, 0.3);
+}
+
+.hotspotHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.hotspotDescription {
+  display: block;
+  margin-top: 12px;
+  line-height: 1.5;
+}
+
+/* 分析区域 */
+.analysisSection {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 24px 40px;
+  background: white;
+  border-radius: 16px 16px 0 0;
+  min-height: 600px;
+}
+
+.analysisCard {
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border: none;
+  height: 100%;
+}
+
+.analysisCard :global(.ant-card-head) {
+  border-bottom: 2px solid #f0f0f0;
+  padding: 20px 24px;
+}
+
+.analysisCard :global(.ant-card-head-title) {
+  font-size: 18px;
+  font-weight: 600;
+  color: #262626;
+}
+
+.analysisCard :global(.ant-card-body) {
+  padding: 24px;
+}
+
+/* 难度指数仪表盘 */
+.gaugeContainer {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.gaugeValue {
+  margin-bottom: 16px;
+}
+
+.gaugeNumber {
+  font-size: 48px;
+  font-weight: bold;
+  color: #ff4d4f;
+}
+
+.gaugeDescription {
+  display: block;
+  margin-bottom: 16px;
+  font-size: 16px;
+}
+
+.difficultyLevels {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.difficultyLevel {
+  padding: 12px;
+  background: #fafafa;
+  border-radius: 8px;
+}
+
+.levelHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+/* 薪资对比 */
+.salaryList {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.salaryItem {
+  padding: 16px;
+  background: #fafafa;
+  border-radius: 8px;
+  border-left: 4px solid #ff4d4f;
+}
+
+.salaryHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.salaryBars {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.salaryBar {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.barContainer {
+  position: relative;
+  height: 32px;
+  background: #f0f0f0;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.expectedBar {
+  height: 100%;
+  background: linear-gradient(90deg, #ff4d4f 0%, #ff7875 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.actualBar {
+  height: 100%;
+  background: linear-gradient(90deg, #52c41a 0%, #73d13d 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+/* 求职漏斗 */
+.funnelContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.funnelStage {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.stageInfo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.stageName {
+  font-size: 16px;
+  color: #262626;
+}
+
+.stageDescription {
+  font-size: 12px;
+}
+
+.stageBar {
+  position: relative;
+  height: 40px;
+  background: #f0f0f0;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.stageProgress {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.stageText {
+  color: white;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+/* 压力来源 */
+.pressureList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.pressureItem {
+  padding: 12px;
+  background: #fafafa;
+  border-radius: 8px;
+}
+
+.pressureHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .headerContent {
+    flex-direction: column;
+    gap: 24px;
+    text-align: center;
+  }
+  
+  .titleSection {
+    flex: none;
+  }
+  
+  .controls {
+    flex: none;
+  }
+  
+  .title {
+    font-size: 24px !important;
+  }
+  
+  .hotspotsSection {
+    padding: 24px 16px;
+  }
+  
+  .analysisSection {
+    margin: 0 16px;
+    padding: 24px 16px;
+    border-radius: 12px 12px 0 0;
+  }
+  
+  .salaryBars {
+    gap: 8px;
+  }
+  
+  .stageInfo {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+}
+
+@media (max-width: 480px) {
+  .header {
+    padding: 24px 0;
+  }
+  
+  .headerContent {
+    padding: 0 16px;
+  }
+  
+  .hotspotsSection {
+    padding: 16px;
+  }
+  
+  .analysisSection {
+    margin: 0 8px;
+    padding: 16px;
+  }
+  
+  .controls {
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .gaugeNumber {
+    font-size: 36px;
+  }
+  
+  .salaryHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+}
+
+/* 控制按钮样式 */
+.controls .ant-btn {
+  border-radius: 8px;
+  font-weight: 500;
+}
+
+.controls .ant-btn-primary {
+  background: linear-gradient(135deg, #ff4d4f 0%, #ff7875 100%);
+  border: none;
+  box-shadow: 0 2px 8px rgba(255, 77, 79, 0.3);
+}
+
+.controls .ant-btn-primary:hover {
+  background: linear-gradient(135deg, #ff7875 0%, #ff4d4f 100%);
+  box-shadow: 0 4px 12px rgba(255, 77, 79, 0.4);
+}

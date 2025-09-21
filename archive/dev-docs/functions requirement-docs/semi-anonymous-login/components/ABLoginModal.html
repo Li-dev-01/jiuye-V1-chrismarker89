@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A+B半匿名登录</title>
+    <link rel="stylesheet" href="ABLoginModal.css">
+</head>
+<body>
+    <!-- 模态框遮罩 -->
+    <div id="ab-modal-overlay" class="modal-overlay" style="display: none;">
+        <!-- 模态框容器 -->
+        <div class="modal-container">
+            <div class="modal-content">
+                <!-- 模态框头部 -->
+                <div class="modal-header">
+                    <h2 class="modal-title">半匿名身份验证</h2>
+                    <button class="modal-close" id="modal-close-btn" aria-label="关闭">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- 模态框描述 -->
+                <div class="modal-description">
+                    <p>请输入您的A+B组合以验证身份</p>
+                </div>
+
+                <!-- 登录表单 -->
+                <form id="ab-login-form" class="login-form">
+                    <!-- A值输入 -->
+                    <div class="form-group">
+                        <label for="identity-a" class="form-label">
+                            A值 <span class="required">*</span>
+                        </label>
+                        <div class="input-wrapper">
+                            <input 
+                                type="text" 
+                                id="identity-a" 
+                                name="identityA" 
+                                class="form-input" 
+                                placeholder="请输入11位数字（如手机号）"
+                                maxlength="11"
+                                autocomplete="off"
+                                required
+                            >
+                            <div class="input-status" id="a-status"></div>
+                        </div>
+                        <div class="form-help">
+                            <small>A值为11位数字，通常使用手机号码</small>
+                        </div>
+                        <div class="form-error" id="a-error"></div>
+                    </div>
+
+                    <!-- B值输入 -->
+                    <div class="form-group">
+                        <label for="identity-b" class="form-label">
+                            B值 <span class="required">*</span>
+                        </label>
+                        <div class="input-wrapper">
+                            <input 
+                                type="password" 
+                                id="identity-b" 
+                                name="identityB" 
+                                class="form-input" 
+                                placeholder="请输入4位或6位数字密码"
+                                maxlength="6"
+                                autocomplete="off"
+                                required
+                            >
+                            <button type="button" class="password-toggle" id="b-toggle" aria-label="显示/隐藏密码">
+                                <svg class="eye-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                    <circle cx="12" cy="12" r="3"></circle>
+                                </svg>
+                            </button>
+                            <div class="input-status" id="b-status"></div>
+                        </div>
+                        <div class="form-help">
+                            <small>B值为4位或6位数字，作为您的身份密码</small>
+                        </div>
+                        <div class="form-error" id="b-error"></div>
+                    </div>
+
+                    <!-- 记住选项 -->
+                    <div class="form-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="remember-identity" class="checkbox-input">
+                            <span class="checkbox-custom"></span>
+                            <span class="checkbox-text">记住此身份（仅在本设备）</span>
+                        </label>
+                        <div class="form-help">
+                            <small>勾选后将在本设备记住您的身份信息，下次无需重新输入</small>
+                        </div>
+                    </div>
+
+                    <!-- 提交按钮 -->
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" id="clear-btn">
+                            清除
+                        </button>
+                        <button type="submit" class="btn btn-primary" id="login-btn" disabled>
+                            <span class="btn-text">确认登录</span>
+                            <div class="btn-loading" id="login-loading">
+                                <div class="spinner"></div>
+                            </div>
+                        </button>
+                    </div>
+                </form>
+
+                <!-- 提示信息 -->
+                <div class="info-section">
+                    <div class="info-card">
+                        <div class="info-icon">💡</div>
+                        <div class="info-content">
+                            <h4>提示</h4>
+                            <p>如果您之前在问卷或故事墙中使用过A+B身份标识，请输入相同的组合。</p>
+                            <p class="info-note">系统不会存储您的原始A+B值，只会生成加密的身份标识。</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 帮助链接 -->
+                <div class="help-section">
+                    <details class="help-details">
+                        <summary class="help-summary">什么是A+B组合？</summary>
+                        <div class="help-content">
+                            <h5>A值（身份标识）</h5>
+                            <ul>
+                                <li>11位数字，通常使用手机号码</li>
+                                <li>作为您的主要身份标识</li>
+                                <li>示例：13812345678</li>
+                            </ul>
+                            
+                            <h5>B值（身份密码）</h5>
+                            <ul>
+                                <li>4位或6位数字</li>
+                                <li>作为您的身份验证密码</li>
+                                <li>示例：1234 或 123456</li>
+                            </ul>
+                            
+                            <h5>安全说明</h5>
+                            <ul>
+                                <li>系统只存储加密后的身份标识</li>
+                                <li>原始A+B值不会被保存</li>
+                                <li>每次登录都需要输入完整的A+B组合</li>
+                            </ul>
+                        </div>
+                    </details>
+                    
+                    <div class="help-links">
+                        <button type="button" class="link-btn" id="forgot-help">
+                            忘记了A+B组合？
+                        </button>
+                        <button type="button" class="link-btn" id="security-help">
+                            了解安全机制
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 消息提示容器 -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- 确认对话框 -->
+    <div id="confirm-dialog" class="confirm-dialog" style="display: none;">
+        <div class="confirm-content">
+            <div class="confirm-icon">⚠️</div>
+            <h3 class="confirm-title">身份切换确认</h3>
+            <p class="confirm-message" id="confirm-message"></p>
+            <div class="confirm-actions">
+                <button type="button" class="btn btn-secondary" id="confirm-cancel">取消</button>
+                <button type="button" class="btn btn-primary" id="confirm-ok">确认</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 加载脚本 -->
+    <script src="../services/anonymousAuthService.js"></script>
+    <script src="../services/identityManager.js"></script>
+    <script src="../services/cryptoUtils.js"></script>
+    <script src="ABLoginModal.js"></script>
+
+    <!-- 示例触发按钮（用于测试） -->
+    <div style="padding: 20px; text-align: center;">
+        <button onclick="showABLoginModal()" class="btn btn-primary">
+            打开A+B登录模态框
+        </button>
+        
+        <div style="margin-top: 20px;">
+            <h3>测试用A+B组合：</h3>
+            <div style="background: #f5f5f5; padding: 15px; border-radius: 8px; margin: 10px 0;">
+                <p><strong>组合1:</strong> A=13812345678, B=1234</p>
+                <p><strong>组合2:</strong> A=13987654321, B=123456</p>
+                <p><strong>组合3:</strong> A=15612345678, B=0000</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

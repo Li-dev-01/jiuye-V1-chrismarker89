@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登录修复测试</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .test-section {
+            background: #f5f5f5;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        .test-button {
+            background: #1890ff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .test-button:hover {
+            background: #40a9ff;
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        .status.success {
+            background: #f6ffed;
+            border: 1px solid #b7eb8f;
+            color: #52c41a;
+        }
+        .status.error {
+            background: #fff2f0;
+            border: 1px solid #ffccc7;
+            color: #ff4d4f;
+        }
+        .status.info {
+            background: #e6f7ff;
+            border: 1px solid #91d5ff;
+            color: #1890ff;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔧 登录修复测试页面</h1>
+    
+    <div class="status info">
+        <strong>测试目的：</strong>验证故事和心声页面的登录按钮是否正确触发半匿名登录弹窗
+    </div>
+
+    <div class="test-section">
+        <h2>📋 修复内容总结</h2>
+        <ul>
+            <li>✅ 修复了移动端导航中的登录按钮，现在会触发半匿名登录弹窗</li>
+            <li>✅ 修复了故事页面点赞/踩功能的登录提示，现在会触发半匿名登录弹窗</li>
+            <li>✅ 修复了心声页面点赞/踩功能的登录提示，现在会触发半匿名登录弹窗</li>
+            <li>✅ 修复了心声提交页面的登录跳转，现在会触发半匿名登录弹窗</li>
+            <li>✅ 修复了故事提交页面的登录跳转，现在会触发半匿名登录弹窗</li>
+        </ul>
+    </div>
+
+    <div class="test-section">
+        <h2>🧪 测试步骤</h2>
+        <ol>
+            <li>在未登录状态下访问故事页面：<a href="http://localhost:5173/stories" target="_blank">http://localhost:5173/stories</a></li>
+            <li>点击页面右上角的"匿名注册/登录"按钮</li>
+            <li>验证是否弹出半匿名登录弹窗（A+B组合输入框）</li>
+            <li>在未登录状态下访问心声页面：<a href="http://localhost:5173/voices" target="_blank">http://localhost:5173/voices</a></li>
+            <li>点击页面右上角的"匿名注册/登录"按钮</li>
+            <li>验证是否弹出半匿名登录弹窗</li>
+            <li>在移动端模式下测试导航菜单中的登录按钮</li>
+            <li>尝试点赞故事或心声，验证登录提示是否正确</li>
+        </ol>
+    </div>
+
+    <div class="test-section">
+        <h2>🎯 预期结果</h2>
+        <ul>
+            <li>所有登录按钮都应该触发半匿名登录弹窗</li>
+            <li>弹窗应该包含A值和B值输入框</li>
+            <li>不应该跳转到管理员登录页面（/admin/login）</li>
+            <li>登录成功后应该能正常使用点赞等功能</li>
+        </ul>
+    </div>
+
+    <div class="test-section">
+        <h2>🔗 快速测试链接</h2>
+        <button class="test-button" onclick="window.open('http://localhost:5173/stories', '_blank')">
+            测试故事页面
+        </button>
+        <button class="test-button" onclick="window.open('http://localhost:5173/voices', '_blank')">
+            测试心声页面
+        </button>
+        <button class="test-button" onclick="testLoginEvent()">
+            测试登录事件
+        </button>
+    </div>
+
+    <div class="test-section">
+        <h2>📱 测试用A+B组合</h2>
+        <div class="status info">
+            <strong>测试账号：</strong><br>
+            A值: 13812345678, B值: 1234<br>
+            A值: 13987654321, B值: 123456<br>
+            A值: 15612345678, B值: 0000
+        </div>
+    </div>
+
+    <div id="test-results" class="test-section" style="display: none;">
+        <h2>📊 测试结果</h2>
+        <div id="results-content"></div>
+    </div>
+
+    <script>
+        function testLoginEvent() {
+            try {
+                // 触发全局登录事件
+                window.dispatchEvent(new Event('openSemiAnonymousLogin'));
+                
+                // 显示测试结果
+                const resultsDiv = document.getElementById('test-results');
+                const contentDiv = document.getElementById('results-content');
+                
+                resultsDiv.style.display = 'block';
+                contentDiv.innerHTML = `
+                    <div class="status success">
+                        ✅ 登录事件触发成功！如果看到半匿名登录弹窗，说明修复有效。
+                    </div>
+                    <div class="status info">
+                        测试时间: ${new Date().toLocaleString()}
+                    </div>
+                `;
+            } catch (error) {
+                const resultsDiv = document.getElementById('test-results');
+                const contentDiv = document.getElementById('results-content');
+                
+                resultsDiv.style.display = 'block';
+                contentDiv.innerHTML = `
+                    <div class="status error">
+                        ❌ 登录事件触发失败: ${error.message}
+                    </div>
+                `;
+            }
+        }
+
+        // 页面加载完成后的提示
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🔧 登录修复测试页面已加载');
+            console.log('请按照测试步骤验证修复效果');
+        });
+    </script>
+</body>
+</html>

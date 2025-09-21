@@ -1,0 +1,323 @@
+{
+  "aValue": {
+    "name": "A值",
+    "description": "11位数字身份标识，通常使用手机号码",
+    "rules": {
+      "required": true,
+      "type": "string",
+      "pattern": "^\\d{11}$",
+      "minLength": 11,
+      "maxLength": 11,
+      "allowedCharacters": "0123456789"
+    },
+    "validation": {
+      "realTime": true,
+      "onBlur": true,
+      "showStatus": true,
+      "showProgress": true
+    },
+    "messages": {
+      "required": "A值不能为空",
+      "pattern": "A值必须是11位数字",
+      "minLength": "A值不足11位，还需要输入{remaining}位数字",
+      "maxLength": "A值超过11位，请删除多余的{excess}位数字",
+      "invalid": "A值格式不正确，请输入11位数字"
+    },
+    "examples": [
+      "13812345678",
+      "13987654321",
+      "15612345678",
+      "18812345678"
+    ],
+    "hints": [
+      "通常使用手机号码作为A值",
+      "A值必须是完整的11位数字",
+      "不要包含空格、横线或其他符号",
+      "确保输入的是您常用的手机号"
+    ],
+    "security": {
+      "maskDisplay": true,
+      "maskPattern": "***-****-{last4}",
+      "logOriginalValue": false,
+      "hashForStorage": true
+    }
+  },
+  "bValue": {
+    "name": "B值",
+    "description": "4位或6位数字密码，作为身份验证码",
+    "rules": {
+      "required": true,
+      "type": "string",
+      "pattern": "^\\d{4}$|^\\d{6}$",
+      "allowedLengths": [4, 6],
+      "allowedCharacters": "0123456789"
+    },
+    "validation": {
+      "realTime": true,
+      "onBlur": true,
+      "showStatus": true,
+      "showProgress": true,
+      "strengthCheck": false
+    },
+    "messages": {
+      "required": "B值不能为空",
+      "pattern": "B值必须是4位或6位数字",
+      "length4": "B值不足4位，还需要输入{remaining}位数字",
+      "length6": "B值不足6位，还需要输入{remaining}位数字",
+      "length5": "B值必须是4位或6位数字，当前是5位",
+      "invalid": "B值格式不正确，请输入4位或6位数字"
+    },
+    "examples": [
+      "1234",
+      "123456",
+      "0000",
+      "888888"
+    ],
+    "hints": [
+      "B值可以是4位或6位数字",
+      "建议使用容易记住但不易猜测的数字组合",
+      "避免使用过于简单的组合如1234或0000",
+      "确保与A值组合后能够唯一标识您的身份"
+    ],
+    "security": {
+      "maskDisplay": true,
+      "maskPattern": "****",
+      "allowVisibilityToggle": true,
+      "logOriginalValue": false,
+      "hashForStorage": true,
+      "preventAutocomplete": true
+    }
+  },
+  "combination": {
+    "name": "A+B组合",
+    "description": "A值和B值的组合验证",
+    "rules": {
+      "bothRequired": true,
+      "uniqueCombination": true,
+      "validFormat": true
+    },
+    "validation": {
+      "crossValidation": true,
+      "combinationCheck": true,
+      "duplicateCheck": false
+    },
+    "messages": {
+      "bothRequired": "请同时输入A值和B值",
+      "invalidCombination": "A+B组合格式不正确",
+      "combinationNotFound": "未找到匹配的A+B组合",
+      "combinationExists": "该A+B组合已存在"
+    },
+    "security": {
+      "hashCombination": true,
+      "saltedHash": true,
+      "preventReplay": true,
+      "rateLimiting": true
+    }
+  },
+  "ui": {
+    "realTimeValidation": {
+      "enabled": true,
+      "debounceMs": 300,
+      "showProgress": true,
+      "showStatus": true,
+      "animateChanges": true
+    },
+    "statusIndicators": {
+      "valid": {
+        "icon": "✓",
+        "color": "#10b981",
+        "message": "格式正确"
+      },
+      "invalid": {
+        "icon": "✗",
+        "color": "#ef4444",
+        "message": "格式错误"
+      },
+      "pending": {
+        "icon": "⏳",
+        "color": "#f59e0b",
+        "message": "验证中..."
+      },
+      "empty": {
+        "icon": "",
+        "color": "#6b7280",
+        "message": ""
+      }
+    },
+    "progressIndicators": {
+      "aValue": {
+        "showProgress": true,
+        "progressText": "{current}/{total}位",
+        "completeText": "完成"
+      },
+      "bValue": {
+        "showProgress": true,
+        "progressText": "{current}位 (需要4位或6位)",
+        "completeText": "完成"
+      }
+    },
+    "errorDisplay": {
+      "showInline": true,
+      "showTooltip": false,
+      "animateErrors": true,
+      "errorPosition": "below",
+      "maxErrorLength": 100
+    }
+  },
+  "behavior": {
+    "autoAdvance": {
+      "enabled": false,
+      "fromAToB": false,
+      "submitOnComplete": false
+    },
+    "inputFiltering": {
+      "allowOnlyNumbers": true,
+      "preventPaste": false,
+      "preventCopy": false,
+      "maxLength": true
+    },
+    "formatting": {
+      "autoFormat": false,
+      "removeSpaces": true,
+      "removeDashes": true,
+      "removeSpecialChars": true
+    }
+  },
+  "accessibility": {
+    "ariaLabels": {
+      "aValue": "A值输入框，请输入11位数字",
+      "bValue": "B值输入框，请输入4位或6位数字",
+      "togglePassword": "显示或隐藏B值",
+      "clearForm": "清除表单内容",
+      "submitForm": "提交A+B组合"
+    },
+    "announcements": {
+      "validationSuccess": "输入验证成功",
+      "validationError": "输入验证失败：{error}",
+      "formCleared": "表单已清除",
+      "loginSuccess": "登录成功",
+      "loginError": "登录失败：{error}"
+    },
+    "keyboardNavigation": {
+      "enabled": true,
+      "tabOrder": ["aValue", "bValue", "togglePassword", "clearButton", "submitButton"],
+      "shortcuts": {
+        "clearForm": "Ctrl+R",
+        "submitForm": "Enter",
+        "togglePassword": "Ctrl+Shift+P"
+      }
+    }
+  },
+  "testing": {
+    "validCombinations": [
+      {
+        "a": "13812345678",
+        "b": "1234",
+        "description": "标准4位密码组合"
+      },
+      {
+        "a": "13987654321",
+        "b": "123456",
+        "description": "标准6位密码组合"
+      },
+      {
+        "a": "15612345678",
+        "b": "0000",
+        "description": "简单4位密码组合"
+      },
+      {
+        "a": "18812345678",
+        "b": "888888",
+        "description": "重复6位密码组合"
+      }
+    ],
+    "invalidCombinations": [
+      {
+        "a": "1381234567",
+        "b": "1234",
+        "error": "A值不足11位",
+        "description": "A值长度不足"
+      },
+      {
+        "a": "13812345678",
+        "b": "123",
+        "error": "B值不足4位",
+        "description": "B值长度不足"
+      },
+      {
+        "a": "13812345678",
+        "b": "12345",
+        "error": "B值必须是4位或6位",
+        "description": "B值长度为5位"
+      },
+      {
+        "a": "1381234567a",
+        "b": "1234",
+        "error": "A值包含非数字字符",
+        "description": "A值包含字母"
+      },
+      {
+        "a": "13812345678",
+        "b": "123a",
+        "error": "B值包含非数字字符",
+        "description": "B值包含字母"
+      }
+    ],
+    "edgeCases": [
+      {
+        "a": "00000000000",
+        "b": "0000",
+        "description": "全零组合"
+      },
+      {
+        "a": "99999999999",
+        "b": "999999",
+        "description": "全九组合"
+      },
+      {
+        "a": "12345678901",
+        "b": "123456",
+        "description": "连续数字组合"
+      }
+    ]
+  },
+  "performance": {
+    "validation": {
+      "debounceMs": 300,
+      "throttleMs": 100,
+      "cacheResults": true,
+      "cacheDurationMs": 60000
+    },
+    "rendering": {
+      "batchUpdates": true,
+      "virtualScrolling": false,
+      "lazyValidation": false
+    }
+  },
+  "localization": {
+    "defaultLanguage": "zh-CN",
+    "supportedLanguages": ["zh-CN", "en-US"],
+    "messages": {
+      "zh-CN": {
+        "aValueLabel": "A值",
+        "bValueLabel": "B值",
+        "aValuePlaceholder": "请输入11位数字（如手机号）",
+        "bValuePlaceholder": "请输入4位或6位数字密码",
+        "submitButton": "确认登录",
+        "clearButton": "清除",
+        "showPassword": "显示密码",
+        "hidePassword": "隐藏密码"
+      },
+      "en-US": {
+        "aValueLabel": "A Value",
+        "bValueLabel": "B Value",
+        "aValuePlaceholder": "Enter 11-digit number (e.g., phone number)",
+        "bValuePlaceholder": "Enter 4 or 6-digit password",
+        "submitButton": "Login",
+        "clearButton": "Clear",
+        "showPassword": "Show Password",
+        "hidePassword": "Hide Password"
+      }
+    }
+  }
+}

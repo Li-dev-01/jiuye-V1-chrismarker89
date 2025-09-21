@@ -1,0 +1,274 @@
+/* 管理员登录页面样式 */
+
+/* CSS变量定义 */
+:root {
+  --primary-color: #3b82f6;
+  --primary-hover: #2563eb;
+  --success-color: #10b981;
+  --error-color: #ef4444;
+  --warning-color: #f59e0b;
+  --gray-50: #f9fafb;
+  --gray-100: #f3f4f6;
+  --gray-200: #e5e7eb;
+  --gray-300: #d1d5db;
+  --gray-400: #9ca3af;
+  --gray-500: #6b7280;
+  --gray-600: #4b5563;
+  --gray-700: #374151;
+  --gray-800: #1f2937;
+  --gray-900: #111827;
+  --blue-50: #eff6ff;
+  --blue-100: #dbeafe;
+  --blue-200: #bfdbfe;
+  --blue-600: #2563eb;
+  --blue-700: #1d4ed8;
+  --border-radius: 0.5rem;
+  --border-radius-lg: 0.75rem;
+  --box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --box-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --transition: all 0.15s ease-in-out;
+}
+
+/* 页面容器 */
+.pageContainer {
+  min-height: 100vh;
+  background-color: #ffffff;
+}
+
+/* 登录容器 */
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 1rem;
+  background-color: #ffffff;
+}
+
+/* 移动端容器优化 */
+@media (max-width: 768px) {
+  .container {
+    padding: 0.5rem;
+    align-items: flex-start;
+    padding-top: 2rem;
+  }
+}
+
+/* 登录卡片 */
+.loginCard {
+  width: 100%;
+  max-width: 28rem;
+  border-radius: var(--border-radius-lg) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+  border: 1px solid #e5e7eb !important;
+  background: #ffffff !important;
+}
+
+/* 移动端登录卡片优化 */
+@media (max-width: 768px) {
+  .loginCard {
+    max-width: 100%;
+    margin: 0;
+    border-radius: 0.5rem !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+  }
+}
+
+/* 登录头部 */
+.header {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.title {
+  font-size: 2rem !important;
+  font-weight: 700 !important;
+  color: var(--gray-900) !important;
+  margin-bottom: 0.5rem !important;
+}
+
+/* 移动端标题优化 */
+@media (max-width: 768px) {
+  .title {
+    font-size: 1.5rem !important;
+    margin-bottom: 0.25rem !important;
+  }
+
+  .description {
+    font-size: 0.875rem !important;
+    margin-bottom: 1rem !important;
+  }
+
+  .header {
+    margin-bottom: 1rem;
+  }
+}
+
+.description {
+  color: var(--gray-600) !important;
+  font-size: 0.875rem !important;
+}
+
+/* 错误提示 */
+.errorAlert {
+  margin-bottom: 1.5rem !important;
+}
+
+/* 表单样式 */
+.form {
+  margin-bottom: 1.5rem;
+}
+
+.loginButton {
+  height: 3rem !important;
+  font-weight: 500 !important;
+}
+
+/* 一键登录区域 */
+.quickLoginSection {
+  margin-bottom: 1.5rem;
+}
+
+.dividerText {
+  font-size: 0.75rem !important;
+  color: var(--gray-500) !important;
+}
+
+/* 一键登录组 */
+.quickLoginGroup {
+  margin-bottom: 1rem;
+}
+
+.groupTitle {
+  font-size: 0.75rem !important;
+  color: var(--gray-600) !important;
+  margin-bottom: 0.5rem !important;
+  display: block;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* 一键登录按钮 */
+.quickLoginButton {
+  margin-bottom: 0.5rem !important;
+  font-weight: 500 !important;
+  transition: var(--transition) !important;
+}
+
+/* 角色特定按钮样式 */
+.adminButton {
+  background: #f0f9ff !important;
+  border-color: #bfdbfe !important;
+  color: var(--blue-700) !important;
+}
+
+.adminButton:hover {
+  background: #dbeafe !important;
+  border-color: #93c5fd !important;
+}
+
+.superAdminButton {
+  background: #fef3c7 !important;
+  border-color: #fcd34d !important;
+  color: #92400e !important;
+}
+
+.superAdminButton:hover {
+  background: #fde68a !important;
+  border-color: #f59e0b !important;
+}
+
+.reviewerButton {
+  background: #f0fdf4 !important;
+  border-color: #bbf7d0 !important;
+  color: #166534 !important;
+}
+
+.reviewerButton:hover {
+  background: #dcfce7 !important;
+  border-color: #86efac !important;
+}
+
+/* 审核员按钮组 */
+.reviewerButtons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+}
+
+.reviewerButtons .quickLoginButton {
+  margin-bottom: 0 !important;
+}
+
+/* 帮助区域 */
+.helpSection {
+  text-align: center;
+  padding-top: 1rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+.backToHome {
+  margin-top: 0.5rem;
+}
+
+/* 响应式设计 */
+@media (max-width: 640px) {
+  .container {
+    padding: 0.5rem;
+  }
+
+  .loginCard {
+    margin: 0 !important;
+  }
+
+  .title {
+    font-size: 1.5rem !important;
+  }
+
+  .reviewerButtons {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+
+/* 加载状态 */
+.quickLoginButton:disabled {
+  opacity: 0.6 !important;
+  cursor: not-allowed !important;
+}
+
+/* 焦点状态 */
+.quickLoginButton:focus {
+  outline: none !important;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1) !important;
+}
+
+/* 动画效果 */
+.quickLoginButton {
+  transform: translateY(0);
+  transition: all 0.2s ease-in-out !important;
+}
+
+.quickLoginButton:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1) !important;
+}
+
+.quickLoginButton:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+/* 图标样式 */
+.groupTitle .anticon {
+  margin-right: 0.25rem;
+}
+
+/* 表单项间距调整 */
+.form .ant-form-item {
+  margin-bottom: 1rem;
+}
+
+.form .ant-form-item:last-child {
+  margin-bottom: 0;
+}

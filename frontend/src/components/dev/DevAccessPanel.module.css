@@ -1,0 +1,100 @@
+.toggleButton {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 9999;
+  opacity: 0.8;
+  transition: opacity 0.3s ease;
+}
+
+.toggleButton:hover {
+  opacity: 1;
+}
+
+.devPanel {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 9999;
+  width: 280px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.card {
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  font-size: 14px;
+  font-weight: 600;
+  color: #1890ff;
+}
+
+.content {
+  padding: 0;
+}
+
+.actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.actions .ant-btn-link {
+  padding: 0;
+  height: auto;
+  font-size: 12px;
+}
+
+/* 开发环境标识 */
+.devPanel::before {
+  content: 'DEV';
+  position: absolute;
+  top: -8px;
+  left: 8px;
+  background: #ff4d4f;
+  color: white;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: bold;
+  z-index: 1;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .devPanel {
+    width: 240px;
+    right: 10px;
+    top: 10px;
+  }
+  
+  .toggleButton {
+    right: 10px;
+    top: 10px;
+  }
+}
+
+/* 动画效果 */
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.devPanel {
+  animation: slideIn 0.3s ease-out;
+}

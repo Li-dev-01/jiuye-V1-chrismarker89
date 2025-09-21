@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI水源管理 - 基础集成示例</title>
+    <link rel="stylesheet" href="../components/AIWaterManagementPanel.css">
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f2f5;
+        }
+        
+        .example-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .example-header {
+            background: linear-gradient(135deg, #1890ff 0%, #fa8c16 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .example-section {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            padding: 20px;
+        }
+        
+        .example-section h3 {
+            color: #1890ff;
+            margin-top: 0;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 10px;
+        }
+        
+        .code-block {
+            background: #f5f5f5;
+            border: 1px solid #d9d9d9;
+            border-radius: 4px;
+            padding: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            overflow-x: auto;
+            margin: 10px 0;
+        }
+        
+        .demo-buttons {
+            display: flex;
+            gap: 10px;
+            margin: 15px 0;
+            flex-wrap: wrap;
+        }
+        
+        .demo-btn {
+            padding: 8px 16px;
+            border: 1px solid #1890ff;
+            border-radius: 4px;
+            background: white;
+            color: #1890ff;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+        
+        .demo-btn:hover {
+            background: #1890ff;
+            color: white;
+        }
+        
+        .demo-btn.primary {
+            background: #1890ff;
+            color: white;
+        }
+        
+        .demo-btn.primary:hover {
+            background: #40a9ff;
+        }
+        
+        .result-display {
+            background: #f9f9f9;
+            border: 1px solid #e8e8e8;
+            border-radius: 4px;
+            padding: 15px;
+            margin: 10px 0;
+            min-height: 100px;
+            white-space: pre-wrap;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+        }
+        
+        .status-card {
+            background: #fafafa;
+            border: 1px solid #f0f0f0;
+            border-radius: 4px;
+            padding: 15px;
+            margin: 10px 0;
+        }
+        
+        .status-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 8px 0;
+        }
+        
+        .status-label {
+            font-weight: 500;
+            color: #262626;
+        }
+        
+        .status-value {
+            color: #1890ff;
+            font-weight: 600;
+        }
+        
+        .alert-box {
+            padding: 12px 16px;
+            border-radius: 4px;
+            margin: 10px 0;
+            border-left: 4px solid;
+        }
+        
+        .alert-box.info {
+            background: #e6f7ff;
+            border-left-color: #1890ff;
+            color: #0050b3;
+        }
+        
+        .alert-box.success {
+            background: #f6ffed;
+            border-left-color: #52c41a;
+            color: #389e0d;
+        }
+        
+        .alert-box.warning {
+            background: #fff7e6;
+            border-left-color: #faad14;
+            color: #d46b08;
+        }
+        
+        .alert-box.error {
+            background: #fff2f0;
+            border-left-color: #ff4d4f;
+            color: #cf1322;
+        }
+    </style>
+</head>
+<body>
+    <div class="example-container">
+        <div class="example-header">
+            <h1>💧 AI水源与水管管理系统</h1>
+            <p>基础集成示例 - 快速上手指南</p>
+        </div>
+
+        <!-- 快速开始 -->
+        <div class="example-section">
+            <h3>🚀 快速开始</h3>
+            <p>以下是最基本的集成方式，只需几行代码即可启动AI水源管理系统：</p>
+            
+            <div class="code-block">
+&lt;!-- 引入样式文件 --&gt;
+&lt;link rel="stylesheet" href="components/AIWaterManagementPanel.css"&gt;
+
+&lt;!-- 创建容器 --&gt;
+&lt;div id="ai-water-management-container"&gt;&lt;/div&gt;
+
+&lt;!-- 引入脚本文件 --&gt;
+&lt;script src="services/waterSourceService.js"&gt;&lt;/script&gt;
+&lt;script src="services/loadBalancerService.js"&gt;&lt;/script&gt;
+&lt;script src="components/AIWaterManagementPanel.js"&gt;&lt;/script&gt;
+
+&lt;script&gt;
+// 初始化AI水源管理面板
+const waterManagement = new AIWaterManagementPanel({
+    container: '#ai-water-management-container',
+    config: {
+        autoHealthCheck: true,
+        healthCheckInterval: 300000, // 5分钟
+        enableCostControl: true,
+        enableFailover: true
+    }
+});
+&lt;/script&gt;
+            </div>
+            
+            <div class="demo-buttons">
+                <button class="demo-btn primary" onclick="initializeBasicExample()">初始化基础示例</button>
+                <button class="demo-btn" onclick="showSystemStatus()">显示系统状态</button>
+            </div>
+            
+            <div class="result-display" id="basic-result">点击"初始化基础示例"开始...</div>
+        </div>
+
+        <!-- 水源管理示例 -->
+        <div class="example-section">
+            <h3>💧 水源管理示例</h3>
+            <p>演示如何管理AI水源，包括添加、测试、监控水源状态：</p>
+            
+            <div class="code-block">
+// 添加新的AI水源
+async function addWaterSource() {
+    const sourceConfig = {
+        id: 'claude',
+        name: 'Anthropic Claude',
+        type: 'secondary',
+        config: {
+            apiKey: 'your-api-key',
+            endpoint: 'https://api.anthropic.com/v1/messages',
+            model: 'claude-3-sonnet',
+            maxConcurrent: 5,
+            rateLimit: 25,
+            costPerToken: 0.000015
+        }
+    };
+    
+    const result = await WaterSourceService.addSource(sourceConfig);
+    console.log('添加结果:', result);
+}
+
+// 测试水源连接
+async function testConnection(sourceId) {
+    const result = await WaterSourceService.testConnection(sourceId);
+    console.log('测试结果:', result);
+}
+            </div>
+            
+            <div class="demo-buttons">
+                <button class="demo-btn primary" onclick="demonstrateWaterSourceManagement()">演示水源管理</button>
+                <button class="demo-btn" onclick="testAllWaterSources()">测试所有水源</button>
+                <button class="demo-btn" onclick="getWaterSourceStats()">获取水源统计</button>
+            </div>
+            
+            <div class="result-display" id="water-source-result">等待操作...</div>
+        </div>
+
+        <!-- 负载均衡示例 -->
+        <div class="example-section">
+            <h3>⚖️ 负载均衡示例</h3>
+            <p>演示智能负载均衡功能，根据不同策略选择最优水源：</p>
+            
+            <div class="code-block">
+// 获取最佳水源
+async function getBestSource() {
+    const result = await LoadBalancerService.getBestSource({
+        terminalType: 'generation',
+        qualityRequirement: 'high',
+        costPriority: 'balanced',
+        maxCostPerRequest: 0.03
+    });
+    
+    console.log('推荐水源:', result);
+    return result;
+}
+
+// 更新全局策略
+async function updateStrategy(strategy) {
+    const result = await LoadBalancerService.updateGlobalStrategy(strategy);
+    console.log('策略更新:', result);
+}
+            </div>
+            
+            <div class="demo-buttons">
+                <button class="demo-btn primary" onclick="demonstrateLoadBalancing()">演示负载均衡</button>
+                <button class="demo-btn" onclick="compareLoadBalancingStrategies()">对比策略</button>
+                <button class="demo-btn" onclick="getLoadDistribution()">获取负载分布</button>
+            </div>
+            
+            <div class="result-display" id="load-balancer-result">等待操作...</div>
+        </div>
+
+        <!-- 健康监控示例 -->
+        <div class="example-section">
+            <h3>🔍 健康监控示例</h3>
+            <p>演示健康检查和监控功能，确保水源稳定运行：</p>
+            
+            <div class="code-block">
+// 执行健康检查
+async function performHealthCheck() {
+    const results = await HealthChecker.checkAllSources();
+    
+    results.forEach(result => {
+        const status = result.healthy ? '✅' : '❌';
+        console.log(`${status} ${result.sourceId}: ${result.summary}`);
+    });
+    
+    return results;
+}
+
+// 获取健康报告
+function getHealthReport() {
+    const report = HealthChecker.getHealthReport();
+    console.log('健康报告:', report);
+    return report;
+}
+            </div>
+            
+            <div class="demo-buttons">
+                <button class="demo-btn primary" onclick="demonstrateHealthMonitoring()">演示健康监控</button>
+                <button class="demo-btn" onclick="runHealthCheck()">执行健康检查</button>
+                <button class="demo-btn" onclick="getHealthReport()">获取健康报告</button>
+            </div>
+            
+            <div class="result-display" id="health-monitoring-result">等待操作...</div>
+        </div>
+
+        <!-- 成本控制示例 -->
+        <div class="example-section">
+            <h3>💰 成本控制示例</h3>
+            <p>演示成本监控和控制功能，优化AI服务成本：</p>
+            
+            <div class="code-block">
+// 获取成本分析
+async function getCostAnalysis() {
+    const analysis = await CostControlService.getAnalysis({
+        period: 'current_month',
+        groupBy: 'source',
+        includeProjections: true
+    });
+    
+    console.log('成本分析:', analysis);
+    return analysis;
+}
+
+// 设置预算限制
+async function setBudgetLimits() {
+    const result = await CostControlService.setBudgetLimits({
+        dailyBudget: 30.00,
+        monthlyBudget: 900.00,
+        alertThresholds: {
+            daily: 25.00,
+            monthly: 750.00
+        }
+    });
+    
+    console.log('预算设置:', result);
+}
+            </div>
+            
+            <div class="demo-buttons">
+                <button class="demo-btn primary" onclick="demonstrateCostControl()">演示成本控制</button>
+                <button class="demo-btn" onclick="getCostAnalysis()">获取成本分析</button>
+                <button class="demo-btn" onclick="getOptimizationSuggestions()">获取优化建议</button>
+            </div>
+            
+            <div class="result-display" id="cost-control-result">等待操作...</div>
+        </div>
+
+        <!-- 系统状态显示 -->
+        <div class="example-section">
+            <h3>📊 系统状态</h3>
+            <div class="status-card" id="system-status-card">
+                <div class="status-item">
+                    <span class="status-label">系统状态:</span>
+                    <span class="status-value" id="system-status">未初始化</span>
+                </div>
+                <div class="status-item">
+                    <span class="status-label">活跃水源:</span>
+                    <span class="status-value" id="active-sources">0/0</span>
+                </div>
+                <div class="status-item">
+                    <span class="status-label">今日请求:</span>
+                    <span class="status-value" id="today-requests">0</span>
+                </div>
+                <div class="status-item">
+                    <span class="status-label">今日成本:</span>
+                    <span class="status-value" id="today-cost">$0.00</span>
+                </div>
+                <div class="status-item">
+                    <span class="status-label">系统健康度:</span>
+                    <span class="status-value" id="system-health">0%</span>
+                </div>
+            </div>
+            
+            <div class="demo-buttons">
+                <button class="demo-btn primary" onclick="refreshSystemStatus()">刷新状态</button>
+                <button class="demo-btn" onclick="exportSystemReport()">导出报告</button>
+            </div>
+        </div>
+
+        <!-- 实时日志 -->
+        <div class="example-section">
+            <h3>📝 实时日志</h3>
+            <div class="result-display" id="real-time-log" style="height: 200px; overflow-y: auto;">
+系统日志将在这里显示...
+            </div>
+            <div class="demo-buttons">
+                <button class="demo-btn" onclick="clearLog()">清空日志</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 引入必要的脚本 -->
+    <script src="../services/waterSourceService.js"></script>
+    <script src="../services/loadBalancerService.js"></script>
+    <script src="../services/costControlService.js"></script>
+    <script src="../utils/healthChecker.js"></script>
+    <script src="../utils/performanceMonitor.js"></script>
+    <script src="../utils/failoverManager.js"></script>
+
+    <script>
+        // 日志记录函数
+        function log(message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            const logContainer = document.getElementById('real-time-log');
+            const logEntry = `[${timestamp}] ${message}\n`;
+            logContainer.textContent += logEntry;
+            logContainer.scrollTop = logContainer.scrollHeight;
+        }
+
+        // 显示结果
+        function showResult(containerId, result) {
+            const container = document.getElementById(containerId);
+            container.textContent = typeof result === 'object' ? 
+                JSON.stringify(result, null, 2) : result;
+        }
+
+        // 显示警告框
+        function showAlert(message, type = 'info') {
+            const alertBox = document.createElement('div');
+            alertBox.className = `alert-box ${type}`;
+            alertBox.textContent = message;
+            
+            // 插入到第一个示例区域后面
+            const firstSection = document.querySelector('.example-section');
+            firstSection.parentNode.insertBefore(alertBox, firstSection.nextSibling);
+            
+            // 3秒后自动移除
+            setTimeout(() => {
+                alertBox.remove();
+            }, 3000);
+        }
+
+        // 基础示例初始化
+        async function initializeBasicExample() {
+            log('🚀 开始初始化AI水源管理系统...');
+            
+            try {
+                // 模拟初始化过程
+                log('📦 加载水源配置...');
+                await new Promise(resolve => setTimeout(resolve, 500));
+                
+                log('🔧 初始化服务组件...');
+                await new Promise(resolve => setTimeout(resolve, 500));
+                
+                log('🔍 执行健康检查...');
+                await new Promise(resolve => setTimeout(resolve, 500));
+                
+                const result = {
+                    status: 'success',
+                    message: 'AI水源管理系统初始化完成',
+                    activeSources: 1,
+                    totalSources: 3,
+                    systemHealth: 98.5
+                };
+                
+                showResult('basic-result', result);
+                log('✅ 系统初始化完成');
+                showAlert('系统初始化成功！', 'success');
+                
+                // 更新系统状态
+                updateSystemStatusDisplay(result);
+                
+            } catch (error) {
+                log('❌ 初始化失败: ' + error.message);
+                showAlert('系统初始化失败: ' + error.message, 'error');
+            }
+        }
+
+        // 演示水源管理
+        async function demonstrateWaterSourceManagement() {
+            log('💧 开始演示水源管理功能...');
+            
+            try {
+                const sources = await WaterSourceService.getAllSources();
+                log(`📊 当前有 ${sources.length} 个水源`);
+                
+                const result = {
+                    totalSources: sources.length,
+                    sources: sources.map(s => ({
+                        id: s.id,
+                        name: s.name,
+                        status: s.status,
+                        type: s.type
+                    }))
+                };
+                
+                showResult('water-source-result', result);
+                log('✅ 水源管理演示完成');
+                
+            } catch (error) {
+                log('❌ 水源管理演示失败: ' + error.message);
+                showAlert('水源管理演示失败', 'error');
+            }
+        }
+
+        // 演示负载均衡
+        async function demonstrateLoadBalancing() {
+            log('⚖️ 开始演示负载均衡功能...');
+            
+            try {
+                const bestSource = await LoadBalancerService.getBestSource({
+                    terminalType: 'generation',
+                    qualityRequirement: 'high',
+                    costPriority: 'balanced'
+                });
+                
+                log(`🎯 推荐使用水源: ${bestSource.source?.name || 'N/A'}`);
+                showResult('load-balancer-result', bestSource);
+                log('✅ 负载均衡演示完成');
+                
+            } catch (error) {
+                log('❌ 负载均衡演示失败: ' + error.message);
+                showAlert('负载均衡演示失败', 'error');
+            }
+        }
+
+        // 演示健康监控
+        async function demonstrateHealthMonitoring() {
+            log('🔍 开始演示健康监控功能...');
+            
+            try {
+                const healthResults = await HealthChecker.checkAllSources();
+                const healthyCount = healthResults.filter(r => r.healthy).length;
+                
+                log(`📊 健康检查完成: ${healthyCount}/${healthResults.length} 个水源正常`);
+                
+                const result = {
+                    totalSources: healthResults.length,
+                    healthySources: healthyCount,
+                    unhealthySources: healthResults.length - healthyCount,
+                    details: healthResults
+                };
+                
+                showResult('health-monitoring-result', result);
+                log('✅ 健康监控演示完成');
+                
+            } catch (error) {
+                log('❌ 健康监控演示失败: ' + error.message);
+                showAlert('健康监控演示失败', 'error');
+            }
+        }
+
+        // 演示成本控制
+        async function demonstrateCostControl() {
+            log('💰 开始演示成本控制功能...');
+            
+            try {
+                const costData = CostControlService.getCurrentCosts();
+                const budgetLimits = CostControlService.getBudgetLimits();
+                
+                log(`📊 今日成本: $${costData.daily.toFixed(3)}`);
+                log(`📊 月度成本: $${costData.monthly.toFixed(2)}`);
+                
+                const result = {
+                    currentCosts: costData,
+                    budgetLimits: budgetLimits,
+                    utilizationRate: {
+                        daily: (costData.daily / budgetLimits.daily * 100).toFixed(1) + '%',
+                        monthly: (costData.monthly / budgetLimits.monthly * 100).toFixed(1) + '%'
+                    }
+                };
+                
+                showResult('cost-control-result', result);
+                log('✅ 成本控制演示完成');
+                
+            } catch (error) {
+                log('❌ 成本控制演示失败: ' + error.message);
+                showAlert('成本控制演示失败', 'error');
+            }
+        }
+
+        // 更新系统状态显示
+        function updateSystemStatusDisplay(data) {
+            document.getElementById('system-status').textContent = '正常运行';
+            document.getElementById('active-sources').textContent = `${data.activeSources}/${data.totalSources}`;
+            document.getElementById('today-requests').textContent = '150';
+            document.getElementById('today-cost').textContent = '$2.45';
+            document.getElementById('system-health').textContent = data.systemHealth + '%';
+        }
+
+        // 其他功能函数
+        function showSystemStatus() {
+            log('📊 显示系统状态...');
+            showAlert('系统状态已更新', 'info');
+        }
+
+        function testAllWaterSources() {
+            log('🔍 测试所有水源连接...');
+            showAlert('水源连接测试完成', 'success');
+        }
+
+        function getWaterSourceStats() {
+            log('📊 获取水源统计信息...');
+            showAlert('水源统计信息已获取', 'info');
+        }
+
+        function compareLoadBalancingStrategies() {
+            log('📊 对比负载均衡策略...');
+            showAlert('策略对比完成', 'info');
+        }
+
+        function runHealthCheck() {
+            log('🔍 执行健康检查...');
+            showAlert('健康检查完成', 'success');
+        }
+
+        function getHealthReport() {
+            log('📋 获取健康报告...');
+            showAlert('健康报告已生成', 'info');
+        }
+
+        function getCostAnalysis() {
+            log('💰 获取成本分析...');
+            showAlert('成本分析已完成', 'info');
+        }
+
+        function getOptimizationSuggestions() {
+            log('💡 获取优化建议...');
+            showAlert('优化建议已生成', 'info');
+        }
+
+        function refreshSystemStatus() {
+            log('🔄 刷新系统状态...');
+            updateSystemStatusDisplay({
+                activeSources: 1,
+                totalSources: 3,
+                systemHealth: 98.5
+            });
+            showAlert('系统状态已刷新', 'success');
+        }
+
+        function exportSystemReport() {
+            log('📄 导出系统报告...');
+            showAlert('系统报告导出完成', 'success');
+        }
+
+        function clearLog() {
+            document.getElementById('real-time-log').textContent = '系统日志将在这里显示...\n';
+        }
+
+        // 页面加载完成后的初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            log('🌟 AI水源管理基础集成示例页面已加载');
+            log('💡 点击各个按钮体验不同功能');
+        });
+    </script>
+</body>
+</html>

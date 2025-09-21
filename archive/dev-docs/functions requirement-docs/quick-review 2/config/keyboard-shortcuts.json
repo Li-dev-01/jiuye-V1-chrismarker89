@@ -1,0 +1,528 @@
+{
+  "version": "1.0.0",
+  "lastUpdated": "2024-01-20T10:30:00Z",
+  "shortcuts": [
+    {
+      "key": "a",
+      "action": "approve",
+      "description": "批准当前内容",
+      "category": "review",
+      "context": "review",
+      "enabled": true,
+      "preventDefault": true,
+      "priority": 10
+    },
+    {
+      "key": "ArrowUp",
+      "action": "approve",
+      "description": "批准当前内容（方向键）",
+      "category": "review",
+      "context": "review",
+      "enabled": true,
+      "preventDefault": true,
+      "priority": 9
+    },
+    {
+      "key": "r",
+      "action": "reject",
+      "description": "拒绝当前内容",
+      "category": "review",
+      "context": "review",
+      "enabled": true,
+      "preventDefault": true,
+      "priority": 10
+    },
+    {
+      "key": "ArrowDown",
+      "action": "reject",
+      "description": "拒绝当前内容（方向键）",
+      "category": "review",
+      "context": "review",
+      "enabled": true,
+      "preventDefault": true,
+      "priority": 9
+    },
+    {
+      "key": "n",
+      "action": "next",
+      "description": "下一个内容",
+      "category": "navigation",
+      "context": "review",
+      "enabled": true,
+      "preventDefault": true,
+      "priority": 8
+    },
+    {
+      "key": "ArrowRight",
+      "action": "next",
+      "description": "下一个内容（方向键）",
+      "category": "navigation",
+      "context": "review",
+      "enabled": true,
+      "preventDefault": true,
+      "priority": 7
+    },
+    {
+      "key": "p",
+      "action": "previous",
+      "description": "上一个内容",
+      "category": "navigation",
+      "context": "review",
+      "enabled": true,
+      "preventDefault": true,
+      "priority": 8
+    },
+    {
+      "key": "ArrowLeft",
+      "action": "previous",
+      "description": "上一个内容（方向键）",
+      "category": "navigation",
+      "context": "review",
+      "enabled": true,
+      "preventDefault": true,
+      "priority": 7
+    },
+    {
+      "key": "s",
+      "action": "skip",
+      "description": "跳过当前内容",
+      "category": "review",
+      "context": "review",
+      "enabled": true,
+      "preventDefault": true,
+      "priority": 6
+    },
+    {
+      "key": "f",
+      "action": "flag",
+      "description": "标记当前内容",
+      "category": "review",
+      "context": "review",
+      "enabled": true,
+      "preventDefault": true,
+      "priority": 6
+    },
+    {
+      "key": "Enter",
+      "action": "edit",
+      "description": "编辑当前内容",
+      "category": "edit",
+      "context": "review",
+      "enabled": true,
+      "preventDefault": true,
+      "priority": 5
+    },
+    {
+      "key": " ",
+      "action": "toggle-auto",
+      "description": "切换自动前进模式",
+      "category": "settings",
+      "context": "review",
+      "enabled": true,
+      "preventDefault": true,
+      "priority": 4
+    },
+    {
+      "key": "Escape",
+      "action": "exit",
+      "description": "退出快速审核",
+      "category": "navigation",
+      "context": "review",
+      "enabled": true,
+      "preventDefault": true,
+      "priority": 10
+    },
+    {
+      "key": "F1",
+      "action": "help",
+      "description": "显示帮助信息",
+      "category": "help",
+      "context": "global",
+      "enabled": true,
+      "preventDefault": true,
+      "priority": 3
+    },
+    {
+      "key": "F5",
+      "action": "refresh",
+      "description": "申请新批次",
+      "category": "batch",
+      "context": "review",
+      "enabled": true,
+      "preventDefault": true,
+      "priority": 5
+    },
+    {
+      "key": "Ctrl+z",
+      "action": "undo",
+      "description": "撤销上一个操作",
+      "category": "edit",
+      "context": "review",
+      "enabled": true,
+      "preventDefault": true,
+      "priority": 8
+    },
+    {
+      "key": "Ctrl+y",
+      "action": "redo",
+      "description": "重做上一个操作",
+      "category": "edit",
+      "context": "review",
+      "enabled": true,
+      "preventDefault": true,
+      "priority": 7
+    },
+    {
+      "key": "Ctrl+s",
+      "action": "save",
+      "description": "保存当前进度",
+      "category": "file",
+      "context": "review",
+      "enabled": true,
+      "preventDefault": true,
+      "priority": 6
+    },
+    {
+      "key": "Ctrl+a",
+      "action": "select-all",
+      "description": "选择当前批次所有内容",
+      "category": "selection",
+      "context": "review",
+      "enabled": false,
+      "preventDefault": true,
+      "priority": 4
+    },
+    {
+      "key": "Ctrl+f",
+      "action": "search",
+      "description": "搜索内容",
+      "category": "search",
+      "context": "global",
+      "enabled": true,
+      "preventDefault": true,
+      "priority": 5
+    },
+    {
+      "key": "Ctrl+r",
+      "action": "reload",
+      "description": "重新加载当前批次",
+      "category": "batch",
+      "context": "review",
+      "enabled": true,
+      "preventDefault": true,
+      "priority": 4
+    },
+    {
+      "key": "Home",
+      "action": "first",
+      "description": "跳转到第一个内容",
+      "category": "navigation",
+      "context": "review",
+      "enabled": true,
+      "preventDefault": true,
+      "priority": 3
+    },
+    {
+      "key": "End",
+      "action": "last",
+      "description": "跳转到最后一个内容",
+      "category": "navigation",
+      "context": "review",
+      "enabled": true,
+      "preventDefault": true,
+      "priority": 3
+    },
+    {
+      "key": "PageUp",
+      "action": "page-up",
+      "description": "向上翻页",
+      "category": "navigation",
+      "context": "review",
+      "enabled": true,
+      "preventDefault": true,
+      "priority": 2
+    },
+    {
+      "key": "PageDown",
+      "action": "page-down",
+      "description": "向下翻页",
+      "category": "navigation",
+      "context": "review",
+      "enabled": true,
+      "preventDefault": true,
+      "priority": 2
+    },
+    {
+      "key": "Tab",
+      "action": "next-field",
+      "description": "切换到下一个字段",
+      "category": "navigation",
+      "context": "form",
+      "enabled": true,
+      "preventDefault": false,
+      "priority": 1
+    },
+    {
+      "key": "Shift+Tab",
+      "action": "previous-field",
+      "description": "切换到上一个字段",
+      "category": "navigation",
+      "context": "form",
+      "enabled": true,
+      "preventDefault": false,
+      "priority": 1
+    },
+    {
+      "key": "Ctrl+Enter",
+      "action": "quick-approve",
+      "description": "快速批准并跳转",
+      "category": "review",
+      "context": "review",
+      "enabled": true,
+      "preventDefault": true,
+      "priority": 9
+    },
+    {
+      "key": "Ctrl+Shift+Enter",
+      "action": "quick-reject",
+      "description": "快速拒绝并跳转",
+      "category": "review",
+      "context": "review",
+      "enabled": true,
+      "preventDefault": true,
+      "priority": 9
+    },
+    {
+      "key": "Alt+1",
+      "action": "reject-reason-1",
+      "description": "选择拒绝原因1",
+      "category": "dialog",
+      "context": "dialog",
+      "enabled": true,
+      "preventDefault": true,
+      "priority": 5
+    },
+    {
+      "key": "Alt+2",
+      "action": "reject-reason-2",
+      "description": "选择拒绝原因2",
+      "category": "dialog",
+      "context": "dialog",
+      "enabled": true,
+      "preventDefault": true,
+      "priority": 5
+    },
+    {
+      "key": "Alt+3",
+      "action": "reject-reason-3",
+      "description": "选择拒绝原因3",
+      "category": "dialog",
+      "context": "dialog",
+      "enabled": true,
+      "preventDefault": true,
+      "priority": 5
+    },
+    {
+      "key": "Alt+4",
+      "action": "reject-reason-4",
+      "description": "选择拒绝原因4",
+      "category": "dialog",
+      "context": "dialog",
+      "enabled": true,
+      "preventDefault": true,
+      "priority": 5
+    },
+    {
+      "key": "Alt+5",
+      "action": "reject-reason-5",
+      "description": "选择拒绝原因5",
+      "category": "dialog",
+      "context": "dialog",
+      "enabled": true,
+      "preventDefault": true,
+      "priority": 5
+    },
+    {
+      "key": "Alt+6",
+      "action": "reject-reason-6",
+      "description": "选择拒绝原因6",
+      "category": "dialog",
+      "context": "dialog",
+      "enabled": true,
+      "preventDefault": true,
+      "priority": 5
+    }
+  ],
+  "categories": {
+    "review": {
+      "name": "审核操作",
+      "description": "内容审核相关的快捷键",
+      "color": "#10b981",
+      "icon": "check-circle"
+    },
+    "navigation": {
+      "name": "导航操作",
+      "description": "页面导航和内容切换",
+      "color": "#3b82f6",
+      "icon": "navigation"
+    },
+    "edit": {
+      "name": "编辑操作",
+      "description": "内容编辑和修改",
+      "color": "#f59e0b",
+      "icon": "edit"
+    },
+    "batch": {
+      "name": "批次操作",
+      "description": "批次管理相关操作",
+      "color": "#8b5cf6",
+      "icon": "package"
+    },
+    "settings": {
+      "name": "设置操作",
+      "description": "系统设置和配置",
+      "color": "#6b7280",
+      "icon": "settings"
+    },
+    "help": {
+      "name": "帮助操作",
+      "description": "帮助和支持功能",
+      "color": "#ef4444",
+      "icon": "help-circle"
+    },
+    "file": {
+      "name": "文件操作",
+      "description": "文件保存和加载",
+      "color": "#14b8a6",
+      "icon": "file"
+    },
+    "selection": {
+      "name": "选择操作",
+      "description": "内容选择和批量操作",
+      "color": "#f97316",
+      "icon": "check-square"
+    },
+    "search": {
+      "name": "搜索操作",
+      "description": "内容搜索和过滤",
+      "color": "#84cc16",
+      "icon": "search"
+    },
+    "dialog": {
+      "name": "对话框操作",
+      "description": "对话框内的快捷操作",
+      "color": "#ec4899",
+      "icon": "message-square"
+    }
+  },
+  "contexts": {
+    "global": {
+      "name": "全局",
+      "description": "在任何地方都生效的快捷键"
+    },
+    "review": {
+      "name": "审核页面",
+      "description": "在审核页面生效的快捷键"
+    },
+    "dialog": {
+      "name": "对话框",
+      "description": "在对话框中生效的快捷键"
+    },
+    "form": {
+      "name": "表单",
+      "description": "在表单中生效的快捷键"
+    },
+    "list": {
+      "name": "列表",
+      "description": "在列表页面生效的快捷键"
+    },
+    "editor": {
+      "name": "编辑器",
+      "description": "在编辑器中生效的快捷键"
+    }
+  },
+  "config": {
+    "enabled": true,
+    "preventDefault": true,
+    "caseSensitive": false,
+    "globalContext": true,
+    "contextSwitching": true,
+    "conflictResolution": "priority",
+    "allowDuplicates": false,
+    "learningMode": true,
+    "showHints": true,
+    "trackUsage": true,
+    "allowCustomShortcuts": true,
+    "maxCustomShortcuts": 20,
+    "exportFormat": "json",
+    "importValidation": true,
+    "autoBackup": true,
+    "backupInterval": 300000,
+    "maxBackups": 10
+  },
+  "themes": [
+    {
+      "id": "default",
+      "name": "默认主题",
+      "description": "系统默认的快捷键主题",
+      "colors": {
+        "primary": "#3b82f6",
+        "secondary": "#6b7280",
+        "accent": "#10b981",
+        "background": "#ffffff",
+        "text": "#111827",
+        "border": "#d1d5db"
+      },
+      "keyStyle": {
+        "backgroundColor": "#f3f4f6",
+        "textColor": "#374151",
+        "borderColor": "#d1d5db",
+        "borderRadius": "4px",
+        "fontSize": "12px",
+        "fontWeight": "500",
+        "padding": "2px 6px",
+        "margin": "0 2px"
+      },
+      "animations": {
+        "enabled": true,
+        "duration": 200,
+        "easing": "ease-in-out"
+      }
+    },
+    {
+      "id": "dark",
+      "name": "暗色主题",
+      "description": "适合暗色环境的快捷键主题",
+      "colors": {
+        "primary": "#60a5fa",
+        "secondary": "#9ca3af",
+        "accent": "#34d399",
+        "background": "#111827",
+        "text": "#f9fafb",
+        "border": "#374151"
+      },
+      "keyStyle": {
+        "backgroundColor": "#374151",
+        "textColor": "#d1d5db",
+        "borderColor": "#4b5563",
+        "borderRadius": "4px",
+        "fontSize": "12px",
+        "fontWeight": "500",
+        "padding": "2px 6px",
+        "margin": "0 2px"
+      },
+      "animations": {
+        "enabled": true,
+        "duration": 200,
+        "easing": "ease-in-out"
+      }
+    }
+  ],
+  "metadata": {
+    "appVersion": "1.0.0",
+    "platform": "web",
+    "locale": "zh-CN",
+    "author": "Quick Review Team",
+    "license": "MIT"
+  }
+}

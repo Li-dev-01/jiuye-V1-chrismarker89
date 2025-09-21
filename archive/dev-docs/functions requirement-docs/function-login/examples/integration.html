@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登录功能集成示例</title>
+    <link rel="stylesheet" href="../components/AdminLoginPage.css">
+    <style>
+        .example-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .example-section {
+            margin-bottom: 3rem;
+            padding: 2rem;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.5rem;
+            background: white;
+        }
+        
+        .example-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #1f2937;
+        }
+        
+        .example-description {
+            color: #6b7280;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+        
+        .code-block {
+            background: #f3f4f6;
+            border: 1px solid #d1d5db;
+            border-radius: 0.375rem;
+            padding: 1rem;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 0.875rem;
+            overflow-x: auto;
+            margin: 1rem 0;
+        }
+        
+        .demo-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin: 1rem 0;
+        }
+        
+        .demo-button {
+            padding: 0.5rem 1rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.375rem;
+            background: white;
+            color: #374151;
+            cursor: pointer;
+            font-size: 0.875rem;
+            transition: all 0.15s ease-in-out;
+        }
+        
+        .demo-button:hover {
+            background: #f9fafb;
+            border-color: #9ca3af;
+        }
+        
+        .demo-button.primary {
+            background: #3b82f6;
+            color: white;
+            border-color: #3b82f6;
+        }
+        
+        .demo-button.primary:hover {
+            background: #2563eb;
+            border-color: #2563eb;
+        }
+        
+        .status-display {
+            background: #f0f9ff;
+            border: 1px solid #bfdbfe;
+            border-radius: 0.375rem;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+        
+        .status-title {
+            font-weight: 600;
+            color: #1e40af;
+            margin-bottom: 0.5rem;
+        }
+        
+        .status-content {
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 0.75rem;
+            color: #1e40af;
+            white-space: pre-wrap;
+        }
+        
+        .login-demo {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            align-items: start;
+        }
+        
+        @media (max-width: 768px) {
+            .login-demo {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="example-container">
+        <h1 style="text-align: center; margin-bottom: 2rem; color: #1f2937;">管理员登录功能集成示例</h1>
+        
+        <!-- 基础集成示例 -->
+        <div class="example-section">
+            <h2 class="example-title">1. 基础集成</h2>
+            <p class="example-description">
+                最简单的集成方式，只需要引入CSS和JS文件，然后创建一个容器元素。
+            </p>
+            
+            <div class="code-block">
+&lt;!-- 引入样式文件 --&gt;
+&lt;link rel="stylesheet" href="components/AdminLoginPage.css"&gt;
+
+&lt;!-- 创建登录容器 --&gt;
+&lt;div id="login-container"&gt;&lt;/div&gt;
+
+&lt;!-- 引入脚本文件 --&gt;
+&lt;script src="services/authService.js"&gt;&lt;/script&gt;
+&lt;script src="components/AdminLoginPage.js"&gt;&lt;/script&gt;
+            </div>
+            
+            <div class="demo-buttons">
+                <button class="demo-button primary" onclick="showBasicDemo()">查看基础演示</button>
+                <button class="demo-button" onclick="hideDemo()">隐藏演示</button>
+            </div>
+        </div>
+        
+        <!-- 自定义配置示例 -->
+        <div class="example-section">
+            <h2 class="example-title">2. 自定义配置</h2>
+            <p class="example-description">
+                通过配置选项自定义登录行为，包括成功/失败回调、重定向控制等。
+            </p>
+            
+            <div class="code-block">
+const loginPage = new AdminLoginPage({
+    container: '#custom-login-container',
+    redirectEnabled: false, // 禁用自动重定向
+    onSuccess: (user) => {
+        console.log('登录成功:', user);
+        // 自定义成功处理逻辑
+        showUserInfo(user);
+    },
+    onError: (error) => {
+        console.error('登录失败:', error);
+        // 自定义错误处理逻辑
+        showErrorMessage(error);
+    }
+});
+            </div>
+            
+            <div class="demo-buttons">
+                <button class="demo-button primary" onclick="showCustomDemo()">查看自定义演示</button>
+                <button class="demo-button" onclick="testAllAccounts()">测试所有账号</button>
+            </div>
+        </div>
+        
+        <!-- API使用示例 -->
+        <div class="example-section">
+            <h2 class="example-title">3. API使用</h2>
+            <p class="example-description">
+                直接使用认证服务API进行登录验证和权限检查。
+            </p>
+            
+            <div class="code-block">
+// 直接调用登录API
+const result = await AuthService.adminLogin('admin1', 'admin123');
+if (result.success) {
+    console.log('登录成功:', result.data.user);
+}
+
+// 检查权限
+const hasPermission = AuthService.hasPermission('content_review');
+console.log('是否有内容审核权限:', hasPermission);
+
+// 获取当前用户
+const currentUser = AuthService.getCurrentUser();
+console.log('当前用户:', currentUser);
+            </div>
+            
+            <div class="demo-buttons">
+                <button class="demo-button primary" onclick="testDirectAPI()">测试直接API</button>
+                <button class="demo-button" onclick="checkCurrentStatus()">检查当前状态</button>
+                <button class="demo-button" onclick="clearAuthState()">清除认证状态</button>
+            </div>
+        </div>
+        
+        <!-- 实时演示区域 -->
+        <div class="example-section">
+            <h2 class="example-title">4. 实时演示</h2>
+            <p class="example-description">
+                在下方区域查看登录功能的实时演示效果。
+            </p>
+            
+            <div class="login-demo">
+                <div>
+                    <div id="demo-login-container" style="display: none;"></div>
+                    <div id="custom-login-container" style="display: none;"></div>
+                </div>
+                
+                <div>
+                    <div class="status-display">
+                        <div class="status-title">当前状态</div>
+                        <div class="status-content" id="status-display">未初始化</div>
+                    </div>
+                    
+                    <div class="demo-buttons">
+                        <button class="demo-button" onclick="refreshStatus()">刷新状态</button>
+                        <button class="demo-button" onclick="showDebugInfo()">调试信息</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 预置账号信息 -->
+        <div class="example-section">
+            <h2 class="example-title">5. 预置账号信息</h2>
+            <p class="example-description">
+                以下是系统预置的测试账号，可以直接使用这些账号进行登录测试。
+            </p>
+            
+            <div id="accounts-list"></div>
+        </div>
+    </div>
+    
+    <!-- 引入脚本 -->
+    <script src="../services/authService.js"></script>
+    <script src="../components/AdminLoginPage.js"></script>
+    
+    <script>
+        let basicLoginInstance = null;
+        let customLoginInstance = null;
+        
+        // 显示基础演示
+        function showBasicDemo() {
+            hideDemo();
+            const container = document.getElementById('demo-login-container');
+            container.style.display = 'block';
+            
+            if (!basicLoginInstance) {
+                basicLoginInstance = new AdminLoginPage({
+                    container: '#demo-login-container'
+                });
+            }
+            
+            refreshStatus();
+        }
+        
+        // 显示自定义演示
+        function showCustomDemo() {
+            hideDemo();
+            const container = document.getElementById('custom-login-container');
+            container.style.display = 'block';
+            
+            if (!customLoginInstance) {
+                customLoginInstance = new AdminLoginPage({
+                    container: '#custom-login-container',
+                    redirectEnabled: false,
+                    onSuccess: (user) => {
+                        alert(`登录成功！欢迎 ${user.name} (${user.role})`);
+                        refreshStatus();
+                    },
+                    onError: (error) => {
+                        alert(`登录失败：${error}`);
+                        refreshStatus();
+                    }
+                });
+            }
+            
+            refreshStatus();
+        }
+        
+        // 隐藏演示
+        function hideDemo() {
+            document.getElementById('demo-login-container').style.display = 'none';
+            document.getElementById('custom-login-container').style.display = 'none';
+        }
+        
+        // 测试所有账号
+        async function testAllAccounts() {
+            if (window.debugAuth) {
+                await window.debugAuth.testAllAccounts();
+                refreshStatus();
+            }
+        }
+        
+        // 测试直接API
+        async function testDirectAPI() {
+            try {
+                const result = await AuthService.adminLogin('admin1', 'admin123');
+                console.log('API测试结果:', result);
+                alert(`API测试${result.success ? '成功' : '失败'}: ${result.success ? result.data.user.name : result.error}`);
+                refreshStatus();
+            } catch (error) {
+                console.error('API测试失败:', error);
+                alert(`API测试失败: ${error.message}`);
+            }
+        }
+        
+        // 检查当前状态
+        function checkCurrentStatus() {
+            if (window.debugAuth) {
+                const state = window.debugAuth.getCurrentState();
+                console.log('当前状态:', state);
+                alert(`认证状态: ${state.isAuthenticated ? '已登录' : '未登录'}\n用户: ${state.currentUser ? state.currentUser.name : '无'}`);
+            }
+        }
+        
+        // 清除认证状态
+        function clearAuthState() {
+            if (window.debugAuth) {
+                window.debugAuth.clearAuth();
+                refreshStatus();
+            }
+        }
+        
+        // 刷新状态显示
+        function refreshStatus() {
+            const statusDisplay = document.getElementById('status-display');
+            const isAuth = AuthService.isAuthenticated();
+            const user = AuthService.getCurrentUser();
+            const token = AuthService.getCurrentToken();
+            
+            const status = {
+                认证状态: isAuth ? '已登录' : '未登录',
+                当前用户: user ? `${user.name} (${user.role})` : '无',
+                用户权限: user ? user.permissions.join(', ') : '无',
+                Token: token ? token.substring(0, 20) + '...' : '无',
+                登录时间: user && user.loginTime ? new Date(user.loginTime).toLocaleString() : '无'
+            };
+            
+            statusDisplay.textContent = JSON.stringify(status, null, 2);
+        }
+        
+        // 显示调试信息
+        function showDebugInfo() {
+            console.log('=== 调试信息 ===');
+            console.log('AuthService:', AuthService);
+            console.log('测试账号列表:', AuthService.getTestAccountsList());
+            console.log('当前认证状态:', AuthService.isAuthenticated());
+            console.log('当前用户:', AuthService.getCurrentUser());
+            console.log('当前Token:', AuthService.getCurrentToken());
+            
+            if (window.debugAuth) {
+                console.log('调试工具:', window.debugAuth);
+            }
+            
+            alert('调试信息已输出到控制台，请按F12查看');
+        }
+        
+        // 显示预置账号列表
+        function showAccountsList() {
+            const container = document.getElementById('accounts-list');
+            const accounts = AuthService.getTestAccountsList();
+            
+            const html = accounts.map(account => `
+                <div style="border: 1px solid #e5e7eb; border-radius: 0.375rem; padding: 1rem; margin: 0.5rem 0;">
+                    <div style="font-weight: 600; color: #1f2937;">${account.name}</div>
+                    <div style="font-size: 0.875rem; color: #6b7280; margin: 0.25rem 0;">
+                        用户名: <code>${account.username}</code> | 角色: <code>${account.role}</code>
+                    </div>
+                    <div style="font-size: 0.75rem; color: #9ca3af;">
+                        密码: admin123 (所有测试账号使用相同密码)
+                    </div>
+                </div>
+            `).join('');
+            
+            container.innerHTML = html;
+        }
+        
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            refreshStatus();
+            showAccountsList();
+            
+            // 定期刷新状态
+            setInterval(refreshStatus, 5000);
+        });
+    </script>
+</body>
+</html>

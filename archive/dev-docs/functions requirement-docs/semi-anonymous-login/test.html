@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A+B半匿名登录功能测试</title>
+    <link rel="stylesheet" href="components/ABLoginModal.css">
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f5f5f5;
+            line-height: 1.6;
+        }
+        
+        .test-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .test-section {
+            background: white;
+            margin: 20px 0;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .test-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin: 15px 0;
+        }
+        
+        .test-btn {
+            padding: 8px 16px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background: white;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+        
+        .test-btn:hover {
+            background: #f0f0f0;
+        }
+        
+        .test-btn.primary {
+            background: #3b82f6;
+            color: white;
+            border-color: #3b82f6;
+        }
+        
+        .test-btn.primary:hover {
+            background: #2563eb;
+        }
+        
+        .test-result {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            padding: 15px;
+            margin: 10px 0;
+            font-family: monospace;
+            font-size: 12px;
+            white-space: pre-wrap;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 15px 0;
+        }
+        
+        .status-card {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            padding: 15px;
+        }
+        
+        .status-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #495057;
+        }
+        
+        .status-value {
+            font-family: monospace;
+            font-size: 12px;
+            color: #6c757d;
+        }
+        
+        .test-accounts {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+            margin: 15px 0;
+        }
+        
+        .account-card {
+            background: #e3f2fd;
+            border: 1px solid #bbdefb;
+            border-radius: 4px;
+            padding: 15px;
+        }
+        
+        .account-title {
+            font-weight: bold;
+            color: #1976d2;
+            margin-bottom: 8px;
+        }
+        
+        .account-info {
+            font-family: monospace;
+            font-size: 14px;
+            color: #1565c0;
+        }
+        
+        .quick-test-btn {
+            background: #4caf50;
+            color: white;
+            border: none;
+            padding: 4px 8px;
+            border-radius: 3px;
+            font-size: 12px;
+            cursor: pointer;
+            margin-top: 8px;
+        }
+        
+        .quick-test-btn:hover {
+            background: #45a049;
+        }
+        
+        .log-container {
+            max-height: 400px;
+            overflow-y: auto;
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 15px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+        }
+        
+        .log-entry {
+            margin-bottom: 5px;
+            padding: 2px 0;
+        }
+        
+        .log-timestamp {
+            color: #569cd6;
+        }
+        
+        .log-level-info {
+            color: #4ec9b0;
+        }
+        
+        .log-level-error {
+            color: #f44747;
+        }
+        
+        .log-level-success {
+            color: #b5cea8;
+        }
+        
+        .log-level-warning {
+            color: #dcdcaa;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-header">
+        <h1>🔐 A+B半匿名登录功能测试</h1>
+        <p>测试A+B组合登录的各项功能和安全特性</p>
+    </div>
+
+    <!-- 基础功能测试 -->
+    <div class="test-section">
+        <h3>📱 基础功能测试</h3>
+        <div class="test-buttons">
+            <button class="test-btn primary" onclick="showLoginModal()">显示登录模态框</button>
+            <button class="test-btn" onclick="hideLoginModal()">隐藏模态框</button>
+            <button class="test-btn" onclick="testModalFeatures()">测试模态框功能</button>
+        </div>
+    </div>
+
+    <!-- A+B组合测试 -->
+    <div class="test-section">
+        <h3>🔧 A+B组合测试</h3>
+        <div class="test-buttons">
+            <button class="test-btn primary" onclick="testAllCombinations()">测试所有组合</button>
+            <button class="test-btn" onclick="testValidation()">测试格式验证</button>
+            <button class="test-btn" onclick="testInvalidCombinations()">测试无效组合</button>
+            <button class="test-btn" onclick="testEdgeCases()">测试边界情况</button>
+        </div>
+        <div class="test-result" id="combination-test-result">等待测试...</div>
+    </div>
+
+    <!-- 加密和安全测试 -->
+    <div class="test-section">
+        <h3>🔒 加密和安全测试</h3>
+        <div class="test-buttons">
+            <button class="test-btn primary" onclick="testCrypto()">测试加密功能</button>
+            <button class="test-btn" onclick="testHashing()">测试哈希算法</button>
+            <button class="test-btn" onclick="testUUIDGeneration()">测试UUID生成</button>
+            <button class="test-btn" onclick="testFingerprinting()">测试设备指纹</button>
+        </div>
+        <div class="test-result" id="crypto-test-result">等待测试...</div>
+    </div>
+
+    <!-- 身份管理测试 -->
+    <div class="test-section">
+        <h3>👤 身份管理测试</h3>
+        <div class="test-buttons">
+            <button class="test-btn primary" onclick="testIdentityManager()">测试身份管理</button>
+            <button class="test-btn" onclick="testIdentityConflict()">测试身份冲突</button>
+            <button class="test-btn" onclick="clearAllIdentities()">清除所有身份</button>
+            <button class="test-btn" onclick="showIdentityHistory()">查看身份历史</button>
+        </div>
+        <div class="test-result" id="identity-test-result">等待测试...</div>
+    </div>
+
+    <!-- 状态监控 -->
+    <div class="test-section">
+        <h3>📊 状态监控</h3>
+        <div class="test-buttons">
+            <button class="test-btn primary" onclick="refreshStatus()">刷新状态</button>
+            <button class="test-btn" onclick="showDebugInfo()">调试信息</button>
+            <button class="test-btn" onclick="exportTestResults()">导出测试结果</button>
+        </div>
+        
+        <div class="status-grid">
+            <div class="status-card">
+                <div class="status-title">认证状态</div>
+                <div class="status-value" id="auth-status">检查中...</div>
+            </div>
+            <div class="status-card">
+                <div class="status-title">当前身份</div>
+                <div class="status-value" id="current-identity">无</div>
+            </div>
+            <div class="status-card">
+                <div class="status-title">身份类型</div>
+                <div class="status-value" id="identity-type">无</div>
+            </div>
+            <div class="status-card">
+                <div class="status-title">Token状态</div>
+                <div class="status-value" id="token-status">无</div>
+            </div>
+            <div class="status-card">
+                <div class="status-title">加密支持</div>
+                <div class="status-value" id="crypto-support">检查中...</div>
+            </div>
+            <div class="status-card">
+                <div class="status-title">设备指纹</div>
+                <div class="status-value" id="device-fingerprint">生成中...</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 测试账号信息 -->
+    <div class="test-section">
+        <h3>👥 测试账号信息</h3>
+        <div class="test-accounts" id="test-accounts">
+            <!-- 动态生成测试账号卡片 -->
+        </div>
+    </div>
+
+    <!-- 测试日志 -->
+    <div class="test-section">
+        <h3>📝 测试日志</h3>
+        <div class="test-buttons">
+            <button class="test-btn" onclick="clearTestLog()">清除日志</button>
+            <button class="test-btn" onclick="exportTestLog()">导出日志</button>
+            <button class="test-btn" onclick="toggleAutoScroll()">切换自动滚动</button>
+        </div>
+        <div class="log-container" id="test-log">
+            <div class="log-entry">
+                <span class="log-timestamp">[等待]</span>
+                <span class="log-level-info">INFO</span>
+                测试日志将显示在这里...
+            </div>
+        </div>
+    </div>
+
+    <!-- 引入脚本 -->
+    <script src="services/cryptoUtils.js"></script>
+    <script src="services/identityManager.js"></script>
+    <script src="services/anonymousAuthService.js"></script>
+    <script src="components/ABLoginModal.js"></script>
+
+    <script>
+        let testLog = [];
+        let autoScroll = true;
+        let testResults = {};
+
+        // 添加日志
+        function addLog(message, level = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            const logEntry = {
+                timestamp,
+                level,
+                message,
+                time: Date.now()
+            };
+            
+            testLog.push(logEntry);
+            
+            const logContainer = document.getElementById('test-log');
+            const logElement = document.createElement('div');
+            logElement.className = 'log-entry';
+            logElement.innerHTML = `
+                <span class="log-timestamp">[${timestamp}]</span>
+                <span class="log-level-${level}">${level.toUpperCase()}</span>
+                ${message}
+            `;
+            
+            logContainer.appendChild(logElement);
+            
+            // 保持最近100条日志
+            const entries = logContainer.querySelectorAll('.log-entry');
+            if (entries.length > 100) {
+                entries[0].remove();
+            }
+            
+            // 自动滚动到底部
+            if (autoScroll) {
+                logContainer.scrollTop = logContainer.scrollHeight;
+            }
+            
+            console.log(`[${timestamp}] ${level.toUpperCase()}: ${message}`);
+        }
+
+        // 显示登录模态框
+        function showLoginModal() {
+            showABLoginModal({
+                title: "测试A+B登录",
+                description: "请输入测试用的A+B组合",
+                onSuccess: (result) => {
+                    addLog(`登录成功: ${JSON.stringify(result)}`, 'success');
+                    refreshStatus();
+                },
+                onError: (error) => {
+                    addLog(`登录失败: ${error}`, 'error');
+                },
+                onClose: () => {
+                    addLog('模态框已关闭', 'info');
+                }
+            });
+            addLog('显示登录模态框', 'info');
+        }
+
+        // 隐藏登录模态框
+        function hideLoginModal() {
+            hideABLoginModal();
+            addLog('隐藏登录模态框', 'info');
+        }
+
+        // 测试模态框功能
+        function testModalFeatures() {
+            addLog('开始测试模态框功能...', 'info');
+            
+            // 测试显示/隐藏
+            showLoginModal();
+            setTimeout(() => {
+                hideLoginModal();
+                addLog('模态框功能测试完成', 'success');
+            }, 2000);
+        }
+
+        // 测试所有A+B组合
+        async function testAllCombinations() {
+            addLog('开始测试所有A+B组合...', 'info');
+            const resultElement = document.getElementById('combination-test-result');
+            let results = [];
+            
+            if (window.debugAnonymousAuth) {
+                await window.debugAnonymousAuth.testAllCombinations();
+                results.push('✅ 所有组合测试完成，详情请查看控制台');
+            } else {
+                // 手动测试
+                const testCombinations = [
+                    { a: '13812345678', b: '1234', name: '测试用户1' },
+                    { a: '13987654321', b: '123456', name: '测试用户2' },
+                    { a: '15612345678', b: '0000', name: '测试用户3' }
+                ];
+                
+                for (const combo of testCombinations) {
+                    try {
+                        const result = await AnonymousAuthService.login(combo.a, combo.b);
+                        const status = result.success ? '✅' : '❌';
+                        const message = `${status} ${combo.name} (${combo.a}/${combo.b}): ${result.success ? '成功' : result.error}`;
+                        results.push(message);
+                        addLog(message, result.success ? 'success' : 'error');
+                    } catch (error) {
+                        const message = `❌ ${combo.name}: ${error.message}`;
+                        results.push(message);
+                        addLog(message, 'error');
+                    }
+                }
+            }
+            
+            resultElement.textContent = results.join('\n');
+            testResults.combinations = results;
+            addLog('A+B组合测试完成', 'success');
+        }
+
+        // 测试格式验证
+        function testValidation() {
+            addLog('开始测试格式验证...', 'info');
+            const resultElement = document.getElementById('combination-test-result');
+            let results = [];
+            
+            const testCases = [
+                { a: '13812345678', b: '1234', expected: true, desc: '有效：标准组合' },
+                { a: '1381234567', b: '1234', expected: false, desc: '无效：A值不足11位' },
+                { a: '13812345678', b: '123', expected: false, desc: '无效：B值不足4位' },
+                { a: '13812345678', b: '12345', expected: false, desc: '无效：B值5位' },
+                { a: '1381234567a', b: '1234', expected: false, desc: '无效：A值包含字母' },
+                { a: '13812345678', b: '123a', expected: false, desc: '无效：B值包含字母' }
+            ];
+            
+            testCases.forEach(testCase => {
+                const isValid = AnonymousAuthService.validateABFormat(testCase.a, testCase.b);
+                const status = isValid === testCase.expected ? '✅' : '❌';
+                const message = `${status} ${testCase.desc}: ${isValid ? '通过' : '失败'}`;
+                results.push(message);
+                addLog(message, isValid === testCase.expected ? 'success' : 'error');
+            });
+            
+            resultElement.textContent = results.join('\n');
+            testResults.validation = results;
+            addLog('格式验证测试完成', 'success');
+        }
+
+        // 测试无效组合
+        async function testInvalidCombinations() {
+            addLog('开始测试无效组合...', 'info');
+            const resultElement = document.getElementById('combination-test-result');
+            let results = [];
+            
+            const invalidCombinations = [
+                { a: '12345678901', b: '1234', desc: '无效A值长度' },
+                { a: '13812345678', b: '12', desc: '无效B值长度' },
+                { a: '', b: '1234', desc: '空A值' },
+                { a: '13812345678', b: '', desc: '空B值' }
+            ];
+            
+            for (const combo of invalidCombinations) {
+                try {
+                    const result = await AnonymousAuthService.login(combo.a, combo.b);
+                    const message = `${combo.desc}: ${result.success ? '意外成功' : '正确失败 - ' + result.error}`;
+                    results.push(message);
+                    addLog(message, result.success ? 'warning' : 'success');
+                } catch (error) {
+                    const message = `${combo.desc}: 正确抛出异常 - ${error.message}`;
+                    results.push(message);
+                    addLog(message, 'success');
+                }
+            }
+            
+            resultElement.textContent = results.join('\n');
+            testResults.invalidCombinations = results;
+            addLog('无效组合测试完成', 'success');
+        }
+
+        // 测试边界情况
+        async function testEdgeCases() {
+            addLog('开始测试边界情况...', 'info');
+            const resultElement = document.getElementById('combination-test-result');
+            let results = [];
+            
+            const edgeCases = [
+                { a: '00000000000', b: '0000', desc: '全零组合' },
+                { a: '99999999999', b: '999999', desc: '全九组合' },
+                { a: '12345678901', b: '123456', desc: '连续数字组合' }
+            ];
+            
+            for (const combo of edgeCases) {
+                try {
+                    const result = await AnonymousAuthService.login(combo.a, combo.b);
+                    const message = `${combo.desc}: ${result.success ? '成功' : '失败 - ' + result.error}`;
+                    results.push(message);
+                    addLog(message, result.success ? 'success' : 'warning');
+                } catch (error) {
+                    const message = `${combo.desc}: 异常 - ${error.message}`;
+                    results.push(message);
+                    addLog(message, 'error');
+                }
+            }
+            
+            resultElement.textContent = results.join('\n');
+            testResults.edgeCases = results;
+            addLog('边界情况测试完成', 'success');
+        }
+
+        // 测试加密功能
+        async function testCrypto() {
+            addLog('开始测试加密功能...', 'info');
+            const resultElement = document.getElementById('crypto-test-result');
+            
+            if (window.debugCrypto) {
+                const result = await window.debugCrypto.testCrypto();
+                resultElement.textContent = JSON.stringify(result, null, 2);
+                testResults.crypto = result;
+                addLog(`加密功能测试${result.success ? '成功' : '失败'}`, result.success ? 'success' : 'error');
+            } else {
+                const message = '加密工具未加载';
+                resultElement.textContent = message;
+                addLog(message, 'error');
+            }
+        }
+
+        // 测试哈希算法
+        async function testHashing() {
+            addLog('开始测试哈希算法...', 'info');
+            const resultElement = document.getElementById('crypto-test-result');
+            let results = [];
+            
+            if (window.CryptoUtils) {
+                const testData = [
+                    '13812345678:1234',
+                    '13987654321:123456',
+                    'test_data_123'
+                ];
+                
+                for (const data of testData) {
+                    try {
+                        const hash = await CryptoUtils.generateHash(data);
+                        results.push(`数据: ${data}\n哈希: ${hash}\n`);
+                        addLog(`哈希生成成功: ${data} -> ${hash.substring(0, 16)}...`, 'success');
+                    } catch (error) {
+                        results.push(`数据: ${data}\n错误: ${error.message}\n`);
+                        addLog(`哈希生成失败: ${data} - ${error.message}`, 'error');
+                    }
+                }
+                
+                resultElement.textContent = results.join('\n');
+                testResults.hashing = results;
+            } else {
+                const message = '加密工具未加载';
+                resultElement.textContent = message;
+                addLog(message, 'error');
+            }
+        }
+
+        // 测试UUID生成
+        async function testUUIDGeneration() {
+            addLog('开始测试UUID生成...', 'info');
+            const resultElement = document.getElementById('crypto-test-result');
+            let results = [];
+            
+            if (window.CryptoUtils) {
+                const testCombinations = [
+                    { a: '13812345678', b: '1234' },
+                    { a: '13987654321', b: '123456' },
+                    { a: '15612345678', b: '0000' }
+                ];
+                
+                for (const combo of testCombinations) {
+                    try {
+                        const uuid = await CryptoUtils.generateUUID(combo.a, combo.b);
+                        results.push(`A+B: ${combo.a}/${combo.b}\nUUID: ${uuid}\n`);
+                        addLog(`UUID生成成功: ${combo.a}/${combo.b} -> ${uuid}`, 'success');
+                    } catch (error) {
+                        results.push(`A+B: ${combo.a}/${combo.b}\n错误: ${error.message}\n`);
+                        addLog(`UUID生成失败: ${combo.a}/${combo.b} - ${error.message}`, 'error');
+                    }
+                }
+                
+                resultElement.textContent = results.join('\n');
+                testResults.uuid = results;
+            } else {
+                const message = '加密工具未加载';
+                resultElement.textContent = message;
+                addLog(message, 'error');
+            }
+        }
+
+        // 测试设备指纹
+        async function testFingerprinting() {
+            addLog('开始测试设备指纹...', 'info');
+            const resultElement = document.getElementById('crypto-test-result');
+            
+            if (window.CryptoUtils) {
+                try {
+                    const fingerprint = await CryptoUtils.generateFingerprint();
+                    const info = CryptoUtils.getCryptoInfo();
+                    
+                    const result = {
+                        fingerprint,
+                        cryptoInfo: info,
+                        timestamp: new Date().toISOString()
+                    };
+                    
+                    resultElement.textContent = JSON.stringify(result, null, 2);
+                    testResults.fingerprint = result;
+                    addLog(`设备指纹生成成功: ${fingerprint}`, 'success');
+                } catch (error) {
+                    const message = `设备指纹生成失败: ${error.message}`;
+                    resultElement.textContent = message;
+                    addLog(message, 'error');
+                }
+            } else {
+                const message = '加密工具未加载';
+                resultElement.textContent = message;
+                addLog(message, 'error');
+            }
+        }
+
+        // 测试身份管理
+        function testIdentityManager() {
+            addLog('开始测试身份管理...', 'info');
+            const resultElement = document.getElementById('identity-test-result');
+            
+            if (window.debugIdentity) {
+                const debugInfo = window.debugIdentity.getDebugInfo();
+                resultElement.textContent = JSON.stringify(debugInfo, null, 2);
+                testResults.identity = debugInfo;
+                addLog('身份管理测试完成', 'success');
+            } else {
+                const message = '身份管理器未加载';
+                resultElement.textContent = message;
+                addLog(message, 'error');
+            }
+        }
+
+        // 测试身份冲突
+        function testIdentityConflict() {
+            addLog('开始测试身份冲突...', 'info');
+            const resultElement = document.getElementById('identity-test-result');
+            let results = [];
+            
+            if (window.debugIdentity) {
+                const identityTypes = ['anonymous', 'admin', 'reviewer', 'superadmin'];
+                
+                identityTypes.forEach(type => {
+                    const check = window.debugIdentity.testIdentitySwitch(type);
+                    results.push(`切换到${type}: ${JSON.stringify(check)}`);
+                    addLog(`身份切换测试 ${type}: ${check.needConfirm ? '需要确认' : '无冲突'}`, 'info');
+                });
+                
+                resultElement.textContent = results.join('\n\n');
+                testResults.identityConflict = results;
+            } else {
+                const message = '身份管理器未加载';
+                resultElement.textContent = message;
+                addLog(message, 'error');
+            }
+        }
+
+        // 清除所有身份
+        function clearAllIdentities() {
+            if (window.debugIdentity) {
+                window.debugIdentity.clearAllIdentities();
+                addLog('所有身份已清除', 'warning');
+                refreshStatus();
+            } else {
+                addLog('身份管理器未加载', 'error');
+            }
+        }
+
+        // 显示身份历史
+        function showIdentityHistory() {
+            addLog('查看身份历史...', 'info');
+            const resultElement = document.getElementById('identity-test-result');
+            
+            if (window.debugIdentity) {
+                const history = window.debugIdentity.getHistory();
+                resultElement.textContent = JSON.stringify(history, null, 2);
+                testResults.identityHistory = history;
+                addLog(`身份历史记录: ${history.length}条`, 'info');
+            } else {
+                const message = '身份管理器未加载';
+                resultElement.textContent = message;
+                addLog(message, 'error');
+            }
+        }
+
+        // 刷新状态
+        async function refreshStatus() {
+            addLog('刷新状态...', 'info');
+            
+            // 认证状态
+            const isAuth = AnonymousAuthService ? AnonymousAuthService.isAuthenticated() : false;
+            document.getElementById('auth-status').textContent = isAuth ? '已认证' : '未认证';
+            
+            // 当前身份
+            const currentIdentity = window.IdentityManager ? window.IdentityManager.getCurrentIdentity() : null;
+            document.getElementById('current-identity').textContent = currentIdentity ? currentIdentity.user?.name || '匿名用户' : '无';
+            document.getElementById('identity-type').textContent = currentIdentity ? currentIdentity.type : '无';
+            
+            // Token状态
+            const hasToken = currentIdentity && currentIdentity.token;
+            document.getElementById('token-status').textContent = hasToken ? '有效' : '无';
+            
+            // 加密支持
+            const cryptoInfo = window.CryptoUtils ? window.CryptoUtils.getCryptoInfo() : null;
+            document.getElementById('crypto-support').textContent = cryptoInfo ? 
+                `WebCrypto: ${cryptoInfo.webCryptoSupported ? '支持' : '不支持'}` : '未加载';
+            
+            // 设备指纹
+            if (window.CryptoUtils) {
+                try {
+                    const fingerprint = await window.CryptoUtils.generateFingerprint();
+                    document.getElementById('device-fingerprint').textContent = fingerprint.substring(0, 16) + '...';
+                } catch (error) {
+                    document.getElementById('device-fingerprint').textContent = '生成失败';
+                }
+            } else {
+                document.getElementById('device-fingerprint').textContent = '未加载';
+            }
+            
+            addLog('状态已刷新', 'success');
+        }
+
+        // 显示调试信息
+        function showDebugInfo() {
+            addLog('收集调试信息...', 'info');
+            
+            const debugInfo = {
+                anonymousAuth: window.debugAnonymousAuth ? window.debugAnonymousAuth.getCurrentState() : null,
+                identity: window.debugIdentity ? window.debugIdentity.getDebugInfo() : null,
+                crypto: window.CryptoUtils ? window.CryptoUtils.getCryptoInfo() : null,
+                testResults: testResults,
+                timestamp: new Date().toISOString()
+            };
+            
+            console.log('=== 调试信息 ===', debugInfo);
+            addLog('调试信息已输出到控制台', 'info');
+            
+            // 显示在结果区域
+            const resultElement = document.getElementById('identity-test-result');
+            resultElement.textContent = JSON.stringify(debugInfo, null, 2);
+        }
+
+        // 导出测试结果
+        function exportTestResults() {
+            const results = {
+                testResults,
+                testLog: testLog.slice(-50), // 最近50条日志
+                timestamp: new Date().toISOString(),
+                userAgent: navigator.userAgent,
+                url: window.location.href
+            };
+            
+            const blob = new Blob([JSON.stringify(results, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `ab-login-test-results-${new Date().toISOString().slice(0, 19).replace(/:/g, '-')}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            addLog('测试结果已导出', 'success');
+        }
+
+        // 清除测试日志
+        function clearTestLog() {
+            testLog = [];
+            document.getElementById('test-log').innerHTML = '<div class="log-entry"><span class="log-timestamp">[清除]</span><span class="log-level-info">INFO</span>日志已清除</div>';
+            addLog('日志已清除', 'info');
+        }
+
+        // 导出测试日志
+        function exportTestLog() {
+            const logContent = testLog.map(entry => 
+                `[${entry.timestamp}] ${entry.level.toUpperCase()}: ${entry.message}`
+            ).join('\n');
+            
+            const blob = new Blob([logContent], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `ab-login-test-log-${new Date().toISOString().slice(0, 19).replace(/:/g, '-')}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            addLog('测试日志已导出', 'success');
+        }
+
+        // 切换自动滚动
+        function toggleAutoScroll() {
+            autoScroll = !autoScroll;
+            addLog(`自动滚动已${autoScroll ? '启用' : '禁用'}`, 'info');
+        }
+
+        // 显示测试账号
+        function showTestAccounts() {
+            const container = document.getElementById('test-accounts');
+            const accounts = AnonymousAuthService ? AnonymousAuthService.getTestCombinations() : [];
+            
+            const html = accounts.map(account => `
+                <div class="account-card">
+                    <div class="account-title">${account.name}</div>
+                    <div class="account-info">
+                        A值: ${account.a}<br>
+                        B值: ${account.b}
+                    </div>
+                    <button class="quick-test-btn" onclick="quickTestAccount('${account.a}', '${account.b}', '${account.name}')">
+                        快速测试
+                    </button>
+                </div>
+            `).join('');
+            
+            container.innerHTML = html || '<p>无测试账号数据</p>';
+        }
+
+        // 快速测试账号
+        async function quickTestAccount(a, b, name) {
+            addLog(`快速测试账号: ${name}`, 'info');
+            
+            try {
+                const result = await AnonymousAuthService.login(a, b);
+                addLog(`${name} 测试${result.success ? '成功' : '失败'}: ${result.success ? '登录成功' : result.error}`, 
+                       result.success ? 'success' : 'error');
+                
+                if (result.success) {
+                    refreshStatus();
+                }
+            } catch (error) {
+                addLog(`${name} 测试异常: ${error.message}`, 'error');
+            }
+        }
+
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            addLog('A+B半匿名登录测试页面已加载', 'success');
+            refreshStatus();
+            showTestAccounts();
+            
+            // 定期刷新状态
+            setInterval(refreshStatus, 30000);
+            
+            addLog('自动状态刷新已启用 (每30秒)', 'info');
+        });
+    </script>
+</body>
+</html>

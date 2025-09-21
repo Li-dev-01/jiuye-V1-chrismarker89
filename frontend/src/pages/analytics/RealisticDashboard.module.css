@@ -1,0 +1,514 @@
+/* RealisticDashboard 样式 */
+
+.container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
+  padding: 0;
+}
+
+/* 页面头部 */
+.header {
+  background: rgba(255, 255, 255, 0.1);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 40px 0;
+}
+
+.headerContent {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 40px;
+}
+
+.titleSection {
+  flex: 1;
+}
+
+.title {
+  color: white !important;
+  margin-bottom: 16px !important;
+  font-size: 32px;
+  font-weight: 700;
+}
+
+.subtitle {
+  color: rgba(255, 255, 255, 0.9) !important;
+  font-size: 16px;
+  margin-bottom: 0 !important;
+  max-width: 600px;
+}
+
+.controls {
+  flex-shrink: 0;
+}
+
+/* 加载状态 */
+.loadingContainer {
+  text-align: center;
+  padding: 50px;
+}
+
+.loadingText {
+  margin-top: 16px;
+}
+
+/* 数据展示区域 */
+.contentSection {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.statsSection {
+  margin-bottom: 24px;
+}
+
+/* 图表卡片 */
+.chartCard {
+  height: 100%;
+}
+
+.distributionList {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.distributionItem {
+  margin-bottom: 16px;
+  padding: 12px;
+  background: #fafafa;
+  border-radius: 6px;
+}
+
+.itemHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+/* 求职困难列表 */
+.difficultiesList {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.difficultyItem {
+  margin-bottom: 16px;
+  padding: 12px;
+  background: #fff2f0;
+  border-radius: 6px;
+}
+
+.difficultyHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+/* 性别分析 */
+.genderList {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.genderItem {
+  margin-bottom: 16px;
+  padding: 12px;
+  background: #f0f5ff;
+  border-radius: 6px;
+}
+
+.genderHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+/* 对比分析 */
+.comparisonList {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.comparisonItem {
+  margin-bottom: 20px;
+  padding: 16px;
+  background: #f6ffed;
+  border-radius: 8px;
+  border: 1px solid #b7eb8f;
+}
+
+.comparisonHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.comparisonBars {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.barRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.barRow .ant-typography {
+  min-width: 80px;
+  margin: 0;
+}
+
+/* 统计卡片 */
+.statCard {
+  text-align: center;
+  height: 100%;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .headerContent {
+    flex-direction: column;
+    text-align: center;
+    gap: 24px;
+  }
+
+  .contentSection {
+    padding: 16px;
+  }
+
+  .title {
+    font-size: 24px;
+  }
+}
+.loadingContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  gap: 16px;
+}
+
+/* 内容区域 */
+.contentSection {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 40px 24px;
+  background: white;
+  border-radius: 16px 16px 0 0;
+  min-height: 600px;
+}
+
+/* 统计卡片 */
+.statsSection {
+  margin-bottom: 24px;
+}
+
+.statCard {
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border: none;
+  transition: all 0.3s ease;
+  text-align: center;
+}
+
+.statCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* 图表卡片 */
+.chartCard {
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border: none;
+  height: 100%;
+}
+
+.chartCard :global(.ant-card-head) {
+  border-bottom: 2px solid #f0f0f0;
+  padding: 20px 24px;
+}
+
+.chartCard :global(.ant-card-head-title) {
+  font-size: 18px;
+  font-weight: 600;
+  color: #262626;
+}
+
+.chartCard :global(.ant-card-body) {
+  padding: 24px;
+}
+
+/* 分布列表 */
+.distributionList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.distributionItem {
+  padding: 12px;
+  background: #fafafa;
+  border-radius: 8px;
+  border-left: 4px solid #1890ff;
+}
+
+.itemHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+/* 对比分析 */
+.comparisonList {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.comparisonItem {
+  padding: 16px;
+  background: #fafafa;
+  border-radius: 8px;
+  border: 1px solid #f0f0f0;
+}
+
+.comparisonHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.comparisonBars {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.barRow {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* 困难分析 */
+.difficultiesList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.difficultyItem {
+  padding: 12px;
+  background: #fff2f0;
+  border-radius: 8px;
+  border-left: 4px solid #ff4d4f;
+}
+
+.difficultyHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+/* 性别分析 */
+.genderList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.genderItem {
+  padding: 16px;
+  background: #f6ffed;
+  border-radius: 8px;
+  border-left: 4px solid #52c41a;
+}
+
+.genderHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+/* 院校分析 */
+.universityList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.universityItem {
+  padding: 16px;
+  background: #f0f9ff;
+  border-radius: 8px;
+  border-left: 4px solid #1890ff;
+}
+
+.universityHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.universityDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 12px;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .headerContent {
+    flex-direction: column;
+    gap: 24px;
+    text-align: center;
+  }
+  
+  .titleSection {
+    flex: none;
+  }
+  
+  .controls {
+    flex: none;
+  }
+  
+  .title {
+    font-size: 24px !important;
+  }
+  
+  .contentSection {
+    margin: 0 16px;
+    padding: 24px 16px;
+    border-radius: 12px 12px 0 0;
+  }
+  
+  .itemHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  
+  .comparisonHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  
+  .difficultyHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .header {
+    padding: 24px 0;
+  }
+  
+  .headerContent {
+    padding: 0 16px;
+  }
+  
+  .contentSection {
+    margin: 0 8px;
+    padding: 16px;
+  }
+  
+  .controls {
+    flex-direction: column;
+    gap: 8px;
+  }
+}
+
+/* 控制按钮样式 */
+.controls .ant-btn {
+  border-radius: 8px;
+  font-weight: 500;
+}
+
+.controls .ant-btn-primary {
+  background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
+  border: none;
+  box-shadow: 0 2px 8px rgba(116, 185, 255, 0.3);
+}
+
+.controls .ant-btn-primary:hover {
+  background: linear-gradient(135deg, #81c7ff 0%, #2d96e8 100%);
+  box-shadow: 0 4px 12px rgba(116, 185, 255, 0.4);
+}
+
+/* 选择器样式 */
+.controls .ant-select {
+  border-radius: 8px;
+}
+
+.controls .ant-select-selector {
+  border-radius: 8px !important;
+  background: rgba(255, 255, 255, 0.9) !important;
+  backdrop-filter: blur(10px);
+}
+
+/* 滚动条样式 */
+.distributionList::-webkit-scrollbar {
+  width: 6px;
+}
+
+.distributionList::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.distributionList::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+
+.distributionList::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+/* 数据强调样式 */
+.statCard :global(.ant-statistic-content-value) {
+  font-weight: bold;
+}
+
+.statCard :global(.ant-statistic-title) {
+  color: #8c8c8c;
+  font-weight: 500;
+}
+
+/* 进度条自定义 */
+.distributionItem :global(.ant-progress-bg) {
+  transition: all 0.3s ease;
+}
+
+.comparisonItem :global(.ant-progress-bg) {
+  border-radius: 4px;
+}
+
+.difficultyItem :global(.ant-progress-bg) {
+  border-radius: 4px;
+}

@@ -1,0 +1,1059 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>数据生成器功能测试</title>
+    <link rel="stylesheet" href="components/DataGeneratorPanel.css">
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f0f2f5;
+            line-height: 1.6;
+        }
+        
+        .test-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .test-section {
+            background: white;
+            margin: 20px 0;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .test-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin: 15px 0;
+        }
+        
+        .test-btn {
+            padding: 8px 16px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background: white;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+        
+        .test-btn:hover {
+            background: #f0f0f0;
+        }
+        
+        .test-btn.primary {
+            background: #1890ff;
+            color: white;
+            border-color: #1890ff;
+        }
+        
+        .test-btn.primary:hover {
+            background: #40a9ff;
+        }
+        
+        .test-btn.success {
+            background: #52c41a;
+            color: white;
+            border-color: #52c41a;
+        }
+        
+        .test-btn.success:hover {
+            background: #73d13d;
+        }
+        
+        .test-result {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            padding: 15px;
+            margin: 10px 0;
+            font-family: monospace;
+            font-size: 12px;
+            white-space: pre-wrap;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 15px 0;
+        }
+        
+        .status-card {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            padding: 15px;
+        }
+        
+        .status-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #495057;
+        }
+        
+        .status-value {
+            font-family: monospace;
+            font-size: 12px;
+            color: #6c757d;
+        }
+        
+        .log-container {
+            max-height: 400px;
+            overflow-y: auto;
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 15px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+        }
+        
+        .log-entry {
+            margin-bottom: 5px;
+            padding: 2px 0;
+        }
+        
+        .log-timestamp {
+            color: #569cd6;
+        }
+        
+        .log-level-info {
+            color: #4ec9b0;
+        }
+        
+        .log-level-error {
+            color: #f44747;
+        }
+        
+        .log-level-success {
+            color: #b5cea8;
+        }
+        
+        .log-level-warning {
+            color: #dcdcaa;
+        }
+        
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 15px 0;
+        }
+        
+        .metric-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .metric-value {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .metric-label {
+            font-size: 12px;
+            opacity: 0.9;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background-color: #f0f0f0;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #52c41a, #73d13d);
+            transition: width 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-header">
+        <h1>🤖 数据生成器功能测试</h1>
+        <p>测试数据生成器的各项功能和性能指标</p>
+    </div>
+
+    <!-- 基础功能测试 -->
+    <div class="test-section">
+        <h3>📱 基础功能测试</h3>
+        <div class="test-buttons">
+            <button class="test-btn primary" onclick="testDataGeneratorPanel()">测试数据生成器面板</button>
+            <button class="test-btn" onclick="testServiceConnections()">测试服务连接</button>
+            <button class="test-btn" onclick="testConfigValidation()">测试配置验证</button>
+        </div>
+    </div>
+
+    <!-- AI生成测试 -->
+    <div class="test-section">
+        <h3>🤖 AI生成测试</h3>
+        <div class="test-buttons">
+            <button class="test-btn primary" onclick="testAIGeneration('questionnaire')">测试问卷生成</button>
+            <button class="test-btn primary" onclick="testAIGeneration('story')">测试故事生成</button>
+            <button class="test-btn primary" onclick="testAIGeneration('user')">测试用户生成</button>
+            <button class="test-btn" onclick="testAIProviderStatus()">测试AI提供商状态</button>
+        </div>
+        <div class="test-result" id="ai-test-result">等待测试...</div>
+    </div>
+
+    <!-- 本地生成测试 -->
+    <div class="test-section">
+        <h3>⚡ 本地生成测试</h3>
+        <div class="test-buttons">
+            <button class="test-btn success" onclick="testLocalGeneration('questionnaire')">测试本地问卷生成</button>
+            <button class="test-btn success" onclick="testLocalGeneration('story')">测试本地故事生成</button>
+            <button class="test-btn success" onclick="testLocalGeneration('user')">测试本地用户生成</button>
+            <button class="test-btn success" onclick="testLocalGeneration('mixed')">测试混合数据生成</button>
+        </div>
+        <div class="test-result" id="local-test-result">等待测试...</div>
+    </div>
+
+    <!-- 性能监控测试 -->
+    <div class="test-section">
+        <h3>📊 性能监控测试</h3>
+        <div class="test-buttons">
+            <button class="test-btn primary" onclick="testPerformanceMonitor()">测试性能监控</button>
+            <button class="test-btn" onclick="simulateLoad()">模拟负载测试</button>
+            <button class="test-btn" onclick="testErrorHandling()">测试错误处理</button>
+            <button class="test-btn" onclick="exportPerformanceData()">导出性能数据</button>
+        </div>
+        
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <div class="metric-value" id="api-response-time">0ms</div>
+                <div class="metric-label">API响应时间</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value" id="success-rate">0%</div>
+                <div class="metric-label">成功率</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value" id="error-rate">0%</div>
+                <div class="metric-label">错误率</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value" id="generation-efficiency">0/s</div>
+                <div class="metric-label">生成效率</div>
+            </div>
+        </div>
+        
+        <div class="test-result" id="performance-test-result">等待测试...</div>
+    </div>
+
+    <!-- 数据验证测试 -->
+    <div class="test-section">
+        <h3>✅ 数据验证测试</h3>
+        <div class="test-buttons">
+            <button class="test-btn primary" onclick="testDataValidation()">测试数据验证</button>
+            <button class="test-btn" onclick="testDataIntegrity()">测试数据完整性</button>
+            <button class="test-btn" onclick="testDataQuality()">测试数据质量</button>
+            <button class="test-btn" onclick="generateQualityReport()">生成质量报告</button>
+        </div>
+        <div class="test-result" id="validation-test-result">等待测试...</div>
+    </div>
+
+    <!-- 系统状态监控 -->
+    <div class="test-section">
+        <h3>📈 系统状态监控</h3>
+        <div class="test-buttons">
+            <button class="test-btn primary" onclick="refreshSystemStatus()">刷新系统状态</button>
+            <button class="test-btn" onclick="showDetailedStats()">显示详细统计</button>
+            <button class="test-btn" onclick="exportSystemData()">导出系统数据</button>
+        </div>
+        
+        <div class="status-grid">
+            <div class="status-card">
+                <div class="status-title">服务状态</div>
+                <div class="status-value" id="service-status">检查中...</div>
+            </div>
+            <div class="status-card">
+                <div class="status-title">AI提供商</div>
+                <div class="status-value" id="ai-provider-status">检查中...</div>
+            </div>
+            <div class="status-card">
+                <div class="status-title">本地生成器</div>
+                <div class="status-value" id="local-generator-status">检查中...</div>
+            </div>
+            <div class="status-card">
+                <div class="status-title">数据库连接</div>
+                <div class="status-value" id="database-status">检查中...</div>
+            </div>
+            <div class="status-card">
+                <div class="status-title">内存使用</div>
+                <div class="status-value" id="memory-usage">检查中...</div>
+            </div>
+            <div class="status-card">
+                <div class="status-title">生成任务</div>
+                <div class="status-value" id="active-tasks">检查中...</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 批量测试 -->
+    <div class="test-section">
+        <h3>🔄 批量测试</h3>
+        <div class="test-buttons">
+            <button class="test-btn primary" onclick="runAllTests()">运行所有测试</button>
+            <button class="test-btn" onclick="runStressTest()">压力测试</button>
+            <button class="test-btn" onclick="runCompatibilityTest()">兼容性测试</button>
+            <button class="test-btn" onclick="clearAllTests()">清除测试结果</button>
+        </div>
+        
+        <div class="progress-bar">
+            <div class="progress-fill" id="test-progress" style="width: 0%">0%</div>
+        </div>
+        
+        <div class="test-result" id="batch-test-result">等待测试...</div>
+    </div>
+
+    <!-- 测试日志 -->
+    <div class="test-section">
+        <h3>📝 测试日志</h3>
+        <div class="test-buttons">
+            <button class="test-btn" onclick="clearTestLog()">清除日志</button>
+            <button class="test-btn" onclick="exportTestLog()">导出日志</button>
+            <button class="test-btn" onclick="toggleAutoScroll()">切换自动滚动</button>
+        </div>
+        <div class="log-container" id="test-log">
+            <div class="log-entry">
+                <span class="log-timestamp">[等待]</span>
+                <span class="log-level-info">INFO</span>
+                测试日志将显示在这里...
+            </div>
+        </div>
+    </div>
+
+    <!-- 引入脚本 -->
+    <script src="services/dataGenerationService.js"></script>
+    <script src="services/localGeneratorService.js"></script>
+    <script src="utils/performanceMonitor.js"></script>
+    <script src="components/DataGeneratorPanel.js"></script>
+
+    <script>
+        let testLog = [];
+        let autoScroll = true;
+        let testResults = {};
+        let performanceMonitor = new PerformanceMonitor();
+
+        // 添加日志
+        function addLog(message, level = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            const logEntry = {
+                timestamp,
+                level,
+                message,
+                time: Date.now()
+            };
+            
+            testLog.push(logEntry);
+            
+            const logContainer = document.getElementById('test-log');
+            const logElement = document.createElement('div');
+            logElement.className = 'log-entry';
+            logElement.innerHTML = `
+                <span class="log-timestamp">[${timestamp}]</span>
+                <span class="log-level-${level}">${level.toUpperCase()}</span>
+                ${message}
+            `;
+            
+            logContainer.appendChild(logElement);
+            
+            // 保持最近100条日志
+            const entries = logContainer.querySelectorAll('.log-entry');
+            if (entries.length > 100) {
+                entries[0].remove();
+            }
+            
+            // 自动滚动到底部
+            if (autoScroll) {
+                logContainer.scrollTop = logContainer.scrollHeight;
+            }
+            
+            console.log(`[${timestamp}] ${level.toUpperCase()}: ${message}`);
+        }
+
+        // 测试数据生成器面板
+        function testDataGeneratorPanel() {
+            addLog('开始测试数据生成器面板...', 'info');
+            
+            try {
+                // 检查面板是否正确初始化
+                if (typeof DataGeneratorPanel !== 'undefined') {
+                    addLog('✅ DataGeneratorPanel 类已加载', 'success');
+                } else {
+                    throw new Error('DataGeneratorPanel 类未找到');
+                }
+                
+                // 检查全局实例
+                if (typeof dataGeneratorPanel !== 'undefined') {
+                    addLog('✅ 全局实例已创建', 'success');
+                } else {
+                    addLog('⚠️ 全局实例未创建，尝试手动创建', 'warning');
+                    window.dataGeneratorPanel = new DataGeneratorPanel();
+                }
+                
+                addLog('数据生成器面板测试完成', 'success');
+                
+            } catch (error) {
+                addLog(`❌ 面板测试失败: ${error.message}`, 'error');
+            }
+        }
+
+        // 测试服务连接
+        async function testServiceConnections() {
+            addLog('开始测试服务连接...', 'info');
+            
+            try {
+                // 测试数据生成服务
+                if (typeof DataGenerationService !== 'undefined') {
+                    addLog('✅ DataGenerationService 已加载', 'success');
+                    
+                    const templates = await DataGenerationService.getTemplates();
+                    addLog(`✅ 获取到 ${templates.length} 个模板`, 'success');
+                } else {
+                    addLog('❌ DataGenerationService 未加载', 'error');
+                }
+                
+                // 测试本地生成服务
+                if (typeof LocalGeneratorService !== 'undefined') {
+                    addLog('✅ LocalGeneratorService 已加载', 'success');
+                } else {
+                    addLog('❌ LocalGeneratorService 未加载', 'error');
+                }
+                
+                // 测试性能监控
+                if (typeof PerformanceMonitor !== 'undefined') {
+                    addLog('✅ PerformanceMonitor 已加载', 'success');
+                } else {
+                    addLog('❌ PerformanceMonitor 未加载', 'error');
+                }
+                
+                addLog('服务连接测试完成', 'success');
+                
+            } catch (error) {
+                addLog(`❌ 服务连接测试失败: ${error.message}`, 'error');
+            }
+        }
+
+        // 测试配置验证
+        function testConfigValidation() {
+            addLog('开始测试配置验证...', 'info');
+            
+            try {
+                const testConfigs = [
+                    { type: 'questionnaire', count: 15, quality: 'standard' },
+                    { type: 'story', count: 8, quality: 'premium' },
+                    { type: 'user', count: 14, quality: 'basic' },
+                    { type: 'invalid', count: -1, quality: 'unknown' }
+                ];
+                
+                testConfigs.forEach((config, index) => {
+                    const result = DataGenerationService.validateConfig(config);
+                    const status = result.isValid ? '✅' : '❌';
+                    addLog(`${status} 配置${index + 1}: ${result.isValid ? '有效' : '无效 - ' + result.errors.join(', ')}`, 
+                           result.isValid ? 'success' : 'warning');
+                });
+                
+                addLog('配置验证测试完成', 'success');
+                
+            } catch (error) {
+                addLog(`❌ 配置验证测试失败: ${error.message}`, 'error');
+            }
+        }
+
+        // 测试AI生成
+        async function testAIGeneration(type) {
+            addLog(`开始测试AI生成 (${type})...`, 'info');
+            const resultElement = document.getElementById('ai-test-result');
+            
+            try {
+                const config = {
+                    type,
+                    count: 3,
+                    quality: 'standard',
+                    aiProvider: 'openai'
+                };
+                
+                addLog(`发送AI生成请求: ${JSON.stringify(config)}`, 'info');
+                
+                const result = await DataGenerationService.startAIGeneration(config);
+                
+                if (result.success) {
+                    addLog(`✅ AI生成任务启动成功: ${result.data?.generationId || 'unknown'}`, 'success');
+                    resultElement.textContent = JSON.stringify(result, null, 2);
+                } else {
+                    addLog(`❌ AI生成任务启动失败: ${result.error}`, 'error');
+                    resultElement.textContent = `错误: ${result.error}`;
+                }
+                
+            } catch (error) {
+                addLog(`❌ AI生成测试异常: ${error.message}`, 'error');
+                resultElement.textContent = `异常: ${error.message}`;
+            }
+        }
+
+        // 测试本地生成
+        async function testLocalGeneration(type) {
+            addLog(`开始测试本地生成 (${type})...`, 'info');
+            const resultElement = document.getElementById('local-test-result');
+            
+            try {
+                const config = {
+                    type,
+                    count: type === 'mixed' ? 20 : 10,
+                    features: {
+                        includeVoices: true,
+                        includeMetadata: true,
+                        deidentification: false
+                    }
+                };
+                
+                addLog(`开始本地生成: ${JSON.stringify(config)}`, 'info');
+                
+                const result = await LocalGeneratorService.generate(config);
+                
+                if (result.success) {
+                    const data = result.data;
+                    addLog(`✅ 本地生成完成: 问卷${data.questionnaires}个, 故事${data.stories}个, 用户${data.users}个, 语音${data.voices}个`, 'success');
+                    resultElement.textContent = JSON.stringify(result, null, 2);
+                    
+                    // 记录性能指标
+                    performanceMonitor.recordGenerationTask(type, data.count, data.duration, true);
+                } else {
+                    addLog(`❌ 本地生成失败: ${result.error}`, 'error');
+                    resultElement.textContent = `错误: ${result.error}`;
+                }
+                
+            } catch (error) {
+                addLog(`❌ 本地生成测试异常: ${error.message}`, 'error');
+                resultElement.textContent = `异常: ${error.message}`;
+            }
+        }
+
+        // 测试性能监控
+        function testPerformanceMonitor() {
+            addLog('开始测试性能监控...', 'info');
+            const resultElement = document.getElementById('performance-test-result');
+            
+            try {
+                // 模拟一些事件
+                performanceMonitor.recordAPICall('/api/test', 1200, true);
+                performanceMonitor.recordAPICall('/api/test', 800, true);
+                performanceMonitor.recordAPICall('/api/test', 2000, false, 'Timeout');
+                performanceMonitor.recordGenerationTask('questionnaire', 10, 5000, true);
+                performanceMonitor.recordUserAction('click_generate', { type: 'questionnaire' });
+                
+                const metrics = performanceMonitor.getMetrics();
+                const events = performanceMonitor.getRecentEvents(10);
+                
+                addLog(`✅ 性能监控测试完成: 记录了${events.length}个事件`, 'success');
+                
+                resultElement.textContent = JSON.stringify({
+                    metrics,
+                    recentEvents: events.length,
+                    performanceGrade: performanceMonitor.getPerformanceGrade()
+                }, null, 2);
+                
+                // 更新指标显示
+                updateMetricsDisplay(metrics);
+                
+            } catch (error) {
+                addLog(`❌ 性能监控测试失败: ${error.message}`, 'error');
+                resultElement.textContent = `错误: ${error.message}`;
+            }
+        }
+
+        // 更新指标显示
+        function updateMetricsDisplay(metrics) {
+            document.getElementById('api-response-time').textContent = `${Math.round(metrics.apiResponseTime)}ms`;
+            document.getElementById('success-rate').textContent = `${metrics.successRate.toFixed(1)}%`;
+            document.getElementById('error-rate').textContent = `${metrics.errorRate.toFixed(1)}%`;
+            document.getElementById('generation-efficiency').textContent = `${metrics.generationEfficiency.toFixed(2)}/s`;
+        }
+
+        // 模拟负载测试
+        async function simulateLoad() {
+            addLog('开始模拟负载测试...', 'info');
+            
+            const loadTests = [
+                { type: 'questionnaire', count: 5 },
+                { type: 'story', count: 3 },
+                { type: 'user', count: 8 },
+                { type: 'questionnaire', count: 10 },
+                { type: 'story', count: 5 }
+            ];
+            
+            for (let i = 0; i < loadTests.length; i++) {
+                const test = loadTests[i];
+                addLog(`执行负载测试 ${i + 1}/${loadTests.length}: ${test.type} x ${test.count}`, 'info');
+                
+                try {
+                    await testLocalGeneration(test.type);
+                    await new Promise(resolve => setTimeout(resolve, 1000)); // 等待1秒
+                } catch (error) {
+                    addLog(`负载测试 ${i + 1} 失败: ${error.message}`, 'error');
+                }
+            }
+            
+            addLog('负载测试完成', 'success');
+        }
+
+        // 测试错误处理
+        function testErrorHandling() {
+            addLog('开始测试错误处理...', 'info');
+            
+            try {
+                // 模拟各种错误
+                performanceMonitor.recordError(new Error('测试错误1'), '测试上下文1');
+                performanceMonitor.recordError(new Error('网络连接失败'), 'API调用');
+                performanceMonitor.recordError(new Error('配置验证失败'), '配置检查');
+                
+                const errorAnalysis = performanceMonitor.getErrorAnalysis();
+                
+                addLog(`✅ 错误处理测试完成: 记录了${errorAnalysis.totalErrors}个错误`, 'success');
+                
+                document.getElementById('performance-test-result').textContent = JSON.stringify(errorAnalysis, null, 2);
+                
+            } catch (error) {
+                addLog(`❌ 错误处理测试失败: ${error.message}`, 'error');
+            }
+        }
+
+        // 测试AI提供商状态
+        async function testAIProviderStatus() {
+            addLog('开始测试AI提供商状态...', 'info');
+            
+            try {
+                const status = await DataGenerationService.getAIProviderStatus();
+                
+                Object.entries(status).forEach(([provider, info]) => {
+                    const statusText = info.status === 'active' ? '✅ 活跃' : 
+                                     info.status === 'disabled' ? '⚠️ 已禁用' : '❌ 未激活';
+                    addLog(`${provider}: ${statusText} (响应时间: ${info.responseTime}ms)`, 'info');
+                });
+                
+                document.getElementById('ai-test-result').textContent = JSON.stringify(status, null, 2);
+                addLog('AI提供商状态测试完成', 'success');
+                
+            } catch (error) {
+                addLog(`❌ AI提供商状态测试失败: ${error.message}`, 'error');
+            }
+        }
+
+        // 测试数据验证
+        async function testDataValidation() {
+            addLog('开始测试数据验证...', 'info');
+            const resultElement = document.getElementById('validation-test-result');
+            
+            try {
+                const result = await LocalGeneratorService.verifyData();
+                
+                if (result.success) {
+                    const data = result.data;
+                    addLog(`✅ 数据验证完成: 验证了${data.questionnaires + data.stories + data.users}条数据`, 'success');
+                    addLog(`验证详情: 格式检查${data.validationDetails?.formatCheck}%, 内容质量${data.validationDetails?.contentQuality}%`, 'info');
+                    
+                    if (data.errors && data.errors.length > 0) {
+                        addLog(`⚠️ 发现${data.errors.length}个问题: ${data.errors.join(', ')}`, 'warning');
+                    }
+                    
+                    resultElement.textContent = JSON.stringify(result, null, 2);
+                } else {
+                    addLog(`❌ 数据验证失败: ${result.error}`, 'error');
+                    resultElement.textContent = `错误: ${result.error}`;
+                }
+                
+            } catch (error) {
+                addLog(`❌ 数据验证测试异常: ${error.message}`, 'error');
+                resultElement.textContent = `异常: ${error.message}`;
+            }
+        }
+
+        // 测试数据完整性
+        function testDataIntegrity() {
+            addLog('开始测试数据完整性...', 'info');
+            
+            // 模拟数据完整性检查
+            const testData = [
+                { id: 1, type: 'questionnaire', valid: true },
+                { id: 2, type: 'story', valid: true },
+                { id: 3, type: 'user', valid: false, error: '缺少必填字段' },
+                { id: 4, type: 'questionnaire', valid: true }
+            ];
+            
+            let validCount = 0;
+            let invalidCount = 0;
+            
+            testData.forEach(item => {
+                if (item.valid) {
+                    validCount++;
+                    addLog(`✅ 数据${item.id} (${item.type}): 完整`, 'success');
+                } else {
+                    invalidCount++;
+                    addLog(`❌ 数据${item.id} (${item.type}): ${item.error}`, 'error');
+                }
+            });
+            
+            const integrityRate = (validCount / testData.length) * 100;
+            addLog(`数据完整性测试完成: ${integrityRate}% (${validCount}/${testData.length})`, 'success');
+            
+            document.getElementById('validation-test-result').textContent = JSON.stringify({
+                totalChecked: testData.length,
+                validCount,
+                invalidCount,
+                integrityRate: integrityRate.toFixed(1) + '%'
+            }, null, 2);
+        }
+
+        // 测试数据质量
+        function testDataQuality() {
+            addLog('开始测试数据质量...', 'info');
+            
+            // 模拟质量检查
+            const qualityMetrics = {
+                completeness: 92.5,
+                formatMatch: 88.3,
+                contentQuality: 85.7,
+                uniqueness: 94.2,
+                reviewPassRate: 85.2
+            };
+            
+            Object.entries(qualityMetrics).forEach(([metric, value]) => {
+                const status = value >= 90 ? '✅' : value >= 80 ? '⚠️' : '❌';
+                addLog(`${status} ${metric}: ${value}%`, value >= 80 ? 'success' : 'warning');
+            });
+            
+            const overallQuality = Object.values(qualityMetrics).reduce((sum, val) => sum + val, 0) / Object.keys(qualityMetrics).length;
+            addLog(`总体质量评分: ${overallQuality.toFixed(1)}%`, 'success');
+            
+            document.getElementById('validation-test-result').textContent = JSON.stringify({
+                ...qualityMetrics,
+                overallQuality: overallQuality.toFixed(1) + '%'
+            }, null, 2);
+        }
+
+        // 生成质量报告
+        async function generateQualityReport() {
+            addLog('开始生成质量报告...', 'info');
+            
+            try {
+                const report = await DataGenerationService.getQualityReport('test-generation-id');
+                
+                addLog(`✅ 质量报告生成完成`, 'success');
+                addLog(`报告摘要: 完整性${report.completeness}%, 格式匹配${report.formatMatch}%, 内容质量${report.contentQuality}%`, 'info');
+                
+                if (report.issues && report.issues.length > 0) {
+                    addLog(`发现问题: ${report.issues.join(', ')}`, 'warning');
+                }
+                
+                if (report.recommendations && report.recommendations.length > 0) {
+                    addLog(`改进建议: ${report.recommendations.join(', ')}`, 'info');
+                }
+                
+                document.getElementById('validation-test-result').textContent = JSON.stringify(report, null, 2);
+                
+            } catch (error) {
+                addLog(`❌ 质量报告生成失败: ${error.message}`, 'error');
+            }
+        }
+
+        // 刷新系统状态
+        async function refreshSystemStatus() {
+            addLog('刷新系统状态...', 'info');
+            
+            try {
+                // 检查各个组件状态
+                const status = {
+                    service: typeof DataGenerationService !== 'undefined' ? '正常' : '异常',
+                    aiProvider: 'OpenAI: 活跃, Grok: 已禁用, Claude: 未激活',
+                    localGenerator: typeof LocalGeneratorService !== 'undefined' ? '正常' : '异常',
+                    database: '模拟连接正常',
+                    memory: performance.memory ? `${Math.round((performance.memory.usedJSHeapSize / performance.memory.totalJSHeapSize) * 100)}%` : '未知',
+                    activeTasks: '0个运行中'
+                };
+                
+                // 更新状态显示
+                document.getElementById('service-status').textContent = status.service;
+                document.getElementById('ai-provider-status').textContent = status.aiProvider;
+                document.getElementById('local-generator-status').textContent = status.localGenerator;
+                document.getElementById('database-status').textContent = status.database;
+                document.getElementById('memory-usage').textContent = status.memory;
+                document.getElementById('active-tasks').textContent = status.activeTasks;
+                
+                addLog('系统状态已刷新', 'success');
+                
+            } catch (error) {
+                addLog(`❌ 刷新系统状态失败: ${error.message}`, 'error');
+            }
+        }
+
+        // 显示详细统计
+        function showDetailedStats() {
+            addLog('显示详细统计...', 'info');
+            
+            const stats = performanceMonitor.getEventStats();
+            const trend = performanceMonitor.getPerformanceTrend();
+            
+            addLog(`详细统计: 总事件${stats.total}个, 成功${stats.success}个, 错误${stats.error}个`, 'info');
+            addLog(`平均持续时间: ${stats.averageDuration.toFixed(0)}ms`, 'info');
+            addLog(`性能等级: ${performanceMonitor.getPerformanceGrade()}`, 'info');
+            
+            console.log('详细统计数据:', { stats, trend });
+        }
+
+        // 运行所有测试
+        async function runAllTests() {
+            addLog('开始运行所有测试...', 'info');
+            const progressBar = document.getElementById('test-progress');
+            const resultElement = document.getElementById('batch-test-result');
+            
+            const tests = [
+                { name: '数据生成器面板', func: testDataGeneratorPanel },
+                { name: '服务连接', func: testServiceConnections },
+                { name: '配置验证', func: testConfigValidation },
+                { name: '本地问卷生成', func: () => testLocalGeneration('questionnaire') },
+                { name: '本地故事生成', func: () => testLocalGeneration('story') },
+                { name: '本地用户生成', func: () => testLocalGeneration('user') },
+                { name: '性能监控', func: testPerformanceMonitor },
+                { name: '数据验证', func: testDataValidation },
+                { name: '系统状态', func: refreshSystemStatus }
+            ];
+            
+            const results = [];
+            
+            for (let i = 0; i < tests.length; i++) {
+                const test = tests[i];
+                const progress = ((i + 1) / tests.length) * 100;
+                
+                progressBar.style.width = `${progress}%`;
+                progressBar.textContent = `${Math.round(progress)}%`;
+                
+                addLog(`执行测试 ${i + 1}/${tests.length}: ${test.name}`, 'info');
+                
+                try {
+                    await test.func();
+                    results.push({ name: test.name, status: 'success' });
+                    addLog(`✅ ${test.name} 测试通过`, 'success');
+                } catch (error) {
+                    results.push({ name: test.name, status: 'failed', error: error.message });
+                    addLog(`❌ ${test.name} 测试失败: ${error.message}`, 'error');
+                }
+                
+                // 等待一下再执行下一个测试
+                await new Promise(resolve => setTimeout(resolve, 500));
+            }
+            
+            const successCount = results.filter(r => r.status === 'success').length;
+            const failedCount = results.filter(r => r.status === 'failed').length;
+            
+            addLog(`所有测试完成: ${successCount}个成功, ${failedCount}个失败`, 'success');
+            
+            resultElement.textContent = JSON.stringify({
+                summary: {
+                    total: tests.length,
+                    success: successCount,
+                    failed: failedCount,
+                    successRate: ((successCount / tests.length) * 100).toFixed(1) + '%'
+                },
+                details: results
+            }, null, 2);
+        }
+
+        // 压力测试
+        async function runStressTest() {
+            addLog('开始压力测试...', 'info');
+            
+            const stressTests = [];
+            for (let i = 0; i < 10; i++) {
+                stressTests.push(testLocalGeneration('questionnaire'));
+            }
+            
+            try {
+                const startTime = Date.now();
+                await Promise.all(stressTests);
+                const duration = Date.now() - startTime;
+                
+                addLog(`✅ 压力测试完成: 并发执行10个生成任务，耗时${duration}ms`, 'success');
+                
+            } catch (error) {
+                addLog(`❌ 压力测试失败: ${error.message}`, 'error');
+            }
+        }
+
+        // 兼容性测试
+        function runCompatibilityTest() {
+            addLog('开始兼容性测试...', 'info');
+            
+            const features = [
+                { name: 'Web Crypto API', test: () => !!(window.crypto && window.crypto.subtle) },
+                { name: 'Performance API', test: () => !!window.performance },
+                { name: 'Local Storage', test: () => !!window.localStorage },
+                { name: 'Session Storage', test: () => !!window.sessionStorage },
+                { name: 'Fetch API', test: () => !!window.fetch },
+                { name: 'Promise', test: () => !!window.Promise },
+                { name: 'Arrow Functions', test: () => { try { eval('() => {}'); return true; } catch { return false; } } },
+                { name: 'Async/Await', test: () => { try { eval('async () => {}'); return true; } catch { return false; } } }
+            ];
+            
+            let supportedCount = 0;
+            
+            features.forEach(feature => {
+                const supported = feature.test();
+                if (supported) supportedCount++;
+                
+                const status = supported ? '✅' : '❌';
+                addLog(`${status} ${feature.name}: ${supported ? '支持' : '不支持'}`, supported ? 'success' : 'warning');
+            });
+            
+            const compatibilityRate = (supportedCount / features.length) * 100;
+            addLog(`兼容性测试完成: ${compatibilityRate}% (${supportedCount}/${features.length})`, 'success');
+            
+            document.getElementById('batch-test-result').textContent = JSON.stringify({
+                compatibilityRate: compatibilityRate.toFixed(1) + '%',
+                supported: supportedCount,
+                total: features.length,
+                details: features.map(f => ({ name: f.name, supported: f.test() }))
+            }, null, 2);
+        }
+
+        // 清除所有测试结果
+        function clearAllTests() {
+            document.querySelectorAll('.test-result').forEach(element => {
+                element.textContent = '等待测试...';
+            });
+            
+            document.getElementById('test-progress').style.width = '0%';
+            document.getElementById('test-progress').textContent = '0%';
+            
+            // 重置指标显示
+            document.getElementById('api-response-time').textContent = '0ms';
+            document.getElementById('success-rate').textContent = '0%';
+            document.getElementById('error-rate').textContent = '0%';
+            document.getElementById('generation-efficiency').textContent = '0/s';
+            
+            addLog('所有测试结果已清除', 'info');
+        }
+
+        // 导出性能数据
+        function exportPerformanceData() {
+            const data = performanceMonitor.exportData();
+            
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `performance-data-${new Date().toISOString().slice(0, 19).replace(/:/g, '-')}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            addLog('性能数据已导出', 'success');
+        }
+
+        // 导出系统数据
+        function exportSystemData() {
+            const data = {
+                testResults,
+                testLog: testLog.slice(-50),
+                performanceData: performanceMonitor.exportData(),
+                systemInfo: {
+                    userAgent: navigator.userAgent,
+                    timestamp: new Date().toISOString(),
+                    url: window.location.href
+                }
+            };
+            
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `system-data-${new Date().toISOString().slice(0, 19).replace(/:/g, '-')}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            addLog('系统数据已导出', 'success');
+        }
+
+        // 清除测试日志
+        function clearTestLog() {
+            testLog = [];
+            document.getElementById('test-log').innerHTML = '<div class="log-entry"><span class="log-timestamp">[清除]</span><span class="log-level-info">INFO</span>日志已清除</div>';
+            addLog('日志已清除', 'info');
+        }
+
+        // 导出测试日志
+        function exportTestLog() {
+            const logContent = testLog.map(entry => 
+                `[${entry.timestamp}] ${entry.level.toUpperCase()}: ${entry.message}`
+            ).join('\n');
+            
+            const blob = new Blob([logContent], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `test-log-${new Date().toISOString().slice(0, 19).replace(/:/g, '-')}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            addLog('测试日志已导出', 'success');
+        }
+
+        // 切换自动滚动
+        function toggleAutoScroll() {
+            autoScroll = !autoScroll;
+            addLog(`自动滚动已${autoScroll ? '启用' : '禁用'}`, 'info');
+        }
+
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            addLog('数据生成器功能测试页面已加载', 'success');
+            
+            // 初始化系统状态
+            refreshSystemStatus();
+            
+            // 定期更新性能指标
+            setInterval(() => {
+                const metrics = performanceMonitor.getMetrics();
+                updateMetricsDisplay(metrics);
+            }, 5000);
+            
+            addLog('自动性能监控已启用 (每5秒更新)', 'info');
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,690 @@
+{
+  "version": "1.0.0",
+  "lastUpdated": "2024-01-20T10:30:00Z",
+  "questionTypes": {
+    "radio": {
+      "name": "单选题",
+      "description": "从多个选项中选择一个答案",
+      "icon": "radio-button",
+      "category": "selection",
+      "supportedFeatures": [
+        "options",
+        "validation",
+        "statistics",
+        "conditional"
+      ],
+      "defaultConfig": {
+        "layout": "vertical",
+        "allowOther": false,
+        "required": false
+      },
+      "validation": {
+        "required": {
+          "message": "请选择一个选项"
+        },
+        "custom": {
+          "validator": "validateRadioSelection"
+        }
+      },
+      "statistics": {
+        "chartTypes": ["bar", "pie", "donut"],
+        "defaultChart": "bar",
+        "showPercentage": true,
+        "showCount": true
+      }
+    },
+    "checkbox": {
+      "name": "多选题",
+      "description": "从多个选项中选择一个或多个答案",
+      "icon": "check-square",
+      "category": "selection",
+      "supportedFeatures": [
+        "options",
+        "validation",
+        "statistics",
+        "conditional",
+        "limits"
+      ],
+      "defaultConfig": {
+        "layout": "vertical",
+        "allowOther": false,
+        "selectAllOption": false,
+        "minSelections": 0,
+        "maxSelections": null,
+        "required": false
+      },
+      "validation": {
+        "required": {
+          "message": "请至少选择一个选项"
+        },
+        "minSelections": {
+          "message": "至少需要选择 {min} 个选项"
+        },
+        "maxSelections": {
+          "message": "最多只能选择 {max} 个选项"
+        }
+      },
+      "statistics": {
+        "chartTypes": ["bar", "heatmap"],
+        "defaultChart": "bar",
+        "showPercentage": true,
+        "showCount": true
+      }
+    },
+    "select": {
+      "name": "下拉选择",
+      "description": "从下拉列表中选择一个或多个选项",
+      "icon": "chevron-down",
+      "category": "selection",
+      "supportedFeatures": [
+        "options",
+        "validation",
+        "statistics",
+        "search",
+        "multiple"
+      ],
+      "defaultConfig": {
+        "searchable": false,
+        "multiple": false,
+        "placeholder": "请选择...",
+        "noOptionsMessage": "没有可选项",
+        "required": false
+      },
+      "validation": {
+        "required": {
+          "message": "请选择一个选项"
+        }
+      },
+      "statistics": {
+        "chartTypes": ["bar", "pie"],
+        "defaultChart": "bar",
+        "showPercentage": true,
+        "showCount": true
+      }
+    },
+    "text": {
+      "name": "文本输入",
+      "description": "单行文本输入框",
+      "icon": "type",
+      "category": "input",
+      "supportedFeatures": [
+        "validation",
+        "formatting",
+        "autocomplete"
+      ],
+      "defaultConfig": {
+        "maxLength": 255,
+        "minLength": 0,
+        "placeholder": "",
+        "autocomplete": "off",
+        "inputMode": "text",
+        "required": false
+      },
+      "validation": {
+        "required": {
+          "message": "此字段为必填项"
+        },
+        "minLength": {
+          "message": "至少需要输入 {min} 个字符"
+        },
+        "maxLength": {
+          "message": "最多只能输入 {max} 个字符"
+        },
+        "pattern": {
+          "message": "输入格式不正确"
+        }
+      },
+      "statistics": {
+        "chartTypes": ["wordcloud", "length"],
+        "defaultChart": "length",
+        "showAverageLength": true,
+        "showWordCloud": true
+      }
+    },
+    "textarea": {
+      "name": "长文本输入",
+      "description": "多行文本输入框",
+      "icon": "align-left",
+      "category": "input",
+      "supportedFeatures": [
+        "validation",
+        "formatting",
+        "resize",
+        "charCount"
+      ],
+      "defaultConfig": {
+        "rows": 4,
+        "maxLength": 1000,
+        "minLength": 0,
+        "resize": "vertical",
+        "autoResize": false,
+        "showCharCount": true,
+        "placeholder": "",
+        "required": false
+      },
+      "validation": {
+        "required": {
+          "message": "此字段为必填项"
+        },
+        "minLength": {
+          "message": "至少需要输入 {min} 个字符"
+        },
+        "maxLength": {
+          "message": "最多只能输入 {max} 个字符"
+        }
+      },
+      "statistics": {
+        "chartTypes": ["wordcloud", "length", "sentiment"],
+        "defaultChart": "length",
+        "showAverageLength": true,
+        "showWordCloud": true,
+        "showSentiment": false
+      }
+    },
+    "number": {
+      "name": "数字输入",
+      "description": "数字输入框",
+      "icon": "hash",
+      "category": "input",
+      "supportedFeatures": [
+        "validation",
+        "formatting",
+        "range",
+        "precision"
+      ],
+      "defaultConfig": {
+        "min": null,
+        "max": null,
+        "step": 1,
+        "precision": 0,
+        "format": "integer",
+        "prefix": "",
+        "suffix": "",
+        "thousandSeparator": false,
+        "placeholder": "",
+        "required": false
+      },
+      "validation": {
+        "required": {
+          "message": "此字段为必填项"
+        },
+        "min": {
+          "message": "数值不能小于 {min}"
+        },
+        "max": {
+          "message": "数值不能大于 {max}"
+        },
+        "integer": {
+          "message": "请输入整数"
+        },
+        "decimal": {
+          "message": "请输入有效的小数"
+        }
+      },
+      "statistics": {
+        "chartTypes": ["histogram", "box", "line"],
+        "defaultChart": "histogram",
+        "showMean": true,
+        "showMedian": true,
+        "showRange": true,
+        "showDistribution": true
+      }
+    },
+    "date": {
+      "name": "日期选择",
+      "description": "日期选择器",
+      "icon": "calendar",
+      "category": "input",
+      "supportedFeatures": [
+        "validation",
+        "range",
+        "formatting",
+        "localization"
+      ],
+      "defaultConfig": {
+        "format": "YYYY-MM-DD",
+        "showTime": false,
+        "timeFormat": "24h",
+        "minDate": null,
+        "maxDate": null,
+        "disabledDates": [],
+        "highlightedDates": [],
+        "locale": "zh-CN",
+        "placeholder": "选择日期",
+        "required": false
+      },
+      "validation": {
+        "required": {
+          "message": "请选择日期"
+        },
+        "minDate": {
+          "message": "日期不能早于 {min}"
+        },
+        "maxDate": {
+          "message": "日期不能晚于 {max}"
+        },
+        "format": {
+          "message": "日期格式不正确"
+        }
+      },
+      "statistics": {
+        "chartTypes": ["timeline", "calendar", "distribution"],
+        "defaultChart": "timeline",
+        "showRange": true,
+        "showDistribution": true,
+        "showCalendarHeatmap": true
+      }
+    },
+    "email": {
+      "name": "邮箱输入",
+      "description": "邮箱地址输入框",
+      "icon": "mail",
+      "category": "input",
+      "supportedFeatures": [
+        "validation",
+        "verification",
+        "domain"
+      ],
+      "defaultConfig": {
+        "domains": [],
+        "blockedDomains": [],
+        "requireVerification": false,
+        "verificationEndpoint": null,
+        "placeholder": "请输入邮箱地址",
+        "required": false
+      },
+      "validation": {
+        "required": {
+          "message": "请输入邮箱地址"
+        },
+        "email": {
+          "message": "请输入有效的邮箱地址"
+        },
+        "domain": {
+          "message": "不支持该邮箱域名"
+        },
+        "blocked": {
+          "message": "该邮箱域名已被禁用"
+        }
+      },
+      "statistics": {
+        "chartTypes": ["domain", "provider"],
+        "defaultChart": "domain",
+        "showDomainDistribution": true,
+        "showProviderStats": true
+      }
+    },
+    "rating": {
+      "name": "评分",
+      "description": "星级评分或数字评分",
+      "icon": "star",
+      "category": "rating",
+      "supportedFeatures": [
+        "validation",
+        "customization",
+        "labels"
+      ],
+      "defaultConfig": {
+        "maxRating": 5,
+        "allowHalf": false,
+        "showLabels": false,
+        "labels": [],
+        "icon": "star",
+        "size": "medium",
+        "color": "#fbbf24",
+        "required": false
+      },
+      "validation": {
+        "required": {
+          "message": "请进行评分"
+        },
+        "range": {
+          "message": "评分必须在 1 到 {max} 之间"
+        }
+      },
+      "statistics": {
+        "chartTypes": ["bar", "distribution", "average"],
+        "defaultChart": "bar",
+        "showAverage": true,
+        "showDistribution": true,
+        "showRatingBreakdown": true
+      }
+    },
+    "slider": {
+      "name": "滑块",
+      "description": "数值滑块选择器",
+      "icon": "sliders",
+      "category": "rating",
+      "supportedFeatures": [
+        "validation",
+        "range",
+        "marks",
+        "formatting"
+      ],
+      "defaultConfig": {
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "marks": {},
+        "showValue": true,
+        "showRange": false,
+        "vertical": false,
+        "tooltipFormatter": null,
+        "required": false
+      },
+      "validation": {
+        "required": {
+          "message": "请选择数值"
+        },
+        "range": {
+          "message": "数值必须在 {min} 到 {max} 之间"
+        }
+      },
+      "statistics": {
+        "chartTypes": ["histogram", "distribution", "heatmap"],
+        "defaultChart": "histogram",
+        "showDistribution": true,
+        "showAverage": true,
+        "showRange": true
+      }
+    },
+    "file": {
+      "name": "文件上传",
+      "description": "文件上传组件",
+      "icon": "upload",
+      "category": "upload",
+      "supportedFeatures": [
+        "validation",
+        "preview",
+        "compression",
+        "multiple"
+      ],
+      "defaultConfig": {
+        "accept": "*/*",
+        "maxSize": 10485760,
+        "maxFiles": 1,
+        "multiple": false,
+        "uploadEndpoint": null,
+        "previewEnabled": true,
+        "compressionEnabled": false,
+        "compressionQuality": 0.8,
+        "required": false
+      },
+      "validation": {
+        "required": {
+          "message": "请上传文件"
+        },
+        "fileType": {
+          "message": "不支持该文件类型"
+        },
+        "fileSize": {
+          "message": "文件大小不能超过 {max}"
+        },
+        "fileCount": {
+          "message": "最多只能上传 {max} 个文件"
+        }
+      },
+      "statistics": {
+        "chartTypes": ["type", "size", "count"],
+        "defaultChart": "type",
+        "showFileTypes": true,
+        "showFileSizes": true,
+        "showUploadCount": true
+      }
+    },
+    "matrix": {
+      "name": "矩阵题",
+      "description": "行列矩阵选择题",
+      "icon": "grid",
+      "category": "complex",
+      "supportedFeatures": [
+        "validation",
+        "options",
+        "statistics",
+        "partial"
+      ],
+      "defaultConfig": {
+        "rows": [],
+        "columns": [],
+        "inputType": "radio",
+        "required": false,
+        "allowPartial": false
+      },
+      "validation": {
+        "required": {
+          "message": "请完成所有必填项"
+        },
+        "partial": {
+          "message": "请至少完成 {min} 行"
+        }
+      },
+      "statistics": {
+        "chartTypes": ["heatmap", "stacked", "grouped"],
+        "defaultChart": "heatmap",
+        "showRowStats": true,
+        "showColumnStats": true,
+        "showCorrelation": true
+      }
+    },
+    "ranking": {
+      "name": "排序题",
+      "description": "拖拽排序选择题",
+      "icon": "move",
+      "category": "complex",
+      "supportedFeatures": [
+        "validation",
+        "options",
+        "statistics",
+        "limits"
+      ],
+      "defaultConfig": {
+        "maxSelections": null,
+        "minSelections": 1,
+        "dragEnabled": true,
+        "showNumbers": true,
+        "allowTies": false,
+        "required": false
+      },
+      "validation": {
+        "required": {
+          "message": "请进行排序"
+        },
+        "minSelections": {
+          "message": "至少需要选择 {min} 项"
+        },
+        "maxSelections": {
+          "message": "最多只能选择 {max} 项"
+        }
+      },
+      "statistics": {
+        "chartTypes": ["ranking", "position", "preference"],
+        "defaultChart": "ranking",
+        "showAverageRank": true,
+        "showPositionStats": true,
+        "showPreferenceMatrix": true
+      }
+    },
+    "likert": {
+      "name": "李克特量表",
+      "description": "标准化态度测量量表",
+      "icon": "bar-chart",
+      "category": "scale",
+      "supportedFeatures": [
+        "validation",
+        "scale",
+        "statistics",
+        "statements"
+      ],
+      "defaultConfig": {
+        "scale": 5,
+        "labels": {
+          "left": "非常不同意",
+          "right": "非常同意",
+          "center": "中立"
+        },
+        "statements": [],
+        "required": false,
+        "allowNeutral": true
+      },
+      "validation": {
+        "required": {
+          "message": "请完成所有评价"
+        },
+        "scale": {
+          "message": "请选择有效的评分"
+        }
+      },
+      "statistics": {
+        "chartTypes": ["likert", "stacked", "mean"],
+        "defaultChart": "likert",
+        "showMeanScores": true,
+        "showDistribution": true,
+        "showReliability": true
+      }
+    }
+  },
+  "categories": {
+    "selection": {
+      "name": "选择类",
+      "description": "单选、多选等选择类问题",
+      "icon": "check-circle",
+      "color": "#10b981"
+    },
+    "input": {
+      "name": "输入类",
+      "description": "文本、数字等输入类问题",
+      "icon": "edit",
+      "color": "#3b82f6"
+    },
+    "rating": {
+      "name": "评分类",
+      "description": "评分、滑块等评价类问题",
+      "icon": "star",
+      "color": "#f59e0b"
+    },
+    "upload": {
+      "name": "上传类",
+      "description": "文件上传类问题",
+      "icon": "upload",
+      "color": "#8b5cf6"
+    },
+    "complex": {
+      "name": "复合类",
+      "description": "矩阵、排序等复杂问题",
+      "icon": "grid",
+      "color": "#ef4444"
+    },
+    "scale": {
+      "name": "量表类",
+      "description": "标准化测量量表",
+      "icon": "bar-chart",
+      "color": "#06b6d4"
+    }
+  },
+  "features": {
+    "options": {
+      "name": "选项配置",
+      "description": "支持自定义选项列表"
+    },
+    "validation": {
+      "name": "数据验证",
+      "description": "支持多种验证规则"
+    },
+    "statistics": {
+      "name": "统计分析",
+      "description": "支持实时统计和图表"
+    },
+    "conditional": {
+      "name": "条件显示",
+      "description": "支持基于条件的显示逻辑"
+    },
+    "limits": {
+      "name": "数量限制",
+      "description": "支持最小/最大选择数量限制"
+    },
+    "search": {
+      "name": "搜索功能",
+      "description": "支持选项搜索"
+    },
+    "multiple": {
+      "name": "多选支持",
+      "description": "支持多项选择"
+    },
+    "formatting": {
+      "name": "格式化",
+      "description": "支持数据格式化"
+    },
+    "autocomplete": {
+      "name": "自动完成",
+      "description": "支持输入自动完成"
+    },
+    "resize": {
+      "name": "大小调整",
+      "description": "支持组件大小调整"
+    },
+    "charCount": {
+      "name": "字符计数",
+      "description": "显示字符数量统计"
+    },
+    "range": {
+      "name": "范围限制",
+      "description": "支持数值或日期范围限制"
+    },
+    "precision": {
+      "name": "精度控制",
+      "description": "支持数字精度控制"
+    },
+    "localization": {
+      "name": "本地化",
+      "description": "支持多语言和地区设置"
+    },
+    "verification": {
+      "name": "验证功能",
+      "description": "支持邮箱等验证"
+    },
+    "domain": {
+      "name": "域名控制",
+      "description": "支持域名白名单/黑名单"
+    },
+    "customization": {
+      "name": "自定义样式",
+      "description": "支持外观自定义"
+    },
+    "labels": {
+      "name": "标签配置",
+      "description": "支持自定义标签"
+    },
+    "marks": {
+      "name": "刻度标记",
+      "description": "支持滑块刻度标记"
+    },
+    "preview": {
+      "name": "预览功能",
+      "description": "支持文件预览"
+    },
+    "compression": {
+      "name": "压缩功能",
+      "description": "支持文件压缩"
+    },
+    "partial": {
+      "name": "部分完成",
+      "description": "支持部分完成验证"
+    },
+    "scale": {
+      "name": "量表配置",
+      "description": "支持量表级数配置"
+    },
+    "statements": {
+      "name": "陈述配置",
+      "description": "支持多个陈述项"
+    }
+  },
+  "metadata": {
+    "version": "1.0.0",
+    "author": "Questionnaire System Team",
+    "license": "MIT",
+    "lastUpdated": "2024-01-20T10:30:00Z",
+    "supportedLocales": ["zh-CN", "en-US", "ja-JP"],
+    "minimumVersion": "1.0.0"
+  }
+}

@@ -1,0 +1,170 @@
+/* 问卷完成状态守卫组件样式 */
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.statusCard {
+  border: 1px solid #d9d9d9;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.statusCard .ant-card-head {
+  background: #fafafa;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.detecting {
+  display: flex;
+  align-items: center;
+  padding: 16px 0;
+}
+
+.statusInfo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+}
+
+.tokenInfo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+}
+
+.loggedIn {
+  color: #52c41a;
+  font-weight: 500;
+}
+
+.anonymous {
+  color: #faad14;
+  font-weight: 500;
+}
+
+.valid {
+  color: #52c41a;
+  font-weight: 500;
+}
+
+.invalid {
+  color: #ff4d4f;
+  font-weight: 500;
+}
+
+.recommendationCard {
+  border: 1px solid #faad14;
+  border-radius: 8px;
+  background: #fffbe6;
+}
+
+.recommendationCard .ant-card-head {
+  background: #fff7e6;
+  border-bottom: 1px solid #ffe7ba;
+}
+
+.recommendationCard .ant-card-head-title {
+  color: #d46b08;
+}
+
+.actionsCard {
+  border: 1px solid #52c41a;
+  border-radius: 8px;
+  background: #f6ffed;
+  text-align: center;
+}
+
+.actionsCard .ant-card-body {
+  padding: 32px 24px;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .container {
+    padding: 16px;
+  }
+  
+  .statusInfo,
+  .tokenInfo {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+  
+  .actionsCard .ant-card-body {
+    padding: 24px 16px;
+  }
+}
+
+/* 动画效果 */
+.statusCard,
+.recommendationCard,
+.actionsCard {
+  transition: all 0.3s ease;
+}
+
+.statusCard:hover,
+.recommendationCard:hover,
+.actionsCard:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* 按钮组样式 */
+.ant-space-item .ant-btn {
+  min-width: 120px;
+}
+
+/* 警告信息样式 */
+.ant-alert {
+  margin-top: 12px;
+}
+
+/* 模态框内容样式 */
+.ant-modal-body ul {
+  margin: 16px 0;
+  padding-left: 20px;
+}
+
+.ant-modal-body li {
+  margin: 8px 0;
+  color: #666;
+}
+
+/* 状态指示器 */
+.statusIndicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.statusIndicator::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+/* 加载状态 */
+.detecting .ant-spin {
+  margin-right: 8px;
+}
+
+/* 卡片标题图标 */
+.ant-card-head-title .anticon {
+  margin-right: 8px;
+  color: #1890ff;
+}
+
+.recommendationCard .ant-card-head-title .anticon {
+  color: #faad14;
+}
+
+.actionsCard .ant-card-head-title .anticon {
+  color: #52c41a;
+}

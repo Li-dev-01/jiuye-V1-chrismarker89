@@ -1,0 +1,547 @@
+/**
+ * 快速审核面板样式
+ * 
+ * 包含响应式布局、动画效果、主题支持等
+ */
+
+/* ==================== 基础样式 ==================== */
+
+.quick-review-panel {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 24px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* ==================== 内容卡片样式 ==================== */
+
+.content-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+  position: relative;
+}
+
+.content-card:hover {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  transform: translateY(-2px);
+}
+
+.content-card-header {
+  padding: 20px 24px 16px;
+  border-bottom: 1px solid #f3f4f6;
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+}
+
+.content-card-body {
+  padding: 24px;
+  min-height: 300px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.content-card-footer {
+  padding: 16px 24px;
+  border-top: 1px solid #f3f4f6;
+  background: #fafbfc;
+}
+
+/* ==================== 内容切换动画 ==================== */
+
+.content-transition-enter {
+  opacity: 0;
+  transform: translateX(100px);
+}
+
+.content-transition-enter-active {
+  opacity: 1;
+  transform: translateX(0);
+  transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.content-transition-exit {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.content-transition-exit-active {
+  opacity: 0;
+  transform: translateX(-100px);
+  transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ==================== 按钮样式 ==================== */
+
+.review-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 14px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  border: none;
+  outline: none;
+  position: relative;
+  overflow: hidden;
+}
+
+.review-button:focus {
+  ring: 2px solid #3b82f6;
+  ring-offset: 2px;
+}
+
+.review-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.review-button:active {
+  transform: scale(0.98);
+}
+
+/* 批准按钮 */
+.review-button.approve {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+}
+
+.review-button.approve:hover:not(:disabled) {
+  background: linear-gradient(135deg, #059669 0%, #047857 100%);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+}
+
+/* 拒绝按钮 */
+.review-button.reject {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  color: white;
+}
+
+.review-button.reject:hover:not(:disabled) {
+  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
+}
+
+/* 导航按钮 */
+.review-button.navigation {
+  background: white;
+  color: #6b7280;
+  border: 1px solid #d1d5db;
+}
+
+.review-button.navigation:hover:not(:disabled) {
+  background: #f9fafb;
+  border-color: #9ca3af;
+  color: #374151;
+}
+
+/* ==================== 进度条样式 ==================== */
+
+.progress-container {
+  width: 100%;
+  height: 8px;
+  background: #f3f4f6;
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+}
+
+.progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #3b82f6 0%, #1d4ed8 100%);
+  border-radius: 4px;
+  transition: width 0.3s ease;
+  position: relative;
+}
+
+.progress-bar::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.3) 50%, transparent 100%);
+  animation: progress-shine 2s infinite;
+}
+
+@keyframes progress-shine {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+/* ==================== 统计面板样式 ==================== */
+
+.statistics-panel {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  height: fit-content;
+  position: sticky;
+  top: 24px;
+}
+
+.statistics-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.statistics-item:last-child {
+  border-bottom: none;
+}
+
+.statistics-label {
+  font-size: 14px;
+  color: #6b7280;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.statistics-value {
+  font-size: 18px;
+  font-weight: 600;
+  color: #111827;
+}
+
+.statistics-trend {
+  font-size: 12px;
+  color: #10b981;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.statistics-trend.negative {
+  color: #ef4444;
+}
+
+/* ==================== 键盘快捷键提示 ==================== */
+
+.keyboard-hint {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 12px;
+  backdrop-filter: blur(8px);
+  z-index: 1000;
+  animation: fade-in 0.3s ease;
+}
+
+.keyboard-hint.hidden {
+  animation: fade-out 0.3s ease forwards;
+}
+
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fade-out {
+  from { opacity: 1; transform: translateY(0); }
+  to { opacity: 0; transform: translateY(20px); }
+}
+
+/* ==================== 拒绝原因对话框 ==================== */
+
+.reject-dialog-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: overlay-fade-in 0.2s ease;
+}
+
+.reject-dialog {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  max-width: 480px;
+  width: 90%;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  animation: dialog-slide-in 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes overlay-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes dialog-slide-in {
+  from { 
+    opacity: 0; 
+    transform: scale(0.95) translateY(-20px); 
+  }
+  to { 
+    opacity: 1; 
+    transform: scale(1) translateY(0); 
+  }
+}
+
+.reject-reasons-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+  margin: 16px 0;
+}
+
+.reject-reason-item {
+  padding: 12px 16px;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: center;
+  font-size: 14px;
+}
+
+.reject-reason-item:hover {
+  border-color: #d1d5db;
+  background: #f9fafb;
+}
+
+.reject-reason-item.selected {
+  border-color: #3b82f6;
+  background: #eff6ff;
+  color: #1d4ed8;
+}
+
+/* ==================== 响应式设计 ==================== */
+
+/* 平板设备 */
+@media (max-width: 1024px) {
+  .quick-review-panel {
+    padding: 16px;
+  }
+  
+  .content-card-body {
+    min-height: 250px;
+    padding: 20px;
+  }
+  
+  .statistics-panel {
+    position: static;
+    margin-top: 24px;
+  }
+}
+
+/* 移动设备 */
+@media (max-width: 768px) {
+  .quick-review-panel {
+    padding: 12px;
+  }
+  
+  .content-card-header {
+    padding: 16px 20px 12px;
+  }
+  
+  .content-card-body {
+    padding: 20px;
+    min-height: 200px;
+  }
+  
+  .content-card-footer {
+    padding: 12px 20px;
+  }
+  
+  .review-button {
+    padding: 10px 16px;
+    font-size: 13px;
+  }
+  
+  .reject-dialog {
+    margin: 20px;
+    padding: 20px;
+  }
+  
+  .reject-reasons-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .keyboard-hint {
+    bottom: 16px;
+    right: 16px;
+    left: 16px;
+    text-align: center;
+  }
+}
+
+/* 小屏幕设备 */
+@media (max-width: 480px) {
+  .quick-review-panel {
+    padding: 8px;
+  }
+  
+  .content-card-body {
+    padding: 16px;
+    min-height: 180px;
+  }
+  
+  .review-button {
+    padding: 8px 12px;
+    font-size: 12px;
+  }
+  
+  .statistics-value {
+    font-size: 16px;
+  }
+}
+
+/* ==================== 暗色主题支持 ==================== */
+
+@media (prefers-color-scheme: dark) {
+  .quick-review-panel {
+    background: #111827;
+    color: #f9fafb;
+  }
+  
+  .content-card {
+    background: #1f2937;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+  }
+  
+  .content-card-header {
+    background: linear-gradient(135deg, #374151 0%, #4b5563 100%);
+    border-bottom-color: #374151;
+  }
+  
+  .content-card-footer {
+    background: #374151;
+    border-top-color: #4b5563;
+  }
+  
+  .statistics-panel {
+    background: #1f2937;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  }
+  
+  .statistics-item {
+    border-bottom-color: #374151;
+  }
+  
+  .statistics-label {
+    color: #9ca3af;
+  }
+  
+  .statistics-value {
+    color: #f9fafb;
+  }
+  
+  .review-button.navigation {
+    background: #374151;
+    color: #d1d5db;
+    border-color: #4b5563;
+  }
+  
+  .review-button.navigation:hover:not(:disabled) {
+    background: #4b5563;
+    border-color: #6b7280;
+    color: #f3f4f6;
+  }
+  
+  .progress-container {
+    background: #374151;
+  }
+  
+  .reject-dialog {
+    background: #1f2937;
+    color: #f9fafb;
+  }
+  
+  .reject-reason-item {
+    border-color: #4b5563;
+    color: #d1d5db;
+  }
+  
+  .reject-reason-item:hover {
+    border-color: #6b7280;
+    background: #374151;
+  }
+  
+  .reject-reason-item.selected {
+    border-color: #60a5fa;
+    background: #1e3a8a;
+    color: #93c5fd;
+  }
+}
+
+/* ==================== 高对比度支持 ==================== */
+
+@media (prefers-contrast: high) {
+  .content-card {
+    border: 2px solid #000;
+  }
+  
+  .review-button {
+    border: 2px solid currentColor;
+  }
+  
+  .review-button.approve {
+    background: #000;
+    color: #fff;
+  }
+  
+  .review-button.reject {
+    background: #fff;
+    color: #000;
+    border-color: #000;
+  }
+}
+
+/* ==================== 动画减少支持 ==================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .content-card,
+  .review-button,
+  .progress-bar,
+  .content-transition-enter-active,
+  .content-transition-exit-active {
+    transition: none;
+    animation: none;
+  }
+  
+  .progress-bar::after {
+    animation: none;
+  }
+}
+
+/* ==================== 打印样式 ==================== */
+
+@media print {
+  .quick-review-panel {
+    background: white;
+    color: black;
+    box-shadow: none;
+  }
+  
+  .review-button,
+  .keyboard-hint,
+  .reject-dialog-overlay {
+    display: none;
+  }
+  
+  .content-card {
+    box-shadow: none;
+    border: 1px solid #000;
+  }
+}

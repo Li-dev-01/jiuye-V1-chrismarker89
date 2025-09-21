@@ -1,0 +1,330 @@
+/* 就业故事发布表单样式 */
+
+.story-form {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.story-form-card {
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+/* 表单头部 */
+.form-header {
+  text-align: center;
+  margin-bottom: 32px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.form-header h3 {
+  margin-bottom: 8px;
+  color: #262626;
+}
+
+.form-header .ant-typography {
+  margin-bottom: 0;
+}
+
+/* 步骤指示器 */
+.story-form .ant-steps {
+  margin-bottom: 32px;
+}
+
+.story-form .ant-steps-item-title {
+  font-weight: 600;
+}
+
+.story-form .ant-steps-item-process .ant-steps-item-icon {
+  background-color: #1890ff;
+  border-color: #1890ff;
+}
+
+.story-form .ant-steps-item-finish .ant-steps-item-icon {
+  background-color: #52c41a;
+  border-color: #52c41a;
+}
+
+/* 步骤内容 */
+.step-content {
+  min-height: 400px;
+  padding: 24px;
+  background-color: #fafafa;
+  border-radius: 8px;
+  margin-bottom: 24px;
+}
+
+.step-content h4 {
+  margin-bottom: 24px;
+  color: #262626;
+  font-size: 18px;
+}
+
+/* 标签选择区域 */
+.tags-section {
+  border: 1px solid #d9d9d9;
+  border-radius: 8px;
+  padding: 16px;
+  background-color: #ffffff;
+}
+
+.selected-tags {
+  margin-bottom: 16px;
+  min-height: 32px;
+  padding: 8px;
+  border: 1px dashed #d9d9d9;
+  border-radius: 6px;
+  background-color: #fafafa;
+}
+
+.selected-tags:empty::before {
+  content: "已选择的标签将显示在这里";
+  color: #bfbfbf;
+  font-style: italic;
+}
+
+.common-tags .ant-tag {
+  margin-bottom: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-radius: 4px;
+}
+
+.common-tags .ant-tag:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* 权限提示 */
+.permission-notice {
+  background-color: #e6f7ff;
+  border: 1px solid #91d5ff;
+  border-radius: 6px;
+  padding: 12px 16px;
+  margin-top: 16px;
+  text-align: center;
+}
+
+.permission-notice a {
+  color: #1890ff;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.permission-notice a:hover {
+  text-decoration: underline;
+}
+
+/* 预览模态框 */
+.story-preview {
+  padding: 16px 0;
+}
+
+.preview-header {
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.preview-header h4 {
+  margin-bottom: 8px;
+}
+
+.preview-summary {
+  margin-bottom: 16px;
+  padding: 12px;
+  background-color: #f6f8fa;
+  border-radius: 6px;
+  border-left: 4px solid #1890ff;
+}
+
+.preview-content {
+  margin: 16px 0;
+  line-height: 1.8;
+}
+
+.preview-tags {
+  margin: 16px 0;
+}
+
+.preview-meta {
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid #f0f0f0;
+}
+
+/* 表单项样式 */
+.story-form .ant-form-item-label > label {
+  font-weight: 600;
+  color: #262626;
+}
+
+.story-form .ant-input,
+.story-form .ant-select-selector,
+.story-form .ant-input-number {
+  border-radius: 6px;
+  border: 1px solid #d9d9d9;
+  transition: all 0.3s ease;
+}
+
+.story-form .ant-input:focus,
+.story-form .ant-select-focused .ant-select-selector,
+.story-form .ant-input-number:focus {
+  border-color: #1890ff;
+  box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+}
+
+.story-form .ant-btn {
+  border-radius: 6px;
+  font-weight: 500;
+  height: 40px;
+  padding: 0 24px;
+}
+
+.story-form .ant-btn-primary {
+  background-color: #1890ff;
+  border-color: #1890ff;
+}
+
+.story-form .ant-btn-primary:hover {
+  background-color: #40a9ff;
+  border-color: #40a9ff;
+}
+
+/* 文本域样式 */
+.story-form .ant-input {
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.story-form .ant-input::placeholder {
+  color: #bfbfbf;
+  font-style: italic;
+}
+
+/* 选择器样式 */
+.story-form .ant-select-item {
+  padding: 12px 16px;
+}
+
+.story-form .ant-select-item-option-content > div {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.story-form .ant-select-item-option-content > div > div:last-child {
+  font-size: 12px;
+  color: #8c8c8c;
+}
+
+/* 操作按钮区域 */
+.story-form .ant-form-item:last-child {
+  margin-bottom: 0;
+  text-align: center;
+}
+
+.story-form .ant-form-item:last-child .ant-space {
+  justify-content: center;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .story-form {
+    padding: 16px;
+  }
+  
+  .form-header {
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+  }
+  
+  .form-header h3 {
+    font-size: 20px;
+  }
+  
+  .story-form .ant-steps {
+    margin-bottom: 24px;
+  }
+  
+  .step-content {
+    min-height: 300px;
+    padding: 16px;
+    margin-bottom: 16px;
+  }
+  
+  .step-content h4 {
+    font-size: 16px;
+    margin-bottom: 16px;
+  }
+  
+  .tags-section {
+    padding: 12px;
+  }
+  
+  .common-tags .ant-tag {
+    margin-bottom: 6px;
+    font-size: 12px;
+  }
+  
+  .story-form .ant-btn {
+    width: 100%;
+    margin-bottom: 8px;
+  }
+  
+  .story-form .ant-form-item:last-child .ant-space {
+    width: 100%;
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 480px) {
+  .story-form {
+    padding: 12px;
+  }
+  
+  .form-header h3 {
+    font-size: 18px;
+  }
+  
+  .story-form .ant-steps {
+    margin-bottom: 16px;
+  }
+  
+  .story-form .ant-steps-item-title {
+    font-size: 12px;
+  }
+  
+  .step-content {
+    min-height: 250px;
+    padding: 12px;
+  }
+  
+  .step-content h4 {
+    font-size: 14px;
+    margin-bottom: 12px;
+  }
+  
+  .tags-section {
+    padding: 8px;
+  }
+  
+  .selected-tags {
+    padding: 6px;
+    min-height: 28px;
+  }
+  
+  .story-form .ant-form-item {
+    margin-bottom: 16px;
+  }
+  
+  .story-form .ant-btn {
+    height: 36px;
+    font-size: 14px;
+  }
+  
+  .preview-summary {
+    padding: 8px;
+  }
+}

@@ -1,0 +1,150 @@
+/* 顶部用户信息样式 */
+
+.container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 8px;
+  border: 1px solid #f0f0f0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  backdrop-filter: blur(8px);
+  transition: all 0.3s ease;
+}
+
+.container:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-color: #d9d9d9;
+}
+
+.userCard {
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: background-color 0.2s ease;
+}
+
+.userCard:hover {
+  background: #f5f5f5;
+}
+
+.avatar {
+  background: #1890ff;
+  border: 2px solid #ffffff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.userDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 80px;
+}
+
+.userName {
+  font-size: 14px;
+  color: #262626;
+  line-height: 1.2;
+  max-width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.userId {
+  font-size: 11px;
+  color: #8c8c8c;
+  line-height: 1.2;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+}
+
+.logoutButton {
+  color: #8c8c8c;
+  padding: 4px 6px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.logoutButton:hover {
+  background: #fff2f0;
+  color: #ff4d4f;
+}
+
+.logoutButton:active {
+  background: #ffebe9;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .container {
+    padding: 6px 8px;
+    gap: 6px;
+  }
+  
+  .userDetails {
+    min-width: 60px;
+  }
+  
+  .userName {
+    font-size: 13px;
+    max-width: 80px;
+  }
+  
+  .userId {
+    font-size: 10px;
+  }
+  
+  .logoutButton {
+    padding: 3px 4px;
+  }
+}
+
+/* 深色模式支持 */
+@media (prefers-color-scheme: dark) {
+  .container {
+    background: rgba(20, 20, 20, 0.95);
+    border-color: #434343;
+  }
+  
+  .container:hover {
+    border-color: #595959;
+  }
+  
+  .userCard:hover {
+    background: #262626;
+  }
+  
+  .userName {
+    color: #ffffff;
+  }
+  
+  .userId {
+    color: #bfbfbf;
+  }
+  
+  .logoutButton {
+    color: #bfbfbf;
+  }
+  
+  .logoutButton:hover {
+    background: #2a1215;
+    color: #ff7875;
+  }
+}
+
+/* 动画效果 */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.container {
+  animation: fadeIn 0.3s ease;
+}
