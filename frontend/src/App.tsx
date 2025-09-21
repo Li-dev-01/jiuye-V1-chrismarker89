@@ -29,17 +29,17 @@ import './styles/global.css';
 const HomePage = React.lazy(() => import('./pages/HomePage'));
 const QuestionnairePage = React.lazy(() => import('./pages/EnhancedQuestionnairePage'));
 const StoriesPage = React.lazy(() => import('./pages/Stories'));
-const VoicesPage = React.lazy(() => import('./pages/Voices'));
+// const VoicesPage = React.lazy(() => import('./pages/Voices'));
 
 
 // 问卷完成和心声生成页面
 const QuestionnaireCompletion = React.lazy(() => import('./pages/QuestionnaireCompletion'));
-const HeartVoiceGeneration = React.lazy(() => import('./pages/HeartVoiceGeneration'));
-const HeartVoiceSubmitPage = React.lazy(() => import('./pages/HeartVoiceSubmitPage'));
+// const HeartVoiceGeneration = React.lazy(() => import('./pages/HeartVoiceGeneration'));
+// const HeartVoiceSubmitPage = React.lazy(() => import('./pages/HeartVoiceSubmitPage'));
 const StorySubmitPage = React.lazy(() => import('./pages/StorySubmitPage'));
 
 // 用户内容管理页面
-const MyContentPage = React.lazy(() => import('./pages/user/MyContentPage'));
+const MyContentPage = React.lazy(() => import('./pages/user/MyContent'));
 
 const AdminLoginPage = React.lazy(() => import('./pages/auth/AdminLoginPage').then(module => ({ default: module.AdminLoginPage })));
 const ManagementLoginPage = React.lazy(() => import('./pages/auth/ManagementLoginPage').then(module => ({ default: module.ManagementLoginPage })));
@@ -83,10 +83,10 @@ const TwoFactorAuthPage = React.lazy(() => import('./pages/user/TwoFactorAuthPag
 const ReviewerDashboard = React.lazy(() => import('./pages/reviewer/ReviewerDashboard').then(module => ({ default: module.ReviewerDashboard })));
 const QuestionnaireReviewPage = React.lazy(() => import('./pages/reviewer/QuestionnaireReviewPage').then(module => ({ default: module.QuestionnaireReviewPage })));
 const StoryReviewPage = React.lazy(() => import('./pages/reviewer/StoryReviewPage').then(module => ({ default: module.StoryReviewPage })));
-const VoiceReviewPage = React.lazy(() => import('./pages/reviewer/VoiceReviewPage').then(module => ({ default: module.VoiceReviewPage })));
+// const VoiceReviewPage = React.lazy(() => import('./pages/reviewer/VoiceReviewPage').then(module => ({ default: module.VoiceReviewPage })));
 const ReviewHistoryPage = React.lazy(() => import('./pages/reviewer/ReviewHistoryPage').then(module => ({ default: module.ReviewHistoryPage })));
 const ReviewerQuickReviewPage = React.lazy(() => import('./pages/reviewer/ReviewerQuickReviewPage').then(module => ({ default: module.ReviewerQuickReviewPage })));
-const QuickReviewVoicePage = React.lazy(() => import('./pages/reviewer/QuickReviewVoicePage').then(module => ({ default: module.QuickReviewVoicePage })));
+// const QuickReviewVoicePage = React.lazy(() => import('./pages/reviewer/QuickReviewVoicePage').then(module => ({ default: module.QuickReviewVoicePage })));
 const QuickReviewStoryPage = React.lazy(() => import('./pages/reviewer/QuickReviewStoryPage').then(module => ({ default: module.QuickReviewStoryPage })));
 const ReviewerSettingsPage = React.lazy(() => import('./pages/reviewer/ReviewerSettingsPage').then(module => ({ default: module.ReviewerSettingsPage })));
 
@@ -94,14 +94,14 @@ const ReviewerSettingsPage = React.lazy(() => import('./pages/reviewer/ReviewerS
 // 测试页面已移动到归档目录
 // const TestPermissionPage = React.lazy(() => import('./pages/test/PermissionTestPage').then(module => ({ default: module.PermissionTestPage })));
 // const LoginSeparationTest = React.lazy(() => import('./pages/test/LoginSeparationTest').then(module => ({ default: module.LoginSeparationTest })));
-const AnalyticsPage = React.lazy(() => import('./pages/analytics/AnalyticsPage').then(module => ({ default: module.AnalyticsPage })));
+// const AnalyticsPage = React.lazy(() => import('./pages/analytics/AnalyticsPage').then(module => ({ default: module.AnalyticsPage })));
 
-const PolicyMakerDashboard = React.lazy(() => import('./pages/analytics/PolicyMakerDashboard').then(module => ({ default: module.PolicyMakerDashboard })));
-const EducationDashboard = React.lazy(() => import('./pages/analytics/EducationDashboard').then(module => ({ default: module.EducationDashboard })));
-const PublicDashboard = React.lazy(() => import('./pages/analytics/PublicDashboard').then(module => ({ default: module.PublicDashboard })));
-const StudentParentDashboard = React.lazy(() => import('./pages/analytics/StudentParentDashboard').then(module => ({ default: module.StudentParentDashboard })));
-const RealisticDashboard = React.lazy(() => import('./pages/analytics/RealisticDashboard').then(module => ({ default: module.RealisticDashboard })));
-const UnifiedAnalyticsPage = React.lazy(() => import('./pages/analytics/UnifiedAnalyticsPage').then(module => ({ default: module.UnifiedAnalyticsPage })));
+// const PolicyMakerDashboard = React.lazy(() => import('./pages/analytics/PolicyMakerDashboard').then(module => ({ default: module.PolicyMakerDashboard })));
+// const EducationDashboard = React.lazy(() => import('./pages/analytics/EducationDashboard').then(module => ({ default: module.EducationDashboard })));
+// const PublicDashboard = React.lazy(() => import('./pages/analytics/PublicDashboard').then(module => ({ default: module.PublicDashboard })));
+// const StudentParentDashboard = React.lazy(() => import('./pages/analytics/StudentParentDashboard').then(module => ({ default: module.StudentParentDashboard })));
+// const RealisticDashboard = React.lazy(() => import('./pages/analytics/RealisticDashboard').then(module => ({ default: module.RealisticDashboard })));
+// const UnifiedAnalyticsPage = React.lazy(() => import('./pages/analytics/UnifiedAnalyticsPage').then(module => ({ default: module.UnifiedAnalyticsPage })));
 const QuestionnaireAnalyticsPage = React.lazy(() => import('./pages/analytics/QuestionnaireAnalyticsPage').then(module => ({ default: module.QuestionnaireAnalyticsPage })));
 const NewQuestionnaireVisualizationPage = React.lazy(() => import('./pages/analytics/NewQuestionnaireVisualizationPage').then(module => ({ default: module.NewQuestionnaireVisualizationPage })));
 
@@ -188,33 +188,21 @@ function App() {
                     } />
 
 
-                    {/* 统一可视化页面 - 新的主要入口 */}
-                    <Route path="/analytics/unified" element={
-                      <PublicRouteGuard>
-                        <QuestionnaireLayout>
-                          <UnifiedAnalyticsPage />
-                          
-                        </QuestionnaireLayout>
-                      </PublicRouteGuard>
-                    } />
-
-
-
                     {/* 可视化导航页面 */}
                     <Route path="/analytics/nav" element={
                       <PublicRouteGuard>
                         <QuestionnaireLayout>
                           <AnalyticsNavigationPage />
-                          
+
                         </QuestionnaireLayout>
                       </PublicRouteGuard>
                     } />
 
-                    {/* 主要可视化页面 - 恢复使用统一页面 */}
+                    {/* 主要可视化页面 - 使用问卷分析页面 */}
                     <Route path="/analytics" element={
                       <PublicRouteGuard>
                         <QuestionnaireLayout>
-                          <UnifiedAnalyticsPage />
+                          <QuestionnaireAnalyticsPage />
 
                         </QuestionnaireLayout>
                       </PublicRouteGuard>
@@ -261,14 +249,14 @@ function App() {
                         </QuestionnaireLayout>
                       </PublicRouteGuard>
                     } />
-                    <Route path="/voices" element={
+                    {/* <Route path="/voices" element={
                       <PublicRouteGuard>
                         <QuestionnaireLayout>
                           <VoicesPage />
-                          
+
                         </QuestionnaireLayout>
                       </PublicRouteGuard>
-                    } />
+                    } /> */}
                     {/* Results页面暂时注释 - 组件不存在 */}
                     {/* <Route path="/results" element={
                       <PublicRouteGuard>
@@ -287,22 +275,22 @@ function App() {
                         </QuestionnaireLayout>
                       </PublicRouteGuard>
                     } />
-                    <Route path="/heart-voice-generation" element={
+                    {/* <Route path="/heart-voice-generation" element={
                       <PublicRouteGuard>
                         <QuestionnaireLayout>
                           <HeartVoiceGeneration />
 
                         </QuestionnaireLayout>
                       </PublicRouteGuard>
-                    } />
-                    <Route path="/heart-voice-submit" element={
+                    } /> */}
+                    {/* <Route path="/heart-voice-submit" element={
                       <PublicRouteGuard>
                         <QuestionnaireLayout>
                           <HeartVoiceSubmitPage />
 
                         </QuestionnaireLayout>
                       </PublicRouteGuard>
-                    } />
+                    } /> */}
                     <Route path="/story-submit" element={
                       <PublicRouteGuard>
                         <QuestionnaireLayout>
@@ -385,8 +373,8 @@ function App() {
                     {/* 保留旧的审核路由以兼容现有功能 */}
                     <Route path="/reviewer/questionnaires" element={<NewReviewerRouteGuard><QuestionnaireReviewPage /></NewReviewerRouteGuard>} />
                     <Route path="/reviewer/stories" element={<NewReviewerRouteGuard><StoryReviewPage /></NewReviewerRouteGuard>} />
-                    <Route path="/reviewer/voices" element={<NewReviewerRouteGuard><VoiceReviewPage /></NewReviewerRouteGuard>} />
-                    <Route path="/reviewer/quick-review/voice" element={<NewReviewerRouteGuard><QuickReviewVoicePage /></NewReviewerRouteGuard>} />
+                    {/* <Route path="/reviewer/voices" element={<NewReviewerRouteGuard><VoiceReviewPage /></NewReviewerRouteGuard>} /> */}
+                    {/* <Route path="/reviewer/quick-review/voice" element={<NewReviewerRouteGuard><QuickReviewVoicePage /></NewReviewerRouteGuard>} /> */}
                     <Route path="/reviewer/quick-review/story" element={<NewReviewerRouteGuard><QuickReviewStoryPage /></NewReviewerRouteGuard>} />
 
                     {/* 管理员路由 - 需要admin权限 */}
