@@ -102,7 +102,6 @@ const ReviewerSettingsPage = React.lazy(() => import('./pages/reviewer/ReviewerS
 // const StudentParentDashboard = React.lazy(() => import('./pages/analytics/StudentParentDashboard').then(module => ({ default: module.StudentParentDashboard })));
 // const RealisticDashboard = React.lazy(() => import('./pages/analytics/RealisticDashboard').then(module => ({ default: module.RealisticDashboard })));
 // const UnifiedAnalyticsPage = React.lazy(() => import('./pages/analytics/UnifiedAnalyticsPage').then(module => ({ default: module.UnifiedAnalyticsPage })));
-const QuestionnaireAnalyticsPage = React.lazy(() => import('./pages/analytics/QuestionnaireAnalyticsPage').then(module => ({ default: module.QuestionnaireAnalyticsPage })));
 const NewQuestionnaireVisualizationPage = React.lazy(() => import('./pages/analytics/NewQuestionnaireVisualizationPage').then(module => ({ default: module.NewQuestionnaireVisualizationPage })));
 
 
@@ -198,26 +197,16 @@ function App() {
                       </PublicRouteGuard>
                     } />
 
-                    {/* 主要可视化页面 - 使用问卷分析页面 */}
+                    {/* 主要可视化页面 - 使用优化的新版本 */}
                     <Route path="/analytics" element={
                       <PublicRouteGuard>
                         <QuestionnaireLayout>
-                          <QuestionnaireAnalyticsPage />
-
+                          <NewQuestionnaireVisualizationPage />
                         </QuestionnaireLayout>
                       </PublicRouteGuard>
                     } />
 
-                    {/* 基于问卷数据的独立可视化页面 */}
-                    <Route path="/analytics/questionnaire" element={
-                      <PublicRouteGuard>
-                        <QuestionnaireLayout>
-                          <QuestionnaireAnalyticsPage />
-                        </QuestionnaireLayout>
-                      </PublicRouteGuard>
-                    } />
-
-                    {/* 新的问卷可视化页面 */}
+                    {/* 新的问卷可视化页面 - 主要入口 */}
                     <Route path="/analytics/visualization" element={
                       <PublicRouteGuard>
                         <QuestionnaireLayout>
