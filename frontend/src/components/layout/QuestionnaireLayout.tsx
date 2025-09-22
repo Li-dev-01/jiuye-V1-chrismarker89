@@ -102,7 +102,7 @@ export const QuestionnaireLayout: React.FC<QuestionnaireLayoutProps> = ({ childr
           {/* Logo区域 */}
           <div className={styles.logoSection}>
             <Link to="/" className={styles.logo}>
-              大学生就业问卷调查
+              2025大学生就业问卷调查
             </Link>
           </div>
 

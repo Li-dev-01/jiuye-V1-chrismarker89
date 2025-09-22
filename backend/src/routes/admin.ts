@@ -450,10 +450,88 @@ export function createAdminRoutes() {
     }
   });
 
+  // 确保内容标签表存在
+  const ensureContentTagsTableExists = async (db: any) => {
+    try {
+      // 检查content_tags表是否存在
+      const tableCheck = await db.prepare(`
+        SELECT name FROM sqlite_master
+        WHERE type='table' AND name='content_tags'
+      `).first();
+
+      if (!tableCheck) {
+        console.log('content_tags表不存在，正在创建...');
+
+        // 创建content_tags表
+        await db.prepare(`
+          CREATE TABLE IF NOT EXISTS content_tags (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            tag_key TEXT NOT NULL UNIQUE,
+            tag_name TEXT NOT NULL,
+            tag_name_en TEXT,
+            description TEXT,
+            tag_type TEXT DEFAULT 'system' CHECK (tag_type IN ('system', 'user', 'auto')),
+            color TEXT DEFAULT '#1890ff',
+            usage_count INTEGER DEFAULT 0,
+            is_active INTEGER DEFAULT 1,
+            content_type TEXT DEFAULT 'all' CHECK (content_type IN ('story', 'heart_voice', 'questionnaire', 'all')),
+            admin_id TEXT,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+          )
+        `).run();
+
+        // 创建索引
+        await db.prepare('CREATE INDEX IF NOT EXISTS idx_content_tags_key ON content_tags(tag_key)').run();
+        await db.prepare('CREATE INDEX IF NOT EXISTS idx_content_tags_type ON content_tags(tag_type)').run();
+        await db.prepare('CREATE INDEX IF NOT EXISTS idx_content_tags_usage_count ON content_tags(usage_count DESC)').run();
+
+        console.log('content_tags表创建完成');
+      }
+
+      // 检查是否有数据，如果没有则插入默认标签
+      const countResult = await db.prepare('SELECT COUNT(*) as count FROM content_tags').first();
+      if (!countResult || countResult.count === 0) {
+        console.log('插入默认标签数据...');
+
+        const defaultTags = [
+          { tag_key: 'job-hunting', tag_name: '求职经历', tag_name_en: 'Job Hunting', description: '分享求职过程中的经历和感悟', tag_type: 'system', color: '#1890ff', content_type: 'story' },
+          { tag_key: 'career-change', tag_name: '转行经历', tag_name_en: 'Career Change', description: '职业转换和行业跳转的经历', tag_type: 'system', color: '#52c41a', content_type: 'story' },
+          { tag_key: 'entrepreneurship', tag_name: '创业故事', tag_name_en: 'Entrepreneurship', description: '创业过程中的故事和经验', tag_type: 'system', color: '#fa8c16', content_type: 'story' },
+          { tag_key: 'workplace-life', tag_name: '职场生活', tag_name_en: 'Workplace Life', description: '日常工作和职场生活的分享', tag_type: 'system', color: '#722ed1', content_type: 'story' },
+          { tag_key: 'skill-growth', tag_name: '技能成长', tag_name_en: 'Skill Growth', description: '专业技能学习和成长经历', tag_type: 'system', color: '#13c2c2', content_type: 'story' },
+          { tag_key: 'experience', tag_name: '经验分享', tag_name_en: 'Experience', description: '个人经验和心得体会', tag_type: 'system', color: '#1890ff', content_type: 'heart_voice' },
+          { tag_key: 'advice', tag_name: '建议意见', tag_name_en: 'Advice', description: '给他人的建议和意见', tag_type: 'system', color: '#52c41a', content_type: 'heart_voice' },
+          { tag_key: 'featured', tag_name: '精选', tag_name_en: 'Featured', description: '精选推荐内容', tag_type: 'system', color: '#fadb14', content_type: 'all' },
+          { tag_key: 'popular', tag_name: '热门', tag_name_en: 'Popular', description: '热门内容', tag_type: 'system', color: '#f759ab', content_type: 'all' }
+        ];
+
+        for (const tag of defaultTags) {
+          await db.prepare(`
+            INSERT INTO content_tags
+            (tag_key, tag_name, tag_name_en, description, tag_type, color, content_type, usage_count)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+          `).bind(
+            tag.tag_key, tag.tag_name, tag.tag_name_en, tag.description,
+            tag.tag_type, tag.color, tag.content_type, Math.floor(Math.random() * 20)
+          ).run();
+        }
+
+        console.log('默认标签数据插入完成');
+      }
+    } catch (error) {
+      console.error('内容标签表初始化失败:', error);
+    }
+  };
+
   // 获取内容标签列表
   admin.get('/content/tags', async (c) => {
     try {
       const db = c.env.DB;
+
+      // 确保表存在
+      await ensureContentTagsTableExists(db);
+
       const contentType = c.req.query('content_type') || 'all';
       const isActive = c.req.query('is_active');
 

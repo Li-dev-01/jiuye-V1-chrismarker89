@@ -1,7 +1,9 @@
 import React from 'react';
-import { Typography, Space, Layout, Menu, Button } from 'antd';
-import { SettingOutlined } from '@ant-design/icons';
+import { Typography, Space, Layout, Menu, Button, Dropdown, Avatar } from 'antd';
+import { SettingOutlined, UserOutlined, LoginOutlined, LogoutOutlined } from '@ant-design/icons';
 import { Link, useLocation } from 'react-router-dom';
+import { useUniversalAuthStore } from '../../stores/universalAuthStore';
+import { GoogleLoginButton } from '../auth/GoogleLoginButton';
 import styles from './GlobalHeader.module.css';
 
 const { Title } = Typography;
@@ -9,6 +11,7 @@ const { Header } = Layout;
 
 export const GlobalHeader: React.FC = () => {
   const location = useLocation();
+  const { user, isAuthenticated, logout } = useUniversalAuthStore();
 
   // 根据当前路径确定选中的菜单项
   const getSelectedKey = () => {
@@ -18,6 +21,7 @@ export const GlobalHeader: React.FC = () => {
     if (path.startsWith('/analytics')) return 'analysis';
     if (path.startsWith('/results')) return 'results';
     if (path.startsWith('/stories')) return 'story';
+    if (path.startsWith('/favorites')) return 'favorites';
     if (path.startsWith('/voices')) return 'about';
     if (path.startsWith('/admin-test')) return 'admin-test';
     if (path.startsWith('/reviewer-test')) return 'reviewer-test';
@@ -46,6 +50,10 @@ export const GlobalHeader: React.FC = () => {
       key: 'story',
       label: <Link to="/stories" style={{ color: 'inherit', textDecoration: 'none' }}>故事墙</Link>
     },
+    {
+      key: 'favorites',
+      label: <Link to="/favorites" style={{ color: 'inherit', textDecoration: 'none' }}>我的收藏</Link>
+    },
 
     {
       key: 'test-item',
@@ -61,7 +69,7 @@ export const GlobalHeader: React.FC = () => {
       <div className={styles.headerContent}>
         <Link to="/" style={{ textDecoration: 'none' }}>
           <Title level={3} className={styles.logo}>
-            大学生就业问卷调查
+            2025大学生就业问卷调查
           </Title>
         </Link>
         
@@ -73,7 +81,70 @@ export const GlobalHeader: React.FC = () => {
         />
         
         <Space className={styles.userActions}>
-          {/* 用户操作区域 - 管理入口已移至独立后台 */}
+          {isAuthenticated && user ? (
+            // 已登录用户菜单
+            <Dropdown
+              menu={{
+                items: [
+                  {
+                    key: 'profile',
+                    icon: <UserOutlined />,
+                    label: '个人信息'
+                  },
+                  {
+                    key: 'divider',
+                    type: 'divider'
+                  },
+                  {
+                    key: 'logout',
+                    icon: <LogoutOutlined />,
+                    label: '退出登录',
+                    onClick: logout
+                  }
+                ]
+              }}
+              placement="bottomRight"
+            >
+              <Button type="text" className={styles.userButton}>
+                <Space>
+                  <Avatar size="small" icon={<UserOutlined />} />
+                  <span>{user.displayName || '匿名用户'}</span>
+                </Space>
+              </Button>
+            </Dropdown>
+          ) : (
+            // 未登录用户操作
+            <Space>
+              <GoogleLoginButton
+                userType="questionnaire"
+                type="primary"
+                size="small"
+                style={{ height: '32px' }}
+              />
+              <Button
+                type="default"
+                size="small"
+                icon={<LoginOutlined />}
+                onClick={() => {
+                  // 触发半匿名登录
+                  window.dispatchEvent(new Event('openSemiAnonymousLogin'));
+                }}
+                className={styles.loginButton}
+              >
+                半匿名登录
+              </Button>
+              <Link to="/management-portal">
+                <Button
+                  type="link"
+                  size="small"
+                  icon={<SettingOutlined />}
+                  className={styles.adminButton}
+                >
+                  管理登录
+                </Button>
+              </Link>
+            </Space>
+          )}
         </Space>
       </div>
     </Header>

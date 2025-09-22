@@ -4,7 +4,7 @@
  * 手动触发统计缓存更新脚本
  */
 
-const API_BASE_URL = 'https://employment-survey-api-prod.justpm2099.workers.dev/api';
+const API_BASE_URL = 'https://employment-survey-api-prod.chrismarker89.workers.dev/api';
 
 async function triggerStatsUpdate() {
   console.log('🔄 手动触发统计缓存更新...\n');

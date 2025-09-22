@@ -8,7 +8,7 @@ import type { AxiosInstance } from 'axios';
 import { ErrorHandler } from '../utils/errorHandler';
 
 // API配置
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://employment-survey-api-prod.justpm2099.workers.dev';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://employment-survey-api-prod.chrismarker89.workers.dev';
 
 // 类型定义
 export interface Story {
@@ -398,6 +398,36 @@ class StoryService {
       return response.data;
     } catch (error) {
       console.error('Get recommended stories error:', error);
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Unknown error'
+      };
+    }
+  }
+
+  /**
+   * 获取故事标签列表
+   */
+  async getStoryTags(): Promise<{ success: boolean; data?: any[]; error?: string }> {
+    try {
+      // 使用管理员API获取标签，避免路由冲突
+      const response = await axios.get(`${this.baseURL.replace('/stories', '')}/admin/content/tags`, {
+        params: { content_type: 'story' }
+      });
+
+      if (response.data.success) {
+        return {
+          success: true,
+          data: response.data.data || []
+        };
+      } else {
+        return {
+          success: false,
+          error: response.data.message || 'Failed to get tags'
+        };
+      }
+    } catch (error) {
+      console.error('Get story tags error:', error);
       return {
         success: false,
         error: error instanceof Error ? error.message : 'Unknown error'

@@ -54,7 +54,7 @@
 - **功能**: 智能分支逻辑完全可用
 
 ### 后端API
-- **URL**: https://employment-survey-api.justpm2099.workers.dev
+- **URL**: https://employment-survey-api.chrismarker89.workers.dev
 - **状态**: ✅ 正常运行
 - **数据**: 100条高质量测试数据
 
@@ -177,7 +177,7 @@ feat: 智能问卷系统完整实现与问卷统计修复
 
 ### 开发资源
 - **GitHub仓库**: https://github.com/justpm2099/jiuye-V1
-- **API服务**: https://employment-survey-api.justpm2099.workers.dev
+- **API服务**: https://employment-survey-api.chrismarker89.workers.dev
 - **项目文档**: `/dev-daily-V1/` 目录
 
 ## 📝 备份验证

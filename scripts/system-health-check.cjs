@@ -8,7 +8,7 @@
 const { IssueTracker, ISSUE_TYPES } = require('./issue-tracker.cjs');
 const { checkDataSyncStatus } = require('./data-sync-monitor.cjs');
 
-const API_BASE_URL = 'https://employment-survey-api-prod.justpm2099.workers.dev/api';
+const API_BASE_URL = 'https://employment-survey-api-prod.chrismarker89.workers.dev/api';
 
 /**
  * 系统健康检查器
@@ -42,7 +42,7 @@ class SystemHealthChecker {
       const startTime = Date.now();
       
       // 检查健康检查端点（使用正确的路径）
-      const healthResponse = await fetch(`https://employment-survey-api-prod.justpm2099.workers.dev/health`);
+      const healthResponse = await fetch(`https://employment-survey-api-prod.chrismarker89.workers.dev/health`);
       component.responseTime = Date.now() - startTime;
       
       if (healthResponse.ok) {
@@ -239,7 +239,7 @@ class SystemHealthChecker {
       // 测试API响应时间
       const tests = [
         { name: '统计API', url: `${API_BASE_URL}/universal-questionnaire/statistics/employment-survey-2024` },
-        { name: '健康检查', url: `https://employment-survey-api-prod.justpm2099.workers.dev/health` }
+        { name: '健康检查', url: `https://employment-survey-api-prod.chrismarker89.workers.dev/health` }
       ];
 
       const results = [];

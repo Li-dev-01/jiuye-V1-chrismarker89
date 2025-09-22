@@ -50,7 +50,7 @@ export const ReviewerQuickReviewPage: React.FC = () => {
     const fetchStats = async () => {
       setLoading(true);
       try {
-        const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || 'https://employment-survey-api-prod.justpm2099.workers.dev';
+        const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || 'https://employment-survey-api-prod.chrismarker89.workers.dev';
 
         // 获取心声待审核数量
         const voiceResponse = await fetch(`${apiBaseUrl}/api/reviewer/pending-reviews?content_type=heart_voice`);

@@ -12,8 +12,52 @@ import { LoginRecordService } from '../services/loginRecordService';
 const googleAuth = new Hono<{ Bindings: Env }>();
 
 // Google OAuth配置
-const GOOGLE_CLIENT_ID = '947246726899-e2nuehhp0ngdcecaj67i1dbrevdu308o.apps.googleusercontent.com';
+const GOOGLE_CLIENT_ID = '23546164414-3t3g8n9hvnv4ekjok90co2sm3sfb6mt8.apps.googleusercontent.com';
 const GOOGLE_CLIENT_SECRET = (env: Env) => env.GOOGLE_CLIENT_SECRET;
+
+/**
+ * 验证Google OAuth token并获取用户信息
+ */
+async function verifyGoogleToken(accessToken: string): Promise<any> {
+  const response = await fetch(`https://www.googleapis.com/oauth2/v2/userinfo?access_token=${accessToken}`);
+
+  if (!response.ok) {
+    throw new Error('Failed to verify Google token');
+  }
+
+  return await response.json();
+}
+
+/**
+ * 使用授权码交换访问令牌
+ */
+async function exchangeCodeForToken(code: string, redirectUri: string, clientSecret: string): Promise<any> {
+  const tokenEndpoint = 'https://oauth2.googleapis.com/token';
+
+  const params = new URLSearchParams({
+    client_id: GOOGLE_CLIENT_ID,
+    client_secret: clientSecret,
+    code: code,
+    grant_type: 'authorization_code',
+    redirect_uri: redirectUri
+  });
+
+  const response = await fetch(tokenEndpoint, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    body: params
+  });
+
+  if (!response.ok) {
+    const error = await response.text();
+    console.error('Token exchange failed:', error);
+    throw new Error('Failed to exchange code for token');
+  }
+
+  return await response.json();
+}
 
 /**
  * 从数据库获取白名单条目
@@ -340,6 +384,269 @@ googleAuth.post('/management', async (c) => {
     }, 500);
   }
 });
+
+/**
+ * Google OAuth回调处理
+ * 处理授权码交换和用户信息获取
+ */
+googleAuth.post('/callback', async (c) => {
+  try {
+    const body = await c.req.json();
+    const { code, redirectUri, userType = 'questionnaire' } = body;
+
+    if (!code) {
+      return c.json({
+        success: false,
+        error: 'Invalid Request',
+        message: '缺少授权码'
+      }, 400);
+    }
+
+    const clientSecret = GOOGLE_CLIENT_SECRET(c.env as Env);
+    if (!clientSecret) {
+      return c.json({
+        success: false,
+        error: 'Configuration Error',
+        message: 'Google OAuth配置不完整'
+      }, 500);
+    }
+
+    // 交换授权码获取访问令牌
+    const tokenData = await exchangeCodeForToken(code, redirectUri, clientSecret);
+
+    // 使用访问令牌获取用户信息
+    const googleUser = await verifyGoogleToken(tokenData.access_token);
+
+    // 根据用户类型处理不同的登录逻辑
+    if (userType === 'questionnaire') {
+      return await handleQuestionnaireUserCallback(c, googleUser);
+    } else if (userType === 'management') {
+      return await handleManagementUserCallback(c, googleUser);
+    } else {
+      return c.json({
+        success: false,
+        error: 'Invalid Request',
+        message: '无效的用户类型'
+      }, 400);
+    }
+
+  } catch (error: any) {
+    console.error('Google OAuth callback error:', error);
+    return c.json({
+      success: false,
+      error: 'OAuth Error',
+      message: error.message || 'OAuth回调处理失败'
+    }, 500);
+  }
+});
+
+/**
+ * 处理问卷用户回调
+ */
+async function handleQuestionnaireUserCallback(c: any, googleUser: any) {
+  const db = createDatabaseService(c.env as Env);
+  const now = new Date().toISOString();
+
+  // 检查是否已存在该Google用户对应的半匿名用户
+  const existingUser = await db.queryFirst(`
+    SELECT uuid, display_name, metadata, status
+    FROM universal_users
+    WHERE user_type = 'semi_anonymous'
+    AND JSON_EXTRACT(metadata, '$.googleEmail') = ?
+  `, [googleUser.email]);
+
+  if (existingUser) {
+    // 更新最后活跃时间和登录次数
+    const metadata = JSON.parse(existingUser.metadata || '{}');
+    metadata.loginCount = (metadata.loginCount || 0) + 1;
+    metadata.lastGoogleLogin = now;
+
+    await db.execute(`
+      UPDATE universal_users
+      SET last_active_at = ?, metadata = ?
+      WHERE uuid = ?
+    `, [now, JSON.stringify(metadata), existingUser.uuid]);
+
+    return c.json({
+      success: true,
+      data: {
+        user: {
+          uuid: existingUser.uuid,
+          userType: 'semi_anonymous',
+          displayName: existingUser.display_name,
+          status: existingUser.status,
+          googleLinked: true
+        }
+      },
+      message: 'Google登录成功，欢迎回来！'
+    });
+  }
+
+  // 创建新的半匿名用户
+  const userUuid = generateUUID('semi_anonymous');
+  const displayName = `匿名用户_${userUuid.slice(-8)}`;
+
+  const userData = {
+    uuid: userUuid,
+    user_type: 'semi_anonymous',
+    display_name: displayName,
+    permissions: JSON.stringify(['browse_content', 'submit_questionnaire', 'manage_own_content']),
+    profile: JSON.stringify({
+      language: 'zh-CN',
+      timezone: 'Asia/Shanghai',
+      googleLinked: true
+    }),
+    metadata: JSON.stringify({
+      loginCount: 1,
+      googleEmail: googleUser.email,
+      googleName: googleUser.name,
+      googlePicture: googleUser.picture,
+      registrationMethod: 'google_oauth',
+      createdAt: now
+    }),
+    status: 'active',
+    created_at: now,
+    updated_at: now,
+    last_active_at: now
+  };
+
+  await db.execute(`
+    INSERT INTO universal_users (
+      uuid, user_type, display_name, permissions, profile, metadata,
+      status, created_at, updated_at, last_active_at
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+  `, [
+    userData.uuid, userData.user_type, userData.display_name,
+    userData.permissions, userData.profile, userData.metadata,
+    userData.status, userData.created_at, userData.updated_at, userData.last_active_at
+  ]);
+
+  return c.json({
+    success: true,
+    data: {
+      user: {
+        uuid: userData.uuid,
+        userType: 'semi_anonymous',
+        displayName: userData.display_name,
+        status: userData.status,
+        googleLinked: true
+      }
+    },
+    message: 'Google登录成功，已自动创建您的匿名身份！'
+  });
+}
+
+/**
+ * 处理管理员用户回调
+ */
+async function handleManagementUserCallback(c: any, googleUser: any) {
+  const db = createDatabaseService(c.env as Env);
+
+  // 检查邮箱是否在白名单中
+  const whitelistEntry = await getWhitelistEntry(db, googleUser.email);
+  if (!whitelistEntry) {
+    return c.json({
+      success: false,
+      error: 'Unauthorized',
+      message: '您的邮箱不在管理员白名单中，请联系超级管理员'
+    }, 403);
+  }
+
+  // 更新白名单最后使用时间
+  await updateLastUsed(db, googleUser.email);
+
+  const now = new Date().toISOString();
+
+  // 检查是否已存在该管理员用户
+  const existingUser = await db.queryFirst(`
+    SELECT uuid, display_name, user_type, metadata, status
+    FROM universal_users
+    WHERE user_type IN ('admin', 'reviewer', 'super_admin')
+    AND JSON_EXTRACT(metadata, '$.googleEmail') = ?
+  `, [googleUser.email]);
+
+  if (existingUser) {
+    // 更新最后活跃时间和登录次数
+    const metadata = JSON.parse(existingUser.metadata || '{}');
+    metadata.loginCount = (metadata.loginCount || 0) + 1;
+    metadata.lastGoogleLogin = now;
+
+    await db.execute(`
+      UPDATE universal_users
+      SET last_active_at = ?, metadata = ?
+      WHERE uuid = ?
+    `, [now, JSON.stringify(metadata), existingUser.uuid]);
+
+    return c.json({
+      success: true,
+      data: {
+        user: {
+          uuid: existingUser.uuid,
+          userType: existingUser.user_type,
+          role: whitelistEntry.role,
+          displayName: existingUser.display_name,
+          status: existingUser.status,
+          googleLinked: true
+        }
+      },
+      message: `欢迎回来，${whitelistEntry.role}！`
+    });
+  }
+
+  // 创建新的管理员用户
+  const userUuid = generateUUID(whitelistEntry.role);
+
+  const userData = {
+    uuid: userUuid,
+    user_type: whitelistEntry.role,
+    display_name: googleUser.name || `${whitelistEntry.role}_${userUuid.slice(-8)}`,
+    permissions: JSON.stringify(getPermissionsByRole(whitelistEntry.role)),
+    profile: JSON.stringify({
+      language: 'zh-CN',
+      timezone: 'Asia/Shanghai',
+      googleLinked: true
+    }),
+    metadata: JSON.stringify({
+      loginCount: 1,
+      googleEmail: googleUser.email,
+      googleName: googleUser.name,
+      googlePicture: googleUser.picture,
+      registrationMethod: 'google_oauth_admin',
+      whitelistRole: whitelistEntry.role,
+      createdAt: now
+    }),
+    status: 'active',
+    created_at: now,
+    updated_at: now,
+    last_active_at: now
+  };
+
+  await db.execute(`
+    INSERT INTO universal_users (
+      uuid, user_type, display_name, permissions, profile, metadata,
+      status, created_at, updated_at, last_active_at
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+  `, [
+    userData.uuid, userData.user_type, userData.display_name,
+    userData.permissions, userData.profile, userData.metadata,
+    userData.status, userData.created_at, userData.updated_at, userData.last_active_at
+  ]);
+
+  return c.json({
+    success: true,
+    data: {
+      user: {
+        uuid: userData.uuid,
+        userType: userData.user_type,
+        role: whitelistEntry.role,
+        displayName: userData.display_name,
+        status: userData.status,
+        googleLinked: true
+      }
+    },
+    message: `欢迎，${whitelistEntry.role}！账号已创建成功`
+  });
+}
 
 /**
  * 根据角色获取权限列表

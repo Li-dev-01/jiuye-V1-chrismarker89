@@ -1,7 +1,97 @@
 {
   "tableName": "questionnaire_heart_voices",
-  "dataDistributions": {},
-  "customGenerators": {},
-  "relationships": {},
-  "constraints": {}
+  "dataDistributions": {
+    "category": {
+      "employment-feedback": 0.4,
+      "campus-life": 0.25,
+      "career-planning": 0.15,
+      "internship-experience": 0.1,
+      "interview-experience": 0.1
+    },
+    "employment_status": {
+      "employed": 0.4,
+      "job-seeking": 0.25,
+      "further-study": 0.15,
+      "entrepreneurship": 0.1,
+      "undecided": 0.1
+    },
+    "major_field": {
+      "computer-science": 0.25,
+      "business-management": 0.2,
+      "engineering": 0.15,
+      "liberal-arts": 0.12,
+      "science": 0.1,
+      "medical": 0.08,
+      "education": 0.06,
+      "arts": 0.04
+    },
+    "region": {
+      "tier1-cities": 0.35,
+      "tier2-cities": 0.3,
+      "tier3-cities": 0.2,
+      "hometown": 0.1,
+      "overseas": 0.05
+    },
+    "employment_destination": {
+      "private-enterprise": 0.35,
+      "state-owned": 0.2,
+      "foreign-enterprise": 0.15,
+      "startup": 0.12,
+      "government": 0.1,
+      "freelance": 0.08
+    },
+    "story_type": {
+      "interview-experience": 0.25,
+      "internship-experience": 0.2,
+      "career-planning": 0.18,
+      "workplace-adaptation": 0.15,
+      "skill-development": 0.12,
+      "campus-life": 0.1
+    },
+    "submission_type": {
+      "anonymous": 0.7,
+      "semi-anonymous": 0.25,
+      "public": 0.05
+    },
+    "is_public": {
+      "true": 0.85,
+      "false": 0.15
+    },
+    "is_approved": {
+      "true": 0.9,
+      "false": 0.1
+    },
+    "status": {
+      "active": 0.85,
+      "pending": 0.1,
+      "archived": 0.05
+    }
+  },
+  "customGenerators": {
+    "content": "storyContentGenerator",
+    "title": "storyTitleGenerator",
+    "tags": "storyTagsGenerator",
+    "anonymous_nickname": "anonymousNicknameGenerator",
+    "word_count": "wordCountCalculator",
+    "likes_count": "likesCountGenerator",
+    "views_count": "viewsCountGenerator"
+  },
+  "relationships": {
+    "user_id": {
+      "table": "users",
+      "field": "id",
+      "type": "foreign_key"
+    }
+  },
+  "constraints": {
+    "content_min_length": 50,
+    "content_max_length": 2000,
+    "title_min_length": 10,
+    "title_max_length": 100,
+    "tags_max_count": 5,
+    "created_at_range": {
+      "start": "2024-01-01",
+      "end": "2025-01-22"
+    }
+  }
 }

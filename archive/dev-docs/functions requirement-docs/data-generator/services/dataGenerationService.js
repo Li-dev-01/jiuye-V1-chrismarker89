@@ -7,7 +7,7 @@
 
 class DataGenerationService {
     constructor() {
-        this.baseUrl = 'https://college-employment-survey-api-isolated.justpm2099.workers.dev/api';
+        this.baseUrl = 'https://college-employment-survey-api-isolated.chrismarker89.workers.dev/api';
         this.timeout = 30000;
         this.retryAttempts = 3;
         this.retryDelay = 1000;

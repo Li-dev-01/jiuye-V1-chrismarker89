@@ -7,14 +7,17 @@ import React from 'react';
 import { Card, Typography, Space, Tag, Rate, Button, Avatar } from 'antd';
 import {
   HeartOutlined,
+  HeartFilled,
   FrownOutlined,
   SmileOutlined,
   MehOutlined,
   UserOutlined,
   ClockCircleOutlined,
-  StarOutlined
+  StarOutlined,
+  DownloadOutlined
 } from '@ant-design/icons';
 import { LikeDislikeDownload } from './LikeDislikeDownload';
+import { QuickReportButton } from '../stories/ReportContent';
 import styles from './UnifiedCard.module.css';
 
 const { Title, Paragraph, Text } = Typography;
@@ -62,6 +65,8 @@ interface UnifiedCardProps {
   onClick?: (data: UnifiedCardData) => void;
   onLike?: (id: number) => void;
   onDislike?: (id: number) => void;
+  onFavorite?: (data: UnifiedCardData) => void;
+  isFavorited?: boolean;
   categories?: Array<{ value: string; label: string; icon?: React.ReactNode }>;
   className?: string;
 }
@@ -72,6 +77,8 @@ export const UnifiedCard: React.FC<UnifiedCardProps> = ({
   onClick,
   onLike,
   onDislike,
+  onFavorite,
+  isFavorited = false,
   categories = [],
   className = ''
 }) => {
@@ -107,16 +114,23 @@ export const UnifiedCard: React.FC<UnifiedCardProps> = ({
     return <FrownOutlined style={{ color: '#ff4d4f' }} />;
   };
 
-  // 格式化时间
+  // 格式化日期
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
-    const now = new Date();
-    const diffTime = Math.abs(now.getTime() - date.getTime());
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    
-    if (diffDays === 1) return '今天';
-    if (diffDays <= 7) return `${diffDays}天前`;
-    return date.toLocaleDateString('zh-CN');
+    return date.toLocaleDateString('zh-CN', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit'
+    });
+  };
+
+  // 格式化时间
+  const formatTime = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleTimeString('zh-CN', {
+      hour: '2-digit',
+      minute: '2-digit'
+    });
   };
 
   const categoryInfo = getCategoryInfo(data.category);
@@ -132,57 +146,113 @@ export const UnifiedCard: React.FC<UnifiedCardProps> = ({
         </div>
       )}
       actions={[
-        <div key="like-dislike-download" onClick={(e) => e.stopPropagation()}>
-          <LikeDislikeDownload
-            contentType={data.type}
-            contentId={data.id}
-            initialLikeCount={data.likeCount}
-            initialDislikeCount={data.dislikeCount || 0}
-            theme="minimal"
+        // 踩按钮
+        <Button
+          key="dislike"
+          type="text"
+          size="small"
+          icon={<FrownOutlined />}
+          onClick={(e) => {
+            e.stopPropagation();
+            onDislike?.(data.id);
+          }}
+          className={styles.actionButton}
+        >
+          {data.dislikeCount || 0}
+        </Button>,
+        // 下载按钮
+        <Button
+          key="download"
+          type="text"
+          size="small"
+          icon={<DownloadOutlined />}
+          onClick={(e) => {
+            e.stopPropagation();
+            // TODO: 实现下载功能
+          }}
+          className={styles.actionButton}
+        >
+          下载
+        </Button>,
+        // 赞按钮
+        <Button
+          key="like"
+          type="text"
+          size="small"
+          icon={<HeartOutlined />}
+          onClick={(e) => {
+            e.stopPropagation();
+            onLike?.(data.id);
+          }}
+          className={styles.actionButton}
+        >
+          {data.likeCount}
+        </Button>,
+        // 收藏按钮
+        ...(onFavorite ? [
+          <Button
+            key="favorite"
+            type="text"
             size="small"
-            showCounts={true}
-          />
-        </div>
+            icon={isFavorited ? <HeartFilled style={{ color: '#ff4d4f' }} /> : <StarOutlined />}
+            onClick={(e) => {
+              e.stopPropagation();
+              onFavorite(data);
+            }}
+            className={styles.actionButton}
+          >
+            {isFavorited ? '已收藏' : '收藏'}
+          </Button>
+        ] : [])
       ]}
     >
       <div className={styles.cardBody}>
-        {/* 卡片头部 - 用户信息和时间 */}
+        {/* 卡片头部 - 用户信息和日期时间 */}
         <div className={styles.cardHeader}>
-          <div className={styles.authorInfo}>
-            <Avatar size="small" icon={<UserOutlined />} />
-            <Text type="secondary" className={styles.authorName}>
-              {data.isAnonymous ? '匿名用户' : (data.authorName || '匿名用户')}
-            </Text>
+          <div className={styles.authorSection}>
+            <div className={styles.authorInfo}>
+              <Avatar size="small" icon={<UserOutlined />} />
+              <Text type="secondary" className={styles.authorName}>
+                {data.isAnonymous ? '匿名用户' : (data.authorName || '匿名用户')}
+              </Text>
+            </div>
+            {/* 分类标签移到用户名下方 */}
+            <div className={styles.categoryTags}>
+              <Tag color={getCategoryColor(data.category)} size="small">
+                {categoryInfo.icon}
+                {categoryInfo.label}
+              </Tag>
+              {data.isFeatured && !featured && (
+                <Tag color="gold" size="small">精选</Tag>
+              )}
+            </div>
           </div>
 
-          <div className={styles.timeInfo}>
-            <ClockCircleOutlined />
-            <Text type="secondary" className={styles.timeText}>
-              {formatDate(data.publishedAt || data.createdAt)}
-            </Text>
+          <div className={styles.timeSection}>
+            <div className={styles.dateInfo}>
+              <Text type="secondary" className={styles.dateText}>
+                {formatDate(data.publishedAt || data.createdAt)}
+              </Text>
+            </div>
+            {/* 时间移到日期下方 */}
+            <div className={styles.timeInfo}>
+              <ClockCircleOutlined />
+              <Text type="secondary" className={styles.timeText}>
+                {formatTime(data.publishedAt || data.createdAt)}
+              </Text>
+            </div>
           </div>
         </div>
 
-        {/* 分类和评分区域 */}
-        <div className={styles.categorySection}>
-          <div className={styles.categoryTags}>
-            <Tag color={getCategoryColor(data.category)} size="small">
-              {categoryInfo.icon}
-              {categoryInfo.label}
-            </Tag>
-            {data.isFeatured && !featured && (
-              <Tag color="gold" size="small">精选</Tag>
-            )}
-          </div>
-
-          {/* 心声特有：情感评分 */}
-          {data.type === 'heart_voice' && data.emotionScore && (
+        {/* 心声特有：情感评分区域 */}
+        {data.type === 'heart_voice' && data.emotionScore && (
+          <div className={styles.emotionSection}>
             <div className={styles.emotionRating}>
               {getEmotionIcon(data.emotionScore)}
               <Rate disabled value={data.emotionScore} count={5} style={{ fontSize: 10 }} />
             </div>
-          )}
-        </div>
+          </div>
+        )}
 
         {/* 卡片内容 */}
         <div className={styles.cardContent}>
@@ -207,9 +277,13 @@ export const UnifiedCard: React.FC<UnifiedCardProps> = ({
         {data.tags && data.tags.length > 0 && (
           <div className={styles.tagsSection}>
             <Space wrap>
-              {data.tags.slice(0, 4).map(tag => (
-                <Tag key={tag} size="small" className={styles.contentTag}>{tag}</Tag>
-              ))}
+              {data.tags.slice(0, 4).map((tag, index) => {
+                const tagText = typeof tag === 'string' ? tag : (tag?.name || tag?.tag_name || 'Unknown');
+                const tagKey = typeof tag === 'string' ? tag : (tag?.id || tag?.key || index);
+                return (
+                  <Tag key={tagKey} size="small" className={styles.contentTag}>{tagText}</Tag>
+                );
+              })}
               {data.tags.length > 4 && (
                 <Tag size="small" className={styles.moreTag}>+{data.tags.length - 4}</Tag>
               )}

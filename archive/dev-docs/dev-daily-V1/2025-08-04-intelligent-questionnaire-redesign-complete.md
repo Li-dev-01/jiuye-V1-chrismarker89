@@ -150,7 +150,7 @@
 ## 🔗 部署信息
 
 - **前端地址**：https://537d3a9a.college-employment-survey-frontend.pages.dev/questionnaire
-- **后端API**：https://employment-survey-api.justpm2099.workers.dev
+- **后端API**：https://employment-survey-api.chrismarker89.workers.dev
 - **部署状态**：✅ 生产环境运行正常
 - **验证状态**：✅ 智能分流逻辑完全正常
 

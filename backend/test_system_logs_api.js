@@ -3,7 +3,7 @@
  * 用于验证真实数据API是否正常工作
  */
 
-const API_BASE_URL = 'https://employment-survey-api-dev.justpm2099.workers.dev';
+const API_BASE_URL = 'https://employment-survey-api-dev.chrismarker89.workers.dev';
 
 // 模拟超级管理员认证
 const SUPER_ADMIN_AUTH = 'Basic ' + btoa('super_admin:super_admin_password_2024');

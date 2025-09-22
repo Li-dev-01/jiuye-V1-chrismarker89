@@ -65,7 +65,7 @@
 
 ### 后端部署
 - **部署平台**: Cloudflare Workers
-- **部署URL**: https://employment-survey-api-prod.justpm2099.workers.dev
+- **部署URL**: https://employment-survey-api-prod.chrismarker89.workers.dev
 - **部署状态**: ✅ 成功
 - **上传大小**: 378.40 KiB / gzip: 76.60 KiB
 - **启动时间**: 16 ms
@@ -114,7 +114,7 @@ feat: 完善审核规则管理功能
 
 部署状态：
 - 前端：https://435cb67a.college-employment-survey-frontend.pages.dev
-- 后端：https://employment-survey-api-prod.justpm2099.workers.dev
+- 后端：https://employment-survey-api-prod.chrismarker89.workers.dev
 ```
 
 ---

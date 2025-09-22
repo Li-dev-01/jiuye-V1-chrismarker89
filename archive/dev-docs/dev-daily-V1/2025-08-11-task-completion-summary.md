@@ -55,7 +55,7 @@
 
 ### 生产环境
 - **前端**: https://5b1ab864.college-employment-survey-frontend.pages.dev ✅
-- **后端**: https://employment-survey-api-prod.justpm2099.workers.dev ✅
+- **后端**: https://employment-survey-api-prod.chrismarker89.workers.dev ✅
 - **数据库**: Cloudflare D1 (干净状态) ✅
 - **监控**: 系统健康检查正常 ✅
 

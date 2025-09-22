@@ -5,7 +5,7 @@
  * 测试前端和后端的版本功能集成
  */
 
-const API_BASE_URL = 'https://employment-survey-api-prod.justpm2099.workers.dev';
+const API_BASE_URL = 'https://employment-survey-api-prod.chrismarker89.workers.dev';
 
 // 测试端点列表
 const versionTestEndpoints = [

@@ -59,7 +59,7 @@ export const QuickReviewComponent: React.FC<QuickReviewComponentProps> = ({
       // 映射前端类型到后端类型
       const apiContentType = contentType === 'voice' ? 'heart_voice' : contentType;
       console.log(`正在加载 ${contentType} 类型的待审核内容... (API类型: ${apiContentType})`);
-      const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || 'https://employment-survey-api-prod.justpm2099.workers.dev';
+      const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || 'https://employment-survey-api-prod.chrismarker89.workers.dev';
       const response = await fetch(`${apiBaseUrl}/api/reviewer/pending-reviews?content_type=${apiContentType}`);
       const result = await response.json();
 

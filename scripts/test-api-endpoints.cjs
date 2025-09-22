@@ -5,7 +5,7 @@
  * 验证哪些API端点是可用的
  */
 
-const API_BASE_URL = 'https://employment-survey-api-prod.justpm2099.workers.dev/api';
+const API_BASE_URL = 'https://employment-survey-api-prod.chrismarker89.workers.dev/api';
 
 async function testEndpoints() {
   console.log('🔍 测试API端点可用性...\n');

@@ -29,6 +29,12 @@ import './styles/global.css';
 const HomePage = React.lazy(() => import('./pages/HomePage'));
 const QuestionnairePage = React.lazy(() => import('./pages/EnhancedQuestionnairePage'));
 const StoriesPage = React.lazy(() => import('./pages/Stories'));
+const StoriesSimple = React.lazy(() => import('./pages/StoriesSimple'));
+const StoriesTest1 = React.lazy(() => import('./pages/test/StoriesTest1'));
+const StoriesTest2 = React.lazy(() => import('./pages/test/StoriesTest2'));
+const StoriesTest3 = React.lazy(() => import('./pages/test/StoriesTest3'));
+const StoriesTest4 = React.lazy(() => import('./pages/test/StoriesTest4'));
+const FavoritesPage = React.lazy(() => import('./pages/FavoritesPage'));
 // const VoicesPage = React.lazy(() => import('./pages/Voices'));
 
 
@@ -73,6 +79,9 @@ const IntelligentSecurityPage = React.lazy(() => import('./pages/admin/Intellige
 const LoginHistoryPage = React.lazy(() => import('./pages/user/LoginHistoryPage').then(module => ({ default: module.LoginHistoryPage })));
 const TwoFactorAuthPage = React.lazy(() => import('./pages/user/TwoFactorAuthPage').then(module => ({ default: module.TwoFactorAuthPage })));
 
+// PNG缓存管理页面
+const AdminPage = React.lazy(() => import('./pages/Admin'));
+
 // 测试页面已移动到归档目录
 // const StateTest = React.lazy(() => import('./pages/test/StateTest').then(module => ({ default: module.StateTest })));
 
@@ -113,6 +122,10 @@ const AnalyticsNavigationPage = React.lazy(() => import('./pages/analytics/Analy
 // const AuthSystemTestPage = React.lazy(() => import('./pages/debug/AuthSystemTestPage').then(module => ({ default: module.AuthSystemTestPage })));
 const NewAdminLoginPage = React.lazy(() => import('./pages/auth/NewAdminLoginPage').then(module => ({ default: module.NewAdminLoginPage })));
 const AutoLoginPage = React.lazy(() => import('./pages/auth/AutoLoginPage').then(module => ({ default: module.default })));
+const GoogleCallbackPage = React.lazy(() => import('./pages/auth/GoogleCallbackPage').then(module => ({ default: module.GoogleCallbackPage })));
+const GoogleQuestionnaireCallbackPage = React.lazy(() => import('./pages/auth/GoogleQuestionnaireCallbackPage').then(module => ({ default: module.default })));
+const GoogleManagementCallbackPage = React.lazy(() => import('./pages/auth/GoogleManagementCallbackPage').then(module => ({ default: module.default })));
+const OAuthUrlDebugPage = React.lazy(() => import('./pages/debug/OAuthUrlDebugPage').then(module => ({ default: module.default })));
 const LoginMethodGuide = React.lazy(() => import('./components/auth/LoginMethodGuide').then(module => ({ default: module.default })));
 // 调试页面已移动到归档目录
 // const SimpleAdminTestPage = React.lazy(() => import('./pages/debug/SimpleAdminTestPage').then(module => ({ default: module.SimpleAdminTestPage })));
@@ -123,6 +136,8 @@ const ViolationContentPage = React.lazy(() => import('./pages/admin/ViolationCon
 // const ViolationContentTest = React.lazy(() => import('./pages/test/ViolationContentTest'));
 const TestPage = React.lazy(() => import('./pages/TestPage').then(module => ({ default: module.TestPage })));
 const IntelligentQuestionnairePage = React.lazy(() => import('./pages/IntelligentQuestionnairePage'));
+const GoogleOAuthTestPage = React.lazy(() => import('./pages/test/GoogleOAuthTestPage').then(module => ({ default: module.default })));
+const GoogleOAuthDebugPage = React.lazy(() => import('./pages/debug/GoogleOAuthDebugPage').then(module => ({ default: module.default })));
 // const FloatingComponentTestPage = React.lazy(() => import('./pages/test/FloatingComponentTestPage').then(module => ({ default: module.FloatingComponentTestPage })));
 // const AdminRoutesTestPage = React.lazy(() => import('./pages/dev/AdminRoutesTestPage').then(module => ({ default: module.default })));
 // const ManagementAuthDebugPage = React.lazy(() => import('./pages/debug/ManagementAuthDebugPage').then(module => ({ default: module.default })));
@@ -234,7 +249,55 @@ function App() {
                       <PublicRouteGuard>
                         <QuestionnaireLayout>
                           <StoriesPage />
-                          
+                        </QuestionnaireLayout>
+                      </PublicRouteGuard>
+                    } />
+
+                    <Route path="/stories-simple" element={
+                      <PublicRouteGuard>
+                        <QuestionnaireLayout>
+                          <StoriesSimple />
+                        </QuestionnaireLayout>
+                      </PublicRouteGuard>
+                    } />
+
+                    <Route path="/test/stories-1" element={
+                      <PublicRouteGuard>
+                        <QuestionnaireLayout>
+                          <StoriesTest1 />
+                        </QuestionnaireLayout>
+                      </PublicRouteGuard>
+                    } />
+
+                    <Route path="/test/stories-2" element={
+                      <PublicRouteGuard>
+                        <QuestionnaireLayout>
+                          <StoriesTest2 />
+                        </QuestionnaireLayout>
+                      </PublicRouteGuard>
+                    } />
+
+                    <Route path="/test/stories-3" element={
+                      <PublicRouteGuard>
+                        <QuestionnaireLayout>
+                          <StoriesTest3 />
+                        </QuestionnaireLayout>
+                      </PublicRouteGuard>
+                    } />
+
+                    <Route path="/test/stories-4" element={
+                      <PublicRouteGuard>
+                        <QuestionnaireLayout>
+                          <StoriesTest4 />
+                        </QuestionnaireLayout>
+                      </PublicRouteGuard>
+                    } />
+
+                    {/* 收藏页面 */}
+                    <Route path="/favorites" element={
+                      <PublicRouteGuard>
+                        <QuestionnaireLayout>
+                          <FavoritesPage />
                         </QuestionnaireLayout>
                       </PublicRouteGuard>
                     } />
@@ -323,6 +386,11 @@ function App() {
                     {/* 自动登录接收页面 */}
                     <Route path="/auth/auto-login" element={<PublicRouteGuard><AutoLoginPage /></PublicRouteGuard>} />
 
+                    {/* Google OAuth回调页面 */}
+                    <Route path="/auth/google/callback" element={<PublicRouteGuard><GoogleCallbackPage /></PublicRouteGuard>} />
+                    <Route path="/auth/google/callback/questionnaire" element={<PublicRouteGuard><GoogleQuestionnaireCallbackPage /></PublicRouteGuard>} />
+                    <Route path="/auth/google/callback/management" element={<PublicRouteGuard><GoogleManagementCallbackPage /></PublicRouteGuard>} />
+
                     {/* 登录方式选择引导 */}
                     <Route path="/auth/guide" element={<PublicRouteGuard><LoginMethodGuide /></PublicRouteGuard>} />
 
@@ -379,6 +447,7 @@ function App() {
                     <Route path="/admin/api-data" element={<NewAdminRouteGuard><ApiDataPage /></NewAdminRouteGuard>} />
                     <Route path="/admin/data-generator" element={<NewAdminRouteGuard><DataGeneratorPage /></NewAdminRouteGuard>} />
                     <Route path="/admin/png-management" element={<NewAdminRouteGuard><PngManagementPage /></NewAdminRouteGuard>} />
+                    <Route path="/admin/png-cache" element={<NewAdminRouteGuard><AdminPage /></NewAdminRouteGuard>} />
                     <Route path="/admin/architecture" element={<NewAdminRouteGuard><ProjectArchitecturePage /></NewAdminRouteGuard>} />
                     <Route path="/admin/database-monitor" element={<NewAdminRouteGuard><DatabaseMonitorPage /></NewAdminRouteGuard>} />
 
@@ -402,6 +471,15 @@ function App() {
 
                     {/* 测试路由 - 开发用 */}
                     <Route path="/test" element={<PublicRouteGuard><TestPage /></PublicRouteGuard>} />
+
+                    {/* Google OAuth测试页面 */}
+                    <Route path="/test/google-oauth" element={<PublicRouteGuard><GoogleOAuthTestPage /></PublicRouteGuard>} />
+
+                    {/* Google OAuth调试页面 */}
+                    <Route path="/debug/google-oauth" element={<PublicRouteGuard><GoogleOAuthDebugPage /></PublicRouteGuard>} />
+
+                    {/* OAuth URL调试页面 */}
+                    <Route path="/debug/oauth-url" element={<PublicRouteGuard><OAuthUrlDebugPage /></PublicRouteGuard>} />
 
 
                     {/* 测试、演示和调试路由已移动到归档目录 */}

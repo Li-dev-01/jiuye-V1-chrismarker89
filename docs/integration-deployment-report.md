@@ -3,7 +3,7 @@
 ## 🎉 部署成功确认
 
 ### 后端部署 ✅
-- **部署地址**: https://employment-survey-api-prod.justpm2099.workers.dev
+- **部署地址**: https://employment-survey-api-prod.chrismarker89.workers.dev
 - **部署时间**: 2025-08-11 20:49
 - **版本ID**: d2c0c211-ebda-4639-9c19-cb7fa5677780
 - **状态**: 运行正常
@@ -55,7 +55,7 @@ percentage = (选择该选项的人数 / 实际回答该题的人数) * 100
 
 ### API测试结果
 ```bash
-curl "https://employment-survey-api-prod.justpm2099.workers.dev/api/universal-questionnaire/statistics/employment-survey-2024"
+curl "https://employment-survey-api-prod.chrismarker89.workers.dev/api/universal-questionnaire/statistics/employment-survey-2024"
 ```
 
 #### 返回数据摘要:
@@ -80,7 +80,7 @@ curl "https://employment-survey-api-prod.justpm2099.workers.dev/api/universal-qu
 
 ### 1. **API集成** ✅
 - 前端正确调用线上API
-- 环境变量配置正确: `VITE_API_BASE_URL=https://employment-survey-api-prod.justpm2099.workers.dev`
+- 环境变量配置正确: `VITE_API_BASE_URL=https://employment-survey-api-prod.chrismarker89.workers.dev`
 - CORS配置正常，跨域请求成功
 
 ### 2. **实时统计显示** ✅
@@ -147,15 +147,15 @@ curl "https://employment-survey-api-prod.justpm2099.workers.dev/api/universal-qu
 ### API测试 ✅
 ```bash
 # 1. 统计数据获取
-curl "https://employment-survey-api-prod.justpm2099.workers.dev/api/universal-questionnaire/statistics/employment-survey-2024"
+curl "https://employment-survey-api-prod.chrismarker89.workers.dev/api/universal-questionnaire/statistics/employment-survey-2024"
 # 结果: 成功返回30份完成问卷的统计
 
 # 2. 数据完整性分析  
-curl "https://employment-survey-api-prod.justpm2099.workers.dev/api/analytics/data-completeness-analysis/employment-survey-2024"
+curl "https://employment-survey-api-prod.chrismarker89.workers.dev/api/analytics/data-completeness-analysis/employment-survey-2024"
 # 结果: 完成率100%，数据质量良好
 
 # 3. 修正逻辑验证
-curl "https://employment-survey-api-prod.justpm2099.workers.dev/api/analytics/corrected-statistics/employment-survey-2024"
+curl "https://employment-survey-api-prod.chrismarker89.workers.dev/api/analytics/corrected-statistics/employment-survey-2024"
 # 结果: 修正后的统计逻辑工作正常
 ```
 

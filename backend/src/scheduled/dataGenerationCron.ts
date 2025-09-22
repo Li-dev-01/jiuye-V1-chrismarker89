@@ -186,7 +186,7 @@ export async function handleScheduledSubmission(
 
   try {
     // 调用数据提交API
-    const response = await fetch(`${env.API_BASE_URL || 'https://employment-survey-api-prod.justpm2099.workers.dev'}/api/admin/data-generator/submit-random-data`, {
+    const response = await fetch(`${env.API_BASE_URL || 'https://employment-survey-api-prod.chrismarker89.workers.dev'}/api/admin/data-generator/submit-random-data`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

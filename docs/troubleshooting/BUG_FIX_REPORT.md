@@ -3,7 +3,7 @@
 ## 📋 **问题总结**
 
 ### **问题1**: 数据可视化页面500错误
-- **错误信息**: `employment-survey-api-prod.justpm2099.workers.dev/api/universal-questionnaire/statistics/employment-survey-2024?include_test_data=true:1 Failed to load resource: the server responded with a status of 500 ()`
+- **错误信息**: `employment-survey-api-prod.chrismarker89.workers.dev/api/universal-questionnaire/statistics/employment-survey-2024?include_test_data=true:1 Failed to load resource: the server responded with a status of 500 ()`
 - **根本原因**: 生产环境配置中的API域名错误
 
 ### **问题2**: 首页显示数据不正确
@@ -17,7 +17,7 @@
 ### **问题1分析**: API域名不匹配
 ```bash
 # 错误的API域名
-VITE_API_BASE_URL=https://employment-survey-api-prod.justpm2099.workers.dev
+VITE_API_BASE_URL=https://employment-survey-api-prod.chrismarker89.workers.dev
 
 # 正确的API域名  
 VITE_API_BASE_URL=https://employment-survey-api-prod.chrismarker89.workers.dev
@@ -43,7 +43,7 @@ SELECT COUNT(*) as published FROM questionnaire_heart_voices
 **文件**: `frontend/.env.production`
 ```diff
 # 生产环境配置
-- VITE_API_BASE_URL=https://employment-survey-api-prod.justpm2099.workers.dev
+- VITE_API_BASE_URL=https://employment-survey-api-prod.chrismarker89.workers.dev
 + VITE_API_BASE_URL=https://employment-survey-api-prod.chrismarker89.workers.dev
 ```
 

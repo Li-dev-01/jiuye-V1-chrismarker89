@@ -224,6 +224,92 @@ export class PngCacheService {
   }
 
   /**
+   * 批量清理所有缓存（用于样式更新后强制重新生成）
+   */
+  async clearAllCache(options: {
+    contentType?: 'heart_voice' | 'story';
+    theme?: string;
+    reason?: string;
+  } = {}): Promise<{
+    success: boolean;
+    deletedCount: number;
+    deletedR2Keys: string[];
+    error?: string;
+  }> {
+    try {
+      const { contentType, theme, reason = '样式更新' } = options;
+
+      console.log(`🧹 开始批量清理PNG缓存: ${reason}`);
+
+      // 构建查询条件
+      let sql = 'SELECT r2_key FROM png_cache WHERE 1=1';
+      const params: any[] = [];
+
+      if (contentType) {
+        sql += ' AND content_type = ?';
+        params.push(contentType);
+      }
+
+      if (theme) {
+        sql += ' AND theme = ?';
+        params.push(theme);
+      }
+
+      // 获取要删除的R2键列表（用于后续清理R2存储）
+      const cacheEntries = await this.db.queryAll<{ r2_key: string }>(sql, params);
+      const r2Keys = cacheEntries.map(entry => entry.r2_key);
+
+      // 执行删除
+      let deleteSql = 'DELETE FROM png_cache WHERE 1=1';
+      const deleteParams: any[] = [];
+
+      if (contentType) {
+        deleteSql += ' AND content_type = ?';
+        deleteParams.push(contentType);
+      }
+
+      if (theme) {
+        deleteSql += ' AND theme = ?';
+        deleteParams.push(theme);
+      }
+
+      const result = await this.db.execute(deleteSql, deleteParams);
+      const deletedCount = result.meta.changes || 0;
+
+      console.log(`🧹 批量清理PNG缓存完成: 删除${deletedCount}个条目, 原因: ${reason}`);
+
+      return {
+        success: true,
+        deletedCount,
+        deletedR2Keys: r2Keys
+      };
+
+    } catch (error) {
+      console.error('批量清理PNG缓存失败:', error);
+      return {
+        success: false,
+        deletedCount: 0,
+        deletedR2Keys: [],
+        error: error instanceof Error ? error.message : '批量清理失败'
+      };
+    }
+  }
+
+  /**
+   * 清理特定主题的所有缓存
+   */
+  async clearThemeCache(theme: string): Promise<{ success: boolean; deletedCount: number }> {
+    return this.clearAllCache({ theme, reason: `主题${theme}样式更新` });
+  }
+
+  /**
+   * 清理特定内容类型的所有缓存
+   */
+  async clearContentTypeCache(contentType: 'heart_voice' | 'story'): Promise<{ success: boolean; deletedCount: number }> {
+    return this.clearAllCache({ contentType, reason: `${contentType}样式更新` });
+  }
+
+  /**
    * 检查并清理缓存
    */
   async cleanupIfNeeded(): Promise<void> {

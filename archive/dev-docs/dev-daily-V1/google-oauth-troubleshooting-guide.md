@@ -62,7 +62,7 @@ npx wrangler secret list
 cat backend/wrangler.toml | grep GOOGLE
 
 # 3. 测试API端点
-curl -X POST https://employment-survey-api-prod.justpm2099.workers.dev/api/auth/google/questionnaire \
+curl -X POST https://employment-survey-api-prod.chrismarker89.workers.dev/api/auth/google/questionnaire \
   -H "Content-Type: application/json" \
   -d '{"googleUser":{"email":"test@example.com","name":"Test User","id":"123"}}'
 ```
@@ -134,7 +134,7 @@ curl -I https://college-employment-survey-frontend.pages.dev/auth/login
 ```
 /*
   # 生产环境CSP（严格）
-  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://apis.google.com https://accounts.google.com https://www.gstatic.com https://ssl.gstatic.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https: blob:; connect-src 'self' https://employment-survey-api-prod.justpm2099.workers.dev https://accounts.google.com https://www.googleapis.com; frame-src 'self' https://accounts.google.com; object-src 'none'; base-uri 'self'; form-action 'self'
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://apis.google.com https://accounts.google.com https://www.gstatic.com https://ssl.gstatic.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https: blob:; connect-src 'self' https://employment-survey-api-prod.chrismarker89.workers.dev https://accounts.google.com https://www.googleapis.com; frame-src 'self' https://accounts.google.com; object-src 'none'; base-uri 'self'; form-action 'self'
   
   # 调试环境CSP（宽松）
   # Content-Security-Policy: default-src 'self' 'unsafe-inline' 'unsafe-eval' *; script-src 'self' 'unsafe-inline' 'unsafe-eval' *; style-src 'self' 'unsafe-inline' *;

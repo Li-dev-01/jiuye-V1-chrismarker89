@@ -5,7 +5,7 @@
  * 测试新创建的用户内容管理API功能
  */
 
-const API_BASE_URL = 'https://employment-survey-api-prod.justpm2099.workers.dev';
+const API_BASE_URL = 'https://employment-survey-api-prod.chrismarker89.workers.dev';
 
 // 测试端点列表
 const testEndpoints = [

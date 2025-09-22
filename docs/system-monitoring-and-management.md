@@ -140,25 +140,25 @@ CRITICAL  - 存在严重问题
 ### 1. **每日检查**
 ```bash
 # 系统健康检查
-curl "https://employment-survey-api-prod.justpm2099.workers.dev/api/analytics/system-health-check/employment-survey-2024"
+curl "https://employment-survey-api-prod.chrismarker89.workers.dev/api/analytics/system-health-check/employment-survey-2024"
 
 # 数据完整性分析
-curl "https://employment-survey-api-prod.justpm2099.workers.dev/api/analytics/data-completeness-analysis/employment-survey-2024"
+curl "https://employment-survey-api-prod.chrismarker89.workers.dev/api/analytics/data-completeness-analysis/employment-survey-2024"
 ```
 
 ### 2. **每周维护**
 ```bash
 # 统计缓存刷新
-curl -X POST "https://employment-survey-api-prod.justpm2099.workers.dev/api/analytics/refresh-statistics-cache/employment-survey-2024"
+curl -X POST "https://employment-survey-api-prod.chrismarker89.workers.dev/api/analytics/refresh-statistics-cache/employment-survey-2024"
 
 # 数据质量报告
-curl "https://employment-survey-api-prod.justpm2099.workers.dev/api/analytics/data-validity-comparison/employment-survey-2024"
+curl "https://employment-survey-api-prod.chrismarker89.workers.dev/api/analytics/data-validity-comparison/employment-survey-2024"
 ```
 
 ### 3. **紧急处理**
 ```bash
 # 数据清理（谨慎使用）
-curl -X POST "https://employment-survey-api-prod.justpm2099.workers.dev/api/analytics/system-cleanup/employment-survey-2024" \
+curl -X POST "https://employment-survey-api-prod.chrismarker89.workers.dev/api/analytics/system-cleanup/employment-survey-2024" \
   -H "Content-Type: application/json" \
   -d '{"action": "CONFIRM_CLEANUP"}'
 ```
@@ -188,22 +188,22 @@ curl -X POST "https://employment-survey-api-prod.justpm2099.workers.dev/api/anal
 ### 快速诊断
 ```bash
 # 检查系统状态
-curl "https://employment-survey-api-prod.justpm2099.workers.dev/api/analytics/system-health-check/employment-survey-2024" | jq '.data.overall'
+curl "https://employment-survey-api-prod.chrismarker89.workers.dev/api/analytics/system-health-check/employment-survey-2024" | jq '.data.overall'
 
 # 检查数据格式
-curl "https://employment-survey-api-prod.justpm2099.workers.dev/api/analytics/raw-data-sample/employment-survey-2024" | jq '.data.samples[0].rawData.questionnaireId'
+curl "https://employment-survey-api-prod.chrismarker89.workers.dev/api/analytics/raw-data-sample/employment-survey-2024" | jq '.data.samples[0].rawData.questionnaireId'
 
 # 检查统计状态
-curl "https://employment-survey-api-prod.justpm2099.workers.dev/api/universal-questionnaire/statistics/employment-survey-2024" | jq '.data.statistics | keys'
+curl "https://employment-survey-api-prod.chrismarker89.workers.dev/api/universal-questionnaire/statistics/employment-survey-2024" | jq '.data.statistics | keys'
 ```
 
 ### 问题修复
 ```bash
 # 刷新统计缓存
-curl -X POST "https://employment-survey-api-prod.justpm2099.workers.dev/api/analytics/refresh-statistics-cache/employment-survey-2024"
+curl -X POST "https://employment-survey-api-prod.chrismarker89.workers.dev/api/analytics/refresh-statistics-cache/employment-survey-2024"
 
 # 清理问题数据（谨慎）
-curl -X POST "https://employment-survey-api-prod.justpm2099.workers.dev/api/analytics/system-cleanup/employment-survey-2024" \
+curl -X POST "https://employment-survey-api-prod.chrismarker89.workers.dev/api/analytics/system-cleanup/employment-survey-2024" \
   -H "Content-Type: application/json" \
   -d '{"action": "CONFIRM_CLEANUP"}'
 ```
@@ -399,25 +399,25 @@ CRITICAL  - 存在严重问题
 ### 1. **每日检查**
 ```bash
 # 系统健康检查
-curl "https://employment-survey-api-prod.justpm2099.workers.dev/api/analytics/system-health-check/employment-survey-2024"
+curl "https://employment-survey-api-prod.chrismarker89.workers.dev/api/analytics/system-health-check/employment-survey-2024"
 
 # 数据完整性分析
-curl "https://employment-survey-api-prod.justpm2099.workers.dev/api/analytics/data-completeness-analysis/employment-survey-2024"
+curl "https://employment-survey-api-prod.chrismarker89.workers.dev/api/analytics/data-completeness-analysis/employment-survey-2024"
 ```
 
 ### 2. **每周维护**
 ```bash
 # 统计缓存刷新
-curl -X POST "https://employment-survey-api-prod.justpm2099.workers.dev/api/analytics/refresh-statistics-cache/employment-survey-2024"
+curl -X POST "https://employment-survey-api-prod.chrismarker89.workers.dev/api/analytics/refresh-statistics-cache/employment-survey-2024"
 
 # 数据质量报告
-curl "https://employment-survey-api-prod.justpm2099.workers.dev/api/analytics/data-validity-comparison/employment-survey-2024"
+curl "https://employment-survey-api-prod.chrismarker89.workers.dev/api/analytics/data-validity-comparison/employment-survey-2024"
 ```
 
 ### 3. **紧急处理**
 ```bash
 # 数据清理（谨慎使用）
-curl -X POST "https://employment-survey-api-prod.justpm2099.workers.dev/api/analytics/system-cleanup/employment-survey-2024" \
+curl -X POST "https://employment-survey-api-prod.chrismarker89.workers.dev/api/analytics/system-cleanup/employment-survey-2024" \
   -H "Content-Type: application/json" \
   -d '{"action": "CONFIRM_CLEANUP"}'
 ```
@@ -447,22 +447,22 @@ curl -X POST "https://employment-survey-api-prod.justpm2099.workers.dev/api/anal
 ### 快速诊断
 ```bash
 # 检查系统状态
-curl "https://employment-survey-api-prod.justpm2099.workers.dev/api/analytics/system-health-check/employment-survey-2024" | jq '.data.overall'
+curl "https://employment-survey-api-prod.chrismarker89.workers.dev/api/analytics/system-health-check/employment-survey-2024" | jq '.data.overall'
 
 # 检查数据格式
-curl "https://employment-survey-api-prod.justpm2099.workers.dev/api/analytics/raw-data-sample/employment-survey-2024" | jq '.data.samples[0].rawData.questionnaireId'
+curl "https://employment-survey-api-prod.chrismarker89.workers.dev/api/analytics/raw-data-sample/employment-survey-2024" | jq '.data.samples[0].rawData.questionnaireId'
 
 # 检查统计状态
-curl "https://employment-survey-api-prod.justpm2099.workers.dev/api/universal-questionnaire/statistics/employment-survey-2024" | jq '.data.statistics | keys'
+curl "https://employment-survey-api-prod.chrismarker89.workers.dev/api/universal-questionnaire/statistics/employment-survey-2024" | jq '.data.statistics | keys'
 ```
 
 ### 问题修复
 ```bash
 # 刷新统计缓存
-curl -X POST "https://employment-survey-api-prod.justpm2099.workers.dev/api/analytics/refresh-statistics-cache/employment-survey-2024"
+curl -X POST "https://employment-survey-api-prod.chrismarker89.workers.dev/api/analytics/refresh-statistics-cache/employment-survey-2024"
 
 # 清理问题数据（谨慎）
-curl -X POST "https://employment-survey-api-prod.justpm2099.workers.dev/api/analytics/system-cleanup/employment-survey-2024" \
+curl -X POST "https://employment-survey-api-prod.chrismarker89.workers.dev/api/analytics/system-cleanup/employment-survey-2024" \
   -H "Content-Type: application/json" \
   -d '{"action": "CONFIRM_CLEANUP"}'
 ```

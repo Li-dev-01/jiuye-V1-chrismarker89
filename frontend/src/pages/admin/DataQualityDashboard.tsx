@@ -65,7 +65,7 @@ const DataQualityDashboard: React.FC = () => {
   const [repairLoading, setRepairLoading] = useState(false);
 
   const questionnaireId = 'employment-survey-2024';
-  const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || 'https://employment-survey-api-prod.justpm2099.workers.dev';
+  const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || 'https://employment-survey-api-prod.chrismarker89.workers.dev';
 
   // 获取数据质量报告
   const fetchQualityReport = async () => {

@@ -7,7 +7,7 @@ import axios, { AxiosInstance } from 'axios';
 import { ErrorHandler } from '../utils/errorHandler';
 
 // API配置
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://employment-survey-api-prod.justpm2099.workers.dev';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://employment-survey-api-prod.chrismarker89.workers.dev';
 
 // 类型定义
 export interface AuditRecord {

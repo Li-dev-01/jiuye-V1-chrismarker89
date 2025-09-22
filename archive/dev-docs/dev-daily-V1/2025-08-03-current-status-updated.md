@@ -25,7 +25,7 @@
 
 ### 生产环境
 - **前端**: https://95513f96.college-employment-survey-frontend.pages.dev ✅ 智能分支正常
-- **后端**: https://employment-survey-api.justpm2099.workers.dev ✅ 数据生成可用
+- **后端**: https://employment-survey-api.chrismarker89.workers.dev ✅ 数据生成可用
 - **数据库**: D1数据库 ✅ 100条测试数据已生成
 
 ### 开发环境
@@ -166,8 +166,8 @@ const visibleSections = useMemo(() => {
 - **心声功能**: https://95513f96.college-employment-survey-frontend.pages.dev/voices
 
 ### API服务
-- **后端API**: https://employment-survey-api.justpm2099.workers.dev
-- **数据生成**: https://employment-survey-api.justpm2099.workers.dev/api/universal-questionnaire/generate-test-data
+- **后端API**: https://employment-survey-api.chrismarker89.workers.dev
+- **数据生成**: https://employment-survey-api.chrismarker89.workers.dev/api/universal-questionnaire/generate-test-data
 
 ### 开发文档
 - **今日工作记录**: `2025-08-03-intelligent-questionnaire-system-complete.md`

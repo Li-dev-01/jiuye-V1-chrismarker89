@@ -4,10 +4,11 @@
  */
 
 import React, { useState } from 'react';
-import { Modal, Form, Input, Button, Typography, Space, Alert, Checkbox } from 'antd';
+import { Modal, Form, Input, Button, Typography, Space, Alert, Checkbox, Divider, message } from 'antd';
 import { UserOutlined, LockOutlined, EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons';
 import { useUniversalAuthStore } from '../../stores/universalAuthStore';
 import { validateAValue, validateBValue, validateABCombination } from '../../utils/crypto';
+import { GoogleLoginButton } from './GoogleLoginButton';
 import styles from './SemiAnonymousLogin.module.css';
 
 const { Title, Text, Paragraph } = Typography;
@@ -276,6 +277,43 @@ export const SemiAnonymousLogin: React.FC<SemiAnonymousLoginProps> = ({
             </Button>
           </div>
         </Form>
+
+        {/* Google 一键登录分隔线 */}
+        <Divider style={{ margin: '24px 0' }}>
+          <span style={{ color: '#999', fontSize: '14px' }}>或</span>
+        </Divider>
+
+        {/* Google 一键登录 */}
+        <div className={styles.googleLogin}>
+          <GoogleLoginButton
+            userType="questionnaire"
+            type="default"
+            size="large"
+            block
+            onSuccess={(userData) => {
+              message.success('Google登录成功！');
+              onSuccess?.();
+              onClose();
+            }}
+            onError={(error) => {
+              message.error(`Google登录失败: ${error}`);
+            }}
+            style={{
+              borderColor: '#4285f4',
+              color: '#4285f4',
+              height: '48px',
+              fontSize: '16px'
+            }}
+          />
+          <div style={{
+            textAlign: 'center',
+            marginTop: '8px',
+            fontSize: '12px',
+            color: '#666'
+          }}>
+            使用Google账号自动创建匿名身份
+          </div>
+        </div>
 
         {/* 帮助信息 */}
         <div className={styles.helpSection}>

@@ -272,7 +272,7 @@ export const RoleBasedHeader: React.FC<RoleBasedHeaderProps> = ({
       const isSuperAdmin = managementAuthStore.currentUser?.userType === 'SUPER_ADMIN';
       return isSuperAdmin ? '超级管理员控制台' : '管理员控制台';
     }
-    return '大学生就业问卷调查';
+    return '2025大学生就业问卷调查';
   };
 
   return (

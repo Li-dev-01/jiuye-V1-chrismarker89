@@ -71,7 +71,7 @@
 
 ### 生产环境 (2025-08-05 更新)
 - **前端部署**: https://e192d001.college-employment-survey-frontend.pages.dev ✅ 最新版本
-- **后端API**: https://employment-survey-api-prod.justpm2099.workers.dev ✅ 正常运行
+- **后端API**: https://employment-survey-api-prod.chrismarker89.workers.dev ✅ 正常运行
 - **数据库**: Cloudflare D1 (college-employment-survey-isolated) ✅ 稳定运行
 - **存储**: Cloudflare R2 (employment-survey-storage) ✅ 正常运行
 - **CORS配置**: 已更新支持最新前端域名 ✅ 配置正确

@@ -54,21 +54,21 @@ export const GoogleLoginButton: React.FC<GoogleLoginButtonProps> = ({
     setIsLoading(true);
 
     try {
-      // 1. 执行Google OAuth登录
-      const googleUser = await googleOAuthService.signIn();
+      // 保存用户类型到sessionStorage，回调时使用
+      sessionStorage.setItem('google_oauth_user_type', userType);
 
-      // 2. 根据userType处理不同的登录逻辑
-      if (userType === 'questionnaire') {
-        await handleQuestionnaireUserLogin(googleUser);
-      } else {
-        await handleManagementUserLogin(googleUser);
-      }
+      // 执行Google OAuth登录（重定向方式），传递用户类型以使用对应的回调URL
+      await googleOAuthService.signIn(userType);
 
     } catch (error) {
       console.error('Google登录失败:', error);
       const errorMessage = error instanceof Error ? error.message : 'Google登录失败';
-      message.error(errorMessage);
-      onError?.(errorMessage);
+
+      // 如果是重定向消息，不显示错误
+      if (!errorMessage.includes('Redirecting')) {
+        message.error(errorMessage);
+        onError?.(errorMessage);
+      }
     } finally {
       setIsLoading(false);
     }
@@ -78,7 +78,7 @@ export const GoogleLoginButton: React.FC<GoogleLoginButtonProps> = ({
     message.info('正在创建您的匿名身份...');
 
     // 调用后端API创建半匿名用户
-    const response = await fetch('/api/auth/google/questionnaire', {
+    const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/auth/google/questionnaire`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -112,7 +112,7 @@ export const GoogleLoginButton: React.FC<GoogleLoginButtonProps> = ({
     message.info('正在验证管理员权限...');
 
     // 调用后端API验证白名单
-    const response = await fetch('/api/auth/google/management', {
+    const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/auth/google/management`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

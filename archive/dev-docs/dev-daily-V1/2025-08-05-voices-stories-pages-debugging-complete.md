@@ -96,9 +96,9 @@ https://e192d001.college-employment-survey-frontend.pages.dev
 ## 🧪 验证结果
 
 ### API端点验证
-- ✅ **心声API**：`https://employment-survey-api-prod.justpm2099.workers.dev/api/heart-voices`
+- ✅ **心声API**：`https://employment-survey-api-prod.chrismarker89.workers.dev/api/heart-voices`
   - 返回10条心声记录，数据格式正确
-- ✅ **故事API**：`https://employment-survey-api-prod.justpm2099.workers.dev/api/stories`
+- ✅ **故事API**：`https://employment-survey-api-prod.chrismarker89.workers.dev/api/stories`
   - 返回10条故事记录，数据格式正确
 
 ### 前端部署验证
@@ -157,7 +157,7 @@ https://e192d001.college-employment-survey-frontend.pages.dev
 
 ### 当前部署状态
 - **前端最新版本**：https://e192d001.college-employment-survey-frontend.pages.dev
-- **后端API**：https://employment-survey-api-prod.justpm2099.workers.dev
+- **后端API**：https://employment-survey-api-prod.chrismarker89.workers.dev
 - **数据库**：Cloudflare D1 (college-employment-survey-isolated)
 - **存储**：Cloudflare R2 (employment-survey-storage)
 

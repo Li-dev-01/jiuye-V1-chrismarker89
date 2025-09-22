@@ -28,7 +28,7 @@ class ManagementAuthService {
     AUTH_TOKEN: 'management_auth_token'
   };
 
-  private readonly API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://employment-survey-api-prod.justpm2099.workers.dev';
+  private readonly API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://employment-survey-api-prod.chrismarker89.workers.dev';
 
   /**
    * 管理员/审核员登录

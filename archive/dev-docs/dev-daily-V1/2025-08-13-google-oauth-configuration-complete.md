@@ -65,7 +65,7 @@ VITE_GOOGLE_REDIRECT_URI=https://college-employment-survey-frontend.pages.dev/au
 
 #### CSP策略配置 (`frontend/public/_headers`)
 ```
-Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://apis.google.com https://accounts.google.com https://www.gstatic.com https://ssl.gstatic.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https: blob:; connect-src 'self' https://employment-survey-api-prod.justpm2099.workers.dev https://accounts.google.com https://www.googleapis.com; frame-src 'self' https://accounts.google.com; object-src 'none'; base-uri 'self'; form-action 'self'
+Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://apis.google.com https://accounts.google.com https://www.gstatic.com https://ssl.gstatic.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https: blob:; connect-src 'self' https://employment-survey-api-prod.chrismarker89.workers.dev https://accounts.google.com https://www.googleapis.com; frame-src 'self' https://accounts.google.com; object-src 'none'; base-uri 'self'; form-action 'self'
 ```
 
 ## ✅ 功能验证
@@ -135,7 +135,7 @@ npx wrangler pages deploy dist --project-name=college-employment-survey-frontend
 npx wrangler secret list
 
 # 2. 检查API路由
-curl -X POST https://employment-survey-api-prod.justpm2099.workers.dev/api/auth/google/questionnaire
+curl -X POST https://employment-survey-api-prod.chrismarker89.workers.dev/api/auth/google/questionnaire
 
 # 3. 重新部署后端
 npx wrangler deploy
@@ -166,7 +166,7 @@ Content-Security-Policy: default-src 'self' 'unsafe-inline' 'unsafe-eval' *; scr
 
 ### 当前部署版本
 - **前端**: https://college-employment-survey-frontend.pages.dev
-- **后端**: https://employment-survey-api-prod.justpm2099.workers.dev
+- **后端**: https://employment-survey-api-prod.chrismarker89.workers.dev
 - **部署时间**: 2025-08-13
 
 ### 部署命令

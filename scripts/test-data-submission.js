@@ -1,6 +1,6 @@
 // 测试数据提交脚本 - 验证新格式数据和实时统计功能
 
-const API_BASE_URL = 'https://employment-survey-api-prod.justpm2099.workers.dev';
+const API_BASE_URL = 'https://employment-survey-api-prod.chrismarker89.workers.dev';
 
 // 测试数据样本 - 新格式
 const testSubmissions = [

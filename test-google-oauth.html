@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google OAuth 测试</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 20px;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+        }
+        .test-section h3 {
+            margin-top: 0;
+            color: #1976d2;
+        }
+        .button {
+            background: #4285f4;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 10px 10px 0;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .button:hover {
+            background: #3367d6;
+        }
+        .button.secondary {
+            background: #6c757d;
+        }
+        .button.secondary:hover {
+            background: #5a6268;
+        }
+        .result {
+            margin: 15px 0;
+            padding: 15px;
+            border-radius: 4px;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+        .success {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+        .error {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+        .info {
+            background: #d1ecf1;
+            border: 1px solid #bee5eb;
+            color: #0c5460;
+        }
+        .config-info {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 15px 0;
+        }
+        .config-info code {
+            background: #e9ecef;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔐 Google OAuth 集成测试</h1>
+        
+        <div class="config-info">
+            <h3>📋 配置信息</h3>
+            <p><strong>Google Client ID:</strong> <code id="clientId">23546164414-3t3g8n9hvnv4ekjok90co2sm3sfb6mt8.apps.googleusercontent.com</code></p>
+            <p><strong>重定向URI:</strong> <code id="redirectUri">http://localhost:5174/auth/google/callback</code></p>
+            <p><strong>后端API:</strong> <code id="apiUrl">http://localhost:8787</code></p>
+            <p><strong>测试页面:</strong> <code>http://localhost:5174/test/google-oauth</code></p>
+        </div>
+
+        <div class="test-section">
+            <h3>🔧 基础连接测试</h3>
+            <button class="button" onclick="testBackendHealth()">
+                🏥 测试后端健康检查
+            </button>
+            <button class="button secondary" onclick="testFrontendAccess()">
+                🌐 测试前端访问
+            </button>
+            <div id="healthResult" class="result" style="display: none;"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>🔑 Google OAuth 测试</h3>
+            <p>点击下面的按钮测试Google OAuth登录流程：</p>
+            
+            <button class="button" onclick="testQuestionnaireLogin()">
+                👤 测试问卷用户登录
+            </button>
+            <button class="button" onclick="testManagementLogin()">
+                👨‍💼 测试管理员登录
+            </button>
+            <button class="button secondary" onclick="openTestPage()">
+                🧪 打开完整测试页面
+            </button>
+            
+            <div id="oauthResult" class="result" style="display: none;"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>📊 测试结果</h3>
+            <div id="testResults"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>📝 测试说明</h3>
+            <ul>
+                <li><strong>问卷用户登录：</strong>任何Google账号都可以登录，系统会自动创建半匿名身份</li>
+                <li><strong>管理员登录：</strong>只有白名单中的Google邮箱可以登录（默认：admin@example.com）</li>
+                <li><strong>测试环境：</strong>确保前端服务器运行在 localhost:5174，后端运行在 localhost:8787</li>
+                <li><strong>生产环境：</strong>需要在Google Cloud Console中配置正确的重定向URI</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:8787';
+        const FRONTEND_BASE = 'http://localhost:5174';
+        
+        function showResult(elementId, message, type = 'info') {
+            const element = document.getElementById(elementId);
+            element.className = `result ${type}`;
+            element.textContent = message;
+            element.style.display = 'block';
+        }
+
+        function addTestResult(test, status, message) {
+            const resultsDiv = document.getElementById('testResults');
+            const resultItem = document.createElement('div');
+            resultItem.className = `result ${status}`;
+            resultItem.innerHTML = `<strong>${test}:</strong> ${message}`;
+            resultsDiv.appendChild(resultItem);
+        }
+
+        async function testBackendHealth() {
+            try {
+                showResult('healthResult', '正在测试后端连接...', 'info');
+                
+                const response = await fetch(`${API_BASE}/api/health`);
+                const data = await response.json();
+                
+                if (response.ok && data.success) {
+                    const message = `✅ 后端连接正常\n状态: ${data.data.status}\n时间: ${data.data.timestamp}`;
+                    showResult('healthResult', message, 'success');
+                    addTestResult('后端健康检查', 'success', '连接正常');
+                } else {
+                    showResult('healthResult', `❌ 后端响应异常: ${data.message || '未知错误'}`, 'error');
+                    addTestResult('后端健康检查', 'error', '响应异常');
+                }
+            } catch (error) {
+                showResult('healthResult', `❌ 后端连接失败: ${error.message}`, 'error');
+                addTestResult('后端健康检查', 'error', `连接失败: ${error.message}`);
+            }
+        }
+
+        async function testFrontendAccess() {
+            try {
+                showResult('healthResult', '正在测试前端访问...', 'info');
+                
+                const response = await fetch(`${FRONTEND_BASE}/test/google-oauth`);
+                
+                if (response.ok) {
+                    showResult('healthResult', '✅ 前端测试页面可访问', 'success');
+                    addTestResult('前端访问测试', 'success', '测试页面可访问');
+                } else {
+                    showResult('healthResult', `❌ 前端访问异常: ${response.status}`, 'error');
+                    addTestResult('前端访问测试', 'error', `HTTP ${response.status}`);
+                }
+            } catch (error) {
+                showResult('healthResult', `❌ 前端访问失败: ${error.message}`, 'error');
+                addTestResult('前端访问测试', 'error', `访问失败: ${error.message}`);
+            }
+        }
+
+        function testQuestionnaireLogin() {
+            showResult('oauthResult', '正在跳转到问卷用户Google登录...', 'info');
+            addTestResult('问卷用户登录', 'info', '已启动测试');
+            
+            // 构建Google OAuth URL
+            const params = new URLSearchParams({
+                client_id: '23546164414-3t3g8n9hvnv4ekjok90co2sm3sfb6mt8.apps.googleusercontent.com',
+                redirect_uri: 'http://localhost:5174/auth/google/callback',
+                response_type: 'code',
+                scope: 'openid email profile',
+                state: 'questionnaire_test'
+            });
+            
+            const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?${params.toString()}`;
+            
+            // 在新窗口中打开Google OAuth
+            window.open(authUrl, 'google_oauth', 'width=500,height=600');
+        }
+
+        function testManagementLogin() {
+            showResult('oauthResult', '正在跳转到管理员Google登录...', 'info');
+            addTestResult('管理员登录', 'info', '已启动测试（需要白名单邮箱）');
+            
+            // 构建Google OAuth URL
+            const params = new URLSearchParams({
+                client_id: '23546164414-3t3g8n9hvnv4ekjok90co2sm3sfb6mt8.apps.googleusercontent.com',
+                redirect_uri: 'http://localhost:5174/auth/google/callback',
+                response_type: 'code',
+                scope: 'openid email profile',
+                state: 'management_test'
+            });
+            
+            const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?${params.toString()}`;
+            
+            // 在新窗口中打开Google OAuth
+            window.open(authUrl, 'google_oauth', 'width=500,height=600');
+        }
+
+        function openTestPage() {
+            window.open(`${FRONTEND_BASE}/test/google-oauth`, '_blank');
+            addTestResult('测试页面', 'info', '已打开完整测试页面');
+        }
+
+        // 页面加载时自动测试基础连接
+        window.addEventListener('load', () => {
+            setTimeout(testBackendHealth, 1000);
+        });
+    </script>
+</body>
+</html>

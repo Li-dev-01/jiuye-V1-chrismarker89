@@ -15,7 +15,7 @@ class AuthService {
      */
     getApiBaseUrl() {
         // 可以从环境变量或配置中获取
-        return window.API_BASE_URL || 'https://college-employment-survey-api-isolated.justpm2099.workers.dev/api';
+        return window.API_BASE_URL || 'https://college-employment-survey-api-isolated.chrismarker89.workers.dev/api';
     }
 
     /**

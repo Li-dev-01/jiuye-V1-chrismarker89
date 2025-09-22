@@ -56,7 +56,7 @@ GET /api/cards/styles - 获取卡片样式列表
 
 ### **✅ 生产环境已更新**
 - **前端**: https://6e8c7bb9.college-employment-survey-frontend.pages.dev
-- **后端**: https://employment-survey-api-prod.justpm2099.workers.dev
+- **后端**: https://employment-survey-api-prod.chrismarker89.workers.dev
 - **API测试**: 所有新端点正常响应
 
 ### **✅ API测试结果**

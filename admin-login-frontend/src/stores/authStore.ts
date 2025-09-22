@@ -66,7 +66,7 @@ export const useAuthStore = create<AuthState>()(
       login: async (email: string, password: string) => {
         try {
           // 这里连接到您的后端API
-          const response = await fetch('https://employment-survey-api-prod.justpm2099.workers.dev/api/uuid/auth/admin', {
+          const response = await fetch('https://employment-survey-api-prod.chrismarker89.workers.dev/api/uuid/auth/admin', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -97,7 +97,7 @@ export const useAuthStore = create<AuthState>()(
 
       loginWithGoogle: async (googleToken: string) => {
         try {
-          const response = await fetch('https://employment-survey-api-prod.justpm2099.workers.dev/api/google-auth/management', {
+          const response = await fetch('https://employment-survey-api-prod.chrismarker89.workers.dev/api/google-auth/management', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -139,7 +139,7 @@ export const useAuthStore = create<AuthState>()(
         if (!token) return;
 
         try {
-          const response = await fetch('https://employment-survey-api-prod.justpm2099.workers.dev/api/auth/verify', {
+          const response = await fetch('https://employment-survey-api-prod.chrismarker89.workers.dev/api/auth/verify', {
             headers: {
               'Authorization': `Bearer ${token}`,
             },

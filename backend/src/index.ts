@@ -27,7 +27,9 @@ import { intelligentSecurity } from './routes/intelligent-security';
 import userContentManagement from './routes/user-content-management';
 import { createVisualizationRoutes } from './routes/visualization';
 import { createUniversalQuestionnaireRoutes } from './routes/universal-questionnaire';
+import { createDatabaseFixRoutes } from './routes/database-fix';
 import { CronHandler, type CronEvent } from './handlers/cronHandler';
+import pngManagementRoutes from './routes/png-management-simple';
 
 // 创建Hono应用
 const app = new Hono<{ Bindings: Env }>();
@@ -330,6 +332,12 @@ function createApiRoutes() {
 
   // 分级审核路由
   api.route('/audit', createTieredAuditRoutes());
+
+  // 数据库修复路由
+  api.route('/database-fix', createDatabaseFixRoutes());
+
+  // PNG管理路由
+  api.route('/png-management', pngManagementRoutes);
 
   // 健康检查路由（也在API前缀下提供）
   api.route('/health', health);

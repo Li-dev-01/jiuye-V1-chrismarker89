@@ -45,7 +45,7 @@ if command -v node &> /dev/null; then
 else
     echo "⚠️  Node.js未安装，跳过自动测试"
     echo "📋 请手动访问以下URL验证API:"
-    echo "   https://employment-survey-api-dev.justpm2099.workers.dev/api/super-admin/system/logs"
+    echo "   https://employment-survey-api-dev.chrismarker89.workers.dev/api/super-admin/system/logs"
 fi
 
 echo
@@ -60,6 +60,6 @@ echo "  ✅ 系统日志页面现在使用真实数据"
 echo
 echo "🔗 相关链接:"
 echo "  管理后台: https://8fb5537a.college-employment-survey-frontend.pages.dev/admin/logs"
-echo "  API文档: https://employment-survey-api-dev.justpm2099.workers.dev/api/super-admin/system/logs"
+echo "  API文档: https://employment-survey-api-dev.chrismarker89.workers.dev/api/super-admin/system/logs"
 echo
 echo "🎉 系统日志功能已成功切换到真实数据！"

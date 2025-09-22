@@ -138,11 +138,15 @@ export const StoryContent: React.FC<StoryContentProps> = ({ story }) => {
             <div className={styles.tagsSection}>
               <Text className={styles.tagsLabel} type="secondary">相关标签：</Text>
               <Space wrap>
-                {story.tags.map(tag => (
-                  <Tag key={tag} className={styles.contentTag}>
-                    #{tag}
-                  </Tag>
-                ))}
+                {story.tags.map((tag, index) => {
+                  const tagText = typeof tag === 'string' ? tag : (tag?.name || tag?.tag_name || 'Unknown');
+                  const tagKey = typeof tag === 'string' ? tag : (tag?.id || tag?.key || index);
+                  return (
+                    <Tag key={tagKey} className={styles.contentTag}>
+                      #{tagText}
+                    </Tag>
+                  );
+                })}
               </Space>
             </div>
           </>

@@ -1,0 +1,294 @@
+/* 高级筛选组件样式 */
+
+.advanced-filter {
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--shadow-sm);
+  margin-bottom: var(--spacing-md);
+}
+
+.advanced-filter .ant-card-body {
+  padding: var(--spacing-md);
+}
+
+/* 紧凑模式 */
+.advanced-filter.compact .ant-card-body {
+  padding: var(--spacing-sm);
+}
+
+/* 筛选器头部 */
+.filter-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-md);
+  padding-bottom: var(--spacing-sm);
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.filter-header .anticon {
+  color: var(--primary-500);
+}
+
+/* 筛选项 */
+.filter-item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.filter-item .ant-typography {
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  margin-bottom: 0;
+}
+
+/* 折叠面板自定义 */
+.advanced-filter .ant-collapse {
+  background: transparent;
+  border: none;
+}
+
+.advanced-filter .ant-collapse-item {
+  border: none;
+  margin-bottom: var(--spacing-sm);
+}
+
+.advanced-filter .ant-collapse-header {
+  padding: var(--spacing-sm) 0;
+  background-color: var(--bg-secondary);
+  border-radius: var(--border-radius-sm);
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.advanced-filter .ant-collapse-header:hover {
+  background-color: #f0f9ff;
+}
+
+.advanced-filter .ant-collapse-content {
+  background: transparent;
+  border: none;
+}
+
+.advanced-filter .ant-collapse-content-box {
+  padding: var(--spacing-md) 0 0 0;
+}
+
+/* 选择器样式 */
+.advanced-filter .ant-select {
+  border-radius: var(--border-radius-sm);
+}
+
+.advanced-filter .ant-select-selector {
+  border-color: #d9d9d9;
+  transition: all 0.3s ease;
+}
+
+.advanced-filter .ant-select-selector:hover {
+  border-color: var(--primary-500);
+}
+
+.advanced-filter .ant-select-focused .ant-select-selector {
+  border-color: var(--primary-500);
+  box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+}
+
+/* 多选标签样式 */
+.advanced-filter .ant-select-selection-item {
+  background-color: var(--primary-100);
+  border-color: var(--primary-300);
+  color: var(--primary-700);
+  border-radius: var(--border-radius-sm);
+  font-size: var(--font-size-sm);
+}
+
+.advanced-filter .ant-select-selection-item-remove {
+  color: var(--primary-500);
+}
+
+.advanced-filter .ant-select-selection-item-remove:hover {
+  color: var(--primary-700);
+}
+
+/* 日期选择器 */
+.advanced-filter .ant-picker {
+  border-radius: var(--border-radius-sm);
+  border-color: #d9d9d9;
+  transition: all 0.3s ease;
+}
+
+.advanced-filter .ant-picker:hover {
+  border-color: var(--primary-500);
+}
+
+.advanced-filter .ant-picker-focused {
+  border-color: var(--primary-500);
+  box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+}
+
+/* 活跃筛选器 */
+.active-filters {
+  margin-top: var(--spacing-md);
+  padding-top: var(--spacing-md);
+  border-top: 1px solid #f0f0f0;
+}
+
+.active-filters .ant-tag {
+  margin: 2px 4px 2px 0;
+  border-radius: var(--border-radius-sm);
+  font-size: var(--font-size-sm);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: all 0.3s ease;
+}
+
+.active-filters .ant-tag:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+
+/* 清空按钮 */
+.advanced-filter .ant-btn {
+  border-radius: var(--border-radius-sm);
+  transition: all 0.3s ease;
+}
+
+.advanced-filter .ant-btn:hover {
+  transform: translateY(-1px);
+}
+
+.advanced-filter .ant-btn[disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* 下拉选项样式 */
+.advanced-filter .ant-select-dropdown {
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--shadow-lg);
+}
+
+.advanced-filter .ant-select-item {
+  border-radius: var(--border-radius-sm);
+  margin: 2px 4px;
+  transition: all 0.3s ease;
+}
+
+.advanced-filter .ant-select-item:hover {
+  background-color: var(--primary-50);
+}
+
+.advanced-filter .ant-select-item-option-selected {
+  background-color: var(--primary-100);
+  color: var(--primary-700);
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .advanced-filter .ant-card-body {
+    padding: var(--spacing-sm);
+  }
+  
+  .filter-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-sm);
+  }
+  
+  .advanced-filter .ant-collapse-header {
+    padding: var(--spacing-xs) var(--spacing-sm);
+    font-size: var(--font-size-sm);
+  }
+  
+  .advanced-filter .ant-collapse-content-box {
+    padding: var(--spacing-sm) 0 0 0;
+  }
+  
+  .filter-item .ant-typography {
+    font-size: var(--font-size-xs);
+  }
+  
+  .active-filters {
+    margin-top: var(--spacing-sm);
+    padding-top: var(--spacing-sm);
+  }
+  
+  .active-filters .ant-tag {
+    font-size: var(--font-size-xs);
+    margin: 1px 2px 1px 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .advanced-filter.compact .ant-card-body {
+    padding: var(--spacing-xs);
+  }
+  
+  .filter-header {
+    gap: var(--spacing-xs);
+  }
+  
+  .filter-item {
+    gap: 4px;
+  }
+  
+  .advanced-filter .ant-select-selection-item {
+    font-size: var(--font-size-xs);
+    padding: 0 4px;
+  }
+  
+  .advanced-filter .ant-btn {
+    font-size: var(--font-size-xs);
+    padding: 4px 8px;
+    height: auto;
+  }
+}
+
+/* 加载状态 */
+.advanced-filter .ant-select-loading {
+  color: var(--primary-500);
+}
+
+/* 动画效果 */
+.filter-item,
+.active-filters .ant-tag {
+  animation: fadeInUp 0.3s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 焦点状态优化 */
+.advanced-filter .ant-select-selector:focus,
+.advanced-filter .ant-picker:focus {
+  outline: none;
+}
+
+/* 禁用状态 */
+.advanced-filter .ant-select-disabled .ant-select-selector,
+.advanced-filter .ant-picker-disabled {
+  background-color: #f5f5f5;
+  color: #bfbfbf;
+  cursor: not-allowed;
+}
+
+/* 清除按钮样式 */
+.advanced-filter .ant-select-clear,
+.advanced-filter .ant-picker-clear {
+  color: #bfbfbf;
+  transition: color 0.3s ease;
+}
+
+.advanced-filter .ant-select-clear:hover,
+.advanced-filter .ant-picker-clear:hover {
+  color: var(--primary-500);
+}

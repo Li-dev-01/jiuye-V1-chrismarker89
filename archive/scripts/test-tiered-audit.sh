@@ -6,7 +6,7 @@
 set -e
 
 # 配置
-API_BASE="https://employment-survey-api-prod.justpm2099.workers.dev/api/audit"
+API_BASE="https://employment-survey-api-prod.chrismarker89.workers.dev/api/audit"
 
 # 颜色定义
 RED='\033[0;31m'

@@ -1,0 +1,277 @@
+/* HomeChartsSection 样式模块 - 视觉冲击力优化 */
+
+.chartsSection {
+  padding: var(--spacing-md) var(--spacing-lg);
+  background: linear-gradient(135deg, #f6f9fc 0%, #ffffff 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+/* 添加背景装饰 */
+.chartsSection::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(24, 144, 255, 0.03) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.chartsContainer {
+  max-width: var(--content-width-wide);
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+/* 标题区域 - 紧凑优化 */
+.chartsHeader {
+  text-align: center;
+  margin-bottom: var(--spacing-md);
+  padding: var(--spacing-sm) 0;
+}
+
+.chartsTitle {
+  color: var(--text-primary) !important;
+  font-weight: 700 !important;
+  margin-bottom: var(--spacing-xs) !important;
+  font-size: var(--font-size-lg) !important;
+  background: linear-gradient(135deg, #1890ff 0%, #722ed1 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.chartsSubtitle {
+  font-size: var(--font-size-base);
+  color: var(--text-secondary);
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+/* 错误提示 */
+.errorBanner {
+  background: linear-gradient(135deg, #fff7e6 0%, #fffbe6 100%);
+  border: 1px solid #ffd591;
+  border-radius: var(--border-radius-md);
+  padding: var(--spacing-sm) var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+  text-align: center;
+}
+
+.errorText {
+  font-size: var(--font-size-sm);
+  color: #d46b08;
+}
+
+/* 图表网格 - 紧凑优化 */
+.chartsGrid {
+  margin-bottom: var(--spacing-md);
+}
+
+/* 图表卡片 */
+.chartCard {
+  height: 100%;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-lg);
+  transition: all var(--duration-base) var(--ease-out);
+  background: var(--bg-primary);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+}
+
+.chartCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  border-color: var(--primary-500);
+}
+
+.chartCard .ant-card-body {
+  padding: var(--spacing-md);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 图表头部 - 紧凑优化 */
+.chartHeader {
+  margin-bottom: var(--spacing-sm);
+  text-align: center;
+}
+
+.chartTitle {
+  color: var(--text-primary) !important;
+  font-weight: 600 !important;
+  margin: 0 0 var(--spacing-xs) 0 !important;
+  font-size: var(--font-size-lg) !important;
+}
+
+.chartDescription {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* 图表容器 - 紧凑优化 */
+.chartWrapper {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 240px;
+  position: relative;
+}
+
+/* 图表洞察 - 紧凑优化 */
+.chartInsight {
+  margin-top: var(--spacing-sm);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  background: linear-gradient(135deg, #f6f9fc 0%, #f0f5ff 100%);
+  border-radius: var(--border-radius-md);
+  border-left: 3px solid var(--primary-500);
+}
+
+/* 数据说明 */
+.dataNote {
+  text-align: center;
+  padding: var(--spacing-md) 0;
+  border-top: 1px solid var(--border-color);
+  margin-top: var(--spacing-lg);
+}
+
+.noteText {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+/* 加载状态 */
+.loadingContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-xl) 0;
+  min-height: 400px;
+}
+
+.loadingText {
+  margin-top: var(--spacing-md);
+  font-size: var(--font-size-base);
+  color: var(--text-secondary);
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .chartsSection {
+    padding: var(--spacing-lg) var(--spacing-md);
+  }
+
+  .chartsHeader {
+    margin-bottom: var(--spacing-lg);
+  }
+
+  .chartsTitle {
+    font-size: var(--font-size-lg) !important;
+  }
+
+  .chartsSubtitle {
+    font-size: var(--font-size-sm);
+  }
+
+  .chartCard .ant-card-body {
+    padding: var(--spacing-md);
+  }
+
+  .chartWrapper {
+    min-height: 240px;
+  }
+
+  .chartTitle {
+    font-size: var(--font-size-base) !important;
+  }
+
+  .chartDescription {
+    font-size: var(--font-size-xs);
+  }
+}
+
+@media (max-width: 480px) {
+  .chartsSection {
+    padding: var(--spacing-md) var(--spacing-sm);
+  }
+
+  .chartsGrid {
+    margin-bottom: var(--spacing-md);
+  }
+
+  .chartCard .ant-card-body {
+    padding: var(--spacing-sm);
+  }
+
+  .chartWrapper {
+    min-height: 200px;
+  }
+
+  .chartInsight {
+    padding: var(--spacing-xs) var(--spacing-sm);
+  }
+
+  .dataNote {
+    padding: var(--spacing-sm) 0;
+    margin-top: var(--spacing-md);
+  }
+
+  .noteText {
+    font-size: var(--font-size-xs);
+  }
+}
+
+/* 动画效果 */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.chartCard {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.chartCard:nth-child(2) {
+  animation-delay: 0.1s;
+}
+
+/* 图表特定样式增强 */
+.chartWrapper .recharts-wrapper {
+  width: 100% !important;
+}
+
+.chartWrapper .recharts-surface {
+  overflow: visible;
+}
+
+/* 提升视觉层次 */
+.chartsSection {
+  position: relative;
+}
+
+.chartsSection::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, var(--border-color) 50%, transparent 100%);
+}

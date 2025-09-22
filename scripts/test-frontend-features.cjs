@@ -5,7 +5,7 @@
  * 通过API调用测试前端功能是否正常工作
  */
 
-const API_BASE_URL = 'https://employment-survey-api-prod.justpm2099.workers.dev';
+const API_BASE_URL = 'https://employment-survey-api-prod.chrismarker89.workers.dev';
 const FRONTEND_URL = 'https://b1346dca.college-employment-survey-frontend.pages.dev';
 
 /**

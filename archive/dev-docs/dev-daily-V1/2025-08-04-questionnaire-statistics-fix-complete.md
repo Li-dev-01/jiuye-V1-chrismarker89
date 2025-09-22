@@ -215,7 +215,7 @@ npx wrangler pages deploy dist --project-name college-employment-survey-frontend
 ## 🔗 相关链接
 
 - **修复后的问卷页面**: https://cf8d5425.college-employment-survey-frontend.pages.dev/questionnaire
-- **后端统计API**: https://employment-survey-api.justpm2099.workers.dev/api/universal-questionnaire/statistics/employment-survey-2024
+- **后端统计API**: https://employment-survey-api.chrismarker89.workers.dev/api/universal-questionnaire/statistics/employment-survey-2024
 - **项目文档**: `dev-daily-V1/` 目录
 
 ---

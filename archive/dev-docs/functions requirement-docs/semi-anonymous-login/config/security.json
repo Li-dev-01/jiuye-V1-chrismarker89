@@ -93,7 +93,7 @@
     "keyboardNavigation": true
   },
   "api": {
-    "baseUrl": "https://college-employment-survey-api-isolated.justpm2099.workers.dev/api",
+    "baseUrl": "https://college-employment-survey-api-isolated.chrismarker89.workers.dev/api",
     "timeout": 30000,
     "retryAttempts": 3,
     "retryDelay": 1000,

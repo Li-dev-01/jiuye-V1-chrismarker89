@@ -13,7 +13,9 @@ import {
   HeartFilled,
   DislikeOutlined,
   DislikeFilled,
-  DownloadOutlined
+  DownloadOutlined,
+  FlagOutlined,
+  StarOutlined
 } from '@ant-design/icons';
 // 通用内容项接口
 interface ContentItem {
@@ -46,11 +48,14 @@ export interface SwipeViewerProps {
   onLike: (item: ContentItem) => void;
   onDislike?: (item: ContentItem) => void;
   onDownload?: (item: ContentItem) => void;
+  onFavorite?: (item: ContentItem) => void;
+  onReport?: (item: ContentItem) => void;
   contentType: 'voice' | 'story';
   hasMore?: boolean;
   onLoadMore?: () => void;
   userLikes?: Set<number>; // 用户已点赞的内容ID集合
   userDislikes?: Set<number>; // 用户已踩的内容ID集合
+  userFavorites?: Set<number>; // 用户已收藏的内容ID集合
 }
 
 export const SwipeViewer: React.FC<SwipeViewerProps> = ({
@@ -62,11 +67,14 @@ export const SwipeViewer: React.FC<SwipeViewerProps> = ({
   onLike,
   onDislike,
   onDownload,
+  onFavorite,
+  onReport,
   contentType,
   hasMore = false,
   onLoadMore,
   userLikes = new Set(),
-  userDislikes = new Set()
+  userDislikes = new Set(),
+  userFavorites = new Set()
 }) => {
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [touchStart, setTouchStart] = useState<number | null>(null);
@@ -205,12 +213,27 @@ export const SwipeViewer: React.FC<SwipeViewerProps> = ({
     }
   };
 
+  // 收藏处理
+  const handleFavoriteClick = () => {
+    if (currentItem && onFavorite) {
+      onFavorite(currentItem);
+    }
+  };
+
+  // 举报处理
+  const handleReportClick = () => {
+    if (currentItem && onReport) {
+      onReport(currentItem);
+    }
+  };
+
   // 进度计算
   const progress = items.length > 0 ? ((currentIndex + 1) / items.length) * 100 : 0;
 
   // 检查用户状态
   const isLiked = currentItem ? userLikes.has(currentItem.id) : false;
   const isDisliked = currentItem ? userDislikes.has(currentItem.id) : false;
+  const isFavorited = currentItem ? userFavorites.has(currentItem.id) : false;
 
   if (!visible || !currentItem) {
     return null;
@@ -319,6 +342,30 @@ export const SwipeViewer: React.FC<SwipeViewerProps> = ({
                 className={styles.actionButton}
               >
                 下载
+              </Button>
+            )}
+
+            {/* 收藏按钮 */}
+            {onFavorite && (
+              <Button
+                type="text"
+                icon={isFavorited ? <HeartFilled style={{ color: '#ff4d4f' }} /> : <StarOutlined />}
+                onClick={handleFavoriteClick}
+                className={`${styles.actionButton} ${isFavorited ? styles.favorited : ''}`}
+              >
+                {isFavorited ? '已收藏' : '收藏'}
+              </Button>
+            )}
+
+            {/* 举报按钮 */}
+            {onReport && (
+              <Button
+                type="text"
+                icon={<FlagOutlined />}
+                onClick={handleReportClick}
+                className={styles.actionButton}
+              >
+                举报
               </Button>
             )}
           </Space>

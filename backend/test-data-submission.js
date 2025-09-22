@@ -3,7 +3,7 @@
  * 验证从测试数据库到主数据库的数据流转
  */
 
-const API_BASE = 'https://employment-survey-api-prod.justpm2099.workers.dev';
+const API_BASE = 'https://employment-survey-api-prod.chrismarker89.workers.dev';
 
 async function testDataSubmission() {
   console.log('🧪 开始测试数据提交功能...');

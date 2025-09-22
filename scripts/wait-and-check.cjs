@@ -5,7 +5,7 @@
  * 等待足够时间让统计缓存自动更新，然后检查结果
  */
 
-const API_BASE_URL = 'https://employment-survey-api-prod.justpm2099.workers.dev/api';
+const API_BASE_URL = 'https://employment-survey-api-prod.chrismarker89.workers.dev/api';
 
 async function waitAndCheck() {
   console.log('⏰ 等待统计缓存自动更新...\n');

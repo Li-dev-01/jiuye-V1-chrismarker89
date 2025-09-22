@@ -13,11 +13,11 @@
 
 ### **🚀 生产环境 (推荐使用)**
 - **前端应用**: https://a8379d50.college-employment-survey-frontend.pages.dev
-- **后端API**: https://employment-survey-api-prod.justpm2099.workers.dev
-- **健康检查**: https://employment-survey-api-prod.justpm2099.workers.dev/health
+- **后端API**: https://employment-survey-api-prod.chrismarker89.workers.dev
+- **健康检查**: https://employment-survey-api-prod.chrismarker89.workers.dev/health
 
 ### **🔧 开发环境**
-- **后端API**: https://employment-survey-api-dev.justpm2099.workers.dev
+- **后端API**: https://employment-survey-api-dev.chrismarker89.workers.dev
 
 ## 🧪 **最终验证结果**
 
@@ -25,7 +25,7 @@
 
 #### **健康检查**
 ```json
-GET https://employment-survey-api-prod.justpm2099.workers.dev/health
+GET https://employment-survey-api-prod.chrismarker89.workers.dev/health
 响应: {
   "success": true,
   "message": "Employment Survey API - TypeScript Version",
@@ -37,7 +37,7 @@ GET https://employment-survey-api-prod.justpm2099.workers.dev/health
 
 #### **分析API**
 ```json
-GET https://employment-survey-api-prod.justpm2099.workers.dev/api/analytics/dashboard
+GET https://employment-survey-api-prod.chrismarker89.workers.dev/api/analytics/dashboard
 响应: {
   "success": true,
   "data": {
@@ -183,7 +183,7 @@ wrangler deploy --env production
 **🌟 就业问卷调查系统已成功部署到Cloudflare！**
 
 - ✅ **前端**: https://a8379d50.college-employment-survey-frontend.pages.dev
-- ✅ **API**: https://employment-survey-api-prod.justpm2099.workers.dev
+- ✅ **API**: https://employment-survey-api-prod.chrismarker89.workers.dev
 - ✅ **状态**: 生产就绪，全功能可用
 - ✅ **架构**: 现代化边缘计算架构
 - ✅ **性能**: 全球毫秒级响应

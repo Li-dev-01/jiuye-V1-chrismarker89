@@ -60,7 +60,7 @@ app.get('/api-docs/swagger.json', (c) => {
     },
     servers: [
       {
-        url: 'https://employment-survey-api-prod.justpm2099.workers.dev',
+        url: 'https://employment-survey-api-prod.chrismarker89.workers.dev',
         description: '生产环境'
       }
     ],

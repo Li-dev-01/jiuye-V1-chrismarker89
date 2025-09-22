@@ -8,7 +8,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const API_BASE_URL = 'https://employment-survey-api-prod.justpm2099.workers.dev/api';
+const API_BASE_URL = 'https://employment-survey-api-prod.chrismarker89.workers.dev/api';
 
 // 监控配置
 const MONITOR_CONFIG = {

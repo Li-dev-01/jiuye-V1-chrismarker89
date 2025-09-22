@@ -197,7 +197,7 @@ async function checkApiConnection() {
     
     // 查找API基础URL配置
     const apiUrlMatch = html.match(/VITE_API_BASE_URL['"]\s*:\s*['"]([^'"]+)['"]/);
-    const apiUrl = apiUrlMatch ? apiUrlMatch[1] : 'https://employment-survey-api-prod.justpm2099.workers.dev';
+    const apiUrl = apiUrlMatch ? apiUrlMatch[1] : 'https://employment-survey-api-prod.chrismarker89.workers.dev';
     
     console.log(`🌐 检测到API URL: ${apiUrl}`);
     
@@ -328,7 +328,7 @@ async function runFullVerification() {
   console.log(`🌐 前端主页: ${FRONTEND_URL}`);
   console.log(`🔧 管理员页面: ${FRONTEND_URL}/admin`);
   console.log(`👥 用户内容管理: ${FRONTEND_URL}/admin/user-content`);
-  console.log(`🔗 API健康检查: ${apiResult.apiUrl || 'https://employment-survey-api-prod.justpm2099.workers.dev'}/health`);
+  console.log(`🔗 API健康检查: ${apiResult.apiUrl || 'https://employment-survey-api-prod.chrismarker89.workers.dev'}/health`);
 
   return {
     features: featureResults,

@@ -11,8 +11,8 @@
 ## 🌐 **部署地址**
 
 ### **后端API服务**
-- 🔧 **开发环境**: https://employment-survey-api-dev.justpm2099.workers.dev
-- 🚀 **生产环境**: https://employment-survey-api-prod.justpm2099.workers.dev
+- 🔧 **开发环境**: https://employment-survey-api-dev.chrismarker89.workers.dev
+- 🚀 **生产环境**: https://employment-survey-api-prod.chrismarker89.workers.dev
 
 ### **前端应用**
 - 🌐 **生产环境**: https://2b32a1f6.college-employment-survey-frontend.pages.dev
@@ -25,29 +25,29 @@
 ### **健康检查** ✅
 ```bash
 # 开发环境
-curl https://employment-survey-api-dev.justpm2099.workers.dev/health
+curl https://employment-survey-api-dev.chrismarker89.workers.dev/health
 # 响应: {"success":true,"message":"Employment Survey API - TypeScript Version","version":"2.0.0","timestamp":1754148653242,"environment":"development"}
 
 # 生产环境  
-curl https://employment-survey-api-prod.justpm2099.workers.dev/health
+curl https://employment-survey-api-prod.chrismarker89.workers.dev/health
 # 响应: {"success":true,"message":"Employment Survey API - TypeScript Version","version":"2.0.0","timestamp":1754148986582,"environment":"production"}
 ```
 
 ### **分析API** ✅
 ```bash
-curl https://employment-survey-api-dev.justpm2099.workers.dev/api/analytics/dashboard
+curl https://employment-survey-api-dev.chrismarker89.workers.dev/api/analytics/dashboard
 # 响应: {"success":true,"data":{"totalResponses":1,"totalHeartVoices":0,"totalStories":0,"completionRate":100,"averageTime":300,"lastUpdated":"2025-08-02T15:35:31.922Z"},"message":"仪表板数据获取成功"}
 ```
 
 ### **公众仪表板API** ✅
 ```bash
-curl https://employment-survey-api-dev.justpm2099.workers.dev/api/analytics/public-dashboard
+curl https://employment-survey-api-dev.chrismarker89.workers.dev/api/analytics/public-dashboard
 # 响应: {"success":true,"data":{"socialHotspots":[],"difficultyPerception":{"current":0,"levels":[]},"salaryComparison":[],"jobSearchFunnel":[],"lastUpdated":"2025-08-02T15:35:41.760Z"},"message":"公众仪表板数据获取成功"}
 ```
 
 ### **审核员API** ✅
 ```bash
-curl https://employment-survey-api-dev.justpm2099.workers.dev/api/reviewer/stats
+curl https://employment-survey-api-dev.chrismarker89.workers.dev/api/reviewer/stats
 # 响应: {"success":true,"data":{"total":0,"pending":0,"approved":0,"rejected":0},"message":"审核统计获取成功"}
 ```
 

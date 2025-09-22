@@ -82,7 +82,7 @@
 
 ### 当前部署信息
 - **前端最新版本**：https://e192d001.college-employment-survey-frontend.pages.dev
-- **后端API**：https://employment-survey-api-prod.justpm2099.workers.dev
+- **后端API**：https://employment-survey-api-prod.chrismarker89.workers.dev
 - **数据库**：Cloudflare D1 (college-employment-survey-isolated)
 - **存储**：Cloudflare R2 (employment-survey-storage)
 

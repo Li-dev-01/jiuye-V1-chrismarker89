@@ -12,7 +12,7 @@
 ### 原始问题
 用户报告前端登录时出现CORS错误：
 ```
-Access to fetch at 'https://employment-survey-api-prod.justpm2099.workers.dev/api/api/uuid/auth/semi-anonymous' 
+Access to fetch at 'https://employment-survey-api-prod.chrismarker89.workers.dev/api/api/uuid/auth/semi-anonymous' 
 from origin 'https://384ad57b.college-employment-survey-frontend.pages.dev' 
 has been blocked by CORS policy
 ```
@@ -34,16 +34,16 @@ has been blocked by CORS policy
 **修改文件**: `frontend/src/config/apiConfig.ts`
 ```typescript
 // 修复前
-BASE_URL: process.env.REACT_APP_API_BASE_URL || 'https://employment-survey-api.justpm2099.workers.dev/api'
+BASE_URL: process.env.REACT_APP_API_BASE_URL || 'https://employment-survey-api.chrismarker89.workers.dev/api'
 
 // 修复后  
-BASE_URL: import.meta.env.VITE_API_BASE_URL || 'https://employment-survey-api-prod.justpm2099.workers.dev'
+BASE_URL: import.meta.env.VITE_API_BASE_URL || 'https://employment-survey-api-prod.chrismarker89.workers.dev'
 ```
 
 **修改文件**: `frontend/.env.production`
 ```env
 # 修复后
-VITE_API_BASE_URL=https://employment-survey-api-prod.justpm2099.workers.dev
+VITE_API_BASE_URL=https://employment-survey-api-prod.chrismarker89.workers.dev
 ```
 
 ### 2. 后端配置修复
@@ -73,7 +73,7 @@ CORS_ORIGIN = "https://0039cd64.college-employment-survey-frontend.pages.dev,htt
 
 ### 后端
 - **Worker名称**: `employment-survey-api-prod`
-- **URL**: `https://employment-survey-api-prod.justpm2099.workers.dev`
+- **URL**: `https://employment-survey-api-prod.chrismarker89.workers.dev`
 - **版本ID**: `7cf5b717-d07e-4ce4-9241-d55076e4ac17`
 - **状态**: ✅ 正常运行
 
@@ -86,7 +86,7 @@ CORS_ORIGIN = "https://0039cd64.college-employment-survey-frontend.pages.dev,htt
 
 ### API连通性测试
 ```bash
-curl -X POST "https://employment-survey-api-prod.justpm2099.workers.dev/api/uuid/auth/semi-anonymous" \
+curl -X POST "https://employment-survey-api-prod.chrismarker89.workers.dev/api/uuid/auth/semi-anonymous" \
   -H "Content-Type: application/json" \
   -d '{"identityA":"13800138000","identityB":"1234","deviceInfo":{"userAgent":"test"}}'
 ```

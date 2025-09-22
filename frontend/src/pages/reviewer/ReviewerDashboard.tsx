@@ -38,7 +38,7 @@ export const ReviewerDashboard: React.FC = () => {
     setError(null);
 
     try {
-      const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || 'https://employment-survey-api-prod.justpm2099.workers.dev';
+      const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || 'https://employment-survey-api-prod.chrismarker89.workers.dev';
       const response = await fetch(`${apiBaseUrl}/api/reviewer/stats`);
       const result = await response.json();
 

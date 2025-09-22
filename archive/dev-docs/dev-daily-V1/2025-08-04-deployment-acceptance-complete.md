@@ -9,7 +9,7 @@
 
 ### 部署环境
 - **前端**: https://a1dacb82.college-employment-survey-frontend.pages.dev
-- **后端**: https://employment-survey-api-prod.justpm2099.workers.dev
+- **后端**: https://employment-survey-api-prod.chrismarker89.workers.dev
 - **数据库**: Cloudflare D1 (college-employment-survey-isolated)
 - **存储**: Cloudflare R2 (employment-survey-storage)
 
@@ -23,7 +23,7 @@
 
 # 部署到Cloudflare Workers
 npx wrangler deploy --env production
-✅ 部署成功: https://employment-survey-api-prod.justpm2099.workers.dev
+✅ 部署成功: https://employment-survey-api-prod.chrismarker89.workers.dev
 ```
 
 ### 2. 前端部署
@@ -195,8 +195,8 @@ CORS_ORIGIN = "https://a1dacb82.college-employment-survey-frontend.pages.dev"
 - **问卷心声**: https://a1dacb82.college-employment-survey-frontend.pages.dev/voices
 
 ### API服务
-- **后端API**: https://employment-survey-api-prod.justpm2099.workers.dev
-- **健康检查**: https://employment-survey-api-prod.justpm2099.workers.dev/api/health
+- **后端API**: https://employment-survey-api-prod.chrismarker89.workers.dev
+- **健康检查**: https://employment-survey-api-prod.chrismarker89.workers.dev/api/health
 
 ### 开发资源
 - **GitHub仓库**: https://github.com/justpm2099/jiuye-V1

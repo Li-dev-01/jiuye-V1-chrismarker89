@@ -101,8 +101,8 @@ export const ManagementLoginPage: React.FC = () => {
         <div className={styles.backgroundPattern}></div>
       </div>
       
-      <Row justify="center" align="middle" style={{ minHeight: '100vh', padding: '20px' }}>
-        <Col xs={24} sm={20} md={16} lg={12} xl={8}>
+      <div className={styles.layoutContainer}>
+        <div className={styles.cardWrapper}>
           <Card className={styles.loginCard} bordered={false}>
             <div className={styles.header}>
               <div className={styles.iconContainer}>
@@ -182,7 +182,7 @@ export const ManagementLoginPage: React.FC = () => {
 
             {/* Google 管理员登录分隔线 */}
             <Divider style={{ margin: '24px 0' }}>
-              <span style={{ color: '#999', fontSize: '14px' }}>或</span>
+              <span className={styles.dividerText}>或</span>
             </Divider>
 
             {/* Google 管理员登录 */}
@@ -209,12 +209,7 @@ export const ManagementLoginPage: React.FC = () => {
                   fontSize: '16px'
                 }}
               />
-              <div style={{
-                textAlign: 'center',
-                marginTop: '8px',
-                fontSize: '12px',
-                color: '#666'
-              }}>
+              <div className={styles.googleLoginHint}>
                 仅限白名单邮箱登录
               </div>
             </div>
@@ -267,8 +262,8 @@ export const ManagementLoginPage: React.FC = () => {
               </Button>
             </div>
           </Card>
-        </Col>
-      </Row>
+        </div>
+      </div>
     </div>
   );
 };

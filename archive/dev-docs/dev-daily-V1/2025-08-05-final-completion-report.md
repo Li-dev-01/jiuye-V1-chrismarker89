@@ -82,7 +82,7 @@
 - **构建**: 自动化部署
 
 ### 后端部署
-- **URL**: https://employment-survey-api-prod.justpm2099.workers.dev
+- **URL**: https://employment-survey-api-prod.chrismarker89.workers.dev
 - **状态**: ✅ 正常运行
 - **平台**: Cloudflare Workers
 - **数据库**: Cloudflare D1

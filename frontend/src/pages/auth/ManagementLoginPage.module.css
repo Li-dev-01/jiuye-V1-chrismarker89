@@ -193,3 +193,36 @@
   color: #667eea;
   background: rgba(102, 126, 234, 0.05);
 }
+
+/* 修复布局容器 */
+.layoutContainer {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.cardWrapper {
+  width: 100%;
+  max-width: 400px;
+}
+
+/* Google登录相关样式 */
+.googleLogin {
+  margin-top: 16px;
+}
+
+.dividerText {
+  color: #999;
+  font-size: 14px;
+}
+
+.googleLoginHint {
+  text-align: center;
+  margin-top: 8px;
+  font-size: 12px;
+  color: #666;
+}

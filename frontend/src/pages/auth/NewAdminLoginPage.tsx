@@ -11,6 +11,7 @@ import { useManagementAuthStore } from '../../stores/managementAuthStore';
 import { managementAuthService } from '../../services/managementAuthService';
 import { PRESET_MANAGEMENT_ACCOUNTS } from '../../types/management-auth';
 import type { ManagementUserType } from '../../types/management-auth';
+import { GoogleLoginButton } from '../../components/auth/GoogleLoginButton';
 
 
 const { Title, Text } = Typography;
@@ -192,6 +193,45 @@ export const NewAdminLoginPage: React.FC = () => {
             </Button>
           </Form.Item>
         </Form>
+
+        {/* Google 管理员登录分隔线 */}
+        <Divider style={{ margin: '24px 0' }}>
+          <span style={{ color: '#999', fontSize: '14px' }}>或</span>
+        </Divider>
+
+        {/* Google 管理员登录 */}
+        <div style={{ marginBottom: '24px' }}>
+          <GoogleLoginButton
+            userType="management"
+            type="default"
+            size="large"
+            block
+            onSuccess={(userData) => {
+              message.success(`欢迎，${userData.role}！`);
+              // 根据角色跳转到对应页面
+              const redirectPath = userData.role === 'super_admin' ? '/admin' :
+                                 userData.role === 'admin' ? '/admin' : '/reviewer/dashboard';
+              navigate(redirectPath, { replace: true });
+            }}
+            onError={(error) => {
+              message.error(`Google登录失败: ${error}`);
+            }}
+            style={{
+              borderColor: '#4285f4',
+              color: '#4285f4',
+              height: '48px',
+              fontSize: '16px'
+            }}
+          />
+          <div style={{
+            textAlign: 'center',
+            marginTop: '8px',
+            fontSize: '12px',
+            color: '#666'
+          }}>
+            仅限白名单邮箱登录
+          </div>
+        </div>
 
         <Divider />
 

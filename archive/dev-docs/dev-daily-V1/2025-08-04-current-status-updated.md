@@ -16,7 +16,7 @@
 
 ### ✅ 部署架构优化
 - **前端**: `https://6f1ea71c.college-employment-survey-frontend.pages.dev`
-- **后端**: `https://employment-survey-api-prod.justpm2099.workers.dev`
+- **后端**: `https://employment-survey-api-prod.chrismarker89.workers.dev`
 - **状态**: 生产环境稳定运行
 
 ## 🏗️ 系统架构状态

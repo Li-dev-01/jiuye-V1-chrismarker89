@@ -171,7 +171,7 @@ AND submitted_at IS NOT NULL
 ## 📋 部署和验证
 
 ### 部署状态
-- ✅ 后端API: https://employment-survey-api-prod.justpm2099.workers.dev
+- ✅ 后端API: https://employment-survey-api-prod.chrismarker89.workers.dev
 - ✅ 前端页面: https://5b1ab864.college-employment-survey-frontend.pages.dev
 - ✅ 数据库: 干净状态，新格式数据
 - ✅ 统计缓存: 正常工作

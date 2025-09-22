@@ -14,7 +14,7 @@ class AnonymousAuthService {
      * 获取API基础URL
      */
     getApiBaseUrl() {
-        return window.API_BASE_URL || 'https://college-employment-survey-api-isolated.justpm2099.workers.dev/api';
+        return window.API_BASE_URL || 'https://college-employment-survey-api-isolated.chrismarker89.workers.dev/api';
     }
 
     /**

@@ -9,7 +9,7 @@ ENVIRONMENT = "production"
 JWT_SECRET = "your-jwt-secret-key-change-in-production"
 CORS_ORIGIN = "*"
 R2_BUCKET_NAME = "employment-survey-storage"
-GOOGLE_CLIENT_SECRET = "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"
+GOOGLE_CLIENT_SECRET = "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"
 
 # D1 数据库配置
 [[d1_databases]]

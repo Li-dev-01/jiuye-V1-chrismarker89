@@ -5,7 +5,21 @@
 
 // Google OAuth配置
 const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID || 'your-google-client-id.apps.googleusercontent.com';
-const GOOGLE_REDIRECT_URI = import.meta.env.VITE_GOOGLE_REDIRECT_URI || `${window.location.origin}/auth/google/callback`;
+const GOOGLE_REDIRECT_URI = import.meta.env.VITE_GOOGLE_REDIRECT_URI || 'https://college-employment-survey-frontend-l84.pages.dev/auth/google/callback';
+
+// 根据用户类型获取不同的回调URL
+const getRedirectUri = (userType: 'questionnaire' | 'management') => {
+  // 使用固定的主域名，避免预览URL导致的redirect_uri_mismatch错误
+  const baseUrl = 'https://college-employment-survey-frontend-l84.pages.dev';
+  switch (userType) {
+    case 'questionnaire':
+      return `${baseUrl}/auth/google/callback/questionnaire`;
+    case 'management':
+      return `${baseUrl}/auth/google/callback/management`;
+    default:
+      return GOOGLE_REDIRECT_URI;
+  }
+};
 
 export interface GoogleUser {
   id: string;
@@ -110,38 +124,22 @@ export class GoogleOAuthService {
   }
 
   /**
-   * 执行Google登录
+   * 执行Google登录 - 使用重定向方式（更稳定）
    */
-  async signIn(): Promise<GoogleUser> {
-    if (!this.isInitialized) {
-      await this.initialize();
-    }
+  async signIn(userType: 'questionnaire' | 'management' = 'questionnaire'): Promise<GoogleUser> {
+    // 使用重定向方式进行OAuth登录
+    const state = Math.random().toString(36).substring(2);
+    const redirectUri = getRedirectUri(userType);
+    const authUrl = this.generateAuthUrl(state, redirectUri);
 
-    try {
-      const authInstance = (window as any).gapi.auth2.getAuthInstance();
-      const googleUser = await authInstance.signIn({
-        scope: this.config.scope
-      });
+    // 保存state用于验证
+    sessionStorage.setItem('google_oauth_state', state);
 
-      const profile = googleUser.getBasicProfile();
-      const authResponse = googleUser.getAuthResponse();
+    // 重定向到Google OAuth
+    window.location.href = authUrl;
 
-      // 获取用户信息
-      const userData: GoogleUser = {
-        id: profile.getId(),
-        email: profile.getEmail(),
-        name: profile.getName(),
-        picture: profile.getImageUrl(),
-        verified_email: true
-      };
-
-      console.log('Google sign-in successful:', userData);
-      return userData;
-
-    } catch (error) {
-      console.error('Google sign-in failed:', error);
-      throw new Error('Google登录失败');
-    }
+    // 这个方法不会返回，因为页面会重定向
+    throw new Error('Redirecting to Google OAuth...');
   }
 
   /**
@@ -194,10 +192,10 @@ export class GoogleOAuthService {
   /**
    * 生成Google OAuth授权URL（备用方案）
    */
-  generateAuthUrl(state?: string): string {
+  generateAuthUrl(state?: string, redirectUri?: string): string {
     const params = new URLSearchParams({
       client_id: this.config.clientId,
-      redirect_uri: this.config.redirectUri,
+      redirect_uri: redirectUri || this.config.redirectUri,
       scope: this.config.scope,
       response_type: this.config.responseType,
       include_granted_scopes: this.config.includeGrantedScopes.toString(),
@@ -213,7 +211,7 @@ export class GoogleOAuthService {
   async handleCallback(code: string): Promise<GoogleUser> {
     try {
       // 这里应该调用后端API来交换code获取token
-      const response = await fetch('/api/auth/google/callback', {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/auth/google/callback`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

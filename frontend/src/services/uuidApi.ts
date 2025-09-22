@@ -64,7 +64,7 @@ interface LinkContentRequest {
 
 class UUIDApiService {
   private api: AxiosInstance;
-  private authBaseUrl = import.meta.env.VITE_API_BASE_URL || 'https://employment-survey-api-prod.justpm2099.workers.dev'; // 用户认证API服务
+  private authBaseUrl = import.meta.env.VITE_API_BASE_URL || 'https://employment-survey-api-prod.chrismarker89.workers.dev'; // 用户认证API服务
 
   constructor() {
     this.api = apiClient;

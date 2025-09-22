@@ -66,7 +66,7 @@
 
 ### 🎯 **部署目标环境**
 - **前端**: https://a1dacb82.college-employment-survey-frontend.pages.dev
-- **后端**: https://employment-survey-api-prod.justpm2099.workers.dev
+- **后端**: https://employment-survey-api-prod.chrismarker89.workers.dev
 - **数据库**: Cloudflare D1 (college-employment-survey-isolated)
 
 ### 📋 **部署清单**

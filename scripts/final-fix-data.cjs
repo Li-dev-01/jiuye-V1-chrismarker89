@@ -5,7 +5,7 @@
  * 提交包含年龄段和工作地点偏好的问卷数据
  */
 
-const API_BASE_URL = 'https://employment-survey-api-prod.justpm2099.workers.dev/api';
+const API_BASE_URL = 'https://employment-survey-api-prod.chrismarker89.workers.dev/api';
 
 // 数据选项配置（与前端完全一致）
 const dataOptions = {

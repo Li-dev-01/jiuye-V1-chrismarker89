@@ -5,7 +5,7 @@
  * 直接查询数据库，检查我们提交的数据是否正确保存
  */
 
-const API_BASE_URL = 'https://employment-survey-api-prod.justpm2099.workers.dev/api';
+const API_BASE_URL = 'https://employment-survey-api-prod.chrismarker89.workers.dev/api';
 
 async function debugDatabase() {
   console.log('🔍 开始调试数据库数据...\n');

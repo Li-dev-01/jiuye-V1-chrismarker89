@@ -62,7 +62,7 @@
 
 ### 部署环境
 - **生产环境**: https://5b1ab864.college-employment-survey-frontend.pages.dev
-- **API服务**: https://employment-survey-api-prod.justpm2099.workers.dev
+- **API服务**: https://employment-survey-api-prod.chrismarker89.workers.dev
 - **状态**: 稳定运行 ✅
 
 ## 📈 功能完成度

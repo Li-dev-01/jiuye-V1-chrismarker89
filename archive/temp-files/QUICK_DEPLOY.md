@@ -45,7 +45,7 @@ wrangler pages deploy dist --project-name college-employment-survey-frontend
 ### **1. 更新前端API配置**
 ```bash
 # 编辑 frontend/.env.production
-VITE_API_BASE_URL=https://employment-survey-api-prod.justpm2099.workers.dev
+VITE_API_BASE_URL=https://employment-survey-api-prod.chrismarker89.workers.dev
 ```
 
 ### **2. 配置CORS**
@@ -66,13 +66,13 @@ wrangler deploy --env production
 ### **后端API测试**
 ```bash
 # 健康检查
-curl https://employment-survey-api-prod.justpm2099.workers.dev/health
+curl https://employment-survey-api-prod.chrismarker89.workers.dev/health
 
 # 分析API
-curl https://employment-survey-api-prod.justpm2099.workers.dev/api/analytics/dashboard
+curl https://employment-survey-api-prod.chrismarker89.workers.dev/api/analytics/dashboard
 
 # 审核员API
-curl https://employment-survey-api-prod.justpm2099.workers.dev/api/reviewer/stats
+curl https://employment-survey-api-prod.chrismarker89.workers.dev/api/reviewer/stats
 ```
 
 ### **前端应用测试**
@@ -85,8 +85,8 @@ curl https://employment-survey-api-prod.justpm2099.workers.dev/api/reviewer/stat
 ## 📊 **预期部署结果**
 
 ### **后端API**
-- 🌐 **开发环境**: https://employment-survey-api-dev.justpm2099.workers.dev
-- 🌐 **生产环境**: https://employment-survey-api-prod.justpm2099.workers.dev
+- 🌐 **开发环境**: https://employment-survey-api-dev.chrismarker89.workers.dev
+- 🌐 **生产环境**: https://employment-survey-api-prod.chrismarker89.workers.dev
 
 ### **前端应用**
 - 🌐 **生产环境**: https://college-employment-survey-frontend.pages.dev
@@ -160,7 +160,7 @@ wrangler tail employment-survey-api-prod
 wrangler deploy --env production
 
 # 4. 验证修复
-curl https://employment-survey-api-prod.justpm2099.workers.dev/health
+curl https://employment-survey-api-prod.chrismarker89.workers.dev/health
 ```
 
 ## 📈 **成功指标**

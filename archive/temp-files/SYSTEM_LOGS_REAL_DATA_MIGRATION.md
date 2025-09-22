@@ -125,7 +125,7 @@ node backend/test_system_logs_api.js
 ### 手动测试
 访问管理后台验证：
 - 系统日志页面: https://8fb5537a.college-employment-survey-frontend.pages.dev/admin/logs
-- API端点: https://employment-survey-api-dev.justpm2099.workers.dev/api/super-admin/system/logs
+- API端点: https://employment-survey-api-dev.chrismarker89.workers.dev/api/super-admin/system/logs
 
 ### 测试用例
 1. **基本查询** - 验证数据正常返回

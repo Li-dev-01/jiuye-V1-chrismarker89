@@ -7,7 +7,7 @@
 
 // Node.js 18+ 内置支持fetch
 
-const API_BASE_URL = 'https://employment-survey-api-prod.justpm2099.workers.dev/api';
+const API_BASE_URL = 'https://employment-survey-api-prod.chrismarker89.workers.dev/api';
 
 // 生成随机数据的工具函数
 function randomChoice(array) {

@@ -6,13 +6,13 @@
   min-height: 100vh;
 }
 
-/* 页面头部 */
+/* 页面头部 - 故事墙紧凑优化 */
 .page-header {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin-bottom: var(--spacing-lg);
-  padding: var(--spacing-lg);
+  margin-bottom: var(--spacing-md);
+  padding: var(--spacing-md) var(--spacing-lg);
   background: linear-gradient(135deg, var(--primary-500) 0%, var(--primary-600) 100%);
   border-radius: var(--border-radius-lg);
   color: white;
@@ -21,11 +21,15 @@
 .header-content h2 {
   color: white;
   margin-bottom: var(--spacing-xs);
+  font-size: var(--font-size-xl);
+  line-height: 1.2;
 }
 
 .header-content .ant-typography {
   color: rgba(255, 255, 255, 0.9);
   margin-bottom: 0;
+  font-size: var(--font-size-sm);
+  line-height: 1.4;
 }
 
 .page-header .ant-btn {
@@ -307,8 +311,8 @@
   
   .page-header {
     flex-direction: column;
-    gap: 16px;
-    padding: 20px;
+    gap: 12px;
+    padding: 16px;
   }
   
   .page-header .ant-btn {
@@ -380,11 +384,11 @@
   }
   
   .page-header {
-    padding: 16px;
+    padding: 12px;
   }
-  
+
   .page-header h2 {
-    font-size: 20px;
+    font-size: 18px;
   }
   
   .featured-section .ant-card-body {

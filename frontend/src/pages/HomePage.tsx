@@ -12,7 +12,7 @@ import {
   RightOutlined
 } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
-import { HomeStatsSection } from '../components/home/HomeStatsSection';
+import { HomeChartsSection } from '../components/home/HomeChartsSection';
 import styles from './HomePage.module.css';
 
 const { Title, Paragraph } = Typography;
@@ -57,7 +57,7 @@ const HomePage: React.FC = () => {
         <div className={styles.container}>
           <div className={styles.heroContent}>
             <Title level={1} className={styles.heroTitle}>
-              大学生就业问卷调查
+              2025大学生就业问卷调查
             </Title>
             <Paragraph className={styles.heroDescription}>
               全方位的就业调研和分享平台，助力大学生职业发展。
@@ -67,12 +67,8 @@ const HomePage: React.FC = () => {
         </div>
       </div>
 
-      {/* 统计数据展示 */}
-      <div className={styles.statsSection}>
-        <div className={styles.container}>
-          <HomeStatsSection showRefreshButton={false} autoRefresh={true} />
-        </div>
-      </div>
+      {/* 数据可视化展示 */}
+      <HomeChartsSection autoRefresh={true} />
 
       {/* 核心功能入口 */}
       <div className={styles.featuresSection}>
@@ -118,36 +114,7 @@ const HomePage: React.FC = () => {
         </div>
       </div>
 
-      {/* 精简行动号召 */}
-      <div className={styles.ctaSection}>
-        <div className={styles.container}>
-          <div className={styles.ctaContent}>
-            <Title level={3} className={styles.ctaTitle}>
-              开始您的就业调研之旅
-            </Title>
-            <Paragraph className={styles.ctaDescription}>
-              加入我们，分享您的就业经历，获得有价值的职业洞察
-            </Paragraph>
-            <div className={styles.ctaButtons}>
-              <Button
-                type="primary"
-                size="large"
-                onClick={() => handleNavigate('/questionnaire')}
-                className={styles.primaryButton}
-              >
-                开始问卷调查
-              </Button>
-              <Button
-                size="large"
-                onClick={() => handleNavigate('/analytics')}
-                className={styles.secondaryButton}
-              >
-                查看数据分析
-              </Button>
-            </div>
-          </div>
-        </div>
-      </div>
+
     </div>
   );
 };

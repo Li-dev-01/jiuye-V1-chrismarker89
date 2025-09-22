@@ -32,7 +32,7 @@ sleep 10
 
 # 测试开发环境健康检查
 echo "🔍 测试开发环境API健康状态..."
-DEV_URL="https://employment-survey-api-dev.justpm2099.workers.dev"
+DEV_URL="https://employment-survey-api-dev.chrismarker89.workers.dev"
 
 if curl -f "$DEV_URL/health" > /dev/null 2>&1; then
     echo "✅ 开发环境部署成功！"
@@ -73,7 +73,7 @@ if curl -f "$DEV_URL/health" > /dev/null 2>&1; then
         
         # 测试生产环境
         echo "🔍 测试生产环境API健康状态..."
-        PROD_URL="https://employment-survey-api-prod.justpm2099.workers.dev"
+        PROD_URL="https://employment-survey-api-prod.chrismarker89.workers.dev"
         
         if curl -f "$PROD_URL/health" > /dev/null 2>&1; then
             echo "✅ 生产环境部署成功！"

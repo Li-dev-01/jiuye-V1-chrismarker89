@@ -21,69 +21,294 @@ function cleanContent(content: string): string {
 export function createStoriesRoutes() {
   const stories = new Hono<{ Bindings: Env }>();
 
+  // 数据库初始化检查和修复
+  const ensureTablesExist = async (db: any) => {
+    try {
+      // 检查valid_stories表是否存在
+      const tableCheck = await db.prepare(`
+        SELECT name FROM sqlite_master
+        WHERE type='table' AND name='valid_stories'
+      `).first();
+
+      if (!tableCheck) {
+        console.log('valid_stories表不存在，正在创建...');
+
+        // 创建valid_stories表
+        await db.prepare(`
+          CREATE TABLE IF NOT EXISTS valid_stories (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            raw_id INTEGER,
+            data_uuid TEXT UNIQUE NOT NULL,
+            user_id TEXT NOT NULL,
+            title TEXT NOT NULL,
+            content TEXT NOT NULL,
+            category TEXT DEFAULT 'general',
+            tags TEXT DEFAULT '[]',
+            author_name TEXT DEFAULT '匿名用户',
+            audit_status TEXT DEFAULT 'approved',
+            approved_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            like_count INTEGER DEFAULT 0,
+            dislike_count INTEGER DEFAULT 0,
+            view_count INTEGER DEFAULT 0,
+            is_featured INTEGER DEFAULT 0,
+            published_at DATETIME,
+            png_status TEXT DEFAULT 'pending',
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+          )
+        `).run();
+
+        // 创建索引
+        await db.prepare('CREATE INDEX IF NOT EXISTS idx_valid_stories_audit_status ON valid_stories(audit_status)').run();
+        await db.prepare('CREATE INDEX IF NOT EXISTS idx_valid_stories_approved_at ON valid_stories(approved_at DESC)').run();
+
+        console.log('valid_stories表创建完成');
+      }
+
+      // 检查是否有数据，如果没有则插入测试数据
+      const countResult = await db.prepare('SELECT COUNT(*) as count FROM valid_stories').first();
+      if (!countResult || countResult.count === 0) {
+        console.log('插入测试故事数据...');
+
+        const testStories = [
+          {
+            data_uuid: 'story-uuid-001',
+            user_id: 'user-001',
+            title: '我的第一份工作经历',
+            content: '刚毕业时找工作真的很困难，投了上百份简历才收到几个面试邀请。但是通过这个过程，我学会了如何更好地展示自己，也明白了坚持的重要性。现在回想起来，那段经历虽然艰难，但让我成长了很多。',
+            category: 'job_search',
+            tags: '["求职经历", "新手"]',
+            author_name: '小李同学',
+            like_count: 156,
+            view_count: 1245,
+            is_featured: 1
+          },
+          {
+            data_uuid: 'story-uuid-002',
+            user_id: 'user-002',
+            title: '转行程序员的心路历程',
+            content: '从传统行业转到IT行业并不容易，需要重新学习很多技术知识。我花了一年时间自学编程，参加了培训班，最终成功转行。虽然起薪不高，但我相信通过努力可以获得更好的发展。',
+            category: 'career_change',
+            tags: '["转行", "程序员"]',
+            author_name: '转行小王',
+            like_count: 234,
+            view_count: 1876,
+            is_featured: 0
+          },
+          {
+            data_uuid: 'story-uuid-003',
+            user_id: 'user-003',
+            title: '创业失败后的反思',
+            content: '第一次创业失败了，损失了所有积蓄。但这次经历让我学到了很多宝贵的经验，包括市场调研的重要性、团队管理的技巧等。现在我在一家公司工作，积累经验，为下次创业做准备。',
+            category: 'entrepreneurship',
+            tags: '["创业", "反思"]',
+            author_name: '创业者张三',
+            like_count: 189,
+            view_count: 1432,
+            is_featured: 0
+          }
+        ];
+
+        for (const story of testStories) {
+          await db.prepare(`
+            INSERT INTO valid_stories
+            (data_uuid, user_id, title, content, category, tags, author_name,
+             audit_status, approved_at, like_count, view_count, is_featured, published_at)
+            VALUES (?, ?, ?, ?, ?, ?, ?, 'approved', datetime('now'), ?, ?, ?, datetime('now'))
+          `).bind(
+            story.data_uuid, story.user_id, story.title, story.content,
+            story.category, story.tags, story.author_name,
+            story.like_count, story.view_count, story.is_featured
+          ).run();
+        }
+
+        console.log('测试故事数据插入完成');
+      }
+
+      // 检查并创建content_tags表
+      const contentTagsCheck = await db.prepare(`
+        SELECT name FROM sqlite_master
+        WHERE type='table' AND name='content_tags'
+      `).first();
+
+      if (!contentTagsCheck) {
+        console.log('content_tags表不存在，正在创建...');
+
+        // 创建content_tags表（与admin路由兼容的完整结构）
+        await db.prepare(`
+          CREATE TABLE IF NOT EXISTS content_tags (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            tag_key TEXT NOT NULL UNIQUE,
+            tag_name TEXT NOT NULL,
+            tag_name_en TEXT,
+            description TEXT,
+            tag_type TEXT DEFAULT 'system' CHECK (tag_type IN ('system', 'user', 'auto')),
+            color TEXT DEFAULT '#1890ff',
+            usage_count INTEGER DEFAULT 0,
+            is_active INTEGER DEFAULT 1,
+            content_type TEXT DEFAULT 'all' CHECK (content_type IN ('story', 'voice', 'all')),
+            sort_order INTEGER DEFAULT 0,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+          )
+        `).run();
+
+        // 创建索引
+        await db.prepare('CREATE INDEX IF NOT EXISTS idx_content_tags_type ON content_tags(content_type, tag_type)').run();
+        await db.prepare('CREATE INDEX IF NOT EXISTS idx_content_tags_active ON content_tags(is_active)').run();
+
+        // 插入默认标签数据
+        const defaultTags = [
+          { tag_key: 'job_search', tag_name: '求职经历', tag_name_en: 'Job Search', description: '求职过程中的经历和心得', tag_type: 'system', color: '#1890ff', content_type: 'story' },
+          { tag_key: 'career_change', tag_name: '转行经历', tag_name_en: 'Career Change', description: '职业转换的经历和感悟', tag_type: 'system', color: '#52c41a', content_type: 'story' },
+          { tag_key: 'entrepreneurship', tag_name: '创业故事', tag_name_en: 'Entrepreneurship', description: '创业过程中的故事和经验', tag_type: 'system', color: '#fa8c16', content_type: 'story' },
+          { tag_key: 'workplace_life', tag_name: '职场生活', tag_name_en: 'Workplace Life', description: '职场中的日常生活和体验', tag_type: 'system', color: '#722ed1', content_type: 'story' },
+          { tag_key: 'skill_growth', tag_name: '技能成长', tag_name_en: 'Skill Growth', description: '技能学习和成长的经历', tag_type: 'system', color: '#13c2c2', content_type: 'story' },
+          { tag_key: 'interview', tag_name: '面试经验', tag_name_en: 'Interview Experience', description: '面试过程中的经验和技巧', tag_type: 'system', color: '#eb2f96', content_type: 'story' },
+          { tag_key: 'career_planning', tag_name: '职业规划', tag_name_en: 'Career Planning', description: '职业发展规划和思考', tag_type: 'system', color: '#f5222d', content_type: 'story' }
+        ];
+
+        for (const tag of defaultTags) {
+          await db.prepare(`
+            INSERT INTO content_tags (tag_key, tag_name, tag_name_en, description, tag_type, color, content_type, is_active, usage_count, sort_order)
+            VALUES (?, ?, ?, ?, ?, ?, ?, 1, 0, 0)
+          `).bind(tag.tag_key, tag.tag_name, tag.tag_name_en, tag.description, tag.tag_type, tag.color, tag.content_type).run();
+        }
+
+        console.log('content_tags表创建完成');
+      }
+
+    } catch (error) {
+      console.error('数据库初始化失败:', error);
+    }
+  };
+
   // 获取故事列表
   stories.get('/', async (c) => {
     try {
       console.log('获取故事列表...');
-      
+
+      const db = c.env.DB;
+
+      // 确保表存在
+      await ensureTablesExist(db);
+
       // 获取查询参数
       const page = parseInt(c.req.query('page') || '1');
       const pageSize = parseInt(c.req.query('pageSize') || '20');
       const category = c.req.query('category');
+      const tags = c.req.query('tags'); // 支持标签筛选
       const sortBy = c.req.query('sortBy') || 'approved_at';
       const sortOrder = c.req.query('sortOrder') || 'desc';
       const published = c.req.query('published') !== 'false'; // 默认只显示已发布的
-      
-      console.log('查询参数:', { page, pageSize, category, sortBy, sortOrder, published });
-      
-      const db = c.env.DB;
+
+      console.log('查询参数:', { page, pageSize, category, tags, sortBy, sortOrder, published });
 
       // 计算偏移量
       const offset = (page - 1) * pageSize;
 
       // 构建查询条件
-      let whereClause = "audit_status = 'approved'";
+      let whereClause = "vs.audit_status = 'approved'";
       const params: any[] = [];
+      let joinClause = '';
 
       if (category) {
-        whereClause += " AND category = ?";
+        whereClause += " AND vs.category = ?";
         params.push(category);
       }
 
-      // 获取故事列表 - 简化查询
-      const storyResult = await db.prepare(`
-        SELECT
-          id,
-          data_uuid,
-          user_id,
-          title,
-          content,
-          approved_at,
-          audit_status,
-          png_status,
-          like_count,
-          dislike_count,
-          view_count
-        FROM valid_stories
-        WHERE audit_status = 'approved'
-        ORDER BY approved_at desc
-        LIMIT ? OFFSET ?
-      `).bind(pageSize, offset).all();
+      // 处理标签筛选
+      if (tags) {
+        const tagIds = tags.split(',').map((id: string) => parseInt(id.trim())).filter((id: number) => !isNaN(id));
+        if (tagIds.length > 0) {
+          joinClause = `
+            INNER JOIN content_tag_relations ctr ON vs.data_uuid = ctr.content_id AND ctr.content_type = 'story'
+          `;
+          whereClause += ` AND ctr.tag_id IN (${tagIds.map(() => '?').join(',')})`;
+          params.push(...tagIds);
+        }
+      }
 
+      // 获取故事列表 - 增强查询
+      const storyQuery = `
+        SELECT DISTINCT
+          vs.id,
+          vs.data_uuid,
+          vs.user_id,
+          vs.title,
+          vs.content,
+          vs.category,
+          vs.tags,
+          vs.author_name,
+          vs.approved_at,
+          vs.audit_status,
+          vs.like_count,
+          vs.dislike_count,
+          vs.view_count,
+          vs.is_featured,
+          vs.published_at,
+          vs.created_at
+        FROM valid_stories vs
+        ${joinClause}
+        WHERE ${whereClause}
+        ORDER BY vs.${sortBy} ${sortOrder.toUpperCase()}
+        LIMIT ? OFFSET ?
+      `;
+
+      console.log('执行查询:', storyQuery);
+      console.log('查询参数:', [...params, pageSize, offset]);
+
+      const storyResult = await db.prepare(storyQuery).bind(...params, pageSize, offset).all();
       const storyList = storyResult.results;
 
-      // 获取总数 - 简化查询
-      const totalResult = await db.prepare(`
-        SELECT COUNT(*) as total
-        FROM valid_stories
-        WHERE audit_status = 'approved'
-      `).first();
-      
+      // 获取总数
+      const countQuery = `
+        SELECT COUNT(DISTINCT vs.id) as total
+        FROM valid_stories vs
+        ${joinClause}
+        WHERE ${whereClause}
+      `;
+
+      const totalResult = await db.prepare(countQuery).bind(...params).first();
       const total = totalResult?.total || 0;
-      
+
       console.log(`找到 ${storyList.length} 条故事，总计 ${total} 条`);
-      
-      // 格式化数据 - 简化版本
+
+      // 为每个故事获取关联的标签
+      const storyIds = storyList.map((story: any) => story.data_uuid);
+      let storyTags: any = {};
+
+      if (storyIds.length > 0) {
+        const tagsQuery = `
+          SELECT
+            ctr.content_id,
+            ct.id as tag_id,
+            ct.tag_key,
+            ct.tag_name,
+            ct.color
+          FROM content_tag_relations ctr
+          JOIN content_tags ct ON ctr.tag_id = ct.id
+          WHERE ctr.content_id IN (${storyIds.map(() => '?').join(',')})
+            AND ctr.content_type = 'story'
+        `;
+
+        const tagsResult = await db.prepare(tagsQuery).bind(...storyIds).all();
+
+        // 组织标签数据
+        tagsResult.results.forEach((tagRel: any) => {
+          if (!storyTags[tagRel.content_id]) {
+            storyTags[tagRel.content_id] = [];
+          }
+          storyTags[tagRel.content_id].push({
+            id: tagRel.tag_id,
+            key: tagRel.tag_key,
+            name: tagRel.tag_name,
+            color: tagRel.color
+          });
+        });
+      }
+
+      // 格式化数据 - 使用真实数据
       const formattedStories = storyList.map((story: any) => ({
         id: story.id,
         uuid: story.data_uuid,
@@ -91,18 +316,18 @@ export function createStoriesRoutes() {
         title: cleanContent(story.title),
         content: cleanContent(story.content),
         summary: cleanContent(story.content).substring(0, 100) + '...',
-        category: '求职经历', // 临时硬编码
-        tags: [],
+        category: story.category || 'general',
+        tags: storyTags[story.data_uuid] || [],
         isAnonymous: true,
-        authorName: '匿名用户',
+        authorName: story.author_name || '匿名用户',
         status: 'approved',
-        isFeatured: false,
+        isFeatured: story.is_featured || false,
         isPublished: true,
         likeCount: story.like_count || 0,
         dislikeCount: story.dislike_count || 0,
         viewCount: story.view_count || 0,
-        createdAt: new Date().toISOString(),
-        publishedAt: new Date().toISOString()
+        createdAt: story.created_at || story.approved_at,
+        publishedAt: story.published_at || story.approved_at
       }));
       
       return c.json({
@@ -123,6 +348,211 @@ export function createStoriesRoutes() {
         success: false,
         error: 'Internal Server Error',
         message: '获取故事列表失败'
+      }, 500);
+    }
+  });
+
+  // 获取精选故事 - 必须在 /:id 之前定义
+  stories.get('/featured', async (c) => {
+    try {
+      console.log('获取精选故事...');
+
+      const db = c.env.DB;
+
+      // 确保表存在
+      await ensureTablesExist(db);
+
+      const pageSize = parseInt(c.req.query('pageSize') || '6');
+
+      // 获取点赞数最多的故事作为精选
+      console.log('执行精选故事查询，pageSize:', pageSize);
+
+      const featuredResult = await db.prepare(`
+        SELECT
+          id,
+          data_uuid,
+          user_id,
+          title,
+          content,
+          category,
+          tags,
+          approved_at as created_at,
+          like_count,
+          dislike_count,
+          view_count
+        FROM valid_stories
+        WHERE audit_status = 'approved'
+        ORDER BY like_count DESC, view_count DESC
+        LIMIT ?
+      `).bind(pageSize).all();
+
+      console.log('查询结果对象:', featuredResult);
+      const featuredStories = featuredResult.results;
+
+      console.log('精选故事查询结果:', featuredStories);
+      console.log('结果数量:', featuredStories ? featuredStories.length : 0);
+
+      if (!featuredStories || featuredStories.length === 0) {
+        return c.json({
+          success: false,
+          error: 'Not Found',
+          message: '故事不存在'
+        }, 404);
+      }
+
+      // 为精选故事获取关联的标签
+      const storyIds = featuredStories.map((story: any) => story.data_uuid);
+      let storyTags: any = {};
+
+      if (storyIds.length > 0) {
+        const tagsQuery = `
+          SELECT
+            ctr.content_id,
+            ct.id as tag_id,
+            ct.tag_key,
+            ct.tag_name,
+            ct.color
+          FROM content_tag_relations ctr
+          JOIN content_tags ct ON ctr.tag_id = ct.id
+          WHERE ctr.content_id IN (${storyIds.map(() => '?').join(',')})
+            AND ctr.content_type = 'story'
+        `;
+
+        const tagsResult = await db.prepare(tagsQuery).bind(...storyIds).all();
+
+        // 组织标签数据
+        tagsResult.results.forEach((tagRel: any) => {
+          if (!storyTags[tagRel.content_id]) {
+            storyTags[tagRel.content_id] = [];
+          }
+          storyTags[tagRel.content_id].push({
+            id: tagRel.tag_id,
+            key: tagRel.tag_key,
+            name: tagRel.tag_name,
+            color: tagRel.color
+          });
+        });
+      }
+
+      const formattedStories = featuredStories.map((story: any) => ({
+        id: story.id,
+        uuid: story.data_uuid,
+        userId: story.user_id,
+        title: cleanContent(story.title),
+        content: cleanContent(story.content),
+        summary: cleanContent(story.content).substring(0, 100) + '...',
+        category: story.category || 'general',
+        tags: storyTags[story.data_uuid] || [],
+        isAnonymous: true,
+        authorName: '匿名用户',
+        status: 'approved',
+        isFeatured: true,
+        isPublished: true,
+        likeCount: story.like_count || 0,
+        dislikeCount: story.dislike_count || 0,
+        viewCount: story.view_count || 0,
+        createdAt: story.created_at,
+        publishedAt: story.created_at
+      }));
+
+      return c.json({
+        success: true,
+        data: {
+          stories: formattedStories,
+          total: formattedStories.length
+        },
+        message: '精选故事获取成功'
+      });
+
+    } catch (error) {
+      console.error('获取精选故事失败:', error);
+      return c.json({
+        success: false,
+        error: 'Internal Server Error',
+        message: '获取精选故事失败'
+      }, 500);
+    }
+  });
+
+  // 测试标签关联查询
+  stories.get('/test-tags/:storyId', async (c) => {
+    try {
+      const storyId = c.req.param('storyId');
+      const db = c.env.DB;
+
+      // 查询指定故事的标签
+      const tagsResult = await db.prepare(`
+        SELECT
+          ctr.content_id,
+          ct.id as tag_id,
+          ct.tag_key,
+          ct.tag_name,
+          ct.color
+        FROM content_tag_relations ctr
+        JOIN content_tags ct ON ctr.tag_id = ct.id
+        WHERE ctr.content_id = ? AND ctr.content_type = 'story'
+      `).bind(storyId).all();
+
+      return c.json({
+        success: true,
+        data: {
+          storyId,
+          tags: tagsResult.results
+        }
+      });
+    } catch (error) {
+      console.error('Test tags error:', error);
+      return c.json({
+        success: false,
+        error: error.message
+      }, 500);
+    }
+  });
+
+  // 获取所有可用标签
+  stories.get('/available-tags', async (c) => {
+    try {
+      console.log('获取故事标签列表...');
+
+      const db = c.env.DB;
+
+      // 确保表存在
+      await ensureTablesExist(db);
+
+      // 获取所有故事相关的标签
+      const tagsResult = await db.prepare(`
+        SELECT
+          ct.id,
+          ct.tag_key,
+          ct.tag_name,
+          ct.tag_name_en,
+          ct.description,
+          ct.color,
+          ct.usage_count,
+          COUNT(ctr.id) as actual_usage
+        FROM content_tags ct
+        LEFT JOIN content_tag_relations ctr ON ct.id = ctr.tag_id AND ctr.content_type = 'story'
+        WHERE ct.content_type IN ('story', 'all') AND ct.is_active = 1
+        GROUP BY ct.id, ct.tag_key, ct.tag_name, ct.tag_name_en, ct.description, ct.color, ct.usage_count
+        ORDER BY actual_usage DESC, ct.tag_name
+      `).all();
+
+      const tags = tagsResult.results;
+
+      console.log(`找到 ${tags.length} 个可用标签`);
+
+      return c.json({
+        success: true,
+        data: tags,
+        message: '标签获取成功'
+      });
+
+    } catch (error) {
+      console.error('获取标签失败:', error);
+      return c.json({
+        success: false,
+        error: 'Internal Server Error',
+        message: '获取标签失败'
       }, 500);
     }
   });
@@ -432,77 +862,6 @@ export function createStoriesRoutes() {
     }
   });
 
-  // 获取精选故事
-  stories.get('/featured', async (c) => {
-    try {
-      console.log('获取精选故事...');
-      
-      const pageSize = parseInt(c.req.query('pageSize') || '6');
-      
-      const db = c.env.DB;
-
-      // 获取点赞数最多的故事作为精选
-      const featuredResult = await db.prepare(`
-        SELECT
-          id,
-          data_uuid,
-          user_id,
-          title,
-          content,
-          category,
-          tags,
-          approved_at as created_at,
-          like_count,
-          dislike_count,
-          view_count
-        FROM valid_stories
-        WHERE audit_status = 'approved'
-        ORDER BY like_count DESC, view_count DESC
-        LIMIT ?
-      `).bind(pageSize).all();
-
-      const featuredStories = featuredResult.results;
-      
-      const formattedStories = featuredStories.map((story: any) => ({
-        id: story.id,
-        uuid: story.data_uuid,
-        userId: story.user_id,
-        title: cleanContent(story.title),
-        content: cleanContent(story.content),
-        summary: cleanContent(story.content).substring(0, 100) + '...',
-        category: story.category,
-        tags: story.tags ? JSON.parse(story.tags) : [],
-        isAnonymous: true,
-        authorName: '匿名用户',
-        status: 'approved',
-        isFeatured: true,
-        isPublished: true,
-        likeCount: story.like_count || 0,
-        dislikeCount: story.dislike_count || 0,
-        viewCount: story.view_count || 0,
-        createdAt: story.created_at,
-        publishedAt: story.created_at
-      }));
-      
-      return c.json({
-        success: true,
-        data: {
-          stories: formattedStories,
-          total: formattedStories.length
-        },
-        message: '精选故事获取成功'
-      });
-      
-    } catch (error) {
-      console.error('获取精选故事失败:', error);
-      return c.json({
-        success: false,
-        error: 'Internal Server Error',
-        message: '获取精选故事失败'
-      }, 500);
-    }
-  });
-
   // 获取用户故事列表
   stories.get('/user/:userId', async (c) => {
     try {
@@ -586,6 +945,156 @@ export function createStoriesRoutes() {
         success: false,
         error: 'Internal Server Error',
         message: '获取用户故事列表失败'
+      }, 500);
+    }
+  });
+
+  // 数据库状态检查API
+  stories.get('/debug/status', async (c) => {
+    try {
+      const db = c.env.DB;
+
+      // 检查表是否存在
+      const tables = await db.prepare(`
+        SELECT name FROM sqlite_master
+        WHERE type='table' AND name IN ('valid_stories', 'raw_story_submissions', 'content_tags')
+      `).all();
+
+      const tableNames = tables.results.map((t: any) => t.name);
+
+      let validStoriesCount = 0;
+      let rawStoriesCount = 0;
+      let tagsCount = 0;
+
+      // 检查各表的数据量
+      if (tableNames.includes('valid_stories')) {
+        try {
+          const result = await db.prepare('SELECT COUNT(*) as count FROM valid_stories').first();
+          validStoriesCount = result?.count || 0;
+        } catch (e) {
+          console.error('查询valid_stories失败:', e);
+        }
+      }
+
+      if (tableNames.includes('raw_story_submissions')) {
+        try {
+          const result = await db.prepare('SELECT COUNT(*) as count FROM raw_story_submissions').first();
+          rawStoriesCount = result?.count || 0;
+        } catch (e) {
+          console.error('查询raw_story_submissions失败:', e);
+        }
+      }
+
+      if (tableNames.includes('content_tags')) {
+        try {
+          const result = await db.prepare('SELECT COUNT(*) as count FROM content_tags').first();
+          tagsCount = result?.count || 0;
+        } catch (e) {
+          console.error('查询content_tags失败:', e);
+        }
+      }
+
+      // 如果valid_stories表存在但为空，尝试获取表结构
+      let tableSchema = null;
+      if (tableNames.includes('valid_stories')) {
+        try {
+          const schema = await db.prepare(`
+            PRAGMA table_info(valid_stories)
+          `).all();
+          tableSchema = schema.results;
+        } catch (e) {
+          console.error('获取表结构失败:', e);
+        }
+      }
+
+      return c.json({
+        success: true,
+        data: {
+          database_status: 'connected',
+          tables_exist: tableNames,
+          data_counts: {
+            valid_stories: validStoriesCount,
+            raw_story_submissions: rawStoriesCount,
+            content_tags: tagsCount
+          },
+          table_schema: tableSchema,
+          needs_initialization: validStoriesCount === 0,
+          timestamp: new Date().toISOString()
+        },
+        message: '数据库状态检查完成'
+      });
+
+    } catch (error) {
+      console.error('数据库状态检查失败:', error);
+      return c.json({
+        success: false,
+        error: 'Database Error',
+        message: '数据库状态检查失败',
+        details: error instanceof Error ? error.message : 'Unknown error'
+      }, 500);
+    }
+  });
+
+  // 调试：查看原始数据
+  stories.get('/debug/raw-data', async (c) => {
+    try {
+      const db = c.env.DB;
+
+      // 获取所有故事数据
+      const allStories = await db.prepare('SELECT * FROM valid_stories').all();
+
+      return c.json({
+        success: true,
+        data: {
+          stories: allStories.results,
+          count: allStories.results.length
+        },
+        message: '原始数据获取成功'
+      });
+
+    } catch (error) {
+      console.error('获取原始数据失败:', error);
+      return c.json({
+        success: false,
+        error: 'Database Error',
+        message: '获取原始数据失败',
+        details: error instanceof Error ? error.message : 'Unknown error'
+      }, 500);
+    }
+  });
+
+  // 强制初始化数据库
+  stories.post('/debug/init', async (c) => {
+    try {
+      const db = c.env.DB;
+
+      console.log('开始强制初始化数据库...');
+
+      // 强制执行表创建和数据初始化
+      await ensureTablesExist(db);
+
+      // 再次检查状态
+      const validStoriesCount = await db.prepare('SELECT COUNT(*) as count FROM valid_stories').first();
+      const tagsCount = await db.prepare('SELECT COUNT(*) as count FROM content_tags').first();
+
+      return c.json({
+        success: true,
+        data: {
+          valid_stories_count: validStoriesCount?.count || 0,
+          content_tags_count: tagsCount?.count || 0,
+          initialization_completed: true,
+          timestamp: new Date().toISOString()
+        },
+        message: '数据库初始化完成'
+      });
+
+    } catch (error) {
+      console.error('数据库初始化失败:', error);
+      return c.json({
+        success: false,
+        error: 'Database Error',
+        message: '数据库初始化失败',
+        details: error instanceof Error ? error.message : 'Unknown error'
       }, 500);
     }
   });

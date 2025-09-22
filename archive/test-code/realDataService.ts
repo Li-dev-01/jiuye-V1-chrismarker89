@@ -33,7 +33,7 @@ export interface RealQuestionStats {
 }
 
 export class RealDataService {
-  private baseUrl = import.meta.env.VITE_API_BASE_URL || 'https://employment-survey-api-prod.justpm2099.workers.dev'; // Analytics API
+  private baseUrl = import.meta.env.VITE_API_BASE_URL || 'https://employment-survey-api-prod.chrismarker89.workers.dev'; // Analytics API
 
   /**
    * 获取真实的问卷统计数据

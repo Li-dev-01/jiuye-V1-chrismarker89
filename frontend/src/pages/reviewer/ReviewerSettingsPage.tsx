@@ -123,7 +123,7 @@ export const ReviewerSettingsPage: React.FC = () => {
     const loadData = async () => {
       setLoading(true);
       try {
-        const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || 'https://employment-survey-api-prod.justpm2099.workers.dev';
+        const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || 'https://employment-survey-api-prod.chrismarker89.workers.dev';
 
         // 加载审核员统计数据
         const statsResponse = await fetch(`${apiBaseUrl}/api/reviewer/stats`);

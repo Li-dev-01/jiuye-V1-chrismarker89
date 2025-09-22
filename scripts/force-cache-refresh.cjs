@@ -5,7 +5,7 @@
  * 使用管理员权限强制更新统计缓存
  */
 
-const API_BASE_URL = 'https://employment-survey-api-prod.justpm2099.workers.dev/api';
+const API_BASE_URL = 'https://employment-survey-api-prod.chrismarker89.workers.dev/api';
 
 async function forceCacheRefresh() {
   console.log('🔄 强制刷新统计缓存...\n');

@@ -34,7 +34,7 @@ URL: https://c02f5abc.college-employment-survey-frontend.pages.dev
 ### 后端系统 (Cloudflare Workers)
 ```
 状态: 🟢 正常运行
-URL: https://employment-survey-api-prod.justpm2099.workers.dev
+URL: https://employment-survey-api-prod.chrismarker89.workers.dev
 版本: 2b29b5d6-f6b8-4891-bcd4-c662a50fcf66
 最后部署: 2025-08-12 15:45
 ```

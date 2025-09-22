@@ -14,7 +14,7 @@ import type {
 } from '../types/ai-water-management';
 
 // API基础配置 - 使用现有的admin API服务
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://employment-survey-api-prod.justpm2099.workers.dev';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://employment-survey-api-prod.chrismarker89.workers.dev';
 
 class RealAIService {
   private api: AxiosInstance;

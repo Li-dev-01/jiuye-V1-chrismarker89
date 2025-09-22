@@ -5,7 +5,7 @@
  * 检查数据库中问卷数据的实际情况和统计流转
  */
 
-const API_BASE_URL = 'https://employment-survey-api-prod.justpm2099.workers.dev/api';
+const API_BASE_URL = 'https://employment-survey-api-prod.chrismarker89.workers.dev/api';
 
 // 分析问卷数据
 async function analyzeQuestionnaireData() {

@@ -131,7 +131,7 @@ export class ApiVersionManager {
    */
   getApiEndpoint(path: string, version?: ApiVersion): string {
     const targetVersion = version || this.currentVersion;
-    const baseUrl = import.meta.env.VITE_API_BASE_URL || 'https://employment-survey-api-prod.justpm2099.workers.dev';
+    const baseUrl = import.meta.env.VITE_API_BASE_URL || 'https://employment-survey-api-prod.chrismarker89.workers.dev';
     
     // 如果路径已经包含版本，直接返回
     if (path.startsWith('/api/v')) {
@@ -152,7 +152,7 @@ export class ApiVersionManager {
    */
   async fetchVersionInfo(): Promise<Record<ApiVersion, VersionInfo> | null> {
     try {
-      const baseUrl = import.meta.env.VITE_API_BASE_URL || 'https://employment-survey-api-prod.justpm2099.workers.dev';
+      const baseUrl = import.meta.env.VITE_API_BASE_URL || 'https://employment-survey-api-prod.chrismarker89.workers.dev';
       const response = await fetch(`${baseUrl}/api/version`);
       
       if (!response.ok) {
