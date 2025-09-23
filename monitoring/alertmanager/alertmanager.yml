@@ -1,0 +1,177 @@
+# AlertManager配置文件
+# 用于管理就业调查系统的告警通知
+
+global:
+  # SMTP配置
+  smtp_smarthost: 'localhost:587'
+  smtp_from: 'alerts@jiuye-system.com'
+  smtp_auth_username: 'alerts@jiuye-system.com'
+  smtp_auth_password: 'your-email-password'
+  
+  # 默认通知模板
+  smtp_hello: 'jiuye-system.com'
+
+# 路由配置
+route:
+  group_by: ['alertname', 'cluster', 'service']
+  group_wait: 10s
+  group_interval: 10s
+  repeat_interval: 1h
+  receiver: 'default'
+  routes:
+    # 严重告警立即通知
+    - match:
+        severity: critical
+      receiver: 'critical-alerts'
+      group_wait: 0s
+      repeat_interval: 5m
+    
+    # 安全告警特殊处理
+    - match:
+        service: security
+      receiver: 'security-alerts'
+      group_wait: 0s
+      repeat_interval: 1m
+    
+    # API性能告警
+    - match:
+        service: api
+      receiver: 'api-alerts'
+      repeat_interval: 15m
+    
+    # 系统资源告警
+    - match:
+        service: system
+      receiver: 'system-alerts'
+      repeat_interval: 30m
+    
+    # 数据库告警
+    - match:
+        service: database
+      receiver: 'database-alerts'
+      repeat_interval: 10m
+
+# 接收器配置
+receivers:
+  # 默认接收器
+  - name: 'default'
+    email_configs:
+      - to: 'admin@jiuye-system.com'
+        subject: '[就业调查系统] {{ .GroupLabels.alertname }}'
+        body: |
+          {{ range .Alerts }}
+          告警: {{ .Annotations.summary }}
+          描述: {{ .Annotations.description }}
+          标签: {{ range .Labels.SortedPairs }}{{ .Name }}={{ .Value }} {{ end }}
+          时间: {{ .StartsAt.Format "2006-01-02 15:04:05" }}
+          {{ end }}
+
+  # 严重告警接收器
+  - name: 'critical-alerts'
+    email_configs:
+      - to: 'admin@jiuye-system.com,ops@jiuye-system.com'
+        subject: '[紧急] {{ .GroupLabels.alertname }} - 就业调查系统'
+        body: |
+          🚨 严重告警 🚨
+          
+          {{ range .Alerts }}
+          告警: {{ .Annotations.summary }}
+          描述: {{ .Annotations.description }}
+          严重级别: {{ .Labels.severity }}
+          服务: {{ .Labels.service }}
+          实例: {{ .Labels.instance }}
+          时间: {{ .StartsAt.Format "2006-01-02 15:04:05" }}
+          
+          请立即处理！
+          {{ end }}
+    
+    # 可以添加Slack通知
+    # slack_configs:
+    #   - api_url: 'https://hooks.slack.com/services/YOUR/SLACK/WEBHOOK'
+    #     channel: '#alerts'
+    #     title: '严重告警 - 就业调查系统'
+    #     text: '{{ range .Alerts }}{{ .Annotations.summary }}{{ end }}'
+
+  # 安全告警接收器
+  - name: 'security-alerts'
+    email_configs:
+      - to: 'security@jiuye-system.com,admin@jiuye-system.com'
+        subject: '[安全告警] {{ .GroupLabels.alertname }} - 就业调查系统'
+        body: |
+          🔒 安全告警 🔒
+          
+          {{ range .Alerts }}
+          事件类型: {{ .Labels.event_type }}
+          描述: {{ .Annotations.description }}
+          来源IP: {{ .Labels.source_ip }}
+          时间: {{ .StartsAt.Format "2006-01-02 15:04:05" }}
+          
+          请立即检查系统安全状态！
+          {{ end }}
+
+  # API告警接收器
+  - name: 'api-alerts'
+    email_configs:
+      - to: 'dev@jiuye-system.com'
+        subject: '[API告警] {{ .GroupLabels.alertname }} - 就业调查系统'
+        body: |
+          📊 API性能告警
+          
+          {{ range .Alerts }}
+          告警: {{ .Annotations.summary }}
+          描述: {{ .Annotations.description }}
+          服务: {{ .Labels.job }}
+          时间: {{ .StartsAt.Format "2006-01-02 15:04:05" }}
+          {{ end }}
+
+  # 系统告警接收器
+  - name: 'system-alerts'
+    email_configs:
+      - to: 'ops@jiuye-system.com'
+        subject: '[系统告警] {{ .GroupLabels.alertname }} - 就业调查系统'
+        body: |
+          🖥️ 系统资源告警
+          
+          {{ range .Alerts }}
+          告警: {{ .Annotations.summary }}
+          描述: {{ .Annotations.description }}
+          实例: {{ .Labels.instance }}
+          时间: {{ .StartsAt.Format "2006-01-02 15:04:05" }}
+          {{ end }}
+
+  # 数据库告警接收器
+  - name: 'database-alerts'
+    email_configs:
+      - to: 'dba@jiuye-system.com,ops@jiuye-system.com'
+        subject: '[数据库告警] {{ .GroupLabels.alertname }} - 就业调查系统'
+        body: |
+          🗄️ 数据库告警
+          
+          {{ range .Alerts }}
+          告警: {{ .Annotations.summary }}
+          描述: {{ .Annotations.description }}
+          数据库: {{ .Labels.datname }}
+          时间: {{ .StartsAt.Format "2006-01-02 15:04:05" }}
+          {{ end }}
+
+# 抑制规则
+inhibit_rules:
+  # 如果服务完全下线，抑制其他相关告警
+  - source_match:
+      alertname: ServiceDown
+    target_match:
+      service: api
+    equal: ['instance']
+  
+  # 如果有严重的系统资源问题，抑制性能告警
+  - source_match:
+      severity: critical
+      service: system
+    target_match:
+      severity: warning
+      service: api
+    equal: ['instance']
+
+# 模板配置
+templates:
+  - '/etc/alertmanager/templates/*.tmpl'

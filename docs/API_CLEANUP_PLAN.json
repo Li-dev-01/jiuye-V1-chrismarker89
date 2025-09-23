@@ -1,0 +1,375 @@
+{
+  "timestamp": "2025-09-23T10:36:34.358Z",
+  "summary": {
+    "redundant_apis": 6,
+    "restful_violations": 7,
+    "performance_optimizations": 4,
+    "estimated_cleanup": 10
+  },
+  "phases": [
+    {
+      "phase": 1,
+      "name": "冗余API清理",
+      "priority": "high",
+      "estimated_time": "2-3天",
+      "tasks": [
+        {
+          "description": "remove: 心声功能已删除",
+          "paths": [
+            "/api/heart-voices",
+            "/api/heart-voices/:id",
+            "/api/heart-voices/:id/like"
+          ],
+          "action": "remove"
+        },
+        {
+          "description": "merge: 功能重复",
+          "paths": [
+            "/api/admin/data-generator",
+            "/api/test-data/generate"
+          ],
+          "action": "merge",
+          "keepPath": "/api/admin/data-generator",
+          "removePaths": [
+            "/api/test-data/generate"
+          ]
+        },
+        {
+          "description": "merge: 健康检查重复",
+          "paths": [
+            "/api/health",
+            "/health",
+            "/api/health-test"
+          ],
+          "action": "merge",
+          "keepPath": "/api/health",
+          "removePaths": [
+            "/health",
+            "/api/health-test"
+          ]
+        },
+        {
+          "description": "consolidate: 统计功能分散",
+          "paths": [
+            "/api/admin/dashboard/stats",
+            "/api/stats/simple",
+            "/api/admin/users/stats"
+          ],
+          "action": "consolidate",
+          "removePaths": [
+            "/api/stats/simple"
+          ]
+        },
+        {
+          "description": "merge: 审核功能重复",
+          "paths": [
+            "/api/audit",
+            "/api/audit/process",
+            "/api/reviewer"
+          ],
+          "action": "merge",
+          "keepPath": "/api/reviewer",
+          "removePaths": [
+            "/api/audit/process"
+          ]
+        },
+        {
+          "description": "merge: 版本信息重复",
+          "paths": [
+            "/api/v1",
+            "/api/v2",
+            "/api/version"
+          ],
+          "action": "merge",
+          "keepPath": "/api/version",
+          "removePaths": [
+            "/api/v1",
+            "/api/v2"
+          ]
+        }
+      ]
+    },
+    {
+      "phase": 2,
+      "name": "RESTful规范修复",
+      "priority": "medium",
+      "estimated_time": "3-4天",
+      "tasks": [
+        {
+          "description": "修复: 资源名称应使用复数形式",
+          "current": "/api/admin/dashboard/stats",
+          "suggested": "/api/admin/dashboards/statistics",
+          "severity": "medium"
+        },
+        {
+          "description": "修复: URL参数应使用下划线分隔",
+          "current": "/api/admin/users/:userId",
+          "suggested": "/api/admin/users/:user_id",
+          "severity": "low"
+        },
+        {
+          "description": "修复: 动作应该明确表达",
+          "current": "/api/admin/users/batch",
+          "suggested": "/api/admin/users/batch-operations",
+          "severity": "medium"
+        },
+        {
+          "description": "修复: URL嵌套过深，建议使用查询参数",
+          "current": "/api/admin/content/:contentType/:contentId/tags",
+          "suggested": "/api/admin/content-tags?content_type=:type&content_id=:id",
+          "severity": "high"
+        },
+        {
+          "description": "修复: 避免在URL中使用动词",
+          "current": "/api/admin/content/tags/recommend",
+          "suggested": "/api/admin/content/tag-recommendations",
+          "severity": "medium"
+        },
+        {
+          "description": "修复: 使用名词而非动词",
+          "current": "/api/admin/content/tags/cleanup",
+          "suggested": "/api/admin/content/tag-maintenance",
+          "severity": "medium"
+        },
+        {
+          "description": "修复: 保持命名一致性",
+          "current": "/api/admin/ip-access-control",
+          "suggested": "/api/admin/ip-access-rules",
+          "severity": "low"
+        }
+      ]
+    },
+    {
+      "phase": 3,
+      "name": "性能优化实施",
+      "priority": "medium",
+      "estimated_time": "4-5天",
+      "tasks": [
+        {
+          "description": "实施缓存机制",
+          "category": "缓存机制",
+          "apis": [
+            "/api/admin/dashboard/stats",
+            "/api/admin/users/stats",
+            "/api/admin/content/tags",
+            "/api/stories",
+            "/api/stories/featured"
+          ],
+          "strategy": "Redis缓存",
+          "implementation": "cache-middleware"
+        },
+        {
+          "description": "实施限流机制",
+          "category": "限流机制",
+          "apis": [
+            "/api/admin/users/batch",
+            "/api/admin/data-generator",
+            "/api/reviewer/submit-review"
+          ],
+          "strategy": "令牌桶算法",
+          "implementation": "rate-limit-middleware"
+        },
+        {
+          "description": "实施分页优化",
+          "category": "分页优化",
+          "apis": [
+            "/api/admin/users",
+            "/api/admin/questionnaires",
+            "/api/stories",
+            "/api/admin/reviewers"
+          ],
+          "strategy": "游标分页",
+          "implementation": "pagination-middleware"
+        },
+        {
+          "description": "实施数据库优化",
+          "category": "数据库优化",
+          "apis": [
+            "/api/admin/dashboard/stats",
+            "/api/analytics/dashboard",
+            "/api/participation-stats"
+          ],
+          "strategy": "查询优化",
+          "implementation": "database-optimization"
+        }
+      ]
+    }
+  ],
+  "detailed_actions": {
+    "redundant_apis": [
+      {
+        "paths": [
+          "/api/heart-voices",
+          "/api/heart-voices/:id",
+          "/api/heart-voices/:id/like"
+        ],
+        "reason": "心声功能已删除",
+        "action": "remove"
+      },
+      {
+        "paths": [
+          "/api/admin/data-generator",
+          "/api/test-data/generate"
+        ],
+        "reason": "功能重复",
+        "action": "merge",
+        "keepPath": "/api/admin/data-generator",
+        "removePaths": [
+          "/api/test-data/generate"
+        ]
+      },
+      {
+        "paths": [
+          "/api/health",
+          "/health",
+          "/api/health-test"
+        ],
+        "reason": "健康检查重复",
+        "action": "merge",
+        "keepPath": "/api/health",
+        "removePaths": [
+          "/health",
+          "/api/health-test"
+        ]
+      },
+      {
+        "paths": [
+          "/api/admin/dashboard/stats",
+          "/api/stats/simple",
+          "/api/admin/users/stats"
+        ],
+        "reason": "统计功能分散",
+        "action": "consolidate",
+        "newPath": "/api/admin/statistics",
+        "removePaths": [
+          "/api/stats/simple"
+        ]
+      },
+      {
+        "paths": [
+          "/api/audit",
+          "/api/audit/process",
+          "/api/reviewer"
+        ],
+        "reason": "审核功能重复",
+        "action": "merge",
+        "keepPath": "/api/reviewer",
+        "removePaths": [
+          "/api/audit/process"
+        ]
+      },
+      {
+        "paths": [
+          "/api/v1",
+          "/api/v2",
+          "/api/version"
+        ],
+        "reason": "版本信息重复",
+        "action": "merge",
+        "keepPath": "/api/version",
+        "removePaths": [
+          "/api/v1",
+          "/api/v2"
+        ]
+      }
+    ],
+    "restful_violations": [
+      {
+        "current": "/api/admin/dashboard/stats",
+        "suggested": "/api/admin/dashboards/statistics",
+        "reason": "资源名称应使用复数形式",
+        "severity": "medium"
+      },
+      {
+        "current": "/api/admin/users/:userId",
+        "suggested": "/api/admin/users/:user_id",
+        "reason": "URL参数应使用下划线分隔",
+        "severity": "low"
+      },
+      {
+        "current": "/api/admin/users/batch",
+        "suggested": "/api/admin/users/batch-operations",
+        "reason": "动作应该明确表达",
+        "severity": "medium"
+      },
+      {
+        "current": "/api/admin/content/:contentType/:contentId/tags",
+        "suggested": "/api/admin/content-tags?content_type=:type&content_id=:id",
+        "reason": "URL嵌套过深，建议使用查询参数",
+        "severity": "high"
+      },
+      {
+        "current": "/api/admin/content/tags/recommend",
+        "suggested": "/api/admin/content/tag-recommendations",
+        "reason": "避免在URL中使用动词",
+        "severity": "medium"
+      },
+      {
+        "current": "/api/admin/content/tags/cleanup",
+        "suggested": "/api/admin/content/tag-maintenance",
+        "reason": "使用名词而非动词",
+        "severity": "medium"
+      },
+      {
+        "current": "/api/admin/ip-access-control",
+        "suggested": "/api/admin/ip-access-rules",
+        "reason": "保持命名一致性",
+        "severity": "low"
+      }
+    ],
+    "performance_optimizations": [
+      {
+        "category": "缓存机制",
+        "apis": [
+          "/api/admin/dashboard/stats",
+          "/api/admin/users/stats",
+          "/api/admin/content/tags",
+          "/api/stories",
+          "/api/stories/featured"
+        ],
+        "strategy": "Redis缓存",
+        "ttl": "5分钟",
+        "implementation": "cache-middleware"
+      },
+      {
+        "category": "限流机制",
+        "apis": [
+          "/api/admin/users/batch",
+          "/api/admin/data-generator",
+          "/api/reviewer/submit-review"
+        ],
+        "strategy": "令牌桶算法",
+        "limit": "10请求/分钟",
+        "implementation": "rate-limit-middleware"
+      },
+      {
+        "category": "分页优化",
+        "apis": [
+          "/api/admin/users",
+          "/api/admin/questionnaires",
+          "/api/stories",
+          "/api/admin/reviewers"
+        ],
+        "strategy": "游标分页",
+        "defaultSize": 20,
+        "maxSize": 100,
+        "implementation": "pagination-middleware"
+      },
+      {
+        "category": "数据库优化",
+        "apis": [
+          "/api/admin/dashboard/stats",
+          "/api/analytics/dashboard",
+          "/api/participation-stats"
+        ],
+        "strategy": "查询优化",
+        "techniques": [
+          "索引优化",
+          "查询合并",
+          "预计算"
+        ],
+        "implementation": "database-optimization"
+      }
+    ]
+  }
+}

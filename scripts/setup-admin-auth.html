@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>管理员认证设置</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #1890ff;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .step {
+            margin: 20px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-left: 4px solid #1890ff;
+            border-radius: 4px;
+        }
+        .step h3 {
+            margin: 0 0 10px 0;
+            color: #333;
+        }
+        .code {
+            background: #f1f1f1;
+            padding: 10px;
+            border-radius: 4px;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 14px;
+            margin: 10px 0;
+            word-break: break-all;
+        }
+        .button {
+            background: #1890ff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 5px;
+        }
+        .button:hover {
+            background: #40a9ff;
+        }
+        .success {
+            color: #52c41a;
+            font-weight: bold;
+        }
+        .warning {
+            color: #fa8c16;
+            font-weight: bold;
+        }
+        .link {
+            color: #1890ff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔑 管理员认证设置</h1>
+        
+        <div class="step">
+            <h3>步骤 1: 复制管理员Token</h3>
+            <p>最新生成的管理员token：</p>
+            <div class="code" id="token">mgmt_token_SUPER_ADMIN_1758631557171</div>
+            <button class="button" onclick="copyToken()">复制Token</button>
+        </div>
+
+        <div class="step">
+            <h3>步骤 2: 打开管理员页面</h3>
+            <p>在新标签页中打开管理员页面：</p>
+            <a href="https://head.college-employment-survey-frontend-l84.pages.dev/admin" target="_blank" class="link">
+                https://head.college-employment-survey-frontend-l84.pages.dev/admin
+            </a>
+        </div>
+
+        <div class="step">
+            <h3>步骤 3: 设置认证Token</h3>
+            <p>在管理员页面按 <strong>F12</strong> 打开开发者工具，在 <strong>Console</strong> 标签页中执行：</p>
+            <div class="code">localStorage.setItem('management_auth_token', 'mgmt_token_SUPER_ADMIN_1758631557171');</div>
+            <button class="button" onclick="copyCommand()">复制命令</button>
+        </div>
+
+        <div class="step">
+            <h3>步骤 4: 刷新页面</h3>
+            <p>执行命令后，刷新管理员页面即可看到真实数据：</p>
+            <ul>
+                <li><span class="success">总用户数: 1059个</span></li>
+                <li><span class="success">活跃用户: 1009个</span></li>
+                <li><span class="success">故事数: 183个</span></li>
+                <li><span class="success">问卷数: 6个</span></li>
+            </ul>
+        </div>
+
+        <div class="step">
+            <h3>🎯 一键设置（推荐）</h3>
+            <p>点击下面的按钮自动设置token并跳转到管理员页面：</p>
+            <button class="button" onclick="autoSetup()" style="background: #52c41a;">一键设置并跳转</button>
+        </div>
+
+        <div class="step">
+            <h3>📊 验证数据</h3>
+            <p>设置完成后，您应该能看到：</p>
+            <ul>
+                <li>仪表板显示 <strong>1059个用户</strong>（不是0）</li>
+                <li>用户管理页面显示 <strong>212页用户数据</strong></li>
+                <li>真实的用户信息（testuser851, testuser343等）</li>
+                <li>不同的用户角色（user, reviewer, admin）</li>
+            </ul>
+        </div>
+
+        <div class="step">
+            <h3>🔗 快速链接</h3>
+            <ul>
+                <li><a href="https://head.college-employment-survey-frontend-l84.pages.dev/admin" target="_blank" class="link">管理员仪表板</a></li>
+                <li><a href="https://head.college-employment-survey-frontend-l84.pages.dev/admin/users" target="_blank" class="link">用户管理页面</a></li>
+                <li><a href="https://head.college-employment-survey-frontend-l84.pages.dev/admin/api-data" target="_blank" class="link">API监控页面</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        const token = 'mgmt_token_SUPER_ADMIN_1758631557171';
+        
+        function copyToken() {
+            navigator.clipboard.writeText(token).then(() => {
+                alert('Token已复制到剪贴板！');
+            });
+        }
+        
+        function copyCommand() {
+            const command = `localStorage.setItem('management_auth_token', '${token}');`;
+            navigator.clipboard.writeText(command).then(() => {
+                alert('命令已复制到剪贴板！');
+            });
+        }
+        
+        function autoSetup() {
+            // 设置token
+            localStorage.setItem('management_auth_token', token);
+            
+            // 打开管理员页面
+            window.open('https://head.college-employment-survey-frontend-l84.pages.dev/admin', '_blank');
+            
+            alert('Token已设置！管理员页面将在新标签页中打开。');
+        }
+    </script>
+</body>
+</html>

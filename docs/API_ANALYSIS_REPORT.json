@@ -1,0 +1,4431 @@
+{
+  "summary": {
+    "timestamp": "2025-09-23T09:52:33.159Z",
+    "total_backend_routes": 194,
+    "typescript_routes": 122,
+    "python_routes": 72,
+    "frontend_calls": 101,
+    "issues": {
+      "missing": 56,
+      "unused": 134,
+      "duplicates": 115
+    }
+  },
+  "inventory": {
+    "backend": {
+      "typescript": [
+        {
+          "path": "/api/admin/dashboard/stats",
+          "file": "src/routes/admin.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/admin/questionnaires",
+          "file": "src/routes/admin.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/admin/users",
+          "file": "src/routes/admin.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/admin/users/stats",
+          "file": "src/routes/admin.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/admin/users/:userId/status",
+          "file": "src/routes/admin.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/admin/users/:userId",
+          "file": "src/routes/admin.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/admin/users/batch",
+          "file": "src/routes/admin.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/admin/users/export",
+          "file": "src/routes/admin.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/admin/users/manage",
+          "file": "src/routes/admin.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/admin/reviewers",
+          "file": "src/routes/admin.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/admin/content/categories",
+          "file": "src/routes/admin.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/admin/content/categories",
+          "file": "src/routes/admin.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/admin/content/tags",
+          "file": "src/routes/admin.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/admin/content/tags",
+          "file": "src/routes/admin.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/admin/content/tags/:id",
+          "file": "src/routes/admin.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/admin/content/tags/:id",
+          "file": "src/routes/admin.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/admin/content/tags/recommend",
+          "file": "src/routes/admin.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/admin/content/tags/stats",
+          "file": "src/routes/admin.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/admin/content/tags/merge",
+          "file": "src/routes/admin.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/admin/content/tags/cleanup",
+          "file": "src/routes/admin.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/admin/content/:contentType/:contentId/tags",
+          "file": "src/routes/admin.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/admin/content/:contentType/:contentId/tags",
+          "file": "src/routes/admin.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/admin/content/by-tags",
+          "file": "src/routes/admin.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/admin/content/tags/stats",
+          "file": "src/routes/admin.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/admin/content/tags/merge",
+          "file": "src/routes/admin.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/admin/content/tags/cleanup",
+          "file": "src/routes/admin.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/admin/content/tags/recommend",
+          "file": "src/routes/admin.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/admin/test-data/verify",
+          "file": "src/routes/admin.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/admin/api/endpoints",
+          "file": "src/routes/admin.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/admin/database/tables",
+          "file": "src/routes/admin.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/admin/audit-config",
+          "file": "src/routes/admin.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/admin/audit-config",
+          "file": "src/routes/admin.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/admin/ai-providers",
+          "file": "src/routes/admin.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/admin/local-rules",
+          "file": "src/routes/admin.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/admin/sensitive-words",
+          "file": "src/routes/admin.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/admin/sensitive-words",
+          "file": "src/routes/admin.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/admin/sensitive-words/:id",
+          "file": "src/routes/admin.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/admin/sensitive-words/:id",
+          "file": "src/routes/admin.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/admin/audit-test",
+          "file": "src/routes/admin.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/admin/ip-access-control/rules",
+          "file": "src/routes/admin.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/admin/ip-access-control/rules",
+          "file": "src/routes/admin.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/admin/ip-access-control/rules/:ruleId",
+          "file": "src/routes/admin.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/admin/ip-access-control/rules/:ruleId",
+          "file": "src/routes/admin.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/admin/ip-access-control/time-policies",
+          "file": "src/routes/admin.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/admin/ip-access-control/stats",
+          "file": "src/routes/admin.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/admin/intelligent-security/anomalies",
+          "file": "src/routes/admin.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/admin/intelligent-security/threats",
+          "file": "src/routes/admin.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/admin/intelligent-security/fingerprints",
+          "file": "src/routes/admin.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/admin/intelligent-security/responses",
+          "file": "src/routes/admin.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/admin/intelligent-security/stats",
+          "file": "src/routes/admin.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/admin/login-monitor/records",
+          "file": "src/routes/admin.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/admin/login-monitor/alerts",
+          "file": "src/routes/admin.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/admin/login-monitor/charts",
+          "file": "src/routes/admin.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/admin/users/download/${Date.now()}.${format}",
+          "file": "src/routes/admin.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/admin/api/endpoints",
+          "file": "src/routes/admin.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/admin/api/auth/login",
+          "file": "src/routes/admin.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/admin/api/questionnaire/submit",
+          "file": "src/routes/admin.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/admin/api/reviewer/pending-reviews",
+          "file": "src/routes/admin.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/admin/api/analytics/basic-stats",
+          "file": "src/routes/admin.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/admin/users",
+          "file": "src/routes/admin.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/questionnaire/",
+          "file": "src/routes/questionnaire.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/questionnaire/",
+          "file": "src/routes/questionnaire.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/questionnaire/:id",
+          "file": "src/routes/questionnaire.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/questionnaire/:id",
+          "file": "src/routes/questionnaire.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/reviewer/pending-reviews",
+          "file": "src/routes/reviewer.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/reviewer/submit-review",
+          "file": "src/routes/reviewer.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/reviewer/stats",
+          "file": "src/routes/reviewer.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/stories/",
+          "file": "src/routes/stories.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/stories/featured",
+          "file": "src/routes/stories.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/stories/test-tags/:storyId",
+          "file": "src/routes/stories.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/stories/available-tags",
+          "file": "src/routes/stories.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/stories/:id",
+          "file": "src/routes/stories.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/stories/",
+          "file": "src/routes/stories.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/stories/:id/like",
+          "file": "src/routes/stories.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/stories/:id",
+          "file": "src/routes/stories.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/stories/:id/dislike",
+          "file": "src/routes/stories.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/stories/:id/png/:theme?",
+          "file": "src/routes/stories.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/stories/user/:userId",
+          "file": "src/routes/stories.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/stories/debug/status",
+          "file": "src/routes/stories.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/stories/debug/raw-data",
+          "file": "src/routes/stories.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/stories/debug/init",
+          "file": "src/routes/stories.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/summary",
+          "file": "src/routes/visualization.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/dimension/:dimensionId",
+          "file": "src/routes/visualization.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/question/:questionId",
+          "file": "src/routes/visualization.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/cross-analysis",
+          "file": "src/routes/visualization.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/employment-report",
+          "file": "src/routes/visualization.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/real-time-stats",
+          "file": "src/routes/visualization.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/data-quality",
+          "file": "src/routes/visualization.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/social-insights",
+          "file": "src/routes/visualization.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/api-docs/swagger.json",
+          "file": "src/worker.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/api-docs",
+          "file": "src/worker.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/version",
+          "file": "src/worker.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/health",
+          "file": "src/worker.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/health",
+          "file": "src/worker.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/v1",
+          "file": "src/worker.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/v2",
+          "file": "src/worker.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/api",
+          "file": "src/worker.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/auth",
+          "file": "src/worker.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/uuid",
+          "file": "src/worker.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/questionnaire",
+          "file": "src/worker.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/universal-questionnaire",
+          "file": "src/worker.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/analytics",
+          "file": "src/worker.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/reviewer",
+          "file": "src/worker.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/violations",
+          "file": "src/worker.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/tiered-audit",
+          "file": "src/worker.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/admin",
+          "file": "src/worker.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/stories",
+          "file": "src/worker.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/ai-sources",
+          "file": "src/worker.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/admin/data-generator",
+          "file": "src/worker.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/super-admin",
+          "file": "src/worker.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/participation-stats",
+          "file": "src/worker.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/questionnaire-auth",
+          "file": "src/worker.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/user-content-management",
+          "file": "src/worker.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/file-management",
+          "file": "src/worker.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/auto-png",
+          "file": "src/worker.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/png-test",
+          "file": "src/worker.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/review",
+          "file": "src/worker.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/database-monitor",
+          "file": "src/worker.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/security",
+          "file": "src/worker.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/auth/google",
+          "file": "src/worker.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/admin/google-whitelist",
+          "file": "src/worker.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/user/login-history",
+          "file": "src/worker.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/admin/ip-access-control",
+          "file": "src/worker.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/user/two-factor",
+          "file": "src/worker.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/admin/intelligent-security",
+          "file": "src/worker.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/health",
+          "file": "src/worker.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/*",
+          "file": "src/worker.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/v1",
+          "file": "src/worker.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/v2",
+          "file": "src/worker.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/version",
+          "file": "src/worker.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/v1/",
+          "file": "src/worker.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/v2/",
+          "file": "src/worker.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/health-test",
+          "file": "src/index.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/api-docs/swagger.json",
+          "file": "src/index.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/api-docs",
+          "file": "src/index.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/images/auto-generate/stats",
+          "file": "src/index.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/images/auto-generate/batch-generate",
+          "file": "src/index.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/errors/report",
+          "file": "src/index.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/admin/database-test",
+          "file": "src/index.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/stats/simple",
+          "file": "src/index.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/images/auto-generate/stats",
+          "file": "src/index.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/images/auto-generate/batch-generate",
+          "file": "src/index.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/track",
+          "file": "src/index.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/health",
+          "file": "src/index.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/api",
+          "file": "src/index.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/auth",
+          "file": "src/index.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/auth/google",
+          "file": "src/index.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/admin/google-whitelist",
+          "file": "src/index.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/user/login-history",
+          "file": "src/index.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/admin/ip-access-control",
+          "file": "src/index.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/user/two-factor",
+          "file": "src/index.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/admin/intelligent-security",
+          "file": "src/index.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/admin/login-monitor",
+          "file": "src/index.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/user-content-management",
+          "file": "src/index.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/uuid",
+          "file": "src/index.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/questionnaire",
+          "file": "src/index.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/universal-questionnaire",
+          "file": "src/index.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/stories",
+          "file": "src/index.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/review",
+          "file": "src/index.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/analytics",
+          "file": "src/index.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/analytics/visualization",
+          "file": "src/index.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/reviewer",
+          "file": "src/index.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/admin",
+          "file": "src/index.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/admin/data-generator",
+          "file": "src/index.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/participation-stats",
+          "file": "src/index.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/admin/database",
+          "file": "src/index.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/violations",
+          "file": "src/index.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/audit",
+          "file": "src/index.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/database-fix",
+          "file": "src/index.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/png-management",
+          "file": "src/index.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/health",
+          "file": "src/index.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/security",
+          "file": "src/index.ts",
+          "type": "route"
+        },
+        {
+          "path": "/api/",
+          "file": "src/index.ts",
+          "type": "route"
+        }
+      ],
+      "python": [
+        {
+          "path": "/api/admin/dashboard/stats",
+          "file": "api/admin_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/admin/questionnaires",
+          "file": "api/admin_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/admin/questionnaires/<int:questionnaire_id>",
+          "file": "api/admin_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/admin/audit-records",
+          "file": "api/admin_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/admin/audit-config",
+          "file": "api/admin_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/admin/audit-config",
+          "file": "api/admin_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/admin/ai-providers",
+          "file": "api/admin_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/admin/ai-sources",
+          "file": "api/admin_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/admin/ai-sources",
+          "file": "api/admin_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/admin/local-rules",
+          "file": "api/admin_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/admin/users",
+          "file": "api/admin_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/admin/users/stats",
+          "file": "api/admin_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/admin/users/<user_id>/status",
+          "file": "api/admin_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/admin/reviewers/<reviewer_id>/activity",
+          "file": "api/admin_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/admin/reviewers",
+          "file": "api/admin_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/admin/content/categories",
+          "file": "api/admin_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/admin/content/tags",
+          "file": "api/admin_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/admin/content/categories",
+          "file": "api/admin_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/admin/content/tags",
+          "file": "api/admin_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/admin/database/status",
+          "file": "api/admin_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/admin/api/stats",
+          "file": "api/admin_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/admin/project/status",
+          "file": "api/admin_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/admin/project/control",
+          "file": "api/admin_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/admin/user-behavior/analysis",
+          "file": "api/admin_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/admin/user-behavior/cleanup",
+          "file": "api/admin_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/admin/dashboard/stats",
+          "file": "api/admin_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/admin/questionnaires",
+          "file": "api/admin_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/admin/questionnaires/<int:questionnaire_id>",
+          "file": "api/admin_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/admin/audit-records",
+          "file": "api/admin_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/admin/audit-config",
+          "file": "api/admin_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/admin/audit-config",
+          "file": "api/admin_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/admin/ai-providers",
+          "file": "api/admin_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/admin/ai-sources",
+          "file": "api/admin_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/admin/ai-sources",
+          "file": "api/admin_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/admin/local-rules",
+          "file": "api/admin_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/admin/users",
+          "file": "api/admin_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/admin/users/stats",
+          "file": "api/admin_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/admin/users/<user_id>/status",
+          "file": "api/admin_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/admin/reviewers/<reviewer_id>/activity",
+          "file": "api/admin_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/admin/reviewers",
+          "file": "api/admin_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/admin/content/categories",
+          "file": "api/admin_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/admin/content/tags",
+          "file": "api/admin_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/admin/content/categories",
+          "file": "api/admin_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/admin/content/tags",
+          "file": "api/admin_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/admin/database/status",
+          "file": "api/admin_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/admin/api/stats",
+          "file": "api/admin_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/admin/project/status",
+          "file": "api/admin_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/admin/project/control",
+          "file": "api/admin_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/admin/user-behavior/analysis",
+          "file": "api/admin_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/admin/user-behavior/cleanup",
+          "file": "api/admin_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/audit/process",
+          "file": "api/audit_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/audit/pending",
+          "file": "api/audit_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/audit/manual-review",
+          "file": "api/audit_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/audit/config",
+          "file": "api/audit_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/audit/level",
+          "file": "api/audit_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/audit/stats",
+          "file": "api/audit_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/audit/history",
+          "file": "api/audit_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/audit/test",
+          "file": "api/audit_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/audit/process",
+          "file": "api/audit_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/audit/pending",
+          "file": "api/audit_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/audit/manual-review",
+          "file": "api/audit_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/audit/config",
+          "file": "api/audit_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/audit/level",
+          "file": "api/audit_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/audit/stats",
+          "file": "api/audit_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/audit/history",
+          "file": "api/audit_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/audit/test",
+          "file": "api/audit_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/heart-voices",
+          "file": "api/heart_voice_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/heart-voices",
+          "file": "api/heart_voice_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/heart-voices/<int:voice_id>",
+          "file": "api/heart_voice_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/heart-voices/user/<int:user_id>",
+          "file": "api/heart_voice_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/heart-voices/<int:voice_id>/like",
+          "file": "api/heart_voice_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/heart-voices",
+          "file": "api/heart_voice_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/heart-voices",
+          "file": "api/heart_voice_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/heart-voices/<int:voice_id>",
+          "file": "api/heart_voice_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/heart-voices/user/<int:user_id>",
+          "file": "api/heart_voice_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/heart-voices/<int:voice_id>/like",
+          "file": "api/heart_voice_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/analytics/basic-stats",
+          "file": "api/optimized_analytics_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/analytics/distribution",
+          "file": "api/optimized_analytics_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/analytics/cross-analysis",
+          "file": "api/optimized_analytics_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/analytics/sync",
+          "file": "api/optimized_analytics_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/analytics/sync/status",
+          "file": "api/optimized_analytics_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/analytics/performance",
+          "file": "api/optimized_analytics_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/analytics/cache/invalidate",
+          "file": "api/optimized_analytics_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/analytics/health",
+          "file": "api/optimized_analytics_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/analytics/employment",
+          "file": "api/optimized_analytics_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/analytics/basic-stats",
+          "file": "api/optimized_analytics_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/analytics/distribution",
+          "file": "api/optimized_analytics_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/analytics/cross-analysis",
+          "file": "api/optimized_analytics_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/analytics/sync",
+          "file": "api/optimized_analytics_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/analytics/sync/status",
+          "file": "api/optimized_analytics_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/analytics/performance",
+          "file": "api/optimized_analytics_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/analytics/cache/invalidate",
+          "file": "api/optimized_analytics_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/analytics/health",
+          "file": "api/optimized_analytics_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/analytics/employment",
+          "file": "api/optimized_analytics_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/cards/generate",
+          "file": "api/png_card_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/cards/download/<int:card_id>",
+          "file": "api/png_card_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/cards/user/<int:user_id>",
+          "file": "api/png_card_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/cards/styles",
+          "file": "api/png_card_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/cards/generate",
+          "file": "api/png_card_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/cards/download/<int:card_id>",
+          "file": "api/png_card_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/cards/user/<int:user_id>",
+          "file": "api/png_card_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/cards/styles",
+          "file": "api/png_card_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/analytics/dashboard",
+          "file": "api/real_analytics_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/analytics/questionnaire/statistics/<question_id>",
+          "file": "api/real_analytics_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/analytics/real-data",
+          "file": "api/real_analytics_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/health",
+          "file": "api/real_analytics_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/analytics/dashboard",
+          "file": "api/real_analytics_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/analytics/questionnaire/statistics/<question_id>",
+          "file": "api/real_analytics_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/analytics/real-data",
+          "file": "api/real_analytics_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/health",
+          "file": "api/real_analytics_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/reviewer/pending-reviews",
+          "file": "api/reviewer_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/reviewer/submit-review",
+          "file": "api/reviewer_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/reviewer/stats",
+          "file": "api/reviewer_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/reviewer/pending-reviews",
+          "file": "api/reviewer_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/reviewer/submit-review",
+          "file": "api/reviewer_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/reviewer/stats",
+          "file": "api/reviewer_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/stories",
+          "file": "api/story_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/stories",
+          "file": "api/story_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/stories/<int:story_id>",
+          "file": "api/story_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/stories/user/<int:user_id>",
+          "file": "api/story_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/stories/featured",
+          "file": "api/story_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/stories",
+          "file": "api/story_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/stories",
+          "file": "api/story_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/stories/<int:story_id>",
+          "file": "api/story_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/stories/user/<int:user_id>",
+          "file": "api/story_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/stories/featured",
+          "file": "api/story_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/test-data/stats",
+          "file": "api/test_data_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/test-data/generate",
+          "file": "api/test_data_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/test-data/clear",
+          "file": "api/test_data_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/test-data/preview",
+          "file": "api/test_data_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/test-data/validate",
+          "file": "api/test_data_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/test-data/templates",
+          "file": "api/test_data_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/test-data/health",
+          "file": "api/test_data_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/admin/data-generator/clear",
+          "file": "api/test_data_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/admin/data-generator/smart-voice",
+          "file": "api/test_data_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/admin/data-generator/smart-story",
+          "file": "api/test_data_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/test-data/stats",
+          "file": "api/test_data_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/test-data/generate",
+          "file": "api/test_data_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/test-data/clear",
+          "file": "api/test_data_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/test-data/preview",
+          "file": "api/test_data_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/test-data/validate",
+          "file": "api/test_data_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/test-data/templates",
+          "file": "api/test_data_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/test-data/health",
+          "file": "api/test_data_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/admin/data-generator/clear",
+          "file": "api/test_data_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/admin/data-generator/smart-voice",
+          "file": "api/test_data_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/admin/data-generator/smart-story",
+          "file": "api/test_data_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/uuid/auth/semi-anonymous",
+          "file": "api/user_auth_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/uuid/auth/anonymous",
+          "file": "api/user_auth_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/uuid/test-combinations",
+          "file": "api/user_auth_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/uuid/session/<session_id>",
+          "file": "api/user_auth_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/uuid/users/statistics",
+          "file": "api/user_auth_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/health",
+          "file": "api/user_auth_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/uuid/auth/semi-anonymous",
+          "file": "api/user_auth_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/uuid/auth/anonymous",
+          "file": "api/user_auth_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/uuid/test-combinations",
+          "file": "api/user_auth_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/uuid/session/<session_id>",
+          "file": "api/user_auth_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/api/uuid/users/statistics",
+          "file": "api/user_auth_api.py",
+          "type": "flask_route"
+        },
+        {
+          "path": "/health",
+          "file": "api/user_auth_api.py",
+          "type": "flask_route"
+        }
+      ]
+    },
+    "frontend": {
+      "calls": [
+        {
+          "path": "/api/errors/report",
+          "file": "components/ErrorBoundary/ErrorBoundary.tsx",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/errors/report",
+          "file": "components/ErrorBoundary/ErrorBoundary.tsx",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/super-admin/project/status",
+          "file": "components/admin/SuperAdminDashboard.tsx",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/super-admin/security/metrics",
+          "file": "components/admin/SuperAdminDashboard.tsx",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/super-admin/security/threats",
+          "file": "components/admin/SuperAdminDashboard.tsx",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/super-admin/emergency/shutdown",
+          "file": "components/admin/SuperAdminDashboard.tsx",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/super-admin/project/restore",
+          "file": "components/admin/SuperAdminDashboard.tsx",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/super-admin/security/block-ip",
+          "file": "components/admin/SuperAdminDashboard.tsx",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/super-admin/emergency/shutdown",
+          "file": "components/admin/SuperAdminDashboard.tsx",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/super-admin/project/restore",
+          "file": "components/admin/SuperAdminDashboard.tsx",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/super-admin/security/block-ip",
+          "file": "components/admin/SuperAdminDashboard.tsx",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/content/tags/recommend",
+          "file": "components/common/AITagRecommendation.tsx",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/content/tags/recommend",
+          "file": "components/common/AITagRecommendation.tsx",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/stories/${contentId}/like",
+          "file": "components/common/LikeDislikeDownload.tsx",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/stories/${contentId}/dislike",
+          "file": "components/common/LikeDislikeDownload.tsx",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/stories/${contentId}/png/${theme}",
+          "file": "components/common/LikeDislikeDownload.tsx",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/reviewer/submit-review",
+          "file": "components/reviewer/QuickReviewComponent.tsx",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/audit/level",
+          "file": "config/apiConfig.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/audit/test",
+          "file": "config/apiConfig.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/audit/stats",
+          "file": "config/apiConfig.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/audit/history",
+          "file": "config/apiConfig.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/v",
+          "file": "config/versionConfig.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/health",
+          "file": "pages/TestPage.tsx",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/health",
+          "file": "pages/TestPage.tsx",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/google-whitelist",
+          "file": "pages/admin/GoogleWhitelistPage.tsx",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/google-whitelist/${id}",
+          "file": "pages/admin/GoogleWhitelistPage.tsx",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/google-whitelist",
+          "file": "pages/admin/GoogleWhitelistPage.tsx",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/google-whitelist/${editingEntry.id}",
+          "file": "pages/admin/GoogleWhitelistPage.tsx",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/google-whitelist",
+          "file": "pages/admin/GoogleWhitelistPage.tsx",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/google-whitelist/${id}",
+          "file": "pages/admin/GoogleWhitelistPage.tsx",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/ip-access-control/rules",
+          "file": "pages/admin/IPAccessControlPage.tsx",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/ip-access-control/time-policies",
+          "file": "pages/admin/IPAccessControlPage.tsx",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/ip-access-control/stats",
+          "file": "pages/admin/IPAccessControlPage.tsx",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/ip-access-control/rules/${ruleId}",
+          "file": "pages/admin/IPAccessControlPage.tsx",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/ip-access-control/rules",
+          "file": "pages/admin/IPAccessControlPage.tsx",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/ip-access-control/time-policies",
+          "file": "pages/admin/IPAccessControlPage.tsx",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/ip-access-control/stats",
+          "file": "pages/admin/IPAccessControlPage.tsx",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/ip-access-control/rules/${editingRule.id}",
+          "file": "pages/admin/IPAccessControlPage.tsx",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/ip-access-control/rules",
+          "file": "pages/admin/IPAccessControlPage.tsx",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/ip-access-control/rules/${ruleId}",
+          "file": "pages/admin/IPAccessControlPage.tsx",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/intelligent-security/anomalies",
+          "file": "pages/admin/IntelligentSecurityPage.tsx",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/intelligent-security/threats",
+          "file": "pages/admin/IntelligentSecurityPage.tsx",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/intelligent-security/fingerprints",
+          "file": "pages/admin/IntelligentSecurityPage.tsx",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/intelligent-security/responses",
+          "file": "pages/admin/IntelligentSecurityPage.tsx",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/intelligent-security/stats",
+          "file": "pages/admin/IntelligentSecurityPage.tsx",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/intelligent-security/anomalies",
+          "file": "pages/admin/IntelligentSecurityPage.tsx",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/intelligent-security/threats",
+          "file": "pages/admin/IntelligentSecurityPage.tsx",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/intelligent-security/fingerprints",
+          "file": "pages/admin/IntelligentSecurityPage.tsx",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/intelligent-security/responses",
+          "file": "pages/admin/IntelligentSecurityPage.tsx",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/intelligent-security/stats",
+          "file": "pages/admin/IntelligentSecurityPage.tsx",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/login-monitor/records",
+          "file": "pages/admin/LoginMonitorPage.tsx",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/login-monitor/alerts",
+          "file": "pages/admin/LoginMonitorPage.tsx",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/login-monitor/charts",
+          "file": "pages/admin/LoginMonitorPage.tsx",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/login-monitor/records",
+          "file": "pages/admin/LoginMonitorPage.tsx",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/login-monitor/alerts",
+          "file": "pages/admin/LoginMonitorPage.tsx",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/login-monitor/charts",
+          "file": "pages/admin/LoginMonitorPage.tsx",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/auth/login",
+          "file": "pages/admin/ProjectArchitecturePage.tsx",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/auth/logout",
+          "file": "pages/admin/ProjectArchitecturePage.tsx",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/questionnaire/submit",
+          "file": "pages/admin/ProjectArchitecturePage.tsx",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/dashboard/stats",
+          "file": "pages/admin/ProjectArchitecturePage.tsx",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/questionnaires",
+          "file": "pages/admin/ProjectArchitecturePage.tsx",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/heart-voices",
+          "file": "pages/admin/ProjectArchitecturePage.tsx",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/heart-voices/submit",
+          "file": "pages/admin/ProjectArchitecturePage.tsx",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/stories",
+          "file": "pages/admin/ProjectArchitecturePage.tsx",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/stories/submit",
+          "file": "pages/admin/ProjectArchitecturePage.tsx",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/analytics/*",
+          "file": "pages/admin/ProjectArchitecturePage.tsx",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/questionnaire/submit",
+          "file": "pages/admin/ProjectArchitecturePage.tsx",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/questionnaire/get",
+          "file": "pages/admin/ProjectArchitecturePage.tsx",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/questionnaire/submit",
+          "file": "pages/admin/ProjectArchitecturePage.tsx",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/universal/questionnaire/submit",
+          "file": "pages/admin/ProjectArchitecturePage.tsx",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/universal/questionnaire/submit",
+          "file": "pages/admin/ProjectArchitecturePage.tsx",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/ai/analyze",
+          "file": "pages/admin/ProjectArchitecturePage.tsx",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/analytics/visualization",
+          "file": "pages/admin/ProjectArchitecturePage.tsx",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/analytics/summary",
+          "file": "pages/admin/ProjectArchitecturePage.tsx",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/users",
+          "file": "pages/admin/ProjectArchitecturePage.tsx",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/users/manage",
+          "file": "pages/admin/ProjectArchitecturePage.tsx",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/voices/list",
+          "file": "pages/admin/ProjectArchitecturePage.tsx",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/voices/like",
+          "file": "pages/admin/ProjectArchitecturePage.tsx",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/stories/list",
+          "file": "pages/admin/ProjectArchitecturePage.tsx",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/stories/like",
+          "file": "pages/admin/ProjectArchitecturePage.tsx",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/reviewer/history",
+          "file": "pages/reviewer/ReviewHistoryPage.tsx",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/reviewer/pending-reviews",
+          "file": "pages/reviewer/StoryReviewPage.tsx",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/reviewer/submit-review",
+          "file": "pages/reviewer/StoryReviewPage.tsx",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/user/login-history",
+          "file": "pages/user/LoginHistoryPage.tsx",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/user/login-history",
+          "file": "pages/user/LoginHistoryPage.tsx",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/user/two-factor/status",
+          "file": "pages/user/TwoFactorAuthPage.tsx",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/user/two-factor/setup",
+          "file": "pages/user/TwoFactorAuthPage.tsx",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/user/two-factor/verify",
+          "file": "pages/user/TwoFactorAuthPage.tsx",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/user/two-factor/disable",
+          "file": "pages/user/TwoFactorAuthPage.tsx",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/user/two-factor/regenerate-backup-codes",
+          "file": "pages/user/TwoFactorAuthPage.tsx",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/user/two-factor/status",
+          "file": "pages/user/TwoFactorAuthPage.tsx",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/user/two-factor/setup",
+          "file": "pages/user/TwoFactorAuthPage.tsx",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/user/two-factor/verify",
+          "file": "pages/user/TwoFactorAuthPage.tsx",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/user/two-factor/disable",
+          "file": "pages/user/TwoFactorAuthPage.tsx",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/user/two-factor/regenerate-backup-codes",
+          "file": "pages/user/TwoFactorAuthPage.tsx",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/dashboard/stats",
+          "file": "services/ManagementAdminService.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/users?${params}",
+          "file": "services/ManagementAdminService.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/users/${userId}/status",
+          "file": "services/ManagementAdminService.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/users/${userId}",
+          "file": "services/ManagementAdminService.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/users/${userId}",
+          "file": "services/ManagementAdminService.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/users/batch",
+          "file": "services/ManagementAdminService.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/users/export?format=${format}",
+          "file": "services/ManagementAdminService.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/users/stats",
+          "file": "services/ManagementAdminService.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/questionnaires",
+          "file": "services/ManagementAdminService.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/questionnaires/${id}",
+          "file": "services/ManagementAdminService.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/questionnaires/batch-update",
+          "file": "services/ManagementAdminService.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/questionnaires/${id}",
+          "file": "services/ManagementAdminService.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/audit-records",
+          "file": "services/ManagementAdminService.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/reviewers",
+          "file": "services/ManagementAdminService.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/content/categories",
+          "file": "services/ManagementAdminService.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/content/tags",
+          "file": "services/ManagementAdminService.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/content/categories",
+          "file": "services/ManagementAdminService.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/content/tags",
+          "file": "services/ManagementAdminService.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/content/tags/${id}",
+          "file": "services/ManagementAdminService.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/content/tags/${id}",
+          "file": "services/ManagementAdminService.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/content/tags/stats",
+          "file": "services/ManagementAdminService.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/content/tags/merge",
+          "file": "services/ManagementAdminService.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/content/tags/cleanup",
+          "file": "services/ManagementAdminService.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/audit-config",
+          "file": "services/ManagementAdminService.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/audit-config",
+          "file": "services/ManagementAdminService.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/ai-providers",
+          "file": "services/ManagementAdminService.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/local-rules",
+          "file": "services/ManagementAdminService.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/api/endpoints",
+          "file": "services/ManagementAdminService.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/database/tables",
+          "file": "services/ManagementAdminService.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/dashboard/stats",
+          "file": "services/ManagementAdminService.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/users?${params}",
+          "file": "services/ManagementAdminService.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/users/${userId}/status",
+          "file": "services/ManagementAdminService.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/users/${userId}",
+          "file": "services/ManagementAdminService.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/users/${userId}",
+          "file": "services/ManagementAdminService.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/users/batch",
+          "file": "services/ManagementAdminService.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/users/export?format=${format}",
+          "file": "services/ManagementAdminService.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/users/stats",
+          "file": "services/ManagementAdminService.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/questionnaires",
+          "file": "services/ManagementAdminService.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/questionnaires/${id}",
+          "file": "services/ManagementAdminService.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/questionnaires/batch-update",
+          "file": "services/ManagementAdminService.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/questionnaires/${id}",
+          "file": "services/ManagementAdminService.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/audit-records",
+          "file": "services/ManagementAdminService.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/reviewers",
+          "file": "services/ManagementAdminService.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/content/categories",
+          "file": "services/ManagementAdminService.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/content/tags",
+          "file": "services/ManagementAdminService.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/content/categories",
+          "file": "services/ManagementAdminService.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/content/tags",
+          "file": "services/ManagementAdminService.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/content/tags/${id}",
+          "file": "services/ManagementAdminService.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/content/tags/${id}",
+          "file": "services/ManagementAdminService.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/content/tags/stats",
+          "file": "services/ManagementAdminService.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/content/tags/merge",
+          "file": "services/ManagementAdminService.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/content/tags/cleanup",
+          "file": "services/ManagementAdminService.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/audit-config",
+          "file": "services/ManagementAdminService.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/audit-config",
+          "file": "services/ManagementAdminService.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/ai-providers",
+          "file": "services/ManagementAdminService.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/local-rules",
+          "file": "services/ManagementAdminService.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/api/endpoints",
+          "file": "services/ManagementAdminService.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/auth/login",
+          "file": "services/ManagementAdminService.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/questionnaire/submit",
+          "file": "services/ManagementAdminService.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/voices",
+          "file": "services/ManagementAdminService.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/stories",
+          "file": "services/ManagementAdminService.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/database/tables",
+          "file": "services/ManagementAdminService.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/questionnaires/batch-update",
+          "file": "services/adminService.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/questionnaires/${id}",
+          "file": "services/adminService.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/export",
+          "file": "services/adminService.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/super-admin/security/metrics",
+          "file": "services/adminService.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/super-admin/security/threats",
+          "file": "services/adminService.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/super-admin/security/block-ip",
+          "file": "services/adminService.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/super-admin/emergency/shutdown",
+          "file": "services/adminService.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/super-admin/project/restore",
+          "file": "services/adminService.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/super-admin/project/status",
+          "file": "services/adminService.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/dashboard/stats",
+          "file": "services/adminService.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/questionnaires",
+          "file": "services/adminService.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/questionnaires/${id}",
+          "file": "services/adminService.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/questionnaires/batch-update",
+          "file": "services/adminService.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/questionnaires/${id}",
+          "file": "services/adminService.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/users",
+          "file": "services/adminService.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/audit-records",
+          "file": "services/adminService.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/super-admin/system/logs",
+          "file": "services/adminService.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/super-admin/operation/logs",
+          "file": "services/adminService.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/export",
+          "file": "services/adminService.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/audit-config",
+          "file": "services/adminService.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/audit-config",
+          "file": "services/adminService.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/ai-providers",
+          "file": "services/adminService.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/local-rules",
+          "file": "services/adminService.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/users/stats",
+          "file": "services/adminService.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/users/${userId}/status",
+          "file": "services/adminService.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/reviewers",
+          "file": "services/adminService.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/reviewers/${reviewerId}/activity",
+          "file": "services/adminService.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/content/categories",
+          "file": "services/adminService.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/content/tags",
+          "file": "services/adminService.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/content/categories",
+          "file": "services/adminService.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/content/tags",
+          "file": "services/adminService.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/database/status",
+          "file": "services/adminService.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/admin/api/stats",
+          "file": "services/adminService.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/super-admin/security/metrics",
+          "file": "services/adminService.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/super-admin/security/threats",
+          "file": "services/adminService.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/super-admin/security/block-ip",
+          "file": "services/adminService.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/super-admin/emergency/shutdown",
+          "file": "services/adminService.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/super-admin/project/restore",
+          "file": "services/adminService.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/super-admin/project/status",
+          "file": "services/adminService.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/ai-review",
+          "file": "services/aiReviewService.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/ai-water-management",
+          "file": "services/aiWaterManagementService.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/v",
+          "file": "services/api.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/uuid/questionnaire/user/${userId}",
+          "file": "services/userContentService.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/heart-voices/user/${userId}",
+          "file": "services/userContentService.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/stories/user/${userId}",
+          "file": "services/userContentService.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/uuid/questionnaire/user/${userId}",
+          "file": "services/userContentService.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/heart-voices/user/${userId}",
+          "file": "services/userContentService.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/stories/user/${userId}",
+          "file": "services/userContentService.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/uuid/questionnaire/${id}",
+          "file": "services/userContentService.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/heart-voices/${id}",
+          "file": "services/userContentService.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/stories/${id}",
+          "file": "services/userContentService.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/uuid/questionnaire/${id}",
+          "file": "services/userContentService.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/heart-voices/${id}",
+          "file": "services/userContentService.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/stories/${id}",
+          "file": "services/userContentService.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/errors/report",
+          "file": "utils/errorHandler.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/errors/report",
+          "file": "utils/errorHandler.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/errors",
+          "file": "utils/errorMonitor.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/performance-metrics",
+          "file": "utils/performanceMonitor.ts",
+          "type": "api_call"
+        },
+        {
+          "path": "/api/performance-metrics",
+          "file": "utils/performanceMonitor.ts",
+          "type": "api_call"
+        }
+      ],
+      "services": []
+    },
+    "analysis": {
+      "duplicates": [
+        {
+          "path": "/api/admin/dashboard/stats",
+          "count": 3,
+          "type": "duplicate_definition",
+          "description": "API路径重复定义3次"
+        },
+        {
+          "path": "/api/admin/questionnaires",
+          "count": 3,
+          "type": "duplicate_definition",
+          "description": "API路径重复定义3次"
+        },
+        {
+          "path": "/api/admin/users",
+          "count": 4,
+          "type": "duplicate_definition",
+          "description": "API路径重复定义4次"
+        },
+        {
+          "path": "/api/admin/users/stats",
+          "count": 3,
+          "type": "duplicate_definition",
+          "description": "API路径重复定义3次"
+        },
+        {
+          "path": "/api/admin/reviewers",
+          "count": 3,
+          "type": "duplicate_definition",
+          "description": "API路径重复定义3次"
+        },
+        {
+          "path": "/api/admin/content/categories",
+          "count": 6,
+          "type": "duplicate_definition",
+          "description": "API路径重复定义6次"
+        },
+        {
+          "path": "/api/admin/content/tags",
+          "count": 6,
+          "type": "duplicate_definition",
+          "description": "API路径重复定义6次"
+        },
+        {
+          "path": "/api/admin/content/tags/:id",
+          "count": 2,
+          "type": "duplicate_definition",
+          "description": "API路径重复定义2次"
+        },
+        {
+          "path": "/api/admin/content/tags/recommend",
+          "count": 2,
+          "type": "duplicate_definition",
+          "description": "API路径重复定义2次"
+        },
+        {
+          "path": "/api/admin/content/tags/stats",
+          "count": 2,
+          "type": "duplicate_definition",
+          "description": "API路径重复定义2次"
+        },
+        {
+          "path": "/api/admin/content/tags/merge",
+          "count": 2,
+          "type": "duplicate_definition",
+          "description": "API路径重复定义2次"
+        },
+        {
+          "path": "/api/admin/content/tags/cleanup",
+          "count": 2,
+          "type": "duplicate_definition",
+          "description": "API路径重复定义2次"
+        },
+        {
+          "path": "/api/admin/content/:contentType/:contentId/tags",
+          "count": 2,
+          "type": "duplicate_definition",
+          "description": "API路径重复定义2次"
+        },
+        {
+          "path": "/api/admin/api/endpoints",
+          "count": 2,
+          "type": "duplicate_definition",
+          "description": "API路径重复定义2次"
+        },
+        {
+          "path": "/api/admin/audit-config",
+          "count": 6,
+          "type": "duplicate_definition",
+          "description": "API路径重复定义6次"
+        },
+        {
+          "path": "/api/admin/ai-providers",
+          "count": 3,
+          "type": "duplicate_definition",
+          "description": "API路径重复定义3次"
+        },
+        {
+          "path": "/api/admin/local-rules",
+          "count": 3,
+          "type": "duplicate_definition",
+          "description": "API路径重复定义3次"
+        },
+        {
+          "path": "/api/admin/sensitive-words",
+          "count": 2,
+          "type": "duplicate_definition",
+          "description": "API路径重复定义2次"
+        },
+        {
+          "path": "/api/admin/sensitive-words/:id",
+          "count": 2,
+          "type": "duplicate_definition",
+          "description": "API路径重复定义2次"
+        },
+        {
+          "path": "/api/admin/ip-access-control/rules",
+          "count": 2,
+          "type": "duplicate_definition",
+          "description": "API路径重复定义2次"
+        },
+        {
+          "path": "/api/admin/ip-access-control/rules/:ruleId",
+          "count": 2,
+          "type": "duplicate_definition",
+          "description": "API路径重复定义2次"
+        },
+        {
+          "path": "/api/questionnaire/",
+          "count": 2,
+          "type": "duplicate_definition",
+          "description": "API路径重复定义2次"
+        },
+        {
+          "path": "/api/questionnaire/:id",
+          "count": 2,
+          "type": "duplicate_definition",
+          "description": "API路径重复定义2次"
+        },
+        {
+          "path": "/api/reviewer/pending-reviews",
+          "count": 3,
+          "type": "duplicate_definition",
+          "description": "API路径重复定义3次"
+        },
+        {
+          "path": "/api/reviewer/submit-review",
+          "count": 3,
+          "type": "duplicate_definition",
+          "description": "API路径重复定义3次"
+        },
+        {
+          "path": "/api/reviewer/stats",
+          "count": 3,
+          "type": "duplicate_definition",
+          "description": "API路径重复定义3次"
+        },
+        {
+          "path": "/api/stories/",
+          "count": 2,
+          "type": "duplicate_definition",
+          "description": "API路径重复定义2次"
+        },
+        {
+          "path": "/api/stories/featured",
+          "count": 3,
+          "type": "duplicate_definition",
+          "description": "API路径重复定义3次"
+        },
+        {
+          "path": "/api/stories/:id",
+          "count": 2,
+          "type": "duplicate_definition",
+          "description": "API路径重复定义2次"
+        },
+        {
+          "path": "/api/api-docs/swagger.json",
+          "count": 2,
+          "type": "duplicate_definition",
+          "description": "API路径重复定义2次"
+        },
+        {
+          "path": "/api/api-docs",
+          "count": 2,
+          "type": "duplicate_definition",
+          "description": "API路径重复定义2次"
+        },
+        {
+          "path": "/api/version",
+          "count": 2,
+          "type": "duplicate_definition",
+          "description": "API路径重复定义2次"
+        },
+        {
+          "path": "/api/health",
+          "count": 5,
+          "type": "duplicate_definition",
+          "description": "API路径重复定义5次"
+        },
+        {
+          "path": "/api/v1",
+          "count": 2,
+          "type": "duplicate_definition",
+          "description": "API路径重复定义2次"
+        },
+        {
+          "path": "/api/v2",
+          "count": 2,
+          "type": "duplicate_definition",
+          "description": "API路径重复定义2次"
+        },
+        {
+          "path": "/api/api",
+          "count": 2,
+          "type": "duplicate_definition",
+          "description": "API路径重复定义2次"
+        },
+        {
+          "path": "/api/auth",
+          "count": 2,
+          "type": "duplicate_definition",
+          "description": "API路径重复定义2次"
+        },
+        {
+          "path": "/api/uuid",
+          "count": 2,
+          "type": "duplicate_definition",
+          "description": "API路径重复定义2次"
+        },
+        {
+          "path": "/api/questionnaire",
+          "count": 2,
+          "type": "duplicate_definition",
+          "description": "API路径重复定义2次"
+        },
+        {
+          "path": "/api/universal-questionnaire",
+          "count": 2,
+          "type": "duplicate_definition",
+          "description": "API路径重复定义2次"
+        },
+        {
+          "path": "/api/analytics",
+          "count": 2,
+          "type": "duplicate_definition",
+          "description": "API路径重复定义2次"
+        },
+        {
+          "path": "/api/reviewer",
+          "count": 2,
+          "type": "duplicate_definition",
+          "description": "API路径重复定义2次"
+        },
+        {
+          "path": "/api/violations",
+          "count": 2,
+          "type": "duplicate_definition",
+          "description": "API路径重复定义2次"
+        },
+        {
+          "path": "/api/admin",
+          "count": 2,
+          "type": "duplicate_definition",
+          "description": "API路径重复定义2次"
+        },
+        {
+          "path": "/api/stories",
+          "count": 6,
+          "type": "duplicate_definition",
+          "description": "API路径重复定义6次"
+        },
+        {
+          "path": "/api/admin/data-generator",
+          "count": 2,
+          "type": "duplicate_definition",
+          "description": "API路径重复定义2次"
+        },
+        {
+          "path": "/api/participation-stats",
+          "count": 2,
+          "type": "duplicate_definition",
+          "description": "API路径重复定义2次"
+        },
+        {
+          "path": "/api/user-content-management",
+          "count": 2,
+          "type": "duplicate_definition",
+          "description": "API路径重复定义2次"
+        },
+        {
+          "path": "/api/review",
+          "count": 2,
+          "type": "duplicate_definition",
+          "description": "API路径重复定义2次"
+        },
+        {
+          "path": "/api/security",
+          "count": 2,
+          "type": "duplicate_definition",
+          "description": "API路径重复定义2次"
+        },
+        {
+          "path": "/api/auth/google",
+          "count": 2,
+          "type": "duplicate_definition",
+          "description": "API路径重复定义2次"
+        },
+        {
+          "path": "/api/admin/google-whitelist",
+          "count": 2,
+          "type": "duplicate_definition",
+          "description": "API路径重复定义2次"
+        },
+        {
+          "path": "/api/user/login-history",
+          "count": 2,
+          "type": "duplicate_definition",
+          "description": "API路径重复定义2次"
+        },
+        {
+          "path": "/api/admin/ip-access-control",
+          "count": 2,
+          "type": "duplicate_definition",
+          "description": "API路径重复定义2次"
+        },
+        {
+          "path": "/api/user/two-factor",
+          "count": 2,
+          "type": "duplicate_definition",
+          "description": "API路径重复定义2次"
+        },
+        {
+          "path": "/api/admin/intelligent-security",
+          "count": 2,
+          "type": "duplicate_definition",
+          "description": "API路径重复定义2次"
+        },
+        {
+          "path": "/api/images/auto-generate/stats",
+          "count": 2,
+          "type": "duplicate_definition",
+          "description": "API路径重复定义2次"
+        },
+        {
+          "path": "/api/images/auto-generate/batch-generate",
+          "count": 2,
+          "type": "duplicate_definition",
+          "description": "API路径重复定义2次"
+        },
+        {
+          "path": "/api/admin/questionnaires/<int:questionnaire_id>",
+          "count": 2,
+          "type": "duplicate_definition",
+          "description": "API路径重复定义2次"
+        },
+        {
+          "path": "/api/admin/audit-records",
+          "count": 2,
+          "type": "duplicate_definition",
+          "description": "API路径重复定义2次"
+        },
+        {
+          "path": "/api/admin/ai-sources",
+          "count": 4,
+          "type": "duplicate_definition",
+          "description": "API路径重复定义4次"
+        },
+        {
+          "path": "/api/admin/users/<user_id>/status",
+          "count": 2,
+          "type": "duplicate_definition",
+          "description": "API路径重复定义2次"
+        },
+        {
+          "path": "/api/admin/reviewers/<reviewer_id>/activity",
+          "count": 2,
+          "type": "duplicate_definition",
+          "description": "API路径重复定义2次"
+        },
+        {
+          "path": "/api/admin/database/status",
+          "count": 2,
+          "type": "duplicate_definition",
+          "description": "API路径重复定义2次"
+        },
+        {
+          "path": "/api/admin/api/stats",
+          "count": 2,
+          "type": "duplicate_definition",
+          "description": "API路径重复定义2次"
+        },
+        {
+          "path": "/api/admin/project/status",
+          "count": 2,
+          "type": "duplicate_definition",
+          "description": "API路径重复定义2次"
+        },
+        {
+          "path": "/api/admin/project/control",
+          "count": 2,
+          "type": "duplicate_definition",
+          "description": "API路径重复定义2次"
+        },
+        {
+          "path": "/api/admin/user-behavior/analysis",
+          "count": 2,
+          "type": "duplicate_definition",
+          "description": "API路径重复定义2次"
+        },
+        {
+          "path": "/api/admin/user-behavior/cleanup",
+          "count": 2,
+          "type": "duplicate_definition",
+          "description": "API路径重复定义2次"
+        },
+        {
+          "path": "/api/audit/process",
+          "count": 2,
+          "type": "duplicate_definition",
+          "description": "API路径重复定义2次"
+        },
+        {
+          "path": "/api/audit/pending",
+          "count": 2,
+          "type": "duplicate_definition",
+          "description": "API路径重复定义2次"
+        },
+        {
+          "path": "/api/audit/manual-review",
+          "count": 2,
+          "type": "duplicate_definition",
+          "description": "API路径重复定义2次"
+        },
+        {
+          "path": "/api/audit/config",
+          "count": 2,
+          "type": "duplicate_definition",
+          "description": "API路径重复定义2次"
+        },
+        {
+          "path": "/api/audit/level",
+          "count": 2,
+          "type": "duplicate_definition",
+          "description": "API路径重复定义2次"
+        },
+        {
+          "path": "/api/audit/stats",
+          "count": 2,
+          "type": "duplicate_definition",
+          "description": "API路径重复定义2次"
+        },
+        {
+          "path": "/api/audit/history",
+          "count": 2,
+          "type": "duplicate_definition",
+          "description": "API路径重复定义2次"
+        },
+        {
+          "path": "/api/audit/test",
+          "count": 2,
+          "type": "duplicate_definition",
+          "description": "API路径重复定义2次"
+        },
+        {
+          "path": "/api/heart-voices",
+          "count": 4,
+          "type": "duplicate_definition",
+          "description": "API路径重复定义4次"
+        },
+        {
+          "path": "/api/heart-voices/<int:voice_id>",
+          "count": 2,
+          "type": "duplicate_definition",
+          "description": "API路径重复定义2次"
+        },
+        {
+          "path": "/api/heart-voices/user/<int:user_id>",
+          "count": 2,
+          "type": "duplicate_definition",
+          "description": "API路径重复定义2次"
+        },
+        {
+          "path": "/api/heart-voices/<int:voice_id>/like",
+          "count": 2,
+          "type": "duplicate_definition",
+          "description": "API路径重复定义2次"
+        },
+        {
+          "path": "/api/analytics/basic-stats",
+          "count": 2,
+          "type": "duplicate_definition",
+          "description": "API路径重复定义2次"
+        },
+        {
+          "path": "/api/analytics/distribution",
+          "count": 2,
+          "type": "duplicate_definition",
+          "description": "API路径重复定义2次"
+        },
+        {
+          "path": "/api/analytics/cross-analysis",
+          "count": 2,
+          "type": "duplicate_definition",
+          "description": "API路径重复定义2次"
+        },
+        {
+          "path": "/api/analytics/sync",
+          "count": 2,
+          "type": "duplicate_definition",
+          "description": "API路径重复定义2次"
+        },
+        {
+          "path": "/api/analytics/sync/status",
+          "count": 2,
+          "type": "duplicate_definition",
+          "description": "API路径重复定义2次"
+        },
+        {
+          "path": "/api/analytics/performance",
+          "count": 2,
+          "type": "duplicate_definition",
+          "description": "API路径重复定义2次"
+        },
+        {
+          "path": "/api/analytics/cache/invalidate",
+          "count": 2,
+          "type": "duplicate_definition",
+          "description": "API路径重复定义2次"
+        },
+        {
+          "path": "/api/analytics/health",
+          "count": 2,
+          "type": "duplicate_definition",
+          "description": "API路径重复定义2次"
+        },
+        {
+          "path": "/api/analytics/employment",
+          "count": 2,
+          "type": "duplicate_definition",
+          "description": "API路径重复定义2次"
+        },
+        {
+          "path": "/api/cards/generate",
+          "count": 2,
+          "type": "duplicate_definition",
+          "description": "API路径重复定义2次"
+        },
+        {
+          "path": "/api/cards/download/<int:card_id>",
+          "count": 2,
+          "type": "duplicate_definition",
+          "description": "API路径重复定义2次"
+        },
+        {
+          "path": "/api/cards/user/<int:user_id>",
+          "count": 2,
+          "type": "duplicate_definition",
+          "description": "API路径重复定义2次"
+        },
+        {
+          "path": "/api/cards/styles",
+          "count": 2,
+          "type": "duplicate_definition",
+          "description": "API路径重复定义2次"
+        },
+        {
+          "path": "/api/analytics/dashboard",
+          "count": 2,
+          "type": "duplicate_definition",
+          "description": "API路径重复定义2次"
+        },
+        {
+          "path": "/api/analytics/questionnaire/statistics/<question_id>",
+          "count": 2,
+          "type": "duplicate_definition",
+          "description": "API路径重复定义2次"
+        },
+        {
+          "path": "/api/analytics/real-data",
+          "count": 2,
+          "type": "duplicate_definition",
+          "description": "API路径重复定义2次"
+        },
+        {
+          "path": "/health",
+          "count": 4,
+          "type": "duplicate_definition",
+          "description": "API路径重复定义4次"
+        },
+        {
+          "path": "/api/stories/<int:story_id>",
+          "count": 2,
+          "type": "duplicate_definition",
+          "description": "API路径重复定义2次"
+        },
+        {
+          "path": "/api/stories/user/<int:user_id>",
+          "count": 2,
+          "type": "duplicate_definition",
+          "description": "API路径重复定义2次"
+        },
+        {
+          "path": "/api/test-data/stats",
+          "count": 2,
+          "type": "duplicate_definition",
+          "description": "API路径重复定义2次"
+        },
+        {
+          "path": "/api/test-data/generate",
+          "count": 2,
+          "type": "duplicate_definition",
+          "description": "API路径重复定义2次"
+        },
+        {
+          "path": "/api/test-data/clear",
+          "count": 2,
+          "type": "duplicate_definition",
+          "description": "API路径重复定义2次"
+        },
+        {
+          "path": "/api/test-data/preview",
+          "count": 2,
+          "type": "duplicate_definition",
+          "description": "API路径重复定义2次"
+        },
+        {
+          "path": "/api/test-data/validate",
+          "count": 2,
+          "type": "duplicate_definition",
+          "description": "API路径重复定义2次"
+        },
+        {
+          "path": "/api/test-data/templates",
+          "count": 2,
+          "type": "duplicate_definition",
+          "description": "API路径重复定义2次"
+        },
+        {
+          "path": "/api/test-data/health",
+          "count": 2,
+          "type": "duplicate_definition",
+          "description": "API路径重复定义2次"
+        },
+        {
+          "path": "/api/admin/data-generator/clear",
+          "count": 2,
+          "type": "duplicate_definition",
+          "description": "API路径重复定义2次"
+        },
+        {
+          "path": "/api/admin/data-generator/smart-voice",
+          "count": 2,
+          "type": "duplicate_definition",
+          "description": "API路径重复定义2次"
+        },
+        {
+          "path": "/api/admin/data-generator/smart-story",
+          "count": 2,
+          "type": "duplicate_definition",
+          "description": "API路径重复定义2次"
+        },
+        {
+          "path": "/api/uuid/auth/semi-anonymous",
+          "count": 2,
+          "type": "duplicate_definition",
+          "description": "API路径重复定义2次"
+        },
+        {
+          "path": "/api/uuid/auth/anonymous",
+          "count": 2,
+          "type": "duplicate_definition",
+          "description": "API路径重复定义2次"
+        },
+        {
+          "path": "/api/uuid/test-combinations",
+          "count": 2,
+          "type": "duplicate_definition",
+          "description": "API路径重复定义2次"
+        },
+        {
+          "path": "/api/uuid/session/<session_id>",
+          "count": 2,
+          "type": "duplicate_definition",
+          "description": "API路径重复定义2次"
+        },
+        {
+          "path": "/api/uuid/users/statistics",
+          "count": 2,
+          "type": "duplicate_definition",
+          "description": "API路径重复定义2次"
+        }
+      ],
+      "inconsistencies": [],
+      "unused": [
+        {
+          "path": "/api/admin/users/:userId/status",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/admin/users/:userId",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/admin/users/export",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/admin/content/tags/:id",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/admin/content/:contentType/:contentId/tags",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/admin/content/by-tags",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/admin/test-data/verify",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/admin/sensitive-words",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/admin/sensitive-words/:id",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/admin/audit-test",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/admin/ip-access-control/rules/:ruleId",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/admin/users/download/${Date.now()}.${format}",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/admin/api/auth/login",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/admin/api/questionnaire/submit",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/admin/api/reviewer/pending-reviews",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/admin/api/analytics/basic-stats",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/questionnaire/",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/questionnaire/:id",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/reviewer/stats",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/stories/",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/stories/featured",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/stories/test-tags/:storyId",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/stories/available-tags",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/stories/:id",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/stories/:id/like",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/stories/:id/dislike",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/stories/:id/png/:theme?",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/stories/user/:userId",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/stories/debug/status",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/stories/debug/raw-data",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/stories/debug/init",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/summary",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/dimension/:dimensionId",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/question/:questionId",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/cross-analysis",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/employment-report",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/real-time-stats",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/data-quality",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/social-insights",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/api-docs/swagger.json",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/api-docs",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/version",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/v1",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/v2",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/api",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/auth",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/uuid",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/questionnaire",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/universal-questionnaire",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/analytics",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/reviewer",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/violations",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/tiered-audit",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/admin",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/ai-sources",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/admin/data-generator",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/super-admin",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/participation-stats",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/questionnaire-auth",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/user-content-management",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/file-management",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/auto-png",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/png-test",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/review",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/database-monitor",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/security",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/auth/google",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/admin/ip-access-control",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/user/two-factor",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/admin/intelligent-security",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/*",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/v1/",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/v2/",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/health-test",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/images/auto-generate/stats",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/images/auto-generate/batch-generate",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/admin/database-test",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/stats/simple",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/track",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/admin/login-monitor",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/admin/database",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/audit",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/database-fix",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/png-management",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/admin/questionnaires/<int:questionnaire_id>",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/admin/ai-sources",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/admin/users/<user_id>/status",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/admin/reviewers/<reviewer_id>/activity",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/admin/project/status",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/admin/project/control",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/admin/user-behavior/analysis",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/admin/user-behavior/cleanup",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/audit/process",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/audit/pending",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/audit/manual-review",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/audit/config",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/heart-voices/<int:voice_id>",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/heart-voices/user/<int:user_id>",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/heart-voices/<int:voice_id>/like",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/analytics/basic-stats",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/analytics/distribution",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/analytics/cross-analysis",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/analytics/sync",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/analytics/sync/status",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/analytics/performance",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/analytics/cache/invalidate",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/analytics/health",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/analytics/employment",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/cards/generate",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/cards/download/<int:card_id>",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/cards/user/<int:user_id>",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/cards/styles",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/analytics/dashboard",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/analytics/questionnaire/statistics/<question_id>",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/analytics/real-data",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/health",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/stories/<int:story_id>",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/stories/user/<int:user_id>",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/test-data/stats",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/test-data/generate",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/test-data/clear",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/test-data/preview",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/test-data/validate",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/test-data/templates",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/test-data/health",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/admin/data-generator/clear",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/admin/data-generator/smart-voice",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/admin/data-generator/smart-story",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/uuid/auth/semi-anonymous",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/uuid/auth/anonymous",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/uuid/test-combinations",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/uuid/session/<session_id>",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        },
+        {
+          "path": "/api/uuid/users/statistics",
+          "type": "unused_api",
+          "description": "后端已定义但前端未使用"
+        }
+      ],
+      "missing": [
+        {
+          "path": "/api/super-admin/project/status",
+          "type": "missing_backend",
+          "description": "前端调用但后端未实现"
+        },
+        {
+          "path": "/api/super-admin/security/metrics",
+          "type": "missing_backend",
+          "description": "前端调用但后端未实现"
+        },
+        {
+          "path": "/api/super-admin/security/threats",
+          "type": "missing_backend",
+          "description": "前端调用但后端未实现"
+        },
+        {
+          "path": "/api/super-admin/emergency/shutdown",
+          "type": "missing_backend",
+          "description": "前端调用但后端未实现"
+        },
+        {
+          "path": "/api/super-admin/project/restore",
+          "type": "missing_backend",
+          "description": "前端调用但后端未实现"
+        },
+        {
+          "path": "/api/super-admin/security/block-ip",
+          "type": "missing_backend",
+          "description": "前端调用但后端未实现"
+        },
+        {
+          "path": "/api/stories/${contentId}/like",
+          "type": "missing_backend",
+          "description": "前端调用但后端未实现"
+        },
+        {
+          "path": "/api/stories/${contentId}/dislike",
+          "type": "missing_backend",
+          "description": "前端调用但后端未实现"
+        },
+        {
+          "path": "/api/stories/${contentId}/png/${theme}",
+          "type": "missing_backend",
+          "description": "前端调用但后端未实现"
+        },
+        {
+          "path": "/api/v",
+          "type": "missing_backend",
+          "description": "前端调用但后端未实现"
+        },
+        {
+          "path": "/api/admin/google-whitelist/${id}",
+          "type": "missing_backend",
+          "description": "前端调用但后端未实现"
+        },
+        {
+          "path": "/api/admin/google-whitelist/${editingEntry.id}",
+          "type": "missing_backend",
+          "description": "前端调用但后端未实现"
+        },
+        {
+          "path": "/api/admin/ip-access-control/rules/${ruleId}",
+          "type": "missing_backend",
+          "description": "前端调用但后端未实现"
+        },
+        {
+          "path": "/api/admin/ip-access-control/rules/${editingRule.id}",
+          "type": "missing_backend",
+          "description": "前端调用但后端未实现"
+        },
+        {
+          "path": "/api/auth/login",
+          "type": "missing_backend",
+          "description": "前端调用但后端未实现"
+        },
+        {
+          "path": "/api/auth/logout",
+          "type": "missing_backend",
+          "description": "前端调用但后端未实现"
+        },
+        {
+          "path": "/api/questionnaire/submit",
+          "type": "missing_backend",
+          "description": "前端调用但后端未实现"
+        },
+        {
+          "path": "/api/heart-voices/submit",
+          "type": "missing_backend",
+          "description": "前端调用但后端未实现"
+        },
+        {
+          "path": "/api/stories/submit",
+          "type": "missing_backend",
+          "description": "前端调用但后端未实现"
+        },
+        {
+          "path": "/api/analytics/*",
+          "type": "missing_backend",
+          "description": "前端调用但后端未实现"
+        },
+        {
+          "path": "/api/questionnaire/get",
+          "type": "missing_backend",
+          "description": "前端调用但后端未实现"
+        },
+        {
+          "path": "/api/universal/questionnaire/submit",
+          "type": "missing_backend",
+          "description": "前端调用但后端未实现"
+        },
+        {
+          "path": "/api/ai/analyze",
+          "type": "missing_backend",
+          "description": "前端调用但后端未实现"
+        },
+        {
+          "path": "/api/analytics/summary",
+          "type": "missing_backend",
+          "description": "前端调用但后端未实现"
+        },
+        {
+          "path": "/api/voices/list",
+          "type": "missing_backend",
+          "description": "前端调用但后端未实现"
+        },
+        {
+          "path": "/api/voices/like",
+          "type": "missing_backend",
+          "description": "前端调用但后端未实现"
+        },
+        {
+          "path": "/api/stories/list",
+          "type": "missing_backend",
+          "description": "前端调用但后端未实现"
+        },
+        {
+          "path": "/api/stories/like",
+          "type": "missing_backend",
+          "description": "前端调用但后端未实现"
+        },
+        {
+          "path": "/api/reviewer/history",
+          "type": "missing_backend",
+          "description": "前端调用但后端未实现"
+        },
+        {
+          "path": "/api/user/two-factor/status",
+          "type": "missing_backend",
+          "description": "前端调用但后端未实现"
+        },
+        {
+          "path": "/api/user/two-factor/setup",
+          "type": "missing_backend",
+          "description": "前端调用但后端未实现"
+        },
+        {
+          "path": "/api/user/two-factor/verify",
+          "type": "missing_backend",
+          "description": "前端调用但后端未实现"
+        },
+        {
+          "path": "/api/user/two-factor/disable",
+          "type": "missing_backend",
+          "description": "前端调用但后端未实现"
+        },
+        {
+          "path": "/api/user/two-factor/regenerate-backup-codes",
+          "type": "missing_backend",
+          "description": "前端调用但后端未实现"
+        },
+        {
+          "path": "/api/admin/users?${params}",
+          "type": "missing_backend",
+          "description": "前端调用但后端未实现"
+        },
+        {
+          "path": "/api/admin/users/${userId}/status",
+          "type": "missing_backend",
+          "description": "前端调用但后端未实现"
+        },
+        {
+          "path": "/api/admin/users/${userId}",
+          "type": "missing_backend",
+          "description": "前端调用但后端未实现"
+        },
+        {
+          "path": "/api/admin/users/export?format=${format}",
+          "type": "missing_backend",
+          "description": "前端调用但后端未实现"
+        },
+        {
+          "path": "/api/admin/questionnaires/${id}",
+          "type": "missing_backend",
+          "description": "前端调用但后端未实现"
+        },
+        {
+          "path": "/api/admin/questionnaires/batch-update",
+          "type": "missing_backend",
+          "description": "前端调用但后端未实现"
+        },
+        {
+          "path": "/api/admin/content/tags/${id}",
+          "type": "missing_backend",
+          "description": "前端调用但后端未实现"
+        },
+        {
+          "path": "/api/voices",
+          "type": "missing_backend",
+          "description": "前端调用但后端未实现"
+        },
+        {
+          "path": "/api/admin/export",
+          "type": "missing_backend",
+          "description": "前端调用但后端未实现"
+        },
+        {
+          "path": "/api/super-admin/system/logs",
+          "type": "missing_backend",
+          "description": "前端调用但后端未实现"
+        },
+        {
+          "path": "/api/super-admin/operation/logs",
+          "type": "missing_backend",
+          "description": "前端调用但后端未实现"
+        },
+        {
+          "path": "/api/admin/reviewers/${reviewerId}/activity",
+          "type": "missing_backend",
+          "description": "前端调用但后端未实现"
+        },
+        {
+          "path": "/api/ai-review",
+          "type": "missing_backend",
+          "description": "前端调用但后端未实现"
+        },
+        {
+          "path": "/api/ai-water-management",
+          "type": "missing_backend",
+          "description": "前端调用但后端未实现"
+        },
+        {
+          "path": "/api/uuid/questionnaire/user/${userId}",
+          "type": "missing_backend",
+          "description": "前端调用但后端未实现"
+        },
+        {
+          "path": "/api/heart-voices/user/${userId}",
+          "type": "missing_backend",
+          "description": "前端调用但后端未实现"
+        },
+        {
+          "path": "/api/stories/user/${userId}",
+          "type": "missing_backend",
+          "description": "前端调用但后端未实现"
+        },
+        {
+          "path": "/api/uuid/questionnaire/${id}",
+          "type": "missing_backend",
+          "description": "前端调用但后端未实现"
+        },
+        {
+          "path": "/api/heart-voices/${id}",
+          "type": "missing_backend",
+          "description": "前端调用但后端未实现"
+        },
+        {
+          "path": "/api/stories/${id}",
+          "type": "missing_backend",
+          "description": "前端调用但后端未实现"
+        },
+        {
+          "path": "/api/errors",
+          "type": "missing_backend",
+          "description": "前端调用但后端未实现"
+        },
+        {
+          "path": "/api/performance-metrics",
+          "type": "missing_backend",
+          "description": "前端调用但后端未实现"
+        }
+      ]
+    }
+  },
+  "recommendations": [
+    {
+      "type": "missing_apis",
+      "priority": "high",
+      "description": "实现缺失的API端点",
+      "count": 56
+    },
+    {
+      "type": "duplicate_apis",
+      "priority": "medium",
+      "description": "解决重复的API定义",
+      "count": 115
+    },
+    {
+      "type": "unused_apis",
+      "priority": "low",
+      "description": "清理未使用的API端点",
+      "count": 134
+    }
+  ]
+}

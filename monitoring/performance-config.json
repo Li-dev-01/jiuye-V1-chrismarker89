@@ -1,0 +1,51 @@
+{
+  "performance_thresholds": {
+    "response_time": {
+      "warning": 500,
+      "critical": 1000,
+      "unit": "ms"
+    },
+    "cache_hit_rate": {
+      "warning": 0.7,
+      "critical": 0.5,
+      "unit": "ratio"
+    },
+    "error_rate": {
+      "warning": 0.01,
+      "critical": 0.05,
+      "unit": "ratio"
+    },
+    "throughput": {
+      "warning": 5,
+      "critical": 2,
+      "unit": "req/s"
+    }
+  },
+  "monitoring_endpoints": [
+    "/api/admin/dashboards/statistics",
+    "/api/admin/users",
+    "/api/admin/content/tags",
+    "/api/admin/user-batch-operations",
+    "/api/admin/content/tag-maintenance"
+  ],
+  "alert_rules": [
+    {
+      "name": "High Response Time",
+      "condition": "avg_response_time > 1000",
+      "severity": "critical",
+      "notification": "email"
+    },
+    {
+      "name": "Low Cache Hit Rate",
+      "condition": "cache_hit_rate < 0.5",
+      "severity": "warning",
+      "notification": "slack"
+    },
+    {
+      "name": "High Error Rate",
+      "condition": "error_rate > 0.05",
+      "severity": "critical",
+      "notification": "email"
+    }
+  ]
+}

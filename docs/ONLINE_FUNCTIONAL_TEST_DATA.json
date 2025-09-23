@@ -1,0 +1,186 @@
+{
+  "startTime": "2025-09-23T11:20:18.319Z",
+  "totalTests": 25,
+  "passedTests": 21,
+  "failedTests": 4,
+  "testSuites": {
+    "health_check": {
+      "tests": [
+        {
+          "success": true,
+          "responseTime": 463,
+          "error": null
+        },
+        {
+          "success": true,
+          "responseTime": 281,
+          "error": null
+        },
+        {
+          "success": true,
+          "responseTime": 106,
+          "error": null
+        }
+      ],
+      "passed": 3,
+      "failed": 0
+    },
+    "api_endpoints": {
+      "tests": [
+        {
+          "success": true,
+          "responseTime": 434,
+          "error": null
+        },
+        {
+          "success": true,
+          "responseTime": 122,
+          "error": null
+        },
+        {
+          "success": true,
+          "responseTime": 327,
+          "error": null
+        },
+        {
+          "success": true,
+          "responseTime": 455,
+          "error": null
+        },
+        {
+          "success": true,
+          "responseTime": 538,
+          "error": null
+        },
+        {
+          "success": true,
+          "responseTime": 396,
+          "error": null
+        }
+      ],
+      "passed": 6,
+      "failed": 0
+    },
+    "admin_functions": {
+      "tests": [
+        {
+          "success": true,
+          "responseTime": 321,
+          "error": null
+        },
+        {
+          "success": true,
+          "responseTime": 326,
+          "error": null
+        },
+        {
+          "success": true,
+          "responseTime": 312,
+          "error": null
+        },
+        {
+          "success": true,
+          "responseTime": 380,
+          "error": null
+        },
+        {
+          "success": true,
+          "responseTime": 419,
+          "error": null
+        },
+        {
+          "success": true,
+          "responseTime": 449,
+          "error": null
+        }
+      ],
+      "passed": 6,
+      "failed": 0
+    },
+    "user_functions": {
+      "tests": [
+        {
+          "success": false,
+          "responseTime": 436,
+          "error": "HTTP 500: Internal Server Error"
+        },
+        {
+          "success": false,
+          "responseTime": 210,
+          "error": "HTTP 500: Internal Server Error"
+        },
+        {
+          "success": false,
+          "responseTime": 453,
+          "error": "HTTP 500: Internal Server Error"
+        },
+        {
+          "success": false,
+          "responseTime": 254,
+          "error": "HTTP 500: Internal Server Error"
+        }
+      ],
+      "passed": 0,
+      "failed": 4
+    },
+    "performance_test": {
+      "tests": [
+        {
+          "success": true,
+          "responseTime": 271,
+          "error": null
+        },
+        {
+          "success": true,
+          "responseTime": 380,
+          "error": null
+        }
+      ],
+      "passed": 2,
+      "failed": 0
+    },
+    "security_test": {
+      "tests": [
+        {
+          "success": true,
+          "responseTime": 368,
+          "error": null
+        },
+        {
+          "success": true,
+          "responseTime": 308,
+          "error": null
+        }
+      ],
+      "passed": 2,
+      "failed": 0
+    },
+    "integration_test": {
+      "tests": [
+        {
+          "success": true,
+          "responseTime": 440,
+          "error": null
+        },
+        {
+          "success": true,
+          "responseTime": 250,
+          "error": null
+        }
+      ],
+      "passed": 2,
+      "failed": 0
+    }
+  },
+  "errors": [
+    "用户功能: 故事浏览: HTTP 500: Internal Server Error",
+    "用户功能: 问卷引擎: HTTP 500: Internal Server Error",
+    "用户功能: 用户认证: HTTP 500: Internal Server Error",
+    "用户功能: 数据分析: HTTP 500: Internal Server Error"
+  ],
+  "performance": {
+    "averageResponseTime": 348,
+    "maxResponseTime": 590,
+    "minResponseTime": 105
+  }
+}

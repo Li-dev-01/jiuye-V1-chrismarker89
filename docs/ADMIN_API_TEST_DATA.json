@@ -1,0 +1,274 @@
+{
+  "timestamp": "2025-09-23T11:42:08.742Z",
+  "baseUrl": "https://employment-survey-api-prod.chrismarker89.workers.dev",
+  "frontendUrl": "https://9019b3f6.college-employment-survey-frontend-l84.pages.dev",
+  "tests": [
+    {
+      "name": "前端页面访问",
+      "path": "/",
+      "method": "GET",
+      "expectedStatus": 200,
+      "actualStatus": 200,
+      "success": true,
+      "timestamp": "2025-09-23T11:42:09.077Z"
+    },
+    {
+      "name": "健康检查",
+      "path": "/api/health",
+      "method": "GET",
+      "expectedStatus": 200,
+      "actualStatus": 200,
+      "responseTime": 1140,
+      "requiresAuth": false,
+      "success": true,
+      "timestamp": "2025-09-23T11:42:10.217Z",
+      "responseBody": {
+        "success": true,
+        "data": {
+          "status": "healthy",
+          "timestamp": "2025-09-23T11:42:09.406Z",
+          "version": "1.0.0",
+          "uptime": 105,
+          "services": {
+            "database": {
+              "status": "healthy",
+              "response_time": 358,
+              "last_check": "2025-09-23T11:42:09.406Z"
+            },
+            "cache": {
+              "status": "healthy",
+              "response_time": 10,
+              "last_check": "2025-09-23T11:42:09.406Z"
+            },
+            "storage": {
+              "status": "healthy",
+              "response_time": 821,
+              "last_check": "2025-09-23T11:42:09.406Z"
+            }
+          },
+          "metrics": {
+            "memory_usage": 0,
+            "cpu_usage": 0,
+            "request_count": 0,
+            "error_rate": 0
+          }
+        },
+        "message": "系统状态: healthy"
+      }
+    },
+    {
+      "name": "仪表板统计",
+      "path": "/api/admin/dashboard/stats",
+      "method": "GET",
+      "expectedStatus": 401,
+      "actualStatus": 401,
+      "responseTime": 145,
+      "requiresAuth": true,
+      "success": true,
+      "timestamp": "2025-09-23T11:42:10.466Z",
+      "responseBody": {
+        "success": false,
+        "error": "Unauthorized",
+        "message": "缺少认证token"
+      }
+    },
+    {
+      "name": "用户列表",
+      "path": "/api/admin/users?page=1&pageSize=10",
+      "method": "GET",
+      "expectedStatus": 401,
+      "actualStatus": 401,
+      "responseTime": 152,
+      "requiresAuth": true,
+      "success": true,
+      "timestamp": "2025-09-23T11:42:10.720Z",
+      "responseBody": {
+        "success": false,
+        "error": "Unauthorized",
+        "message": "缺少认证token"
+      }
+    },
+    {
+      "name": "审核员列表",
+      "path": "/api/admin/reviewers?page=1&pageSize=10",
+      "method": "GET",
+      "expectedStatus": 401,
+      "actualStatus": 401,
+      "responseTime": 159,
+      "requiresAuth": true,
+      "success": true,
+      "timestamp": "2025-09-23T11:42:10.981Z",
+      "responseBody": {
+        "success": false,
+        "error": "Unauthorized",
+        "message": "缺少认证token"
+      }
+    },
+    {
+      "name": "问卷列表",
+      "path": "/api/admin/questionnaires?page=1&pageSize=10",
+      "method": "GET",
+      "expectedStatus": 401,
+      "actualStatus": 401,
+      "responseTime": 146,
+      "requiresAuth": true,
+      "success": true,
+      "timestamp": "2025-09-23T11:42:11.229Z",
+      "responseBody": {
+        "success": false,
+        "error": "Unauthorized",
+        "message": "缺少认证token"
+      }
+    },
+    {
+      "name": "内容分类",
+      "path": "/api/admin/content/categories",
+      "method": "GET",
+      "expectedStatus": 401,
+      "actualStatus": 401,
+      "responseTime": 157,
+      "requiresAuth": true,
+      "success": true,
+      "timestamp": "2025-09-23T11:42:11.489Z",
+      "responseBody": {
+        "success": false,
+        "error": "Unauthorized",
+        "message": "缺少认证token"
+      }
+    },
+    {
+      "name": "内容标签",
+      "path": "/api/admin/content/tags",
+      "method": "GET",
+      "expectedStatus": 401,
+      "actualStatus": 401,
+      "responseTime": 150,
+      "requiresAuth": true,
+      "success": true,
+      "timestamp": "2025-09-23T11:42:11.741Z",
+      "responseBody": {
+        "success": false,
+        "error": "Unauthorized",
+        "message": "缺少认证token"
+      }
+    },
+    {
+      "name": "用户内容列表",
+      "path": "/api/user-content-management/list?page=1&pageSize=20&status=active",
+      "method": "GET",
+      "expectedStatus": 401,
+      "actualStatus": 401,
+      "responseTime": 105,
+      "requiresAuth": true,
+      "success": true,
+      "timestamp": "2025-09-23T11:42:11.950Z",
+      "responseBody": {
+        "success": false,
+        "error": "Unauthorized",
+        "message": "缺少认证token"
+      }
+    },
+    {
+      "name": "用户内容统计",
+      "path": "/api/user-content-management/stats",
+      "method": "GET",
+      "expectedStatus": 401,
+      "actualStatus": 401,
+      "responseTime": 110,
+      "requiresAuth": true,
+      "success": true,
+      "timestamp": "2025-09-23T11:42:12.162Z",
+      "responseBody": {
+        "success": false,
+        "error": "Unauthorized",
+        "message": "缺少认证token"
+      }
+    },
+    {
+      "name": "IP访问控制",
+      "path": "/api/admin/ip-access-control/rules",
+      "method": "GET",
+      "expectedStatus": 401,
+      "actualStatus": 401,
+      "responseTime": 150,
+      "requiresAuth": true,
+      "success": true,
+      "timestamp": "2025-09-23T11:42:12.414Z",
+      "responseBody": {
+        "success": false,
+        "error": "Unauthorized",
+        "message": "缺少认证token"
+      }
+    },
+    {
+      "name": "智能安全",
+      "path": "/api/admin/intelligent-security/anomalies",
+      "method": "GET",
+      "expectedStatus": 401,
+      "actualStatus": 401,
+      "responseTime": 153,
+      "requiresAuth": true,
+      "success": true,
+      "timestamp": "2025-09-23T11:42:12.669Z",
+      "responseBody": {
+        "success": false,
+        "error": "Unauthorized",
+        "message": "缺少认证token"
+      }
+    },
+    {
+      "name": "登录监控",
+      "path": "/api/admin/login-monitor/sessions",
+      "method": "GET",
+      "expectedStatus": 401,
+      "actualStatus": 401,
+      "responseTime": 156,
+      "requiresAuth": true,
+      "success": true,
+      "timestamp": "2025-09-23T11:42:12.927Z",
+      "responseBody": {
+        "success": false,
+        "error": "Unauthorized",
+        "message": "缺少认证token"
+      }
+    },
+    {
+      "name": "双因子认证",
+      "path": "/api/admin/two-factor-auth/status",
+      "method": "GET",
+      "expectedStatus": 401,
+      "actualStatus": 401,
+      "responseTime": 146,
+      "requiresAuth": true,
+      "success": true,
+      "timestamp": "2025-09-23T11:42:13.176Z",
+      "responseBody": {
+        "success": false,
+        "error": "Unauthorized",
+        "message": "缺少认证token"
+      }
+    },
+    {
+      "name": "用户登录历史",
+      "path": "/api/admin/user-login-history/history",
+      "method": "GET",
+      "expectedStatus": 401,
+      "actualStatus": 401,
+      "responseTime": 142,
+      "requiresAuth": true,
+      "success": true,
+      "timestamp": "2025-09-23T11:42:13.420Z",
+      "responseBody": {
+        "success": false,
+        "error": "Unauthorized",
+        "message": "缺少认证token"
+      }
+    }
+  ],
+  "summary": {
+    "total": 15,
+    "passed": 15,
+    "failed": 0,
+    "successRate": 100
+  }
+}

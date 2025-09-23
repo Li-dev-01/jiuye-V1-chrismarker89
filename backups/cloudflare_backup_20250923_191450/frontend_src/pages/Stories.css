@@ -1,0 +1,457 @@
+/* 就业故事展示页面样式 - 使用设计系统 */
+
+.stories-page {
+  padding: var(--spacing-lg);
+  background-color: var(--bg-secondary);
+  min-height: 100vh;
+}
+
+/* 页面头部 - 故事墙紧凑优化 */
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: var(--spacing-md);
+  padding: var(--spacing-md) var(--spacing-lg);
+  background: linear-gradient(135deg, var(--primary-500) 0%, var(--primary-600) 100%);
+  border-radius: var(--border-radius-lg);
+  color: white;
+}
+
+.header-content h2 {
+  color: white;
+  margin-bottom: var(--spacing-xs);
+  font-size: var(--font-size-xl);
+  line-height: 1.2;
+}
+
+.header-content .ant-typography {
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 0;
+  font-size: var(--font-size-sm);
+  line-height: 1.4;
+}
+
+.page-header .ant-btn {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.3);
+  color: white;
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+
+.page-header .ant-btn:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.5);
+  color: white;
+}
+
+/* 精选故事区域 */
+.featured-section {
+  margin-bottom: var(--spacing-lg);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-md);
+}
+
+.featured-section .ant-card-head {
+  background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+  border-bottom: none;
+  border-radius: 12px 12px 0 0;
+}
+
+.featured-section .ant-card-head-title {
+  color: #8b4513;
+  font-weight: 600;
+  font-size: 16px;
+}
+
+/* 筛选卡片 */
+.filter-card {
+  margin-bottom: 24px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.filter-card .ant-card-body {
+  padding: 20px 24px;
+}
+
+.stats-info {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+/* 故事内容区域 */
+.stories-content {
+  background-color: white;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+/* 故事卡片 */
+.story-card {
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  border: 1px solid #f0f0f0;
+  overflow: hidden;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.story-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  border-color: #1890ff;
+}
+
+.story-card .ant-card-body {
+  padding: 16px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 精选故事卡片 */
+.featured-card {
+  border: 2px solid #faad14;
+  position: relative;
+}
+
+.featured-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: linear-gradient(135deg, #faad14 0%, #ff7a45 100%);
+  color: white;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.story-header {
+  margin-bottom: 16px;
+}
+
+.story-title {
+  margin: 12px 0;
+  flex-shrink: 0;
+}
+
+.story-title h4 {
+  margin-bottom: 0;
+  color: #262626;
+  line-height: 1.4;
+}
+
+.story-summary {
+  flex: 1;
+  margin: 12px 0;
+}
+
+.story-summary .ant-typography {
+  margin-bottom: 0;
+  line-height: 1.6;
+  color: #595959;
+}
+
+.story-tags {
+  margin: 8px 0;
+  min-height: 20px;
+  flex-shrink: 0;
+}
+
+.story-tags .ant-tag {
+  margin-bottom: 4px;
+  border-radius: 4px;
+  font-size: 12px;
+}
+
+.story-meta {
+  margin-top: auto;
+  padding-top: 8px;
+  border-top: 1px solid #f0f0f0;
+  flex-shrink: 0;
+}
+
+/* 卡片操作按钮 */
+.story-card .ant-card-actions {
+  background-color: #fafafa;
+  border-top: 1px solid #f0f0f0;
+  flex-shrink: 0;
+}
+
+.story-card .ant-card-actions > li {
+  margin: 8px 0;
+}
+
+.story-card .ant-card-actions .ant-btn {
+  border: none;
+  background: transparent;
+  color: #666;
+  font-size: 14px;
+  height: auto;
+  padding: 4px 8px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.story-card .ant-card-actions .ant-btn:hover {
+  color: #1890ff;
+  background-color: rgba(24, 144, 255, 0.1);
+}
+
+/* 故事详情模态框 */
+.story-detail {
+  padding: 16px 0;
+}
+
+.story-detail-meta {
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.story-detail-content {
+  margin: 24px 0;
+  line-height: 1.8;
+  font-size: 16px;
+}
+
+.story-detail-content .ant-typography {
+  margin-bottom: 0;
+}
+
+.story-detail-tags {
+  margin: 24px 0;
+  padding: 16px;
+  background-color: #fafafa;
+  border-radius: 8px;
+}
+
+.story-detail-stats {
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid #f0f0f0;
+  text-align: center;
+}
+
+/* 分页器 */
+.pagination-wrapper {
+  margin-top: 32px;
+  text-align: center;
+}
+
+.pagination-wrapper .ant-pagination {
+  display: inline-flex;
+}
+
+.pagination-wrapper .ant-pagination-item {
+  border-radius: 6px;
+}
+
+.pagination-wrapper .ant-pagination-item-active {
+  background-color: #1890ff;
+  border-color: #1890ff;
+}
+
+.pagination-wrapper .ant-pagination-item-active a {
+  color: white;
+}
+
+/* 空状态 */
+.stories-content .ant-empty {
+  padding: 60px 20px;
+}
+
+.stories-content .ant-empty-description {
+  color: #8c8c8c;
+  font-size: 16px;
+}
+
+.stories-content .ant-empty .ant-btn {
+  margin-top: 16px;
+  background-color: #1890ff;
+  border-color: #1890ff;
+}
+
+.stories-content .ant-empty .ant-btn:hover {
+  background-color: #40a9ff;
+  border-color: #40a9ff;
+}
+
+/* 加载状态 */
+.stories-content .ant-spin-container {
+  min-height: 400px;
+}
+
+/* 响应式设计 */
+@media (max-width: 1200px) {
+  .story-card {
+    margin-bottom: 16px;
+  }
+  
+  .featured-card .story-card {
+    height: auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .stories-page {
+    padding: 16px;
+  }
+  
+  .page-header {
+    flex-direction: column;
+    gap: 12px;
+    padding: 16px;
+  }
+  
+  .page-header .ant-btn {
+    width: 100%;
+  }
+  
+  .featured-section .ant-card-body {
+    padding: 16px;
+  }
+  
+  .filter-card .ant-card-body {
+    padding: 16px;
+  }
+  
+  .stats-info {
+    justify-content: flex-start;
+    margin-top: 8px;
+  }
+  
+  .stories-content {
+    padding: 16px;
+  }
+  
+  .story-card .ant-card-body {
+    padding: 16px;
+  }
+  
+  .featured-badge {
+    top: 8px;
+    right: 8px;
+    padding: 2px 8px;
+    font-size: 11px;
+  }
+  
+  .story-title h4 {
+    font-size: 16px;
+  }
+  
+  .story-summary {
+    margin: 12px 0;
+  }
+  
+  .story-meta {
+    padding-top: 8px;
+  }
+  
+  .pagination-wrapper {
+    margin-top: 24px;
+  }
+  
+  .pagination-wrapper .ant-pagination {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  .story-detail-content {
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  
+  .story-detail-tags {
+    padding: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .stories-page {
+    padding: 12px;
+  }
+  
+  .page-header {
+    padding: 12px;
+  }
+
+  .page-header h2 {
+    font-size: 18px;
+  }
+  
+  .featured-section .ant-card-body {
+    padding: 12px;
+  }
+  
+  .filter-card .ant-card-body {
+    padding: 12px;
+  }
+  
+  .stories-content {
+    padding: 12px;
+  }
+  
+  .story-card .ant-card-body {
+    padding: 12px;
+  }
+  
+  .featured-badge {
+    top: 6px;
+    right: 6px;
+    padding: 2px 6px;
+    font-size: 10px;
+  }
+  
+  .story-title {
+    margin: 8px 0;
+  }
+  
+  .story-title h4 {
+    font-size: 14px;
+  }
+  
+  .story-summary {
+    margin: 8px 0;
+  }
+  
+  .story-tags {
+    margin: 8px 0;
+  }
+  
+  .story-meta {
+    margin-top: 8px;
+    padding-top: 8px;
+  }
+  
+  .story-card .ant-card-actions .ant-btn {
+    font-size: 12px;
+    padding: 2px 6px;
+  }
+  
+  .story-detail-content {
+    margin: 16px 0;
+    font-size: 14px;
+  }
+  
+  .story-detail-tags {
+    margin: 16px 0;
+    padding: 8px;
+  }
+  
+  .story-detail-stats {
+    margin-top: 16px;
+    padding-top: 12px;
+  }
+}

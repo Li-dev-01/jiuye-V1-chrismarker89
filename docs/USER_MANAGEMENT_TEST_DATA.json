@@ -1,0 +1,402 @@
+{
+  "timestamp": "2025-09-23T12:32:10.780Z",
+  "summary": {
+    "total": 5,
+    "passed": 5,
+    "failed": 0,
+    "successRate": 100
+  },
+  "tests": [
+    {
+      "name": "管理员token生成",
+      "passed": true,
+      "details": "Token生成成功",
+      "timestamp": "2025-09-23T12:32:11.274Z"
+    },
+    {
+      "name": "用户列表API",
+      "passed": true,
+      "details": "成功获取 10 个用户，总计 10 个用户",
+      "timestamp": "2025-09-23T12:32:11.495Z"
+    },
+    {
+      "name": "用户数据结构验证",
+      "passed": true,
+      "details": "示例用户: user_semi-202 (semi-202@example.com), 问卷: 0, 故事: 0",
+      "timestamp": "2025-09-23T12:32:11.495Z"
+    },
+    {
+      "name": "数据库用户统计",
+      "passed": true,
+      "details": "总用户数: 10, 活跃用户: 10, 问卷数: 6, 故事数: 183",
+      "timestamp": "2025-09-23T12:32:11.865Z"
+    },
+    {
+      "name": "用户管理页面访问",
+      "passed": true,
+      "details": "状态码: 200",
+      "timestamp": "2025-09-23T12:32:12.232Z"
+    }
+  ],
+  "userDataSample": {
+    "items": [
+      {
+        "id": "semi-20250923-d165e207-1408-474b-a078-8484e83ed80b",
+        "username": "user_semi-202",
+        "nickname": "半匿名用户_e83ed80b",
+        "email": "semi-202@example.com",
+        "role": "user",
+        "status": "active",
+        "createdAt": "2025-09-23T07:52:42.621Z",
+        "lastLogin": "2025-09-23T07:54:04.800Z",
+        "avatar": null,
+        "questionnairesCount": 0,
+        "storiesCount": 0
+      },
+      {
+        "id": "semi-20250923-f8c49787-64b9-4c82-8450-d9d720a0e009",
+        "username": "user_semi-202",
+        "nickname": "半匿名用户_20a0e009",
+        "email": "semi-202@example.com",
+        "role": "user",
+        "status": "active",
+        "createdAt": "2025-09-23T07:17:41.834Z",
+        "lastLogin": "2025-09-23T08:47:52.452Z",
+        "avatar": null,
+        "questionnairesCount": 0,
+        "storiesCount": 0
+      },
+      {
+        "id": "semi-20250923-69f84b72-1c98-4254-890c-172a1fc427f1",
+        "username": "user_semi-202",
+        "nickname": "半匿名用户_1fc427f1",
+        "email": "semi-202@example.com",
+        "role": "user",
+        "status": "active",
+        "createdAt": "2025-09-23T06:28:35.620Z",
+        "lastLogin": "2025-09-23T06:28:35.620Z",
+        "avatar": null,
+        "questionnairesCount": 0,
+        "storiesCount": 0
+      },
+      {
+        "id": "super-e548bc71-e05e-4fdd-98a7-bac910f036bc",
+        "username": "user_super-e5",
+        "nickname": "MARKER CHRIS",
+        "email": "super-e5@example.com",
+        "role": "super_admin",
+        "status": "active",
+        "createdAt": "2025-09-23T06:02:44.077Z",
+        "lastLogin": "2025-09-23T06:03:38.571Z",
+        "avatar": null,
+        "questionnairesCount": 0,
+        "storiesCount": 0
+      },
+      {
+        "id": "semi-20250923-a25166fc-c747-40bc-84bf-8dc1c4dc3cf8",
+        "username": "user_semi-202",
+        "nickname": "半匿名用户_c4dc3cf8",
+        "email": "semi-202@example.com",
+        "role": "user",
+        "status": "active",
+        "createdAt": "2025-09-23T05:50:18.646Z",
+        "lastLogin": "2025-09-23T05:50:18.646Z",
+        "avatar": null,
+        "questionnairesCount": 0,
+        "storiesCount": 0
+      },
+      {
+        "id": "semi-20250923-412026af-701e-4885-9735-2343beafdff7",
+        "username": "user_semi-202",
+        "nickname": "匿名用户_beafdff7",
+        "email": "semi-202@example.com",
+        "role": "user",
+        "status": "active",
+        "createdAt": "2025-09-23T05:50:18.160Z",
+        "lastLogin": "2025-09-23T05:50:18.160Z",
+        "avatar": null,
+        "questionnairesCount": 0,
+        "storiesCount": 0
+      },
+      {
+        "id": "semi-20250922-b15c349e-8995-41f2-8e74-633e6f4ff6b2",
+        "username": "user_semi-202",
+        "nickname": "半匿名用户_6f4ff6b2",
+        "email": "semi-202@example.com",
+        "role": "user",
+        "status": "active",
+        "createdAt": "2025-09-22T13:50:32.358Z",
+        "lastLogin": "2025-09-23T07:15:08.900Z",
+        "avatar": null,
+        "questionnairesCount": 0,
+        "storiesCount": 0
+      },
+      {
+        "id": "rev-550e8400-e29b-41d4-a716-446655440002",
+        "username": "reviewerA",
+        "nickname": "审核员A",
+        "email": "reviewerA@example.com",
+        "role": "admin",
+        "status": "active",
+        "createdAt": "2025-09-20 14:56:26",
+        "lastLogin": "2025-09-20 14:56:26",
+        "avatar": null,
+        "questionnairesCount": 0,
+        "storiesCount": 0
+      },
+      {
+        "id": "admin-550e8400-e29b-41d4-a716-446655440001",
+        "username": "admin1",
+        "nickname": "管理员",
+        "email": "admin1@example.com",
+        "role": "admin",
+        "status": "active",
+        "createdAt": "2025-09-20 14:56:26",
+        "lastLogin": "2025-09-20 14:56:26",
+        "avatar": null,
+        "questionnairesCount": 0,
+        "storiesCount": 0
+      },
+      {
+        "id": "super-550e8400-e29b-41d4-a716-446655440000",
+        "username": "superadmin",
+        "nickname": "超级管理员",
+        "email": "superadmin@example.com",
+        "role": "super_admin",
+        "status": "active",
+        "createdAt": "2025-09-20 14:56:26",
+        "lastLogin": "2025-09-20 14:56:26",
+        "avatar": null,
+        "questionnairesCount": 0,
+        "storiesCount": 0
+      }
+    ],
+    "pagination": {
+      "page": 1,
+      "pageSize": 10,
+      "total": 10,
+      "totalPages": 1
+    }
+  },
+  "apiResponses": {
+    "userList": {
+      "statusCode": 200,
+      "headers": {
+        "date": "Tue, 23 Sep 2025 12:32:11 GMT",
+        "content-type": "application/json",
+        "content-length": "3232",
+        "connection": "keep-alive",
+        "cf-ray": "983a10378c318d21-KIX",
+        "access-control-allow-origin": "*",
+        "access-control-allow-credentials": "true",
+        "access-control-allow-headers": "Content-Type, Authorization, X-Request-Time, X-Requested-With, X-API-Version, X-User-ID, X-Human-Token",
+        "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS",
+        "access-control-max-age": "86400",
+        "x-cache": "MISS",
+        "x-cache-key": "medium:GET:https://employment-survey-api-prod.chrismarker89.workers.dev/api/admin/users?page=1&pageSize=10:admin",
+        "report-to": "{\"endpoints\":[{\"url\":\"https:\\/\\/a.nel.cloudflare.com\\/report\\/v4?s=A1M5f0Q5YjtLyV%2BLRxxIo9ux%2B%2BizJKcilBeUTRKPtYPgZc0CzAGMS8y%2BJ1Vod4smulOzcVEcalOZsOCO90Jv04qyLPUTYIxPMQOAbbqXzUJHyPChwddJ39J%2BNS8baN4PbgTr22jlUhigjw9j88STnSCf9oAdNXUuTyzSRsGRX2Xs0Ztfd3ux\"}],\"group\":\"cf-nel\",\"max_age\":604800}",
+        "nel": "{\"success_fraction\":0,\"report_to\":\"cf-nel\",\"max_age\":604800}",
+        "server": "cloudflare",
+        "alt-svc": "h3=\":443\"; ma=86400",
+        "server-timing": "cfL4;desc=\"?proto=TCP&rtt=8995&min_rtt=8975&rtt_var=2558&sent=7&recv=7&lost=0&retrans=0&sent_bytes=4612&recv_bytes=1004&delivery_rate=320106&cwnd=34&unsent_bytes=0&cid=1a07e5972be076b3&ts=505&x=0\""
+      },
+      "data": {
+        "success": true,
+        "data": {
+          "items": [
+            {
+              "id": "semi-20250923-d165e207-1408-474b-a078-8484e83ed80b",
+              "username": "user_semi-202",
+              "nickname": "半匿名用户_e83ed80b",
+              "email": "semi-202@example.com",
+              "role": "user",
+              "status": "active",
+              "createdAt": "2025-09-23T07:52:42.621Z",
+              "lastLogin": "2025-09-23T07:54:04.800Z",
+              "avatar": null,
+              "questionnairesCount": 0,
+              "storiesCount": 0
+            },
+            {
+              "id": "semi-20250923-f8c49787-64b9-4c82-8450-d9d720a0e009",
+              "username": "user_semi-202",
+              "nickname": "半匿名用户_20a0e009",
+              "email": "semi-202@example.com",
+              "role": "user",
+              "status": "active",
+              "createdAt": "2025-09-23T07:17:41.834Z",
+              "lastLogin": "2025-09-23T08:47:52.452Z",
+              "avatar": null,
+              "questionnairesCount": 0,
+              "storiesCount": 0
+            },
+            {
+              "id": "semi-20250923-69f84b72-1c98-4254-890c-172a1fc427f1",
+              "username": "user_semi-202",
+              "nickname": "半匿名用户_1fc427f1",
+              "email": "semi-202@example.com",
+              "role": "user",
+              "status": "active",
+              "createdAt": "2025-09-23T06:28:35.620Z",
+              "lastLogin": "2025-09-23T06:28:35.620Z",
+              "avatar": null,
+              "questionnairesCount": 0,
+              "storiesCount": 0
+            },
+            {
+              "id": "super-e548bc71-e05e-4fdd-98a7-bac910f036bc",
+              "username": "user_super-e5",
+              "nickname": "MARKER CHRIS",
+              "email": "super-e5@example.com",
+              "role": "super_admin",
+              "status": "active",
+              "createdAt": "2025-09-23T06:02:44.077Z",
+              "lastLogin": "2025-09-23T06:03:38.571Z",
+              "avatar": null,
+              "questionnairesCount": 0,
+              "storiesCount": 0
+            },
+            {
+              "id": "semi-20250923-a25166fc-c747-40bc-84bf-8dc1c4dc3cf8",
+              "username": "user_semi-202",
+              "nickname": "半匿名用户_c4dc3cf8",
+              "email": "semi-202@example.com",
+              "role": "user",
+              "status": "active",
+              "createdAt": "2025-09-23T05:50:18.646Z",
+              "lastLogin": "2025-09-23T05:50:18.646Z",
+              "avatar": null,
+              "questionnairesCount": 0,
+              "storiesCount": 0
+            },
+            {
+              "id": "semi-20250923-412026af-701e-4885-9735-2343beafdff7",
+              "username": "user_semi-202",
+              "nickname": "匿名用户_beafdff7",
+              "email": "semi-202@example.com",
+              "role": "user",
+              "status": "active",
+              "createdAt": "2025-09-23T05:50:18.160Z",
+              "lastLogin": "2025-09-23T05:50:18.160Z",
+              "avatar": null,
+              "questionnairesCount": 0,
+              "storiesCount": 0
+            },
+            {
+              "id": "semi-20250922-b15c349e-8995-41f2-8e74-633e6f4ff6b2",
+              "username": "user_semi-202",
+              "nickname": "半匿名用户_6f4ff6b2",
+              "email": "semi-202@example.com",
+              "role": "user",
+              "status": "active",
+              "createdAt": "2025-09-22T13:50:32.358Z",
+              "lastLogin": "2025-09-23T07:15:08.900Z",
+              "avatar": null,
+              "questionnairesCount": 0,
+              "storiesCount": 0
+            },
+            {
+              "id": "rev-550e8400-e29b-41d4-a716-446655440002",
+              "username": "reviewerA",
+              "nickname": "审核员A",
+              "email": "reviewerA@example.com",
+              "role": "admin",
+              "status": "active",
+              "createdAt": "2025-09-20 14:56:26",
+              "lastLogin": "2025-09-20 14:56:26",
+              "avatar": null,
+              "questionnairesCount": 0,
+              "storiesCount": 0
+            },
+            {
+              "id": "admin-550e8400-e29b-41d4-a716-446655440001",
+              "username": "admin1",
+              "nickname": "管理员",
+              "email": "admin1@example.com",
+              "role": "admin",
+              "status": "active",
+              "createdAt": "2025-09-20 14:56:26",
+              "lastLogin": "2025-09-20 14:56:26",
+              "avatar": null,
+              "questionnairesCount": 0,
+              "storiesCount": 0
+            },
+            {
+              "id": "super-550e8400-e29b-41d4-a716-446655440000",
+              "username": "superadmin",
+              "nickname": "超级管理员",
+              "email": "superadmin@example.com",
+              "role": "super_admin",
+              "status": "active",
+              "createdAt": "2025-09-20 14:56:26",
+              "lastLogin": "2025-09-20 14:56:26",
+              "avatar": null,
+              "questionnairesCount": 0,
+              "storiesCount": 0
+            }
+          ],
+          "pagination": {
+            "page": 1,
+            "pageSize": 10,
+            "total": 10,
+            "totalPages": 1
+          }
+        },
+        "message": "用户列表获取成功"
+      }
+    },
+    "dashboardStats": {
+      "statusCode": 200,
+      "headers": {
+        "date": "Tue, 23 Sep 2025 12:32:11 GMT",
+        "content-type": "application/json",
+        "content-length": "469",
+        "connection": "keep-alive",
+        "cf-ray": "983a1038ed9b8d21-KIX",
+        "access-control-allow-origin": "*",
+        "access-control-allow-credentials": "true",
+        "access-control-allow-headers": "Content-Type, Authorization, X-Request-Time, X-Requested-With, X-API-Version, X-User-ID, X-Human-Token",
+        "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS",
+        "access-control-max-age": "86400",
+        "x-cache": "MISS",
+        "x-cache-key": "stats:GET:https://employment-survey-api-prod.chrismarker89.workers.dev/api/admin/dashboard/stats:admin",
+        "report-to": "{\"endpoints\":[{\"url\":\"https:\\/\\/a.nel.cloudflare.com\\/report\\/v4?s=SGFRkHcO8WnrTaySNgSeCv7No3UVoyMfSWVr7ar0GlAEaLRi6TKsSsqjM6UK9N1kliDi3K6E2knIs1TNG3S5tSfufwKa0Lag4p9GsYgzEqi4GjMgOix3Yywd0EofVBf2viynRkm%2FNSbIP5sVcsLy8u1KCACzn8ADyUViYUCoUKgelytAG96X\"}],\"group\":\"cf-nel\",\"max_age\":604800}",
+        "nel": "{\"success_fraction\":0,\"report_to\":\"cf-nel\",\"max_age\":604800}",
+        "server": "cloudflare",
+        "alt-svc": "h3=\":443\"; ma=86400",
+        "server-timing": "cfL4;desc=\"?proto=TCP&rtt=9044&min_rtt=8975&rtt_var=1148&sent=12&recv=11&lost=0&retrans=0&sent_bytes=9176&recv_bytes=1245&delivery_rate=628267&cwnd=38&unsent_bytes=0&cid=1a07e5972be076b3&ts=876&x=0\""
+      },
+      "data": {
+        "success": true,
+        "data": {
+          "totalUsers": 10,
+          "totalQuestionnaires": 6,
+          "totalReviews": 183,
+          "pendingReviews": 12,
+          "todaySubmissions": 0,
+          "weeklyGrowth": 12.5,
+          "systemHealth": 98.5,
+          "activeUsers": 10,
+          "voices": {
+            "raw_voices": 0,
+            "valid_voices": 0,
+            "total_voices": 0
+          },
+          "stories": {
+            "raw_stories": 183,
+            "valid_stories": 183,
+            "total_stories": 183
+          },
+          "audits": {
+            "total_audits": 183,
+            "pending_audits": 12,
+            "approved_audits": 183,
+            "rejected_audits": 0,
+            "human_reviews": 25
+          }
+        },
+        "message": "仪表板统计数据获取成功"
+      }
+    }
+  }
+}

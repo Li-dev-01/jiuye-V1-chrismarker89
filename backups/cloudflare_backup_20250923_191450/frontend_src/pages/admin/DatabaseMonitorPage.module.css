@@ -1,0 +1,602 @@
+/* 数据库监测管理页面样式 */
+
+.monitorPage {
+  padding: 24px;
+  background: #f5f5f5;
+  min-height: 100vh;
+}
+
+.pageHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  padding: 16px 24px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.pageHeader h2 {
+  margin: 0;
+  color: #1f2937;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.mainTabs {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.mainTabs .ant-tabs-content-holder {
+  padding: 24px;
+}
+
+/* 数据流转卡片样式 */
+.flowCard {
+  height: 100%;
+  transition: all 0.3s ease;
+  border-radius: 8px;
+}
+
+.flowCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.flowHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.flowStats {
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.flowStats > div {
+  margin-bottom: 4px;
+}
+
+.flowStats code {
+  background: #f6f8fa;
+  padding: 2px 4px;
+  border-radius: 3px;
+  font-size: 11px;
+}
+
+/* 状态指示器 */
+.statusIndicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.statusIndicator.healthy {
+  background: #f6ffed;
+  color: #52c41a;
+  border: 1px solid #b7eb8f;
+}
+
+.statusIndicator.warning {
+  background: #fffbe6;
+  color: #faad14;
+  border: 1px solid #ffe58f;
+}
+
+.statusIndicator.error {
+  background: #fff2f0;
+  color: #ff4d4f;
+  border: 1px solid #ffccc7;
+}
+
+/* 统计卡片 */
+.statCard {
+  text-align: center;
+  padding: 20px;
+  border-radius: 8px;
+  background: white;
+  border: 1px solid #f0f0f0;
+  transition: all 0.3s ease;
+}
+
+.statCard:hover {
+  border-color: #1890ff;
+  box-shadow: 0 2px 8px rgba(24, 144, 255, 0.1);
+}
+
+.statCard .ant-statistic-title {
+  color: #666;
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+.statCard .ant-statistic-content {
+  font-size: 24px;
+  font-weight: 600;
+}
+
+/* 表格样式增强 */
+.healthTable .ant-table-thead > tr > th {
+  background: #fafafa;
+  font-weight: 600;
+  color: #262626;
+}
+
+.healthTable .ant-table-tbody > tr:hover > td {
+  background: #f5f5f5;
+}
+
+/* 时间线样式 */
+.alertTimeline .ant-timeline-item-content {
+  margin-left: 8px;
+}
+
+.alertTimeline .ant-timeline-item-tail {
+  border-left-color: #d9d9d9;
+}
+
+/* 工具卡片 */
+.toolCard {
+  height: 100%;
+  border-radius: 8px;
+}
+
+.toolCard .ant-card-head {
+  background: #fafafa;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.toolCard .ant-card-head-title {
+  font-weight: 600;
+  color: #262626;
+}
+
+.toolCard .ant-btn {
+  margin-bottom: 8px;
+}
+
+.toolCard .ant-btn:last-child {
+  margin-bottom: 0;
+}
+
+/* 进度条样式 */
+.qualityProgress .ant-progress-bg {
+  transition: all 0.3s ease;
+}
+
+.qualityProgress .ant-progress-success-bg {
+  background: #52c41a;
+}
+
+.qualityProgress .ant-progress-bg {
+  background: #1890ff;
+}
+
+/* 标签样式 */
+.issueTag {
+  margin-bottom: 4px;
+  font-size: 11px;
+}
+
+/* 同步任务状态 */
+.syncStatus {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.syncStatus .anticon {
+  font-size: 12px;
+}
+
+/* 操作按钮组 */
+.actionButtons {
+  display: flex;
+  gap: 8px;
+}
+
+.actionButtons .ant-btn {
+  font-size: 12px;
+  height: 28px;
+  padding: 0 8px;
+}
+
+/* 告警项 */
+.alertItem {
+  padding: 12px;
+  border-radius: 6px;
+  margin-bottom: 8px;
+  border-left: 4px solid;
+}
+
+.alertItem.error {
+  background: #fff2f0;
+  border-left-color: #ff4d4f;
+}
+
+.alertItem.warning {
+  background: #fffbe6;
+  border-left-color: #faad14;
+}
+
+.alertItem.info {
+  background: #e6f7ff;
+  border-left-color: #1890ff;
+}
+
+.alertItem .alertMessage {
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.alertItem .alertTime {
+  font-size: 12px;
+  color: #666;
+}
+
+/* 数据流转箭头 */
+.flowArrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  font-size: 24px;
+  color: #1890ff;
+}
+
+/* 响应式设计 */
+@media (max-width: 1200px) {
+  .flowCard {
+    margin-bottom: 16px;
+  }
+  
+  .toolCard {
+    margin-bottom: 16px;
+  }
+}
+
+@media (max-width: 768px) {
+  .monitorPage {
+    padding: 16px;
+  }
+  
+  .pageHeader {
+    flex-direction: column;
+    gap: 16px;
+    align-items: stretch;
+  }
+  
+  .pageHeader h2 {
+    text-align: center;
+  }
+  
+  .mainTabs .ant-tabs-content-holder {
+    padding: 16px;
+  }
+  
+  .flowStats {
+    font-size: 11px;
+  }
+  
+  .statCard {
+    padding: 16px;
+  }
+  
+  .statCard .ant-statistic-content {
+    font-size: 20px;
+  }
+}
+
+/* 加载状态 */
+.loadingOverlay {
+  position: relative;
+}
+
+.loadingOverlay::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.8);
+  z-index: 10;
+}
+
+/* 动画效果 */
+@keyframes pulse {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.pulseAnimation {
+  animation: pulse 2s infinite;
+}
+
+/* 图表容器 */
+.chartContainer {
+  height: 300px;
+  padding: 16px;
+}
+
+.chartContainer .ant-card-body {
+  padding: 0;
+}
+
+/* 配置表单 */
+.configForm .ant-form-item {
+  margin-bottom: 16px;
+}
+
+.configForm .ant-form-item-label {
+  font-weight: 500;
+}
+
+/* 数据表格 */
+.dataTable .ant-table-thead > tr > th {
+  background: #fafafa;
+  font-weight: 600;
+  border-bottom: 2px solid #f0f0f0;
+}
+
+.dataTable .ant-table-tbody > tr > td {
+  padding: 12px 16px;
+}
+
+.dataTable .ant-table-tbody > tr:hover > td {
+  background: #f5f5f5;
+}
+
+/* 紧急告警闪烁效果 */
+.criticalAlert {
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  0%, 50% {
+    opacity: 1;
+  }
+  51%, 100% {
+    opacity: 0.3;
+  }
+}
+
+/* 数据库结构关系图样式 */
+.schemaContainer {
+  padding: 0;
+}
+
+.typeIndicator {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.tableCard {
+  height: 100%;
+  transition: all 0.3s ease;
+  border-radius: 8px;
+}
+
+.tableCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.tableHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.tableDescription {
+  display: block;
+  font-size: 12px;
+  line-height: 1.4;
+  margin-bottom: 8px;
+}
+
+.tableDetails {
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.tableDetails > div {
+  margin-bottom: 6px;
+}
+
+.tableDetails strong {
+  color: #262626;
+  margin-right: 4px;
+}
+
+.dataFlow {
+  font-size: 12px;
+}
+
+.dataFlow > div {
+  margin-bottom: 4px;
+}
+
+.dataFlow .ant-tag {
+  margin: 2px;
+  font-size: 11px;
+  line-height: 16px;
+  padding: 0 4px;
+}
+
+/* 数据流转关系图 */
+.flowDiagram {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.flowRelation {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px;
+  border: 1px solid #f0f0f0;
+  border-radius: 6px;
+  background: #fafafa;
+  transition: all 0.3s ease;
+}
+
+.flowRelation:hover {
+  border-color: #1890ff;
+  background: #f6f8fa;
+}
+
+.flowRelation .ant-space {
+  align-items: center;
+}
+
+.flowRelation .ant-tag {
+  font-size: 12px;
+  margin: 0 4px;
+}
+
+.flowRelation .anticon {
+  font-size: 16px;
+  margin: 0 8px;
+}
+
+/* 表类型颜色主题 */
+.coreTable {
+  border-color: #1890ff;
+}
+
+.contentTable {
+  border-color: #52c41a;
+}
+
+.tempTable {
+  border-color: #faad14;
+}
+
+.cacheTable {
+  border-color: #722ed1;
+}
+
+.logTable {
+  border-color: #f5222d;
+}
+
+/* 字段列表样式 */
+.fieldsList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 8px;
+}
+
+.fieldsList .ant-tag {
+  font-size: 11px;
+  margin: 0;
+  padding: 2px 6px;
+  line-height: 16px;
+}
+
+/* 关系连接线样式 */
+.relationLine {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 2px;
+  background: linear-gradient(90deg, #1890ff, #52c41a);
+  margin: 8px 0;
+}
+
+.relationLine::before {
+  content: '';
+  position: absolute;
+  right: -6px;
+  top: -3px;
+  width: 0;
+  height: 0;
+  border-left: 6px solid #52c41a;
+  border-top: 4px solid transparent;
+  border-bottom: 4px solid transparent;
+}
+
+/* 状态指示器增强 */
+.statusBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.statusBadge.active {
+  background: #f6ffed;
+  color: #52c41a;
+  border: 1px solid #b7eb8f;
+}
+
+.statusBadge.inactive {
+  background: #fffbe6;
+  color: #faad14;
+  border: 1px solid #ffe58f;
+}
+
+.statusBadge.error {
+  background: #fff2f0;
+  color: #ff4d4f;
+  border: 1px solid #ffccc7;
+}
+
+/* 响应式设计增强 */
+@media (max-width: 1200px) {
+  .tableCard {
+    margin-bottom: 16px;
+  }
+
+  .flowDiagram {
+    gap: 12px;
+  }
+}
+
+@media (max-width: 768px) {
+  .schemaContainer .ant-col {
+    margin-bottom: 16px;
+  }
+
+  .tableDetails {
+    font-size: 11px;
+  }
+
+  .dataFlow {
+    font-size: 11px;
+  }
+
+  .flowRelation {
+    padding: 8px;
+  }
+
+  .flowRelation .ant-space {
+    flex-wrap: wrap;
+  }
+}

@@ -1,0 +1,605 @@
+{
+  "timestamp": "2025-09-23T10:56:24.987Z",
+  "total_tests": 76,
+  "passed_tests": 76,
+  "failed_tests": 0,
+  "test_details": [
+    {
+      "name": "主应用健康检查",
+      "status": "passed",
+      "response_time": 0,
+      "url": "http://localhost:8787/api/health",
+      "timestamp": "2025-09-23T10:56:24.988Z"
+    },
+    {
+      "name": "数据库连接检查",
+      "status": "passed",
+      "response_time": 0,
+      "url": "http://localhost:8787/api/health/database",
+      "timestamp": "2025-09-23T10:56:24.988Z"
+    },
+    {
+      "name": "缓存系统检查",
+      "status": "passed",
+      "response_time": 0,
+      "url": "http://localhost:8787/api/health/cache",
+      "timestamp": "2025-09-23T10:56:24.988Z"
+    },
+    {
+      "name": "监控系统检查",
+      "status": "passed",
+      "response_time": 0,
+      "url": "http://localhost:8787/api/health/monitoring",
+      "timestamp": "2025-09-23T10:56:24.988Z"
+    },
+    {
+      "name": "仪表板统计API",
+      "status": "passed",
+      "response_time": 0,
+      "url": "http://localhost:8787/api/admin/dashboards/statistics",
+      "timestamp": "2025-09-23T10:56:24.988Z"
+    },
+    {
+      "name": "用户统计API",
+      "status": "passed",
+      "response_time": 0,
+      "url": "http://localhost:8787/api/admin/users/stats",
+      "timestamp": "2025-09-23T10:56:24.988Z"
+    },
+    {
+      "name": "用户列表API",
+      "status": "passed",
+      "response_time": 0,
+      "url": "http://localhost:8787/api/admin/users?page=1&pageSize=10",
+      "timestamp": "2025-09-23T10:56:24.988Z"
+    },
+    {
+      "name": "用户详情API",
+      "status": "passed",
+      "response_time": 0,
+      "url": "http://localhost:8787/api/admin/users/test-user-id",
+      "timestamp": "2025-09-23T10:56:24.988Z"
+    },
+    {
+      "name": "用户状态更新API",
+      "status": "passed",
+      "response_time": 0,
+      "url": "http://localhost:8787/api/admin/users/test-user-id/status",
+      "timestamp": "2025-09-23T10:56:24.988Z"
+    },
+    {
+      "name": "内容标签列表API",
+      "status": "passed",
+      "response_time": 0,
+      "url": "http://localhost:8787/api/admin/content/tags",
+      "timestamp": "2025-09-23T10:56:24.988Z"
+    },
+    {
+      "name": "标签推荐API",
+      "status": "passed",
+      "response_time": 0,
+      "url": "http://localhost:8787/api/admin/content/tag-recommendations",
+      "timestamp": "2025-09-23T10:56:24.988Z"
+    },
+    {
+      "name": "标签统计API",
+      "status": "passed",
+      "response_time": 0,
+      "url": "http://localhost:8787/api/admin/content/tags/stats",
+      "timestamp": "2025-09-23T10:56:24.988Z"
+    },
+    {
+      "name": "IP访问规则API",
+      "status": "passed",
+      "response_time": 0,
+      "url": "http://localhost:8787/api/admin/ip-access-rules",
+      "timestamp": "2025-09-23T10:56:24.988Z"
+    },
+    {
+      "name": "登录监控API",
+      "status": "passed",
+      "response_time": 0,
+      "url": "http://localhost:8787/api/admin/login-monitor/records",
+      "timestamp": "2025-09-23T10:56:24.988Z"
+    },
+    {
+      "name": "安全智能API",
+      "status": "passed",
+      "response_time": 0,
+      "url": "http://localhost:8787/api/admin/security-intelligence/threats",
+      "timestamp": "2025-09-23T10:56:24.988Z"
+    },
+    {
+      "name": "缓存测试 - 首次请求 /api/admin/dashboards/statistics",
+      "status": "passed",
+      "response_time": 0,
+      "url": "http://localhost:8787/api/admin/dashboards/statistics",
+      "timestamp": "2025-09-23T10:56:24.988Z"
+    },
+    {
+      "name": "缓存测试 - 缓存命中 /api/admin/dashboards/statistics",
+      "status": "passed",
+      "response_time": 0,
+      "url": "http://localhost:8787/api/admin/dashboards/statistics",
+      "timestamp": "2025-09-23T10:56:24.988Z"
+    },
+    {
+      "name": "缓存测试 - 首次请求 /api/admin/users?page=1&pageSize=10",
+      "status": "passed",
+      "response_time": 0,
+      "url": "http://localhost:8787/api/admin/users?page=1&pageSize=10",
+      "timestamp": "2025-09-23T10:56:24.988Z"
+    },
+    {
+      "name": "缓存测试 - 缓存命中 /api/admin/users?page=1&pageSize=10",
+      "status": "passed",
+      "response_time": 0,
+      "url": "http://localhost:8787/api/admin/users?page=1&pageSize=10",
+      "timestamp": "2025-09-23T10:56:24.988Z"
+    },
+    {
+      "name": "缓存测试 - 首次请求 /api/admin/content/tags",
+      "status": "passed",
+      "response_time": 0,
+      "url": "http://localhost:8787/api/admin/content/tags",
+      "timestamp": "2025-09-23T10:56:24.988Z"
+    },
+    {
+      "name": "缓存测试 - 缓存命中 /api/admin/content/tags",
+      "status": "passed",
+      "response_time": 0,
+      "url": "http://localhost:8787/api/admin/content/tags",
+      "timestamp": "2025-09-23T10:56:24.988Z"
+    },
+    {
+      "name": "小页面分页",
+      "status": "passed",
+      "response_time": 0,
+      "url": "http://localhost:8787/api/admin/users?page=1&pageSize=10",
+      "timestamp": "2025-09-23T10:56:24.989Z"
+    },
+    {
+      "name": "中页面分页",
+      "status": "passed",
+      "response_time": 0,
+      "url": "http://localhost:8787/api/admin/users?page=1&pageSize=50",
+      "timestamp": "2025-09-23T10:56:24.989Z"
+    },
+    {
+      "name": "大页面分页",
+      "status": "passed",
+      "response_time": 0,
+      "url": "http://localhost:8787/api/admin/users?page=1&pageSize=100",
+      "timestamp": "2025-09-23T10:56:24.989Z"
+    },
+    {
+      "name": "批量操作请求 1",
+      "status": "passed",
+      "response_time": 0,
+      "url": "http://localhost:8787/api/admin/user-batch-operations",
+      "timestamp": "2025-09-23T10:56:24.989Z"
+    },
+    {
+      "name": "批量操作请求 2",
+      "status": "passed",
+      "response_time": 0,
+      "url": "http://localhost:8787/api/admin/user-batch-operations",
+      "timestamp": "2025-09-23T10:56:24.989Z"
+    },
+    {
+      "name": "批量操作请求 3",
+      "status": "passed",
+      "response_time": 0,
+      "url": "http://localhost:8787/api/admin/user-batch-operations",
+      "timestamp": "2025-09-23T10:56:24.989Z"
+    },
+    {
+      "name": "批量操作请求 4",
+      "status": "passed",
+      "response_time": 0,
+      "url": "http://localhost:8787/api/admin/user-batch-operations",
+      "timestamp": "2025-09-23T10:56:24.989Z"
+    },
+    {
+      "name": "批量操作请求 5",
+      "status": "passed",
+      "response_time": 0,
+      "url": "http://localhost:8787/api/admin/user-batch-operations",
+      "timestamp": "2025-09-23T10:56:24.989Z"
+    },
+    {
+      "name": "批量操作请求 6",
+      "status": "passed",
+      "response_time": 0,
+      "url": "http://localhost:8787/api/admin/user-batch-operations",
+      "timestamp": "2025-09-23T10:56:24.989Z"
+    },
+    {
+      "name": "批量操作请求 7",
+      "status": "passed",
+      "response_time": 0,
+      "url": "http://localhost:8787/api/admin/user-batch-operations",
+      "timestamp": "2025-09-23T10:56:24.989Z"
+    },
+    {
+      "name": "批量操作请求 8",
+      "status": "passed",
+      "response_time": 0,
+      "url": "http://localhost:8787/api/admin/user-batch-operations",
+      "timestamp": "2025-09-23T10:56:24.989Z"
+    },
+    {
+      "name": "批量操作请求 9",
+      "status": "passed",
+      "response_time": 0,
+      "url": "http://localhost:8787/api/admin/user-batch-operations",
+      "timestamp": "2025-09-23T10:56:24.989Z"
+    },
+    {
+      "name": "批量操作请求 10",
+      "status": "passed",
+      "response_time": 0,
+      "url": "http://localhost:8787/api/admin/user-batch-operations",
+      "timestamp": "2025-09-23T10:56:24.989Z"
+    },
+    {
+      "name": "批量操作请求 11",
+      "status": "passed",
+      "response_time": 0,
+      "url": "http://localhost:8787/api/admin/user-batch-operations",
+      "timestamp": "2025-09-23T10:56:24.989Z"
+    },
+    {
+      "name": "批量操作请求 12",
+      "status": "passed",
+      "response_time": 0,
+      "url": "http://localhost:8787/api/admin/user-batch-operations",
+      "timestamp": "2025-09-23T10:56:24.989Z"
+    },
+    {
+      "name": "批量操作请求 13",
+      "status": "passed",
+      "response_time": 0,
+      "url": "http://localhost:8787/api/admin/user-batch-operations",
+      "timestamp": "2025-09-23T10:56:24.989Z"
+    },
+    {
+      "name": "批量操作请求 14",
+      "status": "passed",
+      "response_time": 0,
+      "url": "http://localhost:8787/api/admin/user-batch-operations",
+      "timestamp": "2025-09-23T10:56:24.989Z"
+    },
+    {
+      "name": "批量操作请求 15",
+      "status": "passed",
+      "response_time": 0,
+      "url": "http://localhost:8787/api/admin/user-batch-operations",
+      "timestamp": "2025-09-23T10:56:24.989Z"
+    },
+    {
+      "name": "SQL注入防护测试",
+      "status": "passed",
+      "response_time": 0,
+      "url": "http://localhost:8787/api/admin/users?search='; DROP TABLE users; --",
+      "timestamp": "2025-09-23T10:56:24.989Z"
+    },
+    {
+      "name": "XSS防护测试",
+      "status": "passed",
+      "response_time": 0,
+      "url": "http://localhost:8787/api/admin/users?search=<script>alert(\"xss\")</script>",
+      "timestamp": "2025-09-23T10:56:24.989Z"
+    },
+    {
+      "name": "路径遍历防护测试",
+      "status": "passed",
+      "response_time": 0,
+      "url": "http://localhost:8787/api/admin/users/../../../etc/passwd",
+      "timestamp": "2025-09-23T10:56:24.989Z"
+    },
+    {
+      "name": "参数验证测试",
+      "status": "passed",
+      "response_time": 0,
+      "url": "http://localhost:8787/api/admin/users/invalid-uuid-format",
+      "timestamp": "2025-09-23T10:56:24.989Z"
+    },
+    {
+      "name": "Prometheus健康检查",
+      "status": "passed",
+      "response_time": 0,
+      "url": "http://localhost:9090/-/healthy",
+      "timestamp": "2025-09-23T10:56:24.989Z"
+    },
+    {
+      "name": "Grafana健康检查",
+      "status": "passed",
+      "response_time": 0,
+      "url": "http://localhost:3000/api/health",
+      "timestamp": "2025-09-23T10:56:24.989Z"
+    },
+    {
+      "name": "AlertManager健康检查",
+      "status": "passed",
+      "response_time": 0,
+      "url": "http://localhost:9093/-/healthy",
+      "timestamp": "2025-09-23T10:56:24.989Z"
+    },
+    {
+      "name": "并发测试 /api/admin/dashboards/statistics #1",
+      "status": "passed",
+      "response_time": 0,
+      "url": "http://localhost:8787/api/admin/dashboards/statistics",
+      "timestamp": "2025-09-23T10:56:24.989Z"
+    },
+    {
+      "name": "并发测试 /api/admin/dashboards/statistics #2",
+      "status": "passed",
+      "response_time": 0,
+      "url": "http://localhost:8787/api/admin/dashboards/statistics",
+      "timestamp": "2025-09-23T10:56:24.989Z"
+    },
+    {
+      "name": "并发测试 /api/admin/dashboards/statistics #3",
+      "status": "passed",
+      "response_time": 0,
+      "url": "http://localhost:8787/api/admin/dashboards/statistics",
+      "timestamp": "2025-09-23T10:56:24.989Z"
+    },
+    {
+      "name": "并发测试 /api/admin/dashboards/statistics #4",
+      "status": "passed",
+      "response_time": 0,
+      "url": "http://localhost:8787/api/admin/dashboards/statistics",
+      "timestamp": "2025-09-23T10:56:24.989Z"
+    },
+    {
+      "name": "并发测试 /api/admin/dashboards/statistics #5",
+      "status": "passed",
+      "response_time": 0,
+      "url": "http://localhost:8787/api/admin/dashboards/statistics",
+      "timestamp": "2025-09-23T10:56:24.989Z"
+    },
+    {
+      "name": "并发测试 /api/admin/dashboards/statistics #6",
+      "status": "passed",
+      "response_time": 0,
+      "url": "http://localhost:8787/api/admin/dashboards/statistics",
+      "timestamp": "2025-09-23T10:56:24.989Z"
+    },
+    {
+      "name": "并发测试 /api/admin/dashboards/statistics #7",
+      "status": "passed",
+      "response_time": 0,
+      "url": "http://localhost:8787/api/admin/dashboards/statistics",
+      "timestamp": "2025-09-23T10:56:24.989Z"
+    },
+    {
+      "name": "并发测试 /api/admin/dashboards/statistics #8",
+      "status": "passed",
+      "response_time": 0,
+      "url": "http://localhost:8787/api/admin/dashboards/statistics",
+      "timestamp": "2025-09-23T10:56:24.989Z"
+    },
+    {
+      "name": "并发测试 /api/admin/dashboards/statistics #9",
+      "status": "passed",
+      "response_time": 0,
+      "url": "http://localhost:8787/api/admin/dashboards/statistics",
+      "timestamp": "2025-09-23T10:56:24.989Z"
+    },
+    {
+      "name": "并发测试 /api/admin/dashboards/statistics #10",
+      "status": "passed",
+      "response_time": 0,
+      "url": "http://localhost:8787/api/admin/dashboards/statistics",
+      "timestamp": "2025-09-23T10:56:24.989Z"
+    },
+    {
+      "name": "并发测试 /api/admin/users?page=1&pageSize=10 #1",
+      "status": "passed",
+      "response_time": 0,
+      "url": "http://localhost:8787/api/admin/users?page=1&pageSize=10",
+      "timestamp": "2025-09-23T10:56:24.989Z"
+    },
+    {
+      "name": "并发测试 /api/admin/users?page=1&pageSize=10 #2",
+      "status": "passed",
+      "response_time": 0,
+      "url": "http://localhost:8787/api/admin/users?page=1&pageSize=10",
+      "timestamp": "2025-09-23T10:56:24.989Z"
+    },
+    {
+      "name": "并发测试 /api/admin/users?page=1&pageSize=10 #3",
+      "status": "passed",
+      "response_time": 0,
+      "url": "http://localhost:8787/api/admin/users?page=1&pageSize=10",
+      "timestamp": "2025-09-23T10:56:24.989Z"
+    },
+    {
+      "name": "并发测试 /api/admin/users?page=1&pageSize=10 #4",
+      "status": "passed",
+      "response_time": 0,
+      "url": "http://localhost:8787/api/admin/users?page=1&pageSize=10",
+      "timestamp": "2025-09-23T10:56:24.989Z"
+    },
+    {
+      "name": "并发测试 /api/admin/users?page=1&pageSize=10 #5",
+      "status": "passed",
+      "response_time": 0,
+      "url": "http://localhost:8787/api/admin/users?page=1&pageSize=10",
+      "timestamp": "2025-09-23T10:56:24.989Z"
+    },
+    {
+      "name": "并发测试 /api/admin/users?page=1&pageSize=10 #6",
+      "status": "passed",
+      "response_time": 0,
+      "url": "http://localhost:8787/api/admin/users?page=1&pageSize=10",
+      "timestamp": "2025-09-23T10:56:24.989Z"
+    },
+    {
+      "name": "并发测试 /api/admin/users?page=1&pageSize=10 #7",
+      "status": "passed",
+      "response_time": 0,
+      "url": "http://localhost:8787/api/admin/users?page=1&pageSize=10",
+      "timestamp": "2025-09-23T10:56:24.989Z"
+    },
+    {
+      "name": "并发测试 /api/admin/users?page=1&pageSize=10 #8",
+      "status": "passed",
+      "response_time": 0,
+      "url": "http://localhost:8787/api/admin/users?page=1&pageSize=10",
+      "timestamp": "2025-09-23T10:56:24.989Z"
+    },
+    {
+      "name": "并发测试 /api/admin/users?page=1&pageSize=10 #9",
+      "status": "passed",
+      "response_time": 0,
+      "url": "http://localhost:8787/api/admin/users?page=1&pageSize=10",
+      "timestamp": "2025-09-23T10:56:24.989Z"
+    },
+    {
+      "name": "并发测试 /api/admin/users?page=1&pageSize=10 #10",
+      "status": "passed",
+      "response_time": 0,
+      "url": "http://localhost:8787/api/admin/users?page=1&pageSize=10",
+      "timestamp": "2025-09-23T10:56:24.989Z"
+    },
+    {
+      "name": "并发测试 /api/admin/content/tags #1",
+      "status": "passed",
+      "response_time": 0,
+      "url": "http://localhost:8787/api/admin/content/tags",
+      "timestamp": "2025-09-23T10:56:24.989Z"
+    },
+    {
+      "name": "并发测试 /api/admin/content/tags #2",
+      "status": "passed",
+      "response_time": 0,
+      "url": "http://localhost:8787/api/admin/content/tags",
+      "timestamp": "2025-09-23T10:56:24.989Z"
+    },
+    {
+      "name": "并发测试 /api/admin/content/tags #3",
+      "status": "passed",
+      "response_time": 0,
+      "url": "http://localhost:8787/api/admin/content/tags",
+      "timestamp": "2025-09-23T10:56:24.989Z"
+    },
+    {
+      "name": "并发测试 /api/admin/content/tags #4",
+      "status": "passed",
+      "response_time": 0,
+      "url": "http://localhost:8787/api/admin/content/tags",
+      "timestamp": "2025-09-23T10:56:24.989Z"
+    },
+    {
+      "name": "并发测试 /api/admin/content/tags #5",
+      "status": "passed",
+      "response_time": 0,
+      "url": "http://localhost:8787/api/admin/content/tags",
+      "timestamp": "2025-09-23T10:56:24.989Z"
+    },
+    {
+      "name": "并发测试 /api/admin/content/tags #6",
+      "status": "passed",
+      "response_time": 0,
+      "url": "http://localhost:8787/api/admin/content/tags",
+      "timestamp": "2025-09-23T10:56:24.989Z"
+    },
+    {
+      "name": "并发测试 /api/admin/content/tags #7",
+      "status": "passed",
+      "response_time": 0,
+      "url": "http://localhost:8787/api/admin/content/tags",
+      "timestamp": "2025-09-23T10:56:24.989Z"
+    },
+    {
+      "name": "并发测试 /api/admin/content/tags #8",
+      "status": "passed",
+      "response_time": 0,
+      "url": "http://localhost:8787/api/admin/content/tags",
+      "timestamp": "2025-09-23T10:56:24.989Z"
+    },
+    {
+      "name": "并发测试 /api/admin/content/tags #9",
+      "status": "passed",
+      "response_time": 0,
+      "url": "http://localhost:8787/api/admin/content/tags",
+      "timestamp": "2025-09-23T10:56:24.989Z"
+    },
+    {
+      "name": "并发测试 /api/admin/content/tags #10",
+      "status": "passed",
+      "response_time": 0,
+      "url": "http://localhost:8787/api/admin/content/tags",
+      "timestamp": "2025-09-23T10:56:24.989Z"
+    }
+  ],
+  "performance_metrics": {
+    "cache": {
+      "/api/admin/dashboards/statistics": {
+        "first_request_time": 162.4761482936392,
+        "cached_request_time": 225.32224682890515,
+        "cache_improvement": "-38.7%"
+      },
+      "/api/admin/users?page=1&pageSize=10": {
+        "first_request_time": 199.20255704025956,
+        "cached_request_time": 212.02827859321457,
+        "cache_improvement": "-6.4%"
+      },
+      "/api/admin/content/tags": {
+        "first_request_time": 140.49849531489895,
+        "cached_request_time": 108.52801709908495,
+        "cache_improvement": "22.8%"
+      }
+    },
+    "pagination": {
+      "小页面分页": {
+        "response_time": 89.93015383628835,
+        "page_size": "10"
+      },
+      "中页面分页": {
+        "response_time": 230.58146525398539,
+        "page_size": "50"
+      },
+      "大页面分页": {
+        "response_time": 156.43320940611954,
+        "page_size": "100"
+      }
+    },
+    "rate_limiting": {
+      "allowed_requests": 15,
+      "blocked_requests": 0,
+      "block_rate": "0.0%"
+    },
+    "concurrency": {
+      "/api/admin/dashboards/statistics": {
+        "concurrent_requests": 10,
+        "total_time": 0,
+        "avg_response_time": 0,
+        "status": "passed"
+      },
+      "/api/admin/users?page=1&pageSize=10": {
+        "concurrent_requests": 10,
+        "total_time": 0,
+        "avg_response_time": 0,
+        "status": "passed"
+      },
+      "/api/admin/content/tags": {
+        "concurrent_requests": 10,
+        "total_time": 0,
+        "avg_response_time": 0,
+        "status": "passed"
+      }
+    }
+  },
+  "security_checks": {
+    "SQL注入防护测试": "FAILED",
+    "XSS防护测试": "FAILED",
+    "路径遍历防护测试": "FAILED",
+    "参数验证测试": "FAILED"
+  },
+  "deployment_status": "success"
+}

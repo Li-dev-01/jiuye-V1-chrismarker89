@@ -1,0 +1,26 @@
+{
+  "id": "test-environment",
+  "name": "Test Environment",
+  "values": [
+    {
+      "key": "baseUrl",
+      "value": "https://employment-survey-api-prod.chrismarker89.workers.dev",
+      "enabled": true
+    },
+    {
+      "key": "authToken",
+      "value": "",
+      "enabled": true
+    },
+    {
+      "key": "testUserId",
+      "value": "1",
+      "enabled": true
+    },
+    {
+      "key": "testStoryId",
+      "value": "1",
+      "enabled": true
+    }
+  ]
+}

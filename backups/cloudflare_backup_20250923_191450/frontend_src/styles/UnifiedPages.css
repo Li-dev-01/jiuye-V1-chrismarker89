@@ -1,0 +1,314 @@
+/* 统一页面样式 - 使用设计系统 */
+
+.unified-page {
+  padding: var(--spacing-lg);
+  background-color: var(--bg-secondary);
+  min-height: 100vh;
+}
+
+/* 页面头部 */
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: var(--spacing-lg);
+  padding: var(--spacing-lg);
+  background: linear-gradient(135deg, var(--primary-500) 0%, var(--primary-600) 100%);
+  border-radius: var(--border-radius-lg);
+  color: white;
+}
+
+.header-content h2 {
+  color: white;
+  margin-bottom: var(--spacing-xs);
+}
+
+.header-content .ant-typography {
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 0;
+}
+
+.page-header .ant-btn {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.3);
+  color: white;
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+
+.page-header .ant-btn:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.5);
+  color: white;
+}
+
+/* 精选内容区域 */
+.featured-section {
+  margin-bottom: var(--spacing-lg);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-md);
+}
+
+.featured-section .ant-card-head {
+  background: linear-gradient(135deg, var(--warning-100) 0%, var(--warning-200) 100%);
+  border-bottom: none;
+  border-radius: var(--border-radius-lg) var(--border-radius-lg) 0 0;
+}
+
+.featured-section .ant-card-head-title {
+  color: var(--warning-700);
+  font-weight: 600;
+  font-size: var(--font-size-base);
+}
+
+/* 筛选卡片 */
+.filter-card {
+  margin-bottom: var(--spacing-lg);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-md);
+}
+
+.filter-card .ant-card-body {
+  padding: var(--spacing-md) var(--spacing-lg);
+}
+
+.stats-info {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+/* 内容区域 */
+.content-area {
+  background-color: white;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+/* 分页器 */
+.pagination-wrapper {
+  margin-top: 32px;
+  text-align: center;
+}
+
+.pagination-wrapper .ant-pagination {
+  display: inline-flex;
+}
+
+.pagination-wrapper .ant-pagination-item {
+  border-radius: 6px;
+}
+
+.pagination-wrapper .ant-pagination-item-active {
+  background-color: #1890ff;
+  border-color: #1890ff;
+}
+
+.pagination-wrapper .ant-pagination-item-active a {
+  color: white;
+}
+
+/* 空状态 */
+.content-area .ant-empty {
+  padding: 60px 20px;
+}
+
+.content-area .ant-empty-description {
+  color: #8c8c8c;
+  font-size: 16px;
+}
+
+.content-area .ant-empty .ant-btn {
+  margin-top: 16px;
+  background-color: #1890ff;
+  border-color: #1890ff;
+}
+
+.content-area .ant-empty .ant-btn:hover {
+  background-color: #40a9ff;
+  border-color: #40a9ff;
+}
+
+/* 加载状态 */
+.content-area .ant-spin-container {
+  min-height: 400px;
+}
+
+/* 详情模态框样式 */
+.detail-modal .ant-modal-body {
+  padding: 16px 0;
+}
+
+.detail-meta {
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.detail-content {
+  margin: 24px 0;
+  line-height: 1.8;
+  font-size: 16px;
+}
+
+.detail-content .ant-typography {
+  margin-bottom: 0;
+}
+
+.detail-tags {
+  margin: 24px 0;
+  padding: 16px;
+  background-color: #fafafa;
+  border-radius: 8px;
+}
+
+.detail-stats {
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid #f0f0f0;
+  text-align: center;
+}
+
+/* 作者信息样式 */
+.author-info-section {
+  margin-top: 8px;
+}
+
+/* 响应式设计 */
+@media (max-width: 1200px) {
+  .unified-page .ant-col {
+    margin-bottom: 16px;
+  }
+}
+
+@media (max-width: 768px) {
+  .unified-page {
+    padding: 16px;
+  }
+  
+  .page-header {
+    flex-direction: column;
+    gap: 16px;
+    padding: 20px;
+  }
+  
+  .page-header .ant-btn {
+    width: 100%;
+  }
+  
+  .featured-section .ant-card-body {
+    padding: 16px;
+  }
+  
+  .filter-card .ant-card-body {
+    padding: 16px;
+  }
+  
+  .stats-info {
+    justify-content: flex-start;
+    margin-top: 8px;
+  }
+  
+  .content-area {
+    padding: 16px;
+  }
+  
+  .pagination-wrapper {
+    margin-top: 24px;
+  }
+  
+  .pagination-wrapper .ant-pagination {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  .detail-content {
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  
+  .detail-tags {
+    padding: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .unified-page {
+    padding: 12px;
+  }
+  
+  .page-header {
+    padding: 16px;
+  }
+  
+  .page-header h2 {
+    font-size: 20px;
+  }
+  
+  .featured-section .ant-card-body {
+    padding: 12px;
+  }
+  
+  .filter-card .ant-card-body {
+    padding: 12px;
+  }
+  
+  .content-area {
+    padding: 12px;
+  }
+  
+  .detail-content {
+    margin: 16px 0;
+    font-size: 14px;
+  }
+  
+  .detail-tags {
+    margin: 16px 0;
+    padding: 8px;
+  }
+  
+  .detail-stats {
+    margin-top: 16px;
+    padding-top: 12px;
+  }
+}
+
+/* 特殊状态和动画 */
+.loading-overlay {
+  position: relative;
+}
+
+.loading-overlay::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 0.8);
+  z-index: 1;
+}
+
+/* 平滑过渡动画 */
+.content-area,
+.filter-card,
+.featured-section {
+  transition: all 0.3s ease;
+}
+
+/* 卡片网格布局优化 */
+.unified-page .ant-row {
+  margin-left: -8px;
+  margin-right: -8px;
+}
+
+.unified-page .ant-col {
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+/* 卡片自适应高度 */
+.unified-page .ant-col > * {
+  /* 移除固定高度，让卡片根据内容自适应 */
+}

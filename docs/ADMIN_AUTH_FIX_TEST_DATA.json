@@ -1,0 +1,59 @@
+{
+  "timestamp": "2025-09-23T11:56:44.647Z",
+  "summary": {
+    "total": 8,
+    "passed": 8,
+    "failed": 0,
+    "successRate": 100
+  },
+  "tests": [
+    {
+      "name": "前端页面访问",
+      "passed": true,
+      "details": "状态码: 200",
+      "timestamp": "2025-09-23T11:56:45.006Z"
+    },
+    {
+      "name": "管理员token生成",
+      "passed": true,
+      "details": "Token: mgmt_token_SUPER_ADM...",
+      "timestamp": "2025-09-23T11:56:45.451Z"
+    },
+    {
+      "name": "仪表板统计 API",
+      "passed": true,
+      "details": "数据获取成功",
+      "timestamp": "2025-09-23T11:56:45.632Z"
+    },
+    {
+      "name": "用户列表 API",
+      "passed": true,
+      "details": "数据获取成功",
+      "timestamp": "2025-09-23T11:56:45.796Z"
+    },
+    {
+      "name": "问卷列表 API",
+      "passed": true,
+      "details": "数据获取成功",
+      "timestamp": "2025-09-23T11:56:45.963Z"
+    },
+    {
+      "name": "审核员列表 API",
+      "passed": true,
+      "details": "数据获取成功",
+      "timestamp": "2025-09-23T11:56:46.125Z"
+    },
+    {
+      "name": "管理员页面访问",
+      "passed": true,
+      "details": "状态码: 200",
+      "timestamp": "2025-09-23T11:56:46.256Z"
+    },
+    {
+      "name": "API监控页面访问",
+      "passed": true,
+      "details": "状态码: 200",
+      "timestamp": "2025-09-23T11:56:46.413Z"
+    }
+  ]
+}

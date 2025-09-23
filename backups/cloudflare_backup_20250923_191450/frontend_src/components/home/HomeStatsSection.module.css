@@ -1,0 +1,282 @@
+/**
+ * 首页统计展示组件样式
+ * 复现原有项目参与统计的视觉设计
+ */
+
+.statsSection {
+  padding: 0;
+  background: transparent;
+  margin-bottom: 0;
+}
+
+.statsContainer {
+  max-width: 800px;
+  margin: 0 auto;
+  background: white;
+  border-radius: 8px;
+  padding: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  border: 1px solid #f0f0f0;
+}
+
+.statsHeader {
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+.statsTitle {
+  margin: 0 0 4px 0 !important;
+  color: #1f2937;
+  font-weight: 600;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.statsSubtitle {
+  color: #6b7280;
+  font-size: 12px;
+  margin: 0;
+}
+
+.refreshButton {
+  color: #6b7280;
+  border: none;
+  background: transparent;
+  padding: 2px 6px;
+  margin-left: 6px;
+  font-size: 12px;
+}
+
+.refreshButton:hover {
+  color: #1890ff;
+  background: #f8fafc;
+}
+
+.statsGrid {
+  margin-bottom: 8px;
+}
+
+.statCard {
+  text-align: center;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  padding: 8px 6px;
+  background: white;
+  transition: all 0.3s ease;
+  height: 100%;
+  position: relative;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.statCard:hover {
+  border-color: #d1d5db;
+  background: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.statIconWrapper {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 8px;
+  font-size: 14px;
+  color: white;
+}
+
+.statIconWrapper.questionnaire {
+  background: #3b82f6;
+}
+
+.statIconWrapper.responses {
+  background: #10b981;
+}
+
+.statIconWrapper.stories {
+  background: #f59e0b;
+}
+
+.statIconWrapper.voices {
+  background: #ef4444;
+}
+
+.statNumber {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1f2937;
+  margin: 0 0 2px 0;
+  line-height: 1;
+}
+
+.statLabel {
+  font-size: 12px;
+  color: #6b7280;
+  margin: 0 0 4px 0;
+  font-weight: 500;
+}
+
+.statDescription {
+  font-size: 10px;
+  color: #9ca3af;
+  line-height: 1.2;
+  margin: 0;
+}
+
+.lastUpdated {
+  text-align: center;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #f0f0f0;
+}
+
+.loadingContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 64px 24px;
+  min-height: 200px;
+}
+
+.loadingText {
+  margin-top: 16px;
+}
+
+.errorContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 64px 24px;
+  min-height: 200px;
+  text-align: center;
+}
+
+.noDataContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 64px 24px;
+  min-height: 200px;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .statsSection {
+    padding: 32px 16px;
+  }
+  
+  .statsHeader {
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .statsTitle {
+    font-size: 20px !important;
+  }
+  
+  .statCard {
+    margin-bottom: 16px;
+  }
+  
+  .statDescription {
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 576px) {
+  .statsSection {
+    padding: 24px 12px;
+  }
+  
+  .statsTitle {
+    font-size: 18px !important;
+  }
+  
+  .statIcon {
+    font-size: 20px;
+  }
+}
+
+/* 动画效果 */
+.statCard {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.statCard:nth-child(1) {
+  animation-delay: 0.1s;
+}
+
+.statCard:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.statCard:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+.statCard:nth-child(4) {
+  animation-delay: 0.4s;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 强制浅色模式 - 移除深色模式支持 */
+.statsSection {
+  background: #f8f9fa !important;
+}
+
+.statsContainer {
+  background: white !important;
+}
+
+.statCard {
+  background: white !important;
+  color: #1f2937 !important;
+}
+
+/* 错误提示横幅 */
+.errorBanner {
+  background: #fff2f0;
+  border: 1px solid #ffccc7;
+  border-radius: 6px;
+  padding: 12px 16px;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* 错误注释样式 */
+.errorNote {
+  margin-left: 8px;
+  color: #ff4d4f;
+}
+
+/* 新增的样式类 */
+.errorText {
+  font-size: 14px;
+}
+
+.retryButton {
+  padding: 0 8px;
+}
+
+.updateTimeText {
+  font-size: 12px;
+}

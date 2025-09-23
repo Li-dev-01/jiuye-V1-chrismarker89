@@ -1,0 +1,340 @@
+/* 快速审核页面样式 */
+
+.container {
+  padding: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+  min-height: calc(100vh - 64px);
+}
+
+/* 返回按钮 */
+.backButton {
+  margin-bottom: 24px;
+}
+
+/* 页面头部 */
+.header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.titleSection {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.title {
+  margin-bottom: 16px !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36px;
+  font-weight: 700;
+  background: linear-gradient(135deg, #1890ff, #40a9ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.description {
+  font-size: 16px;
+  color: #8c8c8c;
+  margin-bottom: 0 !important;
+}
+
+/* 功能特色卡片 */
+.featureCard {
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border: none;
+}
+
+.feature {
+  text-align: center;
+  padding: 20px;
+  border-radius: 8px;
+  background: #fafafa;
+  height: 100%;
+  transition: all 0.3s ease;
+}
+
+.feature:hover {
+  background: #f0f8ff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(24, 144, 255, 0.15);
+}
+
+.feature h4 {
+  margin: 12px 0 8px 0 !important;
+  color: #262626;
+  font-weight: 600;
+}
+
+/* 信息卡片 */
+.infoCard,
+.statsCard {
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border: none;
+  height: 100%;
+}
+
+.reviewerInfo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.reviewerInfo:last-child {
+  border-bottom: none;
+}
+
+/* 快捷键卡片 */
+.shortcutCard {
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border: none;
+}
+
+.shortcut {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 16px;
+  background: #fafafa;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.shortcut:hover {
+  background: #f0f8ff;
+  transform: translateY(-1px);
+}
+
+.shortcutKey {
+  background: #262626 !important;
+  color: white !important;
+  border: none !important;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-weight: 600;
+  font-size: 14px;
+  padding: 4px 12px;
+  border-radius: 6px;
+  min-width: 32px;
+  text-align: center;
+}
+
+/* 开始审核区域 */
+.startSection {
+  text-align: center;
+  padding: 40px 20px;
+  background: linear-gradient(135deg, #f0f8ff, #e6f7ff);
+  border-radius: 16px;
+  border: 2px dashed #1890ff;
+  margin-top: 32px;
+}
+
+.startButton {
+  background: linear-gradient(135deg, #1890ff, #40a9ff);
+  border: none;
+  height: 56px;
+  padding: 0 32px;
+  font-size: 18px;
+  font-weight: 600;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(24, 144, 255, 0.3);
+  transition: all 0.3s ease;
+}
+
+.startButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(24, 144, 255, 0.4);
+  background: linear-gradient(135deg, #40a9ff, #1890ff);
+}
+
+.startButton:active {
+  transform: translateY(0);
+}
+
+.startTip {
+  margin-top: 16px;
+}
+
+/* 统计数据样式 */
+.statsCard .ant-statistic-title {
+  font-size: 12px;
+  color: #8c8c8c;
+  font-weight: 500;
+}
+
+.statsCard .ant-statistic-content {
+  font-size: 24px;
+  font-weight: 700;
+  color: #262626;
+}
+
+/* 卡片标题样式 */
+.featureCard .ant-card-head-title,
+.infoCard .ant-card-head-title,
+.statsCard .ant-card-head-title,
+.shortcutCard .ant-card-head-title {
+  font-weight: 600;
+  color: #262626;
+  font-size: 16px;
+}
+
+/* 标签样式增强 */
+.ant-tag {
+  border-radius: 6px;
+  font-weight: 500;
+  padding: 2px 8px;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .container {
+    padding: 16px;
+  }
+  
+  .title {
+    font-size: 28px;
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .description {
+    font-size: 14px;
+  }
+  
+  .feature {
+    padding: 16px;
+  }
+  
+  .feature h4 {
+    font-size: 16px;
+  }
+  
+  .shortcut {
+    padding: 12px;
+  }
+  
+  .startButton {
+    width: 100%;
+    max-width: 300px;
+    height: 48px;
+    font-size: 16px;
+  }
+  
+  .startSection {
+    padding: 32px 16px;
+    margin-top: 24px;
+  }
+}
+
+@media (max-width: 576px) {
+  .container {
+    padding: 12px;
+  }
+  
+  .title {
+    font-size: 24px;
+  }
+  
+  .feature {
+    padding: 12px;
+  }
+  
+  .shortcut {
+    padding: 8px;
+  }
+  
+  .shortcutKey {
+    font-size: 12px;
+    padding: 2px 8px;
+    min-width: 28px;
+  }
+}
+
+/* 动画效果 */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.container > * {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.container > *:nth-child(2) {
+  animation-delay: 0.1s;
+}
+
+.container > *:nth-child(3) {
+  animation-delay: 0.2s;
+}
+
+.container > *:nth-child(4) {
+  animation-delay: 0.3s;
+}
+
+.container > *:nth-child(5) {
+  animation-delay: 0.4s;
+}
+
+/* 卡片悬停效果 */
+.featureCard,
+.infoCard,
+.statsCard,
+.shortcutCard {
+  transition: all 0.3s ease;
+}
+
+.featureCard:hover,
+.infoCard:hover,
+.statsCard:hover,
+.shortcutCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+}
+
+/* 渐变背景 */
+.startSection {
+  position: relative;
+  overflow: hidden;
+}
+
+.startSection::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(24, 144, 255, 0.1) 0%, transparent 70%);
+  animation: rotate 20s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* 确保内容在渐变背景之上 */
+.startSection > * {
+  position: relative;
+  z-index: 1;
+}

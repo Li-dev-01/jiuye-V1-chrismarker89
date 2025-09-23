@@ -1,0 +1,211 @@
+# Prometheus告警规则
+# 定义就业调查系统的监控告警
+
+groups:
+  # API性能告警
+  - name: api_performance
+    rules:
+      # API响应时间过长
+      - alert: HighAPILatency
+        expr: histogram_quantile(0.95, rate(http_request_duration_seconds_bucket[5m])) > 1
+        for: 2m
+        labels:
+          severity: warning
+          service: api
+        annotations:
+          summary: "API响应时间过长"
+          description: "{{ $labels.job }} 的95%分位响应时间超过1秒，当前值: {{ $value }}秒"
+
+      # API错误率过高
+      - alert: HighAPIErrorRate
+        expr: rate(http_requests_total{status=~"5.."}[5m]) / rate(http_requests_total[5m]) > 0.05
+        for: 1m
+        labels:
+          severity: critical
+          service: api
+        annotations:
+          summary: "API错误率过高"
+          description: "{{ $labels.job }} 的5xx错误率超过5%，当前值: {{ $value | humanizePercentage }}"
+
+      # API请求量异常
+      - alert: APIRequestSpike
+        expr: rate(http_requests_total[5m]) > 100
+        for: 2m
+        labels:
+          severity: warning
+          service: api
+        annotations:
+          summary: "API请求量异常"
+          description: "{{ $labels.job }} 的请求量异常增长，当前QPS: {{ $value }}"
+
+  # 系统资源告警
+  - name: system_resources
+    rules:
+      # CPU使用率过高
+      - alert: HighCPUUsage
+        expr: 100 - (avg by(instance) (rate(node_cpu_seconds_total{mode="idle"}[5m])) * 100) > 80
+        for: 5m
+        labels:
+          severity: warning
+          service: system
+        annotations:
+          summary: "CPU使用率过高"
+          description: "实例 {{ $labels.instance }} CPU使用率超过80%，当前值: {{ $value }}%"
+
+      # 内存使用率过高
+      - alert: HighMemoryUsage
+        expr: (1 - (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes)) * 100 > 85
+        for: 5m
+        labels:
+          severity: warning
+          service: system
+        annotations:
+          summary: "内存使用率过高"
+          description: "实例 {{ $labels.instance }} 内存使用率超过85%，当前值: {{ $value }}%"
+
+      # 磁盘空间不足
+      - alert: LowDiskSpace
+        expr: (1 - (node_filesystem_avail_bytes / node_filesystem_size_bytes)) * 100 > 90
+        for: 5m
+        labels:
+          severity: critical
+          service: system
+        annotations:
+          summary: "磁盘空间不足"
+          description: "实例 {{ $labels.instance }} 磁盘使用率超过90%，当前值: {{ $value }}%"
+
+  # 数据库告警
+  - name: database
+    rules:
+      # 数据库连接数过多
+      - alert: HighDatabaseConnections
+        expr: pg_stat_database_numbackends > 80
+        for: 2m
+        labels:
+          severity: warning
+          service: database
+        annotations:
+          summary: "数据库连接数过多"
+          description: "数据库 {{ $labels.datname }} 连接数过多，当前值: {{ $value }}"
+
+      # 数据库查询时间过长
+      - alert: SlowDatabaseQueries
+        expr: pg_stat_activity_max_tx_duration > 300
+        for: 1m
+        labels:
+          severity: warning
+          service: database
+        annotations:
+          summary: "数据库查询时间过长"
+          description: "数据库存在长时间运行的查询，最长事务时间: {{ $value }}秒"
+
+  # 安全告警
+  - name: security
+    rules:
+      # 异常登录尝试
+      - alert: SuspiciousLoginAttempts
+        expr: rate(login_attempts_total{status="failed"}[5m]) > 10
+        for: 1m
+        labels:
+          severity: warning
+          service: security
+        annotations:
+          summary: "异常登录尝试"
+          description: "检测到异常登录尝试，失败率: {{ $value }}/分钟"
+
+      # DDoS攻击检测
+      - alert: PossibleDDoSAttack
+        expr: rate(http_requests_total[1m]) > 1000
+        for: 30s
+        labels:
+          severity: critical
+          service: security
+        annotations:
+          summary: "可能的DDoS攻击"
+          description: "检测到异常高的请求量，可能是DDoS攻击，当前QPS: {{ $value }}"
+
+      # 安全事件告警
+      - alert: SecurityEventDetected
+        expr: increase(security_events_total[5m]) > 0
+        for: 0s
+        labels:
+          severity: critical
+          service: security
+        annotations:
+          summary: "安全事件检测"
+          description: "检测到安全事件: {{ $labels.event_type }}，来源IP: {{ $labels.source_ip }}"
+
+  # 业务指标告警
+  - name: business_metrics
+    rules:
+      # 问卷提交失败率过高
+      - alert: HighQuestionnaireFailureRate
+        expr: rate(questionnaire_submissions_total{status="failed"}[5m]) / rate(questionnaire_submissions_total[5m]) > 0.1
+        for: 2m
+        labels:
+          severity: warning
+          service: business
+        annotations:
+          summary: "问卷提交失败率过高"
+          description: "问卷提交失败率超过10%，当前值: {{ $value | humanizePercentage }}"
+
+      # 用户活跃度异常下降
+      - alert: LowUserActivity
+        expr: rate(user_actions_total[1h]) < 10
+        for: 10m
+        labels:
+          severity: warning
+          service: business
+        annotations:
+          summary: "用户活跃度异常下降"
+          description: "用户活跃度异常下降，当前每小时操作数: {{ $value }}"
+
+  # 服务可用性告警
+  - name: service_availability
+    rules:
+      # 服务下线
+      - alert: ServiceDown
+        expr: up == 0
+        for: 1m
+        labels:
+          severity: critical
+          service: availability
+        annotations:
+          summary: "服务下线"
+          description: "服务 {{ $labels.job }} 实例 {{ $labels.instance }} 已下线"
+
+      # 健康检查失败
+      - alert: HealthCheckFailed
+        expr: health_check_status != 1
+        for: 2m
+        labels:
+          severity: warning
+          service: availability
+        annotations:
+          summary: "健康检查失败"
+          description: "服务 {{ $labels.job }} 健康检查失败"
+
+  # Cloudflare Workers特定告警
+  - name: cloudflare_workers
+    rules:
+      # Workers执行时间过长
+      - alert: WorkerExecutionTimeHigh
+        expr: worker_execution_duration_ms > 10000
+        for: 1m
+        labels:
+          severity: warning
+          service: workers
+        annotations:
+          summary: "Workers执行时间过长"
+          description: "Worker {{ $labels.worker_name }} 执行时间超过10秒，当前值: {{ $value }}ms"
+
+      # Workers错误率过高
+      - alert: WorkerErrorRateHigh
+        expr: rate(worker_errors_total[5m]) / rate(worker_requests_total[5m]) > 0.05
+        for: 2m
+        labels:
+          severity: critical
+          service: workers
+        annotations:
+          summary: "Workers错误率过高"
+          description: "Worker {{ $labels.worker_name }} 错误率超过5%，当前值: {{ $value | humanizePercentage }}"

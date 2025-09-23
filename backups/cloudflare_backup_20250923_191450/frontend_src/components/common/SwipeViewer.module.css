@@ -1,0 +1,364 @@
+/**
+ * 滑动浏览器样式
+ */
+
+.swipeViewer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.backdrop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(4px);
+}
+
+.container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+/* 顶部控制栏 */
+.topBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  z-index: 10;
+}
+
+.progressContainer {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-right: 20px;
+}
+
+.progressText {
+  color: white;
+  font-size: 14px;
+  font-weight: 500;
+  white-space: nowrap;
+  min-width: 60px;
+}
+
+.closeButton {
+  color: white !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  background: rgba(255, 255, 255, 0.1) !important;
+  backdrop-filter: blur(8px);
+  border-radius: 50% !important;
+  width: 40px !important;
+  height: 40px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transition: all 0.3s ease !important;
+}
+
+.closeButton:hover {
+  background: rgba(255, 255, 255, 0.2) !important;
+  border-color: rgba(255, 255, 255, 0.5) !important;
+  transform: scale(1.05);
+}
+
+/* 内容区域 */
+.contentArea {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.navButton {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  color: white !important;
+  background: rgba(0, 0, 0, 0.5) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  backdrop-filter: blur(8px);
+  border-radius: 50% !important;
+  width: 48px !important;
+  height: 48px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 18px !important;
+  transition: all 0.3s ease !important;
+}
+
+.navButton:hover {
+  background: rgba(0, 0, 0, 0.7) !important;
+  border-color: rgba(255, 255, 255, 0.4) !important;
+  transform: translateY(-50%) scale(1.1);
+}
+
+.navButton:disabled {
+  opacity: 0.3 !important;
+  cursor: not-allowed !important;
+}
+
+.prevButton {
+  left: -60px;
+}
+
+.nextButton {
+  right: -60px;
+}
+
+.mainContent {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 80px;
+  overflow: hidden;
+}
+
+.contentDisplay {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.contentCard {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 32px;
+  text-align: center;
+}
+
+.contentCard h3 {
+  color: #1a1a1a;
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+.contentCard p {
+  color: #262626;
+  font-size: 16px;
+  line-height: 1.8;
+  margin-bottom: 24px;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.contentMeta {
+  color: #8c8c8c;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* 底部操作栏 */
+.bottomBar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  padding: 20px;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(12px);
+  border-radius: 28px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+/* 操作按钮样式 */
+.actionButton {
+  color: white !important;
+  background: rgba(255, 255, 255, 0.1) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  border-radius: 24px !important;
+  height: 48px !important;
+  padding: 0 20px !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  font-weight: 600 !important;
+  font-size: 14px !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+
+.actionButton:hover {
+  background: rgba(255, 255, 255, 0.2) !important;
+  border-color: rgba(255, 255, 255, 0.4) !important;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+.actionButton.liked {
+  color: #ff4d4f !important;
+  background: rgba(255, 77, 79, 0.2) !important;
+  border-color: rgba(255, 77, 79, 0.4) !important;
+  box-shadow: 0 4px 16px rgba(255, 77, 79, 0.3);
+}
+
+.actionButton.liked:hover {
+  background: rgba(255, 77, 79, 0.3) !important;
+  box-shadow: 0 6px 20px rgba(255, 77, 79, 0.4);
+}
+
+.actionButton.disliked {
+  color: #8c8c8c !important;
+  background: rgba(140, 140, 140, 0.2) !important;
+  border-color: rgba(140, 140, 140, 0.4) !important;
+  box-shadow: 0 4px 16px rgba(140, 140, 140, 0.3);
+}
+
+.actionButton.disliked:hover {
+  background: rgba(140, 140, 140, 0.3) !important;
+  box-shadow: 0 6px 20px rgba(140, 140, 140, 0.4);
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .container {
+    padding: 16px;
+  }
+  
+  .mainContent {
+    padding: 0 20px;
+  }
+  
+  .prevButton {
+    left: -40px;
+  }
+  
+  .nextButton {
+    right: -40px;
+  }
+  
+  .navButton {
+    width: 40px !important;
+    height: 40px !important;
+    font-size: 16px !important;
+  }
+  
+  .topBar {
+    margin-bottom: 16px;
+  }
+  
+  .bottomBar {
+    margin-top: 16px;
+    padding: 16px;
+  }
+
+  .actionButton {
+    height: 40px !important;
+    padding: 0 16px !important;
+    font-size: 13px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 12px;
+  }
+  
+  .mainContent {
+    padding: 0 10px;
+  }
+  
+  .prevButton {
+    left: -30px;
+  }
+  
+  .nextButton {
+    right: -30px;
+  }
+  
+  .navButton {
+    width: 36px !important;
+    height: 36px !important;
+    font-size: 14px !important;
+  }
+  
+  .progressText {
+    font-size: 12px;
+  }
+  
+  .closeButton {
+    width: 36px !important;
+    height: 36px !important;
+  }
+}
+
+/* 动画效果 */
+.swipeViewer {
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.mainContent {
+  transition: transform 0.3s ease-out;
+}
+
+/* 加载状态 */
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 16px;
+}
+
+/* 无内容状态 */
+.noContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.7);
+  text-align: center;
+  padding: 40px;
+}
+
+.noContent h3 {
+  color: white;
+  margin-bottom: 8px;
+}
+
+.noContent p {
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0;
+}

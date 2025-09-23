@@ -1,7 +1,7 @@
 import { Hono } from 'hono';
 // import { serve } from '@hono/node-server'; // 仅在本地开发时使用
 import { serveStatic } from '@hono/node-server/serve-static';
-import type { Env } from './types/api';
+import { Env } from './types/api';
 import { corsMiddleware } from './middleware/cors';
 import { createAuthRoutes } from './routes/auth';
 import { createQuestionnaireRoutes } from './routes/questionnaire';
@@ -23,12 +23,13 @@ import { googleWhitelist } from './routes/google-whitelist';
 import { userLoginHistory } from './routes/user-login-history';
 import { ipAccessControl } from './routes/ip-access-control';
 import { twoFactorAuth } from './routes/two-factor-auth';
+import { loginMonitor } from './routes/login-monitor';
 import { intelligentSecurity } from './routes/intelligent-security';
 import userContentManagement from './routes/user-content-management';
 import { createVisualizationRoutes } from './routes/visualization';
 import { createUniversalQuestionnaireRoutes } from './routes/universal-questionnaire';
 import { createDatabaseFixRoutes } from './routes/database-fix';
-import { CronHandler, type CronEvent } from './handlers/cronHandler';
+// import { CronHandler, type CronEvent } from './handlers/cronHandler';
 import pngManagementRoutes from './routes/png-management-simple';
 
 // 创建Hono应用
@@ -224,6 +225,14 @@ function createApiRoutes() {
     console.error('❌ Failed to register intelligent security routes:', error);
   }
 
+  // 登录监控路由
+  try {
+    api.route('/admin/login-monitor', loginMonitor);
+    console.log('✅ Login monitor routes registered');
+  } catch (error) {
+    console.error('❌ Failed to register login monitor routes:', error);
+  }
+
   // 用户内容管理路由
   try {
     api.route('/user-content-management', userContentManagement);
@@ -264,8 +273,6 @@ function createApiRoutes() {
         totalDownloads: 1247,
         uniqueContents: 89,
         cardStats: [
-          { content_type: 'heart_voice', theme: 'gradient', count: 45, total_downloads: 234 },
-          { content_type: 'heart_voice', theme: 'light', count: 38, total_downloads: 189 },
           { content_type: 'story', theme: 'dark', count: 35, total_downloads: 156 },
           { content_type: 'story', theme: 'minimal', count: 38, total_downloads: 201 }
         ],
@@ -572,33 +579,9 @@ appWithEnv.route('/', app);
 export default {
   fetch: app.fetch,
 
-  // 定时任务处理器
-  async scheduled(event: CronEvent, env: Env, ctx: ExecutionContext): Promise<void> {
-    console.log('🕐 Cloudflare Workers 定时任务触发:', event.cron);
-
-    try {
-      const cronHandler = new CronHandler(env);
-
-      // 使用 waitUntil 确保定时任务完成
-      ctx.waitUntil(cronHandler.handleCronEvent(event));
-
-      console.log('✅ 定时任务处理完成');
-    } catch (error) {
-      console.error('❌ 定时任务处理失败:', error);
-
-      // 记录错误到监控系统
-      ctx.waitUntil(
-        fetch('https://api.example.com/error-log', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            type: 'cron_error',
-            cron: event.cron,
-            error: error.toString(),
-            timestamp: new Date().toISOString()
-          })
-        }).catch(() => {}) // 忽略日志记录失败
-      );
-    }
-  }
+  // 定时任务处理器 - 暂时禁用
+  // async scheduled(event: CronEvent, env: Env, ctx: ExecutionContext): Promise<void> {
+  //   console.log('🕐 Cloudflare Workers 定时任务触发:', event.cron);
+  //   // 暂时禁用定时任务功能
+  // }
 };

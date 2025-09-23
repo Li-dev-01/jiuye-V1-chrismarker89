@@ -1,0 +1,328 @@
+/* PNG卡片下载按钮组件样式 */
+
+.card-download-modal {
+  padding: 8px 0;
+}
+
+/* 风格卡片样式 */
+.style-card {
+  position: relative;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+}
+
+.style-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.style-card-selected {
+  position: relative;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 2px solid #1890ff;
+  box-shadow: 0 4px 12px rgba(24, 144, 255, 0.2);
+}
+
+.style-card-selected:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(24, 144, 255, 0.3);
+}
+
+/* 风格预览区域 */
+.style-preview {
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  margin-bottom: 8px;
+  position: relative;
+  overflow: hidden;
+}
+
+.style-preview::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, transparent 0%, rgba(255, 255, 255, 0.1) 100%);
+  pointer-events: none;
+}
+
+/* 生成的卡片预览 */
+.generated-card-preview {
+  text-align: center;
+  padding: 12px;
+  min-height: 80px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+}
+
+/* 下载按钮样式 */
+.card-download-button {
+  position: relative;
+  overflow: hidden;
+}
+
+.card-download-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.card-download-button:hover::before {
+  left: 100%;
+}
+
+/* 进度条样式 */
+.card-download-modal .ant-progress {
+  margin: 8px 0;
+}
+
+.card-download-modal .ant-progress-text {
+  color: #1890ff;
+  font-weight: 500;
+}
+
+/* 内容预览卡片 */
+.card-download-modal .ant-card {
+  border-radius: 8px;
+}
+
+.card-download-modal .ant-card-head {
+  padding: 12px 16px;
+  min-height: auto;
+}
+
+.card-download-modal .ant-card-body {
+  padding: 16px;
+}
+
+/* 模态框标题 */
+.card-download-modal .ant-modal-title {
+  color: #262626;
+  font-weight: 600;
+}
+
+/* 风格选择区域 */
+.style-selection {
+  margin: 16px 0;
+}
+
+.style-selection .ant-row {
+  margin: -8px;
+}
+
+.style-selection .ant-col {
+  padding: 8px;
+}
+
+/* 生成结果区域 */
+.generation-results {
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid #f0f0f0;
+}
+
+.generation-results .ant-card-actions {
+  background-color: #fafafa;
+}
+
+.generation-results .ant-card-actions .ant-btn {
+  border: none;
+  background: transparent;
+  color: #1890ff;
+  font-weight: 500;
+}
+
+.generation-results .ant-card-actions .ant-btn:hover {
+  background-color: rgba(24, 144, 255, 0.1);
+}
+
+/* 标签样式 */
+.card-download-modal .ant-tag {
+  border-radius: 4px;
+  font-size: 12px;
+  padding: 2px 8px;
+  margin-bottom: 4px;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .card-download-modal {
+    padding: 4px 0;
+  }
+  
+  .style-selection .ant-col {
+    padding: 4px;
+  }
+  
+  .style-preview {
+    height: 50px;
+    margin-bottom: 6px;
+  }
+  
+  .generated-card-preview {
+    padding: 8px;
+    min-height: 60px;
+    gap: 2px;
+  }
+  
+  .card-download-modal .ant-card-body {
+    padding: 12px;
+  }
+  
+  .card-download-modal .ant-modal-body {
+    padding: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .style-selection .ant-col {
+    span: 12; /* 每行显示2个风格 */
+  }
+  
+  .generation-results .ant-col {
+    span: 12; /* 每行显示2个结果 */
+  }
+  
+  .style-preview {
+    height: 40px;
+    margin-bottom: 4px;
+  }
+  
+  .generated-card-preview {
+    padding: 6px;
+    min-height: 50px;
+  }
+  
+  .card-download-modal .ant-card-body {
+    padding: 8px;
+  }
+}
+
+/* 加载状态样式 */
+.card-download-loading {
+  text-align: center;
+  padding: 20px;
+}
+
+.card-download-loading .ant-spin {
+  margin-bottom: 12px;
+}
+
+/* 错误状态样式 */
+.card-download-error {
+  text-align: center;
+  padding: 20px;
+  color: #ff4d4f;
+}
+
+.card-download-error .anticon {
+  font-size: 24px;
+  margin-bottom: 8px;
+}
+
+/* 成功状态样式 */
+.card-download-success {
+  text-align: center;
+  padding: 20px;
+  color: #52c41a;
+}
+
+.card-download-success .anticon {
+  font-size: 24px;
+  margin-bottom: 8px;
+}
+
+/* 权限提示样式 */
+.card-download-permission {
+  text-align: center;
+  padding: 20px;
+  background-color: #fff7e6;
+  border: 1px solid #ffd591;
+  border-radius: 6px;
+  margin: 16px 0;
+}
+
+.card-download-permission .anticon {
+  color: #fa8c16;
+  font-size: 20px;
+  margin-bottom: 8px;
+}
+
+.card-download-permission .ant-typography {
+  color: #d46b08;
+  margin-bottom: 0;
+}
+
+/* 批量下载按钮样式 */
+.batch-download-button {
+  background: linear-gradient(135deg, #1890ff 0%, #722ed1 100%);
+  border: none;
+  box-shadow: 0 2px 8px rgba(24, 144, 255, 0.3);
+}
+
+.batch-download-button:hover {
+  background: linear-gradient(135deg, #40a9ff 0%, #9254de 100%);
+  box-shadow: 0 4px 12px rgba(24, 144, 255, 0.4);
+  transform: translateY(-1px);
+}
+
+/* 动画效果 */
+@keyframes cardGenerate {
+  0% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.generated-card-preview {
+  animation: cardGenerate 0.3s ease-out;
+}
+
+@keyframes downloadSuccess {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.download-success-animation {
+  animation: downloadSuccess 0.5s ease-out;
+}
+
+/* 工具提示样式 */
+.card-download-tooltip {
+  max-width: 300px;
+}
+
+.card-download-tooltip .ant-tooltip-inner {
+  background-color: #262626;
+  color: #ffffff;
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 12px;
+  line-height: 1.4;
+}

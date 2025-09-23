@@ -94,12 +94,6 @@ export const UserManagementPage: React.FC = () => {
     try {
       console.log('开始加载用户数据...', { page, pageSize, filters });
 
-      // 验证认证状态
-      const isAuthValid = await ManagementAdminService.validateAuth();
-      if (!isAuthValid) {
-        throw new Error('管理系统认证失效，请重新登录');
-      }
-
       const response = await ManagementAdminService.getUsers(
         page,
         pageSize,
@@ -109,17 +103,26 @@ export const UserManagementPage: React.FC = () => {
           search: filters.search
         }
       );
-      
-      setUsers(response.items);
+
+      console.log('用户数据加载成功:', response);
+
+      setUsers(response.items || []);
       setPagination({
         current: page,
         pageSize,
-        total: response.pagination.total
+        total: response.pagination?.total || 0
       });
     } catch (error: any) {
       console.error('加载用户失败:', error);
       setError(error.message || '加载用户失败');
       message.error('加载用户失败');
+      // 设置空数据
+      setUsers([]);
+      setPagination({
+        current: page,
+        pageSize,
+        total: 0
+      });
     } finally {
       setLoading(false);
     }
@@ -149,9 +152,15 @@ export const UserManagementPage: React.FC = () => {
   };
 
   useEffect(() => {
-    loadUsers();
-    loadUserStats();
-  }, [filters]);
+    // 只有在用户已认证时才加载数据
+    if (isAuthenticated && currentUser) {
+      console.log('用户已认证，开始加载用户管理数据...');
+      loadUsers();
+      loadUserStats();
+    } else {
+      console.log('用户未认证，跳过用户管理数据加载');
+    }
+  }, [isAuthenticated, currentUser, filters]);
 
   // 用户角色标签
   const getRoleTag = (role: string) => {

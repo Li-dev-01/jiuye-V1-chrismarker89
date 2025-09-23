@@ -1,0 +1,197 @@
+/* 懒加载统计组件样式 */
+
+.statisticsPlaceholder {
+  margin-top: 16px;
+  padding: 16px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #e8e8e8;
+}
+
+.statisticsPanel {
+  margin-top: 16px;
+  padding: 20px;
+  background: #fafbfc;
+  border-radius: 12px;
+  border: 1px solid #e8eaed;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  transition: all 0.3s ease;
+}
+
+.statisticsPanel:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border-color: #d1d5db;
+}
+
+.statisticsHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.statisticsTitle {
+  font-weight: 500;
+  color: #374151;
+  font-size: 14px;
+}
+
+.cacheInfo {
+  font-size: 12px;
+  color: #6b7280;
+  background: #f3f4f6;
+  padding: 4px 8px;
+  border-radius: 6px;
+  border: 1px solid #e5e7eb;
+}
+
+.statisticsContent {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.statItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 6px 0;
+}
+
+.statLabel {
+  min-width: 120px;
+  font-size: 13px;
+  color: #374151;
+  flex-shrink: 0;
+}
+
+.statBar {
+  flex: 1;
+  height: 8px;
+  background: #f1f3f4;
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+}
+
+.statBarFill {
+  height: 100%;
+  background: linear-gradient(90deg, #3b82f6, #60a5fa);
+  border-radius: 4px;
+  position: relative;
+  min-width: 2px;
+  transition: width 0.6s ease-out;
+}
+
+.statBarFill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.statPercentage {
+  min-width: 45px;
+  text-align: right;
+  font-weight: 500;
+  color: #374151;
+  font-size: 13px;
+}
+
+.dataSourceInfo {
+  margin-top: 12px;
+  font-size: 12px;
+  color: #6b7280;
+  text-align: center;
+  padding: 6px 12px;
+  background: #f9fafb;
+  border-radius: 6px;
+  border: 1px solid #e5e7eb;
+}
+
+.noDataMessage {
+  text-align: center;
+  padding: 20px;
+  color: #666;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .statisticsPanel {
+    padding: 12px;
+    margin-top: 12px;
+  }
+  
+  .statisticsHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+  
+  .statItem {
+    gap: 8px;
+  }
+  
+  .statLabel {
+    min-width: 100px;
+    font-size: 12px;
+  }
+  
+  .statPercentage {
+    min-width: 40px;
+    font-size: 12px;
+  }
+}
+
+/* 深色模式支持 */
+@media (prefers-color-scheme: dark) {
+  .statisticsPanel {
+    background: #1f2937;
+    border-color: #374151;
+    color: #f9fafb;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  }
+
+  .statisticsTitle {
+    color: #e5e7eb;
+  }
+
+  .cacheInfo {
+    background: #374151;
+    color: #d1d5db;
+    border-color: #4b5563;
+  }
+
+  .statLabel {
+    color: #e5e7eb;
+  }
+
+  .statBar {
+    background: #374151;
+  }
+
+  .statBarFill {
+    background: linear-gradient(90deg, #3b82f6, #60a5fa);
+  }
+
+  .statPercentage {
+    color: #e5e7eb;
+  }
+
+  .dataSourceInfo {
+    background: #374151;
+    color: #d1d5db;
+    border-color: #4b5563;
+  }
+}

@@ -1,0 +1,425 @@
+/* 统一卡片样式 - 适用于心声和故事 */
+
+.unifiedCard {
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  border: 1px solid #f0f0f0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.unifiedCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  border-color: #1890ff;
+}
+
+.cardBody {
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 卡片头部 - 用户信息和日期时间 */
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 8px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid #f5f5f5;
+  min-height: 40px;
+}
+
+.authorSection {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.authorInfo {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.authorName {
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.categoryTags {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.timeSection {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+}
+
+.dateInfo {
+  display: flex;
+  align-items: center;
+}
+
+.dateText {
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.timeInfo {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.timeText {
+  font-size: 11px;
+}
+
+/* 分类和评分区域 */
+.categorySection {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  min-height: 20px;
+}
+
+.categoryTags {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.emotionRating {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.emotionRating .ant-rate {
+  font-size: 10px;
+  color: #faad14;
+}
+
+/* 卡片内容 */
+.cardContent {
+  margin: 6px 0 8px 0;
+}
+
+.contentTitle {
+  margin: 12px 0;
+  flex-shrink: 0;
+}
+
+.contentTitle h4 {
+  margin-bottom: 0;
+  color: #262626;
+  line-height: 1.4;
+}
+
+.contentText {
+  margin-bottom: 0;
+  line-height: 1.6;
+  color: #262626;
+  font-size: 14px;
+}
+
+.contentSummary {
+  margin: 8px 0;
+}
+
+.contentSummary .ant-typography {
+  margin-bottom: 0;
+  line-height: 1.6;
+  color: #262626;
+  font-size: 14px;
+}
+
+/* 标签区域 */
+.tagsSection {
+  margin: 6px 0 8px 0;
+  flex-shrink: 0;
+}
+
+.contentTag {
+  margin-bottom: 4px;
+  border-radius: 8px;
+  font-size: 11px;
+  padding: 2px 8px;
+  background: rgba(24, 144, 255, 0.08);
+  border: 1px solid rgba(24, 144, 255, 0.2);
+  color: #1890ff;
+}
+
+.moreTag {
+  margin-bottom: 4px;
+  border-radius: 8px;
+  font-size: 11px;
+  padding: 2px 8px;
+  background: #f5f5f5;
+  border: 1px solid #d9d9d9;
+  color: #8c8c8c;
+}
+
+/* 移除原来的底部元信息样式，因为已经移到顶部 */
+
+/* 卡片操作按钮 */
+.unifiedCard .ant-card-actions {
+  background-color: #fafafa;
+  border-top: 1px solid #f0f0f0;
+  flex-shrink: 0;
+  padding: 0;
+  margin: 0;
+  min-height: 36px;
+}
+
+.unifiedCard .ant-card-actions > li {
+  margin: 0;
+  padding: 6px 12px;
+  width: 100%;
+}
+
+.unifiedCard .ant-card-actions .ant-btn {
+  border: none;
+  background: transparent;
+  color: #8c8c8c;
+  font-size: 12px;
+  height: auto;
+  padding: 0;
+  width: 100%;
+}
+
+.unifiedCard .ant-card-actions .ant-btn:hover {
+  background: transparent;
+}
+
+/* 精选卡片样式 */
+.featuredCard {
+  border: 2px solid #faad14;
+  position: relative;
+}
+
+.featuredBadge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: linear-gradient(135deg, #faad14 0%, #ff7a45 100%);
+  color: white;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* 收藏按钮 */
+.favoriteButton {
+  color: #666 !important;
+  font-size: 12px !important;
+  height: auto !important;
+  padding: 4px 8px !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+}
+
+.favoriteButton:hover {
+  color: #ff4d4f !important;
+  background-color: rgba(255, 77, 79, 0.1) !important;
+}
+
+/* 响应式设计 */
+@media (max-width: 1200px) {
+  .unifiedCard {
+    margin-bottom: 16px;
+  }
+}
+
+@media (max-width: 768px) {
+  .cardBody {
+    padding: 10px;
+  }
+
+  .cardHeader {
+    margin-bottom: 6px;
+    padding-bottom: 4px;
+    min-height: 20px;
+  }
+
+  .authorName {
+    font-size: 11px;
+  }
+
+  .timeText {
+    font-size: 10px;
+  }
+
+  .categorySection {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+    margin-bottom: 6px;
+    min-height: 18px;
+  }
+
+  .emotionRating {
+    align-self: flex-end;
+  }
+
+  .contentText {
+    font-size: 13px;
+  }
+
+  .contentSummary .ant-typography {
+    font-size: 13px;
+  }
+
+  .unifiedCard .ant-card-actions {
+    min-height: 32px;
+  }
+
+  .unifiedCard .ant-card-actions > li {
+    padding: 4px 8px;
+  }
+
+  .featuredBadge {
+    top: 8px;
+    right: 8px;
+    padding: 2px 8px;
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 480px) {
+  .cardBody {
+    padding: 8px;
+  }
+
+  .cardHeader {
+    margin-bottom: 6px;
+    padding-bottom: 4px;
+    min-height: 18px;
+  }
+
+  .authorName {
+    font-size: 10px;
+  }
+
+  .timeText {
+    font-size: 9px;
+  }
+
+  .categorySection {
+    margin-bottom: 6px;
+    min-height: 16px;
+  }
+
+  .cardContent {
+    margin: 6px 0 8px 0;
+  }
+
+  .contentTitle {
+    margin: 4px 0;
+  }
+
+  .contentTitle h4 {
+    font-size: 14px;
+  }
+
+  .contentText {
+    font-size: 12px;
+  }
+
+  .contentSummary {
+    margin: 4px 0;
+  }
+
+  .contentSummary .ant-typography {
+    font-size: 12px;
+  }
+
+  .tagsSection {
+    margin: 4px 0 6px 0;
+  }
+
+  .contentTag,
+  .moreTag {
+    font-size: 10px;
+    padding: 1px 6px;
+  }
+
+  .unifiedCard .ant-card-actions {
+    min-height: 28px;
+  }
+
+  .unifiedCard .ant-card-actions > li {
+    padding: 2px 6px;
+  }
+
+  .featuredBadge {
+    top: 6px;
+    right: 6px;
+    padding: 2px 6px;
+    font-size: 10px;
+  }
+}
+
+/* 操作按钮样式 */
+.actionButton {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 4px 8px;
+  border: none;
+  background: transparent;
+  color: #666;
+  font-size: 12px;
+  transition: all 0.2s ease;
+}
+
+.actionButton:hover {
+  color: #1890ff;
+  background: rgba(24, 144, 255, 0.1);
+}
+
+.actionButton .anticon {
+  font-size: 14px;
+}
+
+/* 特殊状态 */
+.clickableCard {
+  cursor: pointer;
+}
+
+.loadingCard {
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+/* 动画效果 */
+@keyframes cardAppear {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.unifiedCard {
+  animation: cardAppear 0.3s ease-out;
+}

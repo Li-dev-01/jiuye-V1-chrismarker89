@@ -1,0 +1,1050 @@
+{
+  "timestamp": "2025-09-23T09:48:22.872Z",
+  "summary": {
+    "totalApis": 139,
+    "securityIssues": 99,
+    "complianceScore": 44.61422062589378
+  },
+  "sla": {
+    "responseTime": {
+      "targets": {
+        "p95": 500,
+        "p99": 1000,
+        "average": 200
+      },
+      "monitoring": [
+        {
+          "metric": "http_request_duration_seconds",
+          "description": "HTTP请求响应时间",
+          "alerting": {
+            "warning": "p95 > 500ms",
+            "critical": "p99 > 1000ms"
+          }
+        },
+        {
+          "metric": "http_request_duration_average",
+          "description": "平均响应时间",
+          "alerting": {
+            "warning": "average > 200ms",
+            "critical": "average > 500ms"
+          }
+        }
+      ]
+    },
+    "availability": {
+      "target": 99.9,
+      "monitoring": [
+        {
+          "metric": "up",
+          "description": "服务可用性",
+          "alerting": {
+            "critical": "availability < 99.9%"
+          }
+        },
+        {
+          "metric": "http_requests_total",
+          "description": "HTTP请求总数",
+          "alerting": {
+            "warning": "error_rate > 0.05%",
+            "critical": "error_rate > 0.1%"
+          }
+        }
+      ]
+    },
+    "throughput": {
+      "monitoring": [
+        {
+          "metric": "http_requests_per_second",
+          "description": "每秒请求数",
+          "alerting": {
+            "warning": "rps > 1000",
+            "critical": "rps > 2000"
+          }
+        }
+      ]
+    }
+  },
+  "security": {
+    "rateLimiting": {
+      "strategy": "Token Bucket",
+      "implementation": {
+        "redis": "Redis作为限流存储",
+        "algorithm": "Sliding Window",
+        "rules": {
+          "anonymous": 100,
+          "authenticated": 1000,
+          "admin": 10000
+        }
+      },
+      "monitoring": [
+        {
+          "metric": "rate_limit_exceeded_total",
+          "description": "限流触发次数",
+          "alerting": {
+            "warning": "rate > 100/hour",
+            "critical": "rate > 1000/hour"
+          }
+        }
+      ]
+    },
+    "authentication": {
+      "jwt": {
+        "algorithm": "RS256",
+        "expiry": 3600,
+        "refreshStrategy": "Sliding Session"
+      },
+      "bruteForce": {
+        "maxAttempts": 5,
+        "lockoutDuration": 900,
+        "monitoring": [
+          {
+            "metric": "failed_login_attempts_total",
+            "description": "登录失败次数",
+            "alerting": {
+              "warning": "attempts > 10/minute",
+              "critical": "attempts > 50/minute"
+            }
+          }
+        ]
+      }
+    },
+    "dataProtection": {
+      "encryption": {
+        "atRest": "AES-256",
+        "inTransit": "TLS 1.3",
+        "keys": "AWS KMS / HashiCorp Vault"
+      },
+      "privacy": {
+        "dataRetention": "2 years",
+        "anonymization": "PII scrubbing",
+        "gdprCompliance": true
+      }
+    },
+    "apiSecurity": {
+      "cors": {
+        "allowedOrigins": [
+          "https://college-employment-survey-frontend-l84.pages.dev"
+        ],
+        "allowedMethods": [
+          "GET",
+          "POST",
+          "PUT",
+          "DELETE"
+        ],
+        "allowedHeaders": [
+          "Authorization",
+          "Content-Type"
+        ]
+      },
+      "headers": {
+        "X-Content-Type-Options": "nosniff",
+        "X-Frame-Options": "DENY",
+        "X-XSS-Protection": "1; mode=block",
+        "Strict-Transport-Security": "max-age=31536000; includeSubDomains"
+      }
+    },
+    "urgentActions": [
+      {
+        "api": "/api/admin/users/download/${Date.now()}.${format}",
+        "issue": "管理员API可能缺少认证检查",
+        "priority": "high",
+        "action": "确保所有管理员API都有适当的认证和授权"
+      },
+      {
+        "api": "/api/admin/users",
+        "issue": "管理员API可能缺少认证检查",
+        "priority": "high",
+        "action": "确保所有管理员API都有适当的认证和授权"
+      },
+      {
+        "api": "/api/dimension/:dimensionId",
+        "issue": "路径参数可能存在注入风险",
+        "priority": "high",
+        "action": "确保对所有路径参数进行验证和清理"
+      },
+      {
+        "api": "/api/question/:questionId",
+        "issue": "路径参数可能存在注入风险",
+        "priority": "high",
+        "action": "确保对所有路径参数进行验证和清理"
+      },
+      {
+        "api": "/api/admin/data-generator",
+        "issue": "管理员API可能缺少认证检查",
+        "priority": "high",
+        "action": "确保所有管理员API都有适当的认证和授权"
+      },
+      {
+        "api": "/api/admin/google-whitelist",
+        "issue": "管理员API可能缺少认证检查",
+        "priority": "high",
+        "action": "确保所有管理员API都有适当的认证和授权"
+      },
+      {
+        "api": "/api/admin/ip-access-control",
+        "issue": "管理员API可能缺少认证检查",
+        "priority": "high",
+        "action": "确保所有管理员API都有适当的认证和授权"
+      },
+      {
+        "api": "/api/admin/intelligent-security",
+        "issue": "管理员API可能缺少认证检查",
+        "priority": "high",
+        "action": "确保所有管理员API都有适当的认证和授权"
+      },
+      {
+        "api": "/api/admin/database-test",
+        "issue": "管理员API可能缺少认证检查",
+        "priority": "high",
+        "action": "确保所有管理员API都有适当的认证和授权"
+      },
+      {
+        "api": "/api/admin/google-whitelist",
+        "issue": "管理员API可能缺少认证检查",
+        "priority": "high",
+        "action": "确保所有管理员API都有适当的认证和授权"
+      },
+      {
+        "api": "/api/admin/ip-access-control",
+        "issue": "管理员API可能缺少认证检查",
+        "priority": "high",
+        "action": "确保所有管理员API都有适当的认证和授权"
+      },
+      {
+        "api": "/api/admin/intelligent-security",
+        "issue": "管理员API可能缺少认证检查",
+        "priority": "high",
+        "action": "确保所有管理员API都有适当的认证和授权"
+      },
+      {
+        "api": "/api/admin/login-monitor",
+        "issue": "管理员API可能缺少认证检查",
+        "priority": "high",
+        "action": "确保所有管理员API都有适当的认证和授权"
+      },
+      {
+        "api": "/api/admin/data-generator",
+        "issue": "管理员API可能缺少认证检查",
+        "priority": "high",
+        "action": "确保所有管理员API都有适当的认证和授权"
+      },
+      {
+        "api": "/api/admin/database",
+        "issue": "管理员API可能缺少认证检查",
+        "priority": "high",
+        "action": "确保所有管理员API都有适当的认证和授权"
+      },
+      {
+        "api": "/api/admin/dashboard/stats",
+        "issue": "管理员API可能缺少认证检查",
+        "priority": "high",
+        "action": "确保所有管理员API都有适当的认证和授权"
+      },
+      {
+        "api": "/api/admin/questionnaires",
+        "issue": "管理员API可能缺少认证检查",
+        "priority": "high",
+        "action": "确保所有管理员API都有适当的认证和授权"
+      },
+      {
+        "api": "/api/admin/questionnaires/<int:questionnaire_id>",
+        "issue": "管理员API可能缺少认证检查",
+        "priority": "high",
+        "action": "确保所有管理员API都有适当的认证和授权"
+      },
+      {
+        "api": "/api/admin/questionnaires/<int:questionnaire_id>",
+        "issue": "路径参数可能存在注入风险",
+        "priority": "high",
+        "action": "确保对所有路径参数进行验证和清理"
+      },
+      {
+        "api": "/api/admin/audit-records",
+        "issue": "管理员API可能缺少认证检查",
+        "priority": "high",
+        "action": "确保所有管理员API都有适当的认证和授权"
+      },
+      {
+        "api": "/api/admin/audit-config",
+        "issue": "管理员API可能缺少认证检查",
+        "priority": "high",
+        "action": "确保所有管理员API都有适当的认证和授权"
+      },
+      {
+        "api": "/api/admin/audit-config",
+        "issue": "管理员API可能缺少认证检查",
+        "priority": "high",
+        "action": "确保所有管理员API都有适当的认证和授权"
+      },
+      {
+        "api": "/api/admin/ai-providers",
+        "issue": "管理员API可能缺少认证检查",
+        "priority": "high",
+        "action": "确保所有管理员API都有适当的认证和授权"
+      },
+      {
+        "api": "/api/admin/ai-sources",
+        "issue": "管理员API可能缺少认证检查",
+        "priority": "high",
+        "action": "确保所有管理员API都有适当的认证和授权"
+      },
+      {
+        "api": "/api/admin/ai-sources",
+        "issue": "管理员API可能缺少认证检查",
+        "priority": "high",
+        "action": "确保所有管理员API都有适当的认证和授权"
+      },
+      {
+        "api": "/api/admin/local-rules",
+        "issue": "管理员API可能缺少认证检查",
+        "priority": "high",
+        "action": "确保所有管理员API都有适当的认证和授权"
+      },
+      {
+        "api": "/api/admin/users",
+        "issue": "管理员API可能缺少认证检查",
+        "priority": "high",
+        "action": "确保所有管理员API都有适当的认证和授权"
+      },
+      {
+        "api": "/api/admin/users/stats",
+        "issue": "管理员API可能缺少认证检查",
+        "priority": "high",
+        "action": "确保所有管理员API都有适当的认证和授权"
+      },
+      {
+        "api": "/api/admin/users/<user_id>/status",
+        "issue": "管理员API可能缺少认证检查",
+        "priority": "high",
+        "action": "确保所有管理员API都有适当的认证和授权"
+      },
+      {
+        "api": "/api/admin/users/<user_id>/status",
+        "issue": "路径参数可能存在注入风险",
+        "priority": "high",
+        "action": "确保对所有路径参数进行验证和清理"
+      },
+      {
+        "api": "/api/admin/reviewers/<reviewer_id>/activity",
+        "issue": "管理员API可能缺少认证检查",
+        "priority": "high",
+        "action": "确保所有管理员API都有适当的认证和授权"
+      },
+      {
+        "api": "/api/admin/reviewers/<reviewer_id>/activity",
+        "issue": "路径参数可能存在注入风险",
+        "priority": "high",
+        "action": "确保对所有路径参数进行验证和清理"
+      },
+      {
+        "api": "/api/admin/reviewers",
+        "issue": "管理员API可能缺少认证检查",
+        "priority": "high",
+        "action": "确保所有管理员API都有适当的认证和授权"
+      },
+      {
+        "api": "/api/admin/content/categories",
+        "issue": "管理员API可能缺少认证检查",
+        "priority": "high",
+        "action": "确保所有管理员API都有适当的认证和授权"
+      },
+      {
+        "api": "/api/admin/content/tags",
+        "issue": "管理员API可能缺少认证检查",
+        "priority": "high",
+        "action": "确保所有管理员API都有适当的认证和授权"
+      },
+      {
+        "api": "/api/admin/content/categories",
+        "issue": "管理员API可能缺少认证检查",
+        "priority": "high",
+        "action": "确保所有管理员API都有适当的认证和授权"
+      },
+      {
+        "api": "/api/admin/content/tags",
+        "issue": "管理员API可能缺少认证检查",
+        "priority": "high",
+        "action": "确保所有管理员API都有适当的认证和授权"
+      },
+      {
+        "api": "/api/admin/database/status",
+        "issue": "管理员API可能缺少认证检查",
+        "priority": "high",
+        "action": "确保所有管理员API都有适当的认证和授权"
+      },
+      {
+        "api": "/api/admin/api/stats",
+        "issue": "管理员API可能缺少认证检查",
+        "priority": "high",
+        "action": "确保所有管理员API都有适当的认证和授权"
+      },
+      {
+        "api": "/api/admin/project/status",
+        "issue": "管理员API可能缺少认证检查",
+        "priority": "high",
+        "action": "确保所有管理员API都有适当的认证和授权"
+      },
+      {
+        "api": "/api/admin/project/control",
+        "issue": "管理员API可能缺少认证检查",
+        "priority": "high",
+        "action": "确保所有管理员API都有适当的认证和授权"
+      },
+      {
+        "api": "/api/admin/user-behavior/analysis",
+        "issue": "管理员API可能缺少认证检查",
+        "priority": "high",
+        "action": "确保所有管理员API都有适当的认证和授权"
+      },
+      {
+        "api": "/api/admin/user-behavior/cleanup",
+        "issue": "管理员API可能缺少认证检查",
+        "priority": "high",
+        "action": "确保所有管理员API都有适当的认证和授权"
+      },
+      {
+        "api": "/api/admin/dashboard/stats",
+        "issue": "管理员API可能缺少认证检查",
+        "priority": "high",
+        "action": "确保所有管理员API都有适当的认证和授权"
+      },
+      {
+        "api": "/api/admin/questionnaires",
+        "issue": "管理员API可能缺少认证检查",
+        "priority": "high",
+        "action": "确保所有管理员API都有适当的认证和授权"
+      },
+      {
+        "api": "/api/admin/questionnaires/<int:questionnaire_id>",
+        "issue": "管理员API可能缺少认证检查",
+        "priority": "high",
+        "action": "确保所有管理员API都有适当的认证和授权"
+      },
+      {
+        "api": "/api/admin/questionnaires/<int:questionnaire_id>",
+        "issue": "路径参数可能存在注入风险",
+        "priority": "high",
+        "action": "确保对所有路径参数进行验证和清理"
+      },
+      {
+        "api": "/api/admin/audit-records",
+        "issue": "管理员API可能缺少认证检查",
+        "priority": "high",
+        "action": "确保所有管理员API都有适当的认证和授权"
+      },
+      {
+        "api": "/api/admin/audit-config",
+        "issue": "管理员API可能缺少认证检查",
+        "priority": "high",
+        "action": "确保所有管理员API都有适当的认证和授权"
+      },
+      {
+        "api": "/api/admin/audit-config",
+        "issue": "管理员API可能缺少认证检查",
+        "priority": "high",
+        "action": "确保所有管理员API都有适当的认证和授权"
+      },
+      {
+        "api": "/api/admin/ai-providers",
+        "issue": "管理员API可能缺少认证检查",
+        "priority": "high",
+        "action": "确保所有管理员API都有适当的认证和授权"
+      },
+      {
+        "api": "/api/admin/ai-sources",
+        "issue": "管理员API可能缺少认证检查",
+        "priority": "high",
+        "action": "确保所有管理员API都有适当的认证和授权"
+      },
+      {
+        "api": "/api/admin/ai-sources",
+        "issue": "管理员API可能缺少认证检查",
+        "priority": "high",
+        "action": "确保所有管理员API都有适当的认证和授权"
+      },
+      {
+        "api": "/api/admin/local-rules",
+        "issue": "管理员API可能缺少认证检查",
+        "priority": "high",
+        "action": "确保所有管理员API都有适当的认证和授权"
+      },
+      {
+        "api": "/api/admin/users",
+        "issue": "管理员API可能缺少认证检查",
+        "priority": "high",
+        "action": "确保所有管理员API都有适当的认证和授权"
+      },
+      {
+        "api": "/api/admin/users/stats",
+        "issue": "管理员API可能缺少认证检查",
+        "priority": "high",
+        "action": "确保所有管理员API都有适当的认证和授权"
+      },
+      {
+        "api": "/api/admin/users/<user_id>/status",
+        "issue": "管理员API可能缺少认证检查",
+        "priority": "high",
+        "action": "确保所有管理员API都有适当的认证和授权"
+      },
+      {
+        "api": "/api/admin/users/<user_id>/status",
+        "issue": "路径参数可能存在注入风险",
+        "priority": "high",
+        "action": "确保对所有路径参数进行验证和清理"
+      },
+      {
+        "api": "/api/admin/reviewers/<reviewer_id>/activity",
+        "issue": "管理员API可能缺少认证检查",
+        "priority": "high",
+        "action": "确保所有管理员API都有适当的认证和授权"
+      },
+      {
+        "api": "/api/admin/reviewers/<reviewer_id>/activity",
+        "issue": "路径参数可能存在注入风险",
+        "priority": "high",
+        "action": "确保对所有路径参数进行验证和清理"
+      },
+      {
+        "api": "/api/admin/reviewers",
+        "issue": "管理员API可能缺少认证检查",
+        "priority": "high",
+        "action": "确保所有管理员API都有适当的认证和授权"
+      },
+      {
+        "api": "/api/admin/content/categories",
+        "issue": "管理员API可能缺少认证检查",
+        "priority": "high",
+        "action": "确保所有管理员API都有适当的认证和授权"
+      },
+      {
+        "api": "/api/admin/content/tags",
+        "issue": "管理员API可能缺少认证检查",
+        "priority": "high",
+        "action": "确保所有管理员API都有适当的认证和授权"
+      },
+      {
+        "api": "/api/admin/content/categories",
+        "issue": "管理员API可能缺少认证检查",
+        "priority": "high",
+        "action": "确保所有管理员API都有适当的认证和授权"
+      },
+      {
+        "api": "/api/admin/content/tags",
+        "issue": "管理员API可能缺少认证检查",
+        "priority": "high",
+        "action": "确保所有管理员API都有适当的认证和授权"
+      },
+      {
+        "api": "/api/admin/database/status",
+        "issue": "管理员API可能缺少认证检查",
+        "priority": "high",
+        "action": "确保所有管理员API都有适当的认证和授权"
+      },
+      {
+        "api": "/api/admin/api/stats",
+        "issue": "管理员API可能缺少认证检查",
+        "priority": "high",
+        "action": "确保所有管理员API都有适当的认证和授权"
+      },
+      {
+        "api": "/api/admin/project/status",
+        "issue": "管理员API可能缺少认证检查",
+        "priority": "high",
+        "action": "确保所有管理员API都有适当的认证和授权"
+      },
+      {
+        "api": "/api/admin/project/control",
+        "issue": "管理员API可能缺少认证检查",
+        "priority": "high",
+        "action": "确保所有管理员API都有适当的认证和授权"
+      },
+      {
+        "api": "/api/admin/user-behavior/analysis",
+        "issue": "管理员API可能缺少认证检查",
+        "priority": "high",
+        "action": "确保所有管理员API都有适当的认证和授权"
+      },
+      {
+        "api": "/api/admin/user-behavior/cleanup",
+        "issue": "管理员API可能缺少认证检查",
+        "priority": "high",
+        "action": "确保所有管理员API都有适当的认证和授权"
+      },
+      {
+        "api": "/api/heart-voices/<int:voice_id>",
+        "issue": "路径参数可能存在注入风险",
+        "priority": "high",
+        "action": "确保对所有路径参数进行验证和清理"
+      },
+      {
+        "api": "/api/heart-voices/user/<int:user_id>",
+        "issue": "路径参数可能存在注入风险",
+        "priority": "high",
+        "action": "确保对所有路径参数进行验证和清理"
+      },
+      {
+        "api": "/api/heart-voices/<int:voice_id>/like",
+        "issue": "路径参数可能存在注入风险",
+        "priority": "high",
+        "action": "确保对所有路径参数进行验证和清理"
+      },
+      {
+        "api": "/api/heart-voices/<int:voice_id>",
+        "issue": "路径参数可能存在注入风险",
+        "priority": "high",
+        "action": "确保对所有路径参数进行验证和清理"
+      },
+      {
+        "api": "/api/heart-voices/user/<int:user_id>",
+        "issue": "路径参数可能存在注入风险",
+        "priority": "high",
+        "action": "确保对所有路径参数进行验证和清理"
+      },
+      {
+        "api": "/api/heart-voices/<int:voice_id>/like",
+        "issue": "路径参数可能存在注入风险",
+        "priority": "high",
+        "action": "确保对所有路径参数进行验证和清理"
+      },
+      {
+        "api": "/api/cards/download/<int:card_id>",
+        "issue": "路径参数可能存在注入风险",
+        "priority": "high",
+        "action": "确保对所有路径参数进行验证和清理"
+      },
+      {
+        "api": "/api/cards/user/<int:user_id>",
+        "issue": "路径参数可能存在注入风险",
+        "priority": "high",
+        "action": "确保对所有路径参数进行验证和清理"
+      },
+      {
+        "api": "/api/cards/download/<int:card_id>",
+        "issue": "路径参数可能存在注入风险",
+        "priority": "high",
+        "action": "确保对所有路径参数进行验证和清理"
+      },
+      {
+        "api": "/api/cards/user/<int:user_id>",
+        "issue": "路径参数可能存在注入风险",
+        "priority": "high",
+        "action": "确保对所有路径参数进行验证和清理"
+      },
+      {
+        "api": "/api/analytics/questionnaire/statistics/<question_id>",
+        "issue": "路径参数可能存在注入风险",
+        "priority": "high",
+        "action": "确保对所有路径参数进行验证和清理"
+      },
+      {
+        "api": "/api/analytics/questionnaire/statistics/<question_id>",
+        "issue": "路径参数可能存在注入风险",
+        "priority": "high",
+        "action": "确保对所有路径参数进行验证和清理"
+      },
+      {
+        "api": "/api/stories/<int:story_id>",
+        "issue": "路径参数可能存在注入风险",
+        "priority": "high",
+        "action": "确保对所有路径参数进行验证和清理"
+      },
+      {
+        "api": "/api/stories/user/<int:user_id>",
+        "issue": "路径参数可能存在注入风险",
+        "priority": "high",
+        "action": "确保对所有路径参数进行验证和清理"
+      },
+      {
+        "api": "/api/stories/<int:story_id>",
+        "issue": "路径参数可能存在注入风险",
+        "priority": "high",
+        "action": "确保对所有路径参数进行验证和清理"
+      },
+      {
+        "api": "/api/stories/user/<int:user_id>",
+        "issue": "路径参数可能存在注入风险",
+        "priority": "high",
+        "action": "确保对所有路径参数进行验证和清理"
+      },
+      {
+        "api": "/api/test-data/clear",
+        "issue": "破坏性操作需要额外的安全措施",
+        "priority": "high",
+        "action": "添加确认机制和审计日志"
+      },
+      {
+        "api": "/api/admin/data-generator/clear",
+        "issue": "管理员API可能缺少认证检查",
+        "priority": "high",
+        "action": "确保所有管理员API都有适当的认证和授权"
+      },
+      {
+        "api": "/api/admin/data-generator/clear",
+        "issue": "破坏性操作需要额外的安全措施",
+        "priority": "high",
+        "action": "添加确认机制和审计日志"
+      },
+      {
+        "api": "/api/admin/data-generator/smart-voice",
+        "issue": "管理员API可能缺少认证检查",
+        "priority": "high",
+        "action": "确保所有管理员API都有适当的认证和授权"
+      },
+      {
+        "api": "/api/admin/data-generator/smart-story",
+        "issue": "管理员API可能缺少认证检查",
+        "priority": "high",
+        "action": "确保所有管理员API都有适当的认证和授权"
+      },
+      {
+        "api": "/api/test-data/clear",
+        "issue": "破坏性操作需要额外的安全措施",
+        "priority": "high",
+        "action": "添加确认机制和审计日志"
+      },
+      {
+        "api": "/api/admin/data-generator/clear",
+        "issue": "管理员API可能缺少认证检查",
+        "priority": "high",
+        "action": "确保所有管理员API都有适当的认证和授权"
+      },
+      {
+        "api": "/api/admin/data-generator/clear",
+        "issue": "破坏性操作需要额外的安全措施",
+        "priority": "high",
+        "action": "添加确认机制和审计日志"
+      },
+      {
+        "api": "/api/admin/data-generator/smart-voice",
+        "issue": "管理员API可能缺少认证检查",
+        "priority": "high",
+        "action": "确保所有管理员API都有适当的认证和授权"
+      },
+      {
+        "api": "/api/admin/data-generator/smart-story",
+        "issue": "管理员API可能缺少认证检查",
+        "priority": "high",
+        "action": "确保所有管理员API都有适当的认证和授权"
+      },
+      {
+        "api": "/api/uuid/session/<session_id>",
+        "issue": "路径参数可能存在注入风险",
+        "priority": "high",
+        "action": "确保对所有路径参数进行验证和清理"
+      },
+      {
+        "api": "/api/uuid/session/<session_id>",
+        "issue": "路径参数可能存在注入风险",
+        "priority": "high",
+        "action": "确保对所有路径参数进行验证和清理"
+      }
+    ]
+  },
+  "performance": {
+    "caching": {
+      "strategy": "Multi-layer Caching",
+      "layers": {
+        "cdn": {
+          "provider": "Cloudflare",
+          "ttl": 86400,
+          "rules": [
+            "Cache static assets for 24 hours",
+            "Cache API responses for 5 minutes",
+            "Bypass cache for authenticated requests"
+          ]
+        },
+        "application": {
+          "provider": "Redis",
+          "ttl": 300,
+          "strategies": [
+            "Cache-aside for read operations",
+            "Write-through for critical data",
+            "Time-based invalidation"
+          ]
+        }
+      },
+      "monitoring": [
+        {
+          "metric": "cache_hit_ratio",
+          "description": "缓存命中率",
+          "target": "> 80%",
+          "alerting": {
+            "warning": "hit_ratio < 70%",
+            "critical": "hit_ratio < 50%"
+          }
+        }
+      ]
+    },
+    "database": {
+      "optimization": {
+        "connectionPool": 20,
+        "queryOptimization": [
+          "Add indexes for frequently queried columns",
+          "Use prepared statements",
+          "Implement query result caching",
+          "Monitor slow queries"
+        ]
+      },
+      "monitoring": [
+        {
+          "metric": "database_connections_active",
+          "description": "活跃数据库连接数",
+          "alerting": {
+            "warning": "connections > 15",
+            "critical": "connections > 18"
+          }
+        },
+        {
+          "metric": "database_query_duration_seconds",
+          "description": "数据库查询时间",
+          "alerting": {
+            "warning": "p95 > 500ms",
+            "critical": "p99 > 1000ms"
+          }
+        }
+      ]
+    },
+    "scaling": {
+      "horizontal": {
+        "strategy": "Auto-scaling based on metrics",
+        "triggers": [
+          "CPU usage > 70%",
+          "Memory usage > 80%",
+          "Request queue length > 100"
+        ]
+      },
+      "vertical": {
+        "recommendations": [
+          "Monitor resource utilization",
+          "Scale up during peak hours",
+          "Use spot instances for cost optimization"
+        ]
+      }
+    }
+  },
+  "tools": {
+    "prometheus": {
+      "scrapeInterval": "15s",
+      "evaluationInterval": "15s",
+      "targets": [
+        "localhost:8000",
+        "localhost:8001",
+        "localhost:8003",
+        "localhost:8004"
+      ],
+      "rules": [
+        {
+          "name": "api_alerts",
+          "rules": [
+            {
+              "alert": "HighResponseTime",
+              "expr": "histogram_quantile(0.95, http_request_duration_seconds_bucket) > 0.5",
+              "for": "2m",
+              "labels": {
+                "severity": "warning"
+              },
+              "annotations": {
+                "summary": "High response time detected",
+                "description": "95th percentile response time is above 500ms"
+              }
+            },
+            {
+              "alert": "HighErrorRate",
+              "expr": "rate(http_requests_total{status=~\"5..\"}[5m]) > 0.01",
+              "for": "1m",
+              "labels": {
+                "severity": "critical"
+              },
+              "annotations": {
+                "summary": "High error rate detected",
+                "description": "Error rate is above 1%"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "grafana": {
+      "dashboards": [
+        {
+          "name": "API Overview",
+          "panels": [
+            "Request Rate",
+            "Response Time",
+            "Error Rate",
+            "Active Users"
+          ]
+        },
+        {
+          "name": "System Health",
+          "panels": [
+            "CPU Usage",
+            "Memory Usage",
+            "Disk I/O",
+            "Network Traffic"
+          ]
+        },
+        {
+          "name": "Business Metrics",
+          "panels": [
+            "Questionnaire Submissions",
+            "Story Publications",
+            "User Registrations",
+            "Admin Actions"
+          ]
+        }
+      ]
+    },
+    "alertmanager": {
+      "routes": [
+        {
+          "match": {
+            "severity": "critical"
+          },
+          "receiver": "critical-alerts",
+          "group_wait": "10s",
+          "group_interval": "10s",
+          "repeat_interval": "1h"
+        },
+        {
+          "match": {
+            "severity": "warning"
+          },
+          "receiver": "warning-alerts",
+          "group_wait": "30s",
+          "group_interval": "5m",
+          "repeat_interval": "12h"
+        }
+      ],
+      "receivers": [
+        {
+          "name": "critical-alerts",
+          "webhook_configs": [
+            {
+              "url": "https://hooks.slack.com/services/YOUR/SLACK/WEBHOOK",
+              "channel": "#alerts-critical"
+            }
+          ]
+        },
+        {
+          "name": "warning-alerts",
+          "email_configs": [
+            {
+              "to": "admin@example.com",
+              "subject": "API Warning Alert"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "deployment": {
+    "infrastructure": {
+      "cloudProvider": "Cloudflare Workers + AWS",
+      "architecture": "Serverless + Microservices",
+      "components": [
+        {
+          "service": "Frontend",
+          "platform": "Cloudflare Pages",
+          "scaling": "Global CDN",
+          "monitoring": "Real User Monitoring"
+        },
+        {
+          "service": "API Gateway",
+          "platform": "Cloudflare Workers",
+          "scaling": "Auto-scaling",
+          "monitoring": "Request/Response metrics"
+        },
+        {
+          "service": "Microservices",
+          "platform": "AWS Lambda / ECS",
+          "scaling": "Auto-scaling groups",
+          "monitoring": "Container metrics"
+        },
+        {
+          "service": "Database",
+          "platform": "Cloudflare D1 + AWS RDS",
+          "scaling": "Read replicas",
+          "monitoring": "Query performance"
+        }
+      ]
+    },
+    "cicd": {
+      "pipeline": [
+        "Code commit triggers build",
+        "Run automated tests",
+        "Security scanning",
+        "Deploy to staging",
+        "Integration tests",
+        "Deploy to production",
+        "Health checks",
+        "Rollback on failure"
+      ],
+      "tools": [
+        "GitHub Actions",
+        "Jest for testing",
+        "SonarQube for code quality",
+        "Snyk for security scanning"
+      ]
+    },
+    "backup": {
+      "strategy": "3-2-1 Backup Rule",
+      "implementation": [
+        "Daily automated backups",
+        "Cross-region replication",
+        "Point-in-time recovery",
+        "Backup verification tests"
+      ]
+    }
+  },
+  "actionItems": [
+    {
+      "priority": "high",
+      "category": "security",
+      "title": "修复安全漏洞",
+      "description": "发现99个安全问题需要立即处理",
+      "estimatedEffort": "2-3 days",
+      "deadline": "2025-09-30T09:48:22.873Z"
+    },
+    {
+      "priority": "high",
+      "category": "monitoring",
+      "title": "部署监控系统",
+      "description": "设置Prometheus + Grafana监控栈",
+      "estimatedEffort": "2-3 days",
+      "deadline": "2025-10-03T09:48:22.873Z"
+    },
+    {
+      "priority": "medium",
+      "category": "optimization",
+      "title": "清理重复API",
+      "description": "发现100个重复API端点",
+      "estimatedEffort": "1-2 days",
+      "deadline": "2025-10-07T09:48:22.873Z"
+    },
+    {
+      "priority": "medium",
+      "category": "compliance",
+      "title": "提升API规范性",
+      "description": "当前合规性得分44.6，需要改进",
+      "estimatedEffort": "3-5 days",
+      "deadline": "2025-10-14T09:48:22.873Z"
+    },
+    {
+      "priority": "medium",
+      "category": "testing",
+      "title": "实施API测试",
+      "description": "运行生成的测试套件并修复发现的问题",
+      "estimatedEffort": "1-2 days",
+      "deadline": "2025-09-30T09:48:22.873Z"
+    },
+    {
+      "priority": "low",
+      "category": "documentation",
+      "title": "完善API文档",
+      "description": "基于生成的文档进行人工审核和完善",
+      "estimatedEffort": "1 day",
+      "deadline": "2025-10-07T09:48:22.873Z"
+    }
+  ]
+}

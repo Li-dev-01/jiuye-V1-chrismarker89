@@ -1,0 +1,133 @@
+{
+  "timestamp": "2025-09-23T10:42:21.578Z",
+  "summary": {
+    "total_changes": 11,
+    "categories": 4
+  },
+  "phases": [
+    {
+      "phase": 1,
+      "name": "资源命名修复",
+      "changes": 4,
+      "estimated_time": "2小时",
+      "changes_detail": [
+        {
+          "from": "/api/admin/dashboard/stats",
+          "to": "/api/admin/dashboards/statistics",
+          "reason": "资源名称应使用复数形式"
+        },
+        {
+          "from": "/api/admin/content/tags/recommend",
+          "to": "/api/admin/content/tag-recommendations",
+          "reason": "避免在URL中使用动词，使用名词资源"
+        },
+        {
+          "from": "/api/admin/content/tags/cleanup",
+          "to": "/api/admin/content/tag-maintenance",
+          "reason": "使用名词而非动词"
+        },
+        {
+          "from": "/api/admin/content/tags/merge",
+          "to": "/api/admin/content/tag-merges",
+          "reason": "动作应该表示为资源"
+        }
+      ]
+    },
+    {
+      "phase": 2,
+      "name": "URL参数命名修复",
+      "changes": 2,
+      "estimated_time": "1小时",
+      "changes_detail": [
+        {
+          "from": "/api/admin/users/:userId",
+          "to": "/api/admin/users/:user_id",
+          "reason": "URL参数应使用下划线分隔"
+        },
+        {
+          "from": "/api/admin/content/:contentType/:contentId/tags",
+          "to": "/api/admin/content-tags?content_type=:type&content_id=:id",
+          "reason": "URL嵌套过深，使用查询参数"
+        }
+      ]
+    },
+    {
+      "phase": 3,
+      "name": "URL结构简化",
+      "changes": 3,
+      "estimated_time": "2小时",
+      "changes_detail": [
+        {
+          "from": "/api/admin/users/batch",
+          "to": "/api/admin/user-batch-operations",
+          "reason": "明确表达批量操作"
+        },
+        {
+          "from": "/api/admin/users/export",
+          "to": "/api/admin/user-exports",
+          "reason": "导出作为资源处理"
+        },
+        {
+          "from": "/api/admin/users/manage",
+          "to": "/api/admin/user-management",
+          "reason": "管理功能作为资源"
+        }
+      ]
+    },
+    {
+      "phase": 4,
+      "name": "命名约定统一",
+      "changes": 2,
+      "estimated_time": "1小时",
+      "changes_detail": [
+        {
+          "from": "/api/admin/ip-access-control",
+          "to": "/api/admin/ip-access-rules",
+          "reason": "保持命名一致性"
+        },
+        {
+          "from": "/api/admin/intelligent-security",
+          "to": "/api/admin/security-intelligence",
+          "reason": "调整词序保持一致性"
+        }
+      ]
+    }
+  ],
+  "implementation_steps": [
+    {
+      "step": 1,
+      "description": "更新后端路由定义",
+      "files": [
+        "backend/src/routes/admin.ts",
+        "backend/src/routes/*.ts"
+      ],
+      "action": "修改路由路径和参数名"
+    },
+    {
+      "step": 2,
+      "description": "更新前端API调用",
+      "files": [
+        "frontend/src/**/*.ts",
+        "frontend/src/**/*.tsx"
+      ],
+      "action": "更新API调用路径"
+    },
+    {
+      "step": 3,
+      "description": "更新API文档",
+      "files": [
+        "docs/API_DOCUMENTATION.md",
+        "docs/openapi.json"
+      ],
+      "action": "同步更新文档"
+    },
+    {
+      "step": 4,
+      "description": "更新测试用例",
+      "files": [
+        "tests/api/*.test.js"
+      ],
+      "action": "修改测试中的API路径"
+    }
+  ]
+}

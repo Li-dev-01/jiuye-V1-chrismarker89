@@ -1,0 +1,360 @@
+/* 🧩 统一组件样式库 */
+
+/* ==================== 基础组件样式 ==================== */
+
+/* 统一卡片样式 */
+.unified-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--card-radius);
+  box-shadow: var(--card-shadow);
+  padding: var(--card-padding);
+  transition: all var(--duration-base) var(--ease-out);
+}
+
+.unified-card:hover {
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
+}
+
+.unified-card--compact {
+  padding: var(--spacing-md);
+}
+
+.unified-card--spacious {
+  padding: var(--spacing-xl);
+}
+
+/* 统一容器样式 */
+.unified-container {
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 var(--spacing-lg);
+}
+
+.unified-container--narrow {
+  max-width: var(--content-width-narrow);
+}
+
+.unified-container--normal {
+  max-width: var(--content-width-normal);
+}
+
+.unified-container--wide {
+  max-width: var(--content-width-wide);
+}
+
+.unified-container--full {
+  max-width: var(--content-width-full);
+}
+
+/* 统一页面头部样式 */
+.unified-page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: var(--spacing-lg);
+  padding: var(--spacing-lg);
+  background: linear-gradient(135deg, var(--primary-500) 0%, var(--primary-600) 100%);
+  border-radius: var(--border-radius-lg);
+  color: var(--text-inverse);
+}
+
+.unified-page-header__content h2 {
+  color: var(--text-inverse);
+  margin-bottom: var(--spacing-2);
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-semibold);
+}
+
+.unified-page-header__content p {
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 0;
+  font-size: var(--font-size-base);
+}
+
+.unified-page-header__actions .ant-btn {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.3);
+  color: var(--text-inverse);
+  backdrop-filter: blur(10px);
+}
+
+.unified-page-header__actions .ant-btn:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.5);
+  color: var(--text-inverse);
+}
+
+/* 统一内容区域样式 */
+.unified-content-area {
+  background: var(--bg-primary);
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-lg);
+  box-shadow: var(--shadow-md);
+}
+
+/* 统一筛选卡片样式 */
+.unified-filter-card {
+  margin-bottom: var(--spacing-lg);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-md);
+}
+
+.unified-filter-card .ant-card-body {
+  padding: var(--spacing-md) var(--spacing-lg);
+}
+
+/* 统一统计信息样式 */
+.unified-stats-info {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--spacing-md);
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+}
+
+/* 统一分页样式 */
+.unified-pagination {
+  margin-top: var(--spacing-xl);
+  text-align: center;
+}
+
+.unified-pagination .ant-pagination {
+  display: inline-flex;
+}
+
+.unified-pagination .ant-pagination-item {
+  border-radius: var(--border-radius-base);
+}
+
+.unified-pagination .ant-pagination-item-active {
+  background-color: var(--primary-500);
+  border-color: var(--primary-500);
+}
+
+.unified-pagination .ant-pagination-item-active a {
+  color: var(--text-inverse);
+}
+
+/* ==================== 表单组件样式 ==================== */
+
+/* 统一表单容器 */
+.unified-form {
+  max-width: var(--content-width-normal);
+  margin: 0 auto;
+  padding: var(--spacing-lg);
+  background: var(--bg-primary);
+  border-radius: var(--border-radius-lg);
+  border: 1px solid var(--border-secondary);
+  box-shadow: var(--shadow-md);
+}
+
+/* 统一问题卡片样式 */
+.unified-question-card {
+  background: var(--gray-50);
+  border: 1px solid var(--border-secondary);
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-lg);
+  margin-bottom: var(--spacing-lg);
+  transition: all var(--duration-base) var(--ease-out);
+}
+
+.unified-question-card:hover {
+  border-color: var(--primary-500);
+  box-shadow: var(--shadow-lg);
+}
+
+.unified-question-card:last-child {
+  margin-bottom: 0;
+}
+
+/* 统一问题标题样式 */
+.unified-question-title {
+  margin-bottom: var(--spacing-2);
+  color: var(--text-primary);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-medium);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-1);
+}
+
+.unified-question-number {
+  color: var(--primary-500);
+  font-weight: var(--font-weight-semibold);
+}
+
+.unified-question-required {
+  color: var(--error-color);
+  font-size: var(--font-size-base);
+  margin-left: var(--spacing-1);
+}
+
+/* 统一问题描述样式 */
+.unified-question-description {
+  display: block;
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-base);
+  margin-bottom: var(--spacing-md);
+}
+
+/* ==================== 导航组件样式 ==================== */
+
+/* 统一导航按钮组 */
+.unified-navigation {
+  display: flex;
+  justify-content: center;
+  gap: var(--spacing-md);
+  padding-top: var(--spacing-lg);
+  border-top: 1px solid var(--border-secondary);
+  margin-top: var(--spacing-lg);
+}
+
+.unified-navigation .ant-btn {
+  height: var(--button-height-lg);
+  padding: 0 var(--spacing-lg);
+  border-radius: var(--button-radius);
+  font-weight: var(--font-weight-medium);
+}
+
+/* ==================== 状态样式 ==================== */
+
+/* 加载状态 */
+.unified-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+  background: var(--bg-primary);
+  border-radius: var(--border-radius-lg);
+}
+
+/* 空状态 */
+.unified-empty {
+  padding: var(--spacing-xxl) var(--spacing-lg);
+  text-align: center;
+  background: var(--bg-primary);
+  border-radius: var(--border-radius-lg);
+}
+
+.unified-empty__icon {
+  font-size: var(--font-size-4xl);
+  color: var(--text-quaternary);
+  margin-bottom: var(--spacing-md);
+}
+
+.unified-empty__title {
+  color: var(--text-secondary);
+  font-size: var(--font-size-lg);
+  margin-bottom: var(--spacing-2);
+}
+
+.unified-empty__description {
+  color: var(--text-tertiary);
+  font-size: var(--font-size-sm);
+  margin-bottom: var(--spacing-lg);
+}
+
+/* 错误状态 */
+.unified-error {
+  padding: var(--spacing-lg);
+  background: #fff2f0;
+  border: 1px solid #ffccc7;
+  border-radius: var(--border-radius-lg);
+  color: var(--error-color);
+}
+
+/* ==================== 响应式样式 ==================== */
+
+@media (max-width: 768px) {
+  .unified-container {
+    padding: 0 var(--mobile-spacing-lg);
+  }
+  
+  .unified-page-header {
+    flex-direction: column;
+    gap: var(--spacing-md);
+    padding: var(--mobile-spacing-lg);
+  }
+  
+  .unified-page-header__content h2 {
+    font-size: var(--font-size-xl);
+  }
+  
+  .unified-page-header__actions .ant-btn {
+    width: 100%;
+  }
+  
+  .unified-content-area {
+    padding: var(--mobile-spacing-lg);
+  }
+  
+  .unified-filter-card .ant-card-body {
+    padding: var(--mobile-spacing-md);
+  }
+  
+  .unified-stats-info {
+    justify-content: flex-start;
+    margin-top: var(--spacing-2);
+  }
+  
+  .unified-pagination {
+    margin-top: var(--spacing-lg);
+  }
+  
+  .unified-pagination .ant-pagination {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  .unified-form {
+    padding: var(--mobile-spacing-lg);
+  }
+  
+  .unified-question-card {
+    padding: var(--mobile-spacing-md);
+    margin-bottom: var(--mobile-spacing-md);
+  }
+  
+  .unified-navigation {
+    flex-direction: column;
+    gap: var(--spacing-sm);
+  }
+  
+  .unified-navigation .ant-btn {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .unified-container {
+    padding: 0 var(--mobile-spacing-md);
+  }
+  
+  .unified-page-header {
+    padding: var(--mobile-spacing-md);
+  }
+  
+  .unified-page-header__content h2 {
+    font-size: var(--font-size-lg);
+  }
+  
+  .unified-content-area {
+    padding: var(--mobile-spacing-md);
+  }
+  
+  .unified-filter-card .ant-card-body {
+    padding: var(--mobile-spacing-sm);
+  }
+  
+  .unified-form {
+    padding: var(--mobile-spacing-md);
+  }
+  
+  .unified-question-card {
+    padding: var(--mobile-spacing-sm);
+  }
+}

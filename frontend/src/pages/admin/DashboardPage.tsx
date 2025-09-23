@@ -30,7 +30,7 @@ const { Title } = Typography;
 const { TabPane } = Tabs;
 
 export const DashboardPage: React.FC = () => {
-  const { currentUser } = useManagementAuthStore();
+  const { currentUser, isAuthenticated } = useManagementAuthStore();
   const {
     dashboardStats,
     dashboardLoading,
@@ -50,14 +50,24 @@ export const DashboardPage: React.FC = () => {
   const finalUser = currentUser;
 
   useEffect(() => {
-    // 加载仪表板数据
-    fetchDashboardStats();
-    fetchQuestionnaires({ page: 1, pageSize: 10 });
-  }, [fetchDashboardStats, fetchQuestionnaires]);
+    // 只有在用户已认证时才加载数据
+    if (isAuthenticated && currentUser) {
+      console.log('用户已认证，开始加载仪表板数据...');
+      fetchDashboardStats();
+      fetchQuestionnaires({ page: 1, pageSize: 10 });
+    } else {
+      console.log('用户未认证，跳过数据加载');
+    }
+  }, [isAuthenticated, currentUser, fetchDashboardStats, fetchQuestionnaires]);
 
   const handleRefresh = () => {
-    fetchDashboardStats();
-    fetchQuestionnaires();
+    if (isAuthenticated && currentUser) {
+      console.log('刷新仪表板数据...');
+      fetchDashboardStats();
+      fetchQuestionnaires();
+    } else {
+      console.log('用户未认证，无法刷新数据');
+    }
   };
 
   const handleStatusUpdate = async (id: number, status: 'approved' | 'rejected') => {
@@ -225,20 +235,20 @@ export const DashboardPage: React.FC = () => {
             {/* 内容统计 */}
             <Row gutter={[16, 16]} style={{ marginBottom: '24px' }}>
               <Col xs={24} sm={8}>
-                <Card title="心声统计">
+                <Card title="系统统计">
                   <Row gutter={16}>
                     <Col span={12}>
                       <Statistic
-                        title="原始心声"
-                        value={dashboardStats?.voices?.raw_voices || 0}
-                        prefix={<MessageOutlined />}
+                        title="总用户数"
+                        value={dashboardStats?.totalUsers || 0}
+                        prefix={<UserOutlined />}
                         valueStyle={{ color: '#722ed1' }}
                       />
                     </Col>
                     <Col span={12}>
                       <Statistic
-                        title="有效心声"
-                        value={dashboardStats?.voices?.valid_voices || 0}
+                        title="活跃用户"
+                        value={dashboardStats?.activeUsers || 0}
                         prefix={<CheckCircleOutlined />}
                         valueStyle={{ color: '#52c41a' }}
                       />

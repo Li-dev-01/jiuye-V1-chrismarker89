@@ -1,0 +1,282 @@
+/* 底部导航栏 */
+.bottomNav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #fff;
+  border-top: 1px solid #e8e8e8;
+  z-index: 1000;
+  display: none; /* 默认隐藏，只在移动端显示 */
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.navContainer {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 8px 0;
+  max-width: 100%;
+}
+
+.navItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 8px;
+  min-width: 60px;
+  text-decoration: none;
+  color: #666;
+  transition: all 0.3s ease;
+  border: none;
+  background: none;
+  cursor: pointer;
+  border-radius: 8px;
+}
+
+.navItem:hover {
+  color: #1890ff;
+  background: rgba(24, 144, 255, 0.05);
+}
+
+.navItem.active {
+  color: #1890ff;
+  background: rgba(24, 144, 255, 0.1);
+}
+
+.navItem.disabled {
+  color: #ccc;
+  cursor: not-allowed;
+}
+
+.navItem.disabled:hover {
+  color: #ccc;
+  background: none;
+}
+
+.navIcon {
+  font-size: 20px;
+  margin-bottom: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 24px;
+}
+
+.navLabel {
+  font-size: 10px;
+  line-height: 1;
+  text-align: center;
+  color: inherit;
+  margin: 0;
+}
+
+/* 侧边抽屉 */
+.drawer {
+  z-index: 1001;
+}
+
+.drawer :global(.ant-drawer-content) {
+  background: #fafafa;
+}
+
+.drawer :global(.ant-drawer-header) {
+  border-bottom: 1px solid #e8e8e8;
+  background: #fff;
+}
+
+.drawer :global(.ant-drawer-body) {
+  padding: 16px;
+}
+
+.drawerMenu {
+  background: transparent;
+  border: none;
+}
+
+.drawerMenu :global(.ant-menu-item) {
+  margin-bottom: 4px;
+  border-radius: 6px;
+  background: #fff;
+  border: 1px solid #e8e8e8;
+}
+
+.drawerMenu :global(.ant-menu-item:hover) {
+  background: #f0f9ff;
+  border-color: #1890ff;
+}
+
+.drawerMenu :global(.ant-menu-item-selected) {
+  background: #e6f7ff;
+  border-color: #1890ff;
+}
+
+.drawerMenu :global(.ant-menu-item a) {
+  color: inherit;
+  text-decoration: none;
+}
+
+.userSection {
+  padding: 16px;
+  background: #fff;
+  border-radius: 8px;
+  border: 1px solid #e8e8e8;
+  margin-top: 16px;
+}
+
+/* 移动端显示 */
+@media (max-width: 768px) {
+  .bottomNav {
+    display: block;
+  }
+  
+  /* 为底部导航留出空间 */
+  :global(body) {
+    padding-bottom: 70px;
+  }
+  
+  :global(.ant-layout-content) {
+    padding-bottom: 80px !important;
+  }
+}
+
+/* 平板端优化 */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .bottomNav {
+    display: none;
+  }
+}
+
+/* 桌面端隐藏 */
+@media (min-width: 1025px) {
+  .bottomNav {
+    display: none;
+  }
+}
+
+/* 横屏手机优化 */
+@media (max-width: 768px) and (orientation: landscape) {
+  .bottomNav {
+    padding: 4px 0;
+  }
+  
+  .navItem {
+    padding: 2px 4px;
+  }
+  
+  .navIcon {
+    font-size: 18px;
+    margin-bottom: 1px;
+    height: 20px;
+  }
+  
+  .navLabel {
+    font-size: 9px;
+  }
+}
+
+/* 小屏手机优化 */
+@media (max-width: 375px) {
+  .navContainer {
+    padding: 6px 0;
+  }
+  
+  .navItem {
+    min-width: 50px;
+    padding: 3px 4px;
+  }
+  
+  .navIcon {
+    font-size: 18px;
+    height: 20px;
+  }
+  
+  .navLabel {
+    font-size: 9px;
+  }
+}
+
+/* 大屏手机优化 */
+@media (min-width: 414px) and (max-width: 768px) {
+  .navItem {
+    min-width: 70px;
+    padding: 6px 12px;
+  }
+  
+  .navIcon {
+    font-size: 22px;
+    height: 26px;
+  }
+  
+  .navLabel {
+    font-size: 11px;
+  }
+}
+
+/* 深色模式支持 */
+@media (prefers-color-scheme: dark) {
+  .bottomNav {
+    background: #1f1f1f;
+    border-top-color: #333;
+  }
+  
+  .navItem {
+    color: #ccc;
+  }
+  
+  .navItem:hover {
+    color: #1890ff;
+    background: rgba(24, 144, 255, 0.1);
+  }
+  
+  .navItem.active {
+    color: #1890ff;
+    background: rgba(24, 144, 255, 0.15);
+  }
+  
+  .userSection {
+    background: #2a2a2a;
+    border-color: #444;
+  }
+  
+  .drawerMenu :global(.ant-menu-item) {
+    background: #2a2a2a;
+    border-color: #444;
+    color: #ccc;
+  }
+}
+
+/* 无障碍优化 */
+.navItem:focus {
+  outline: 2px solid #1890ff;
+  outline-offset: 2px;
+}
+
+.navItem:focus-visible {
+  outline: 2px solid #1890ff;
+  outline-offset: 2px;
+}
+
+/* 触摸优化 */
+@media (pointer: coarse) {
+  .navItem {
+    min-height: 44px; /* 确保触摸目标足够大 */
+  }
+}
+
+/* 高对比度模式 */
+@media (prefers-contrast: high) {
+  .bottomNav {
+    border-top: 2px solid #000;
+  }
+  
+  .navItem {
+    border: 1px solid transparent;
+  }
+  
+  .navItem:hover,
+  .navItem.active {
+    border-color: #1890ff;
+  }
+}

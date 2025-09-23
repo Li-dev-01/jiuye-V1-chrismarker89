@@ -1,0 +1,234 @@
+/* 🎨 设计系统 - 设计令牌 */
+
+:root {
+  /* ==================== 颜色系统 ==================== */
+  
+  /* 主色调 - 统一蓝色系 */
+  --primary-50: #e6f7ff;
+  --primary-100: #bae7ff;
+  --primary-200: #91d5ff;
+  --primary-300: #69c0ff;
+  --primary-400: #40a9ff;
+  --primary-500: #1890ff;  /* 主色 */
+  --primary-600: #096dd9;
+  --primary-700: #0050b3;
+  --primary-800: #003a8c;
+  --primary-900: #002766;
+  
+  /* 中性色系 */
+  --gray-50: #fafafa;
+  --gray-100: #f5f5f5;
+  --gray-200: #f0f0f0;
+  --gray-300: #d9d9d9;
+  --gray-400: #bfbfbf;
+  --gray-500: #8c8c8c;
+  --gray-600: #595959;
+  --gray-700: #434343;
+  --gray-800: #262626;
+  --gray-900: #1f1f1f;
+  
+  /* 语义化颜色 */
+  --success-color: #52c41a;
+  --success-hover: #73d13d;
+  --warning-color: #faad14;
+  --warning-hover: #ffc53d;
+  --error-color: #ff4d4f;
+  --error-hover: #ff7875;
+  --info-color: #1890ff;
+  --info-hover: #40a9ff;
+  
+  /* 背景色 */
+  --bg-primary: #ffffff;
+  --bg-secondary: #fafafa;
+  --bg-tertiary: #f5f5f5;
+  --bg-overlay: rgba(0, 0, 0, 0.45);
+  
+  /* 文本颜色 */
+  --text-primary: #262626;
+  --text-secondary: #595959;
+  --text-tertiary: #8c8c8c;
+  --text-quaternary: #bfbfbf;
+  --text-inverse: #ffffff;
+  
+  /* 边框颜色 */
+  --border-primary: #d9d9d9;
+  --border-secondary: #f0f0f0;
+  --border-focus: #40a9ff;
+  --border-error: #ff4d4f;
+  
+  /* ==================== 间距系统 ==================== */
+  
+  /* 基于 8px 网格的间距系统 */
+  --spacing-0: 0;
+  --spacing-1: 4px;   /* 0.5 * 8px */
+  --spacing-2: 8px;   /* 1 * 8px */
+  --spacing-3: 12px;  /* 1.5 * 8px */
+  --spacing-4: 16px;  /* 2 * 8px */
+  --spacing-5: 20px;  /* 2.5 * 8px */
+  --spacing-6: 24px;  /* 3 * 8px */
+  --spacing-8: 32px;  /* 4 * 8px */
+  --spacing-10: 40px; /* 5 * 8px */
+  --spacing-12: 48px; /* 6 * 8px */
+  --spacing-16: 64px; /* 8 * 8px */
+  --spacing-20: 80px; /* 10 * 8px */
+  
+  /* 语义化间距 */
+  --spacing-xs: var(--spacing-1);
+  --spacing-sm: var(--spacing-2);
+  --spacing-md: var(--spacing-4);
+  --spacing-lg: var(--spacing-6);
+  --spacing-xl: var(--spacing-8);
+  --spacing-xxl: var(--spacing-12);
+  
+  /* ==================== 字体系统 ==================== */
+  
+  /* 字体族 */
+  --font-family-base: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 
+                      'Hiragino Sans GB', 'Microsoft YaHei', 'Helvetica Neue', 
+                      Helvetica, Arial, sans-serif;
+  --font-family-mono: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+  
+  /* 字体大小 */
+  --font-size-xs: 12px;
+  --font-size-sm: 14px;
+  --font-size-base: 16px;
+  --font-size-lg: 18px;
+  --font-size-xl: 20px;
+  --font-size-2xl: 24px;
+  --font-size-3xl: 30px;
+  --font-size-4xl: 36px;
+  
+  /* 行高 */
+  --line-height-tight: 1.25;
+  --line-height-base: 1.5;
+  --line-height-relaxed: 1.75;
+  
+  /* 字重 */
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  
+  /* ==================== 圆角系统 ==================== */
+  
+  --border-radius-none: 0;
+  --border-radius-sm: 4px;
+  --border-radius-base: 6px;
+  --border-radius-md: 8px;
+  --border-radius-lg: 12px;
+  --border-radius-xl: 16px;
+  --border-radius-2xl: 20px;
+  --border-radius-full: 50%;
+  
+  /* ==================== 阴影系统 ==================== */
+  
+  /* 基础阴影 */
+  --shadow-none: none;
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.03);
+  --shadow-base: 0 1px 3px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --shadow-xl: 0 8px 24px rgba(0, 0, 0, 0.12);
+  --shadow-2xl: 0 16px 48px rgba(0, 0, 0, 0.16);
+  
+  /* 特殊阴影 */
+  --shadow-inner: inset 0 2px 4px rgba(0, 0, 0, 0.06);
+  --shadow-focus: 0 0 0 3px rgba(24, 144, 255, 0.2);
+  --shadow-error: 0 0 0 3px rgba(255, 77, 79, 0.2);
+  
+  /* ==================== 容器系统 ==================== */
+  
+  /* 容器最大宽度 */
+  --container-xs: 480px;
+  --container-sm: 640px;
+  --container-md: 768px;
+  --container-lg: 1024px;
+  --container-xl: 1280px;
+  --container-2xl: 1536px;
+  
+  /* 内容区域宽度 */
+  --content-width-narrow: 640px;   /* 文章、表单 */
+  --content-width-normal: 768px;   /* 问卷、详情 */
+  --content-width-wide: 1024px;    /* 列表、仪表板 */
+  --content-width-full: 1280px;    /* 全宽内容 */
+  
+  /* ==================== 响应式断点 ==================== */
+  
+  --breakpoint-xs: 480px;
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+  --breakpoint-2xl: 1536px;
+  
+  /* ==================== Z-index 层级 ==================== */
+  
+  --z-index-dropdown: 1000;
+  --z-index-sticky: 1020;
+  --z-index-fixed: 1030;
+  --z-index-modal-backdrop: 1040;
+  --z-index-modal: 1050;
+  --z-index-popover: 1060;
+  --z-index-tooltip: 1070;
+  --z-index-toast: 1080;
+  
+  /* ==================== 动画系统 ==================== */
+  
+  /* 动画时长 */
+  --duration-fast: 150ms;
+  --duration-base: 200ms;
+  --duration-slow: 300ms;
+  --duration-slower: 500ms;
+  
+  /* 动画缓动 */
+  --ease-linear: linear;
+  --ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  
+  /* ==================== 移动端优化 ==================== */
+  
+  /* 触摸目标最小尺寸 */
+  --touch-target-min: 44px;
+  
+  /* 移动端间距 */
+  --mobile-spacing-xs: var(--spacing-1);
+  --mobile-spacing-sm: var(--spacing-2);
+  --mobile-spacing-md: var(--spacing-3);
+  --mobile-spacing-lg: var(--spacing-4);
+  --mobile-spacing-xl: var(--spacing-6);
+  
+  /* 移动端字体 */
+  --mobile-font-size-base: 16px; /* 防止iOS缩放 */
+  --mobile-line-height: 1.5;
+}
+
+/* ==================== 语义化CSS变量 ==================== */
+
+:root {
+  /* 组件特定变量 */
+  --card-bg: var(--bg-primary);
+  --card-border: var(--border-secondary);
+  --card-shadow: var(--shadow-md);
+  --card-radius: var(--border-radius-lg);
+  --card-padding: var(--spacing-lg);
+  
+  --button-height: 32px;
+  --button-height-lg: 40px;
+  --button-height-sm: 24px;
+  --button-padding-x: var(--spacing-4);
+  --button-radius: var(--border-radius-base);
+  
+  --input-height: 32px;
+  --input-height-lg: 40px;
+  --input-height-sm: 24px;
+  --input-padding-x: var(--spacing-3);
+  --input-border: var(--border-primary);
+  --input-radius: var(--border-radius-base);
+  
+  /* 页面布局变量 */
+  --header-height: 64px;
+  --footer-height: 80px;
+  --sidebar-width: 256px;
+  --content-padding: var(--spacing-lg);
+}

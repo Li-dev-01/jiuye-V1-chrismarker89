@@ -1,0 +1,201 @@
+{
+  "startTime": "2025-09-23T11:01:04.344Z",
+  "totalChecks": 5,
+  "successfulChecks": 3,
+  "failedChecks": 2,
+  "checkHistory": [
+    {
+      "checkId": 1,
+      "timestamp": "2025-09-23T11:01:04.345Z",
+      "endpoints": [
+        {
+          "endpoint": "/api/health",
+          "status": "healthy",
+          "responseTime": 126,
+          "statusCode": 200
+        },
+        {
+          "endpoint": "/api/admin/dashboards/statistics",
+          "status": "healthy",
+          "responseTime": 171,
+          "statusCode": 200
+        },
+        {
+          "endpoint": "/api/admin/users",
+          "status": "healthy",
+          "responseTime": 103,
+          "statusCode": 200
+        },
+        {
+          "endpoint": "/api/admin/content/tags",
+          "status": "healthy",
+          "responseTime": 91,
+          "statusCode": 200
+        }
+      ],
+      "overallStatus": "healthy",
+      "responseTime": 492,
+      "errors": []
+    },
+    {
+      "checkId": 2,
+      "timestamp": "2025-09-23T11:01:34.840Z",
+      "endpoints": [
+        {
+          "endpoint": "/api/health",
+          "status": "healthy",
+          "responseTime": 169,
+          "statusCode": 200
+        },
+        {
+          "endpoint": "/api/admin/dashboards/statistics",
+          "status": "healthy",
+          "responseTime": 121,
+          "statusCode": 200
+        },
+        {
+          "endpoint": "/api/admin/users",
+          "status": "healthy",
+          "responseTime": 187,
+          "statusCode": 200
+        },
+        {
+          "endpoint": "/api/admin/content/tags",
+          "status": "healthy",
+          "responseTime": 145,
+          "statusCode": 200
+        }
+      ],
+      "overallStatus": "healthy",
+      "responseTime": 624,
+      "errors": []
+    },
+    {
+      "checkId": 3,
+      "timestamp": "2025-09-23T11:02:05.463Z",
+      "endpoints": [
+        {
+          "endpoint": "/api/health",
+          "status": "healthy",
+          "responseTime": 214,
+          "statusCode": 200
+        },
+        {
+          "endpoint": "/api/admin/dashboards/statistics",
+          "status": "healthy",
+          "responseTime": 165,
+          "statusCode": 200
+        },
+        {
+          "endpoint": "/api/admin/users",
+          "status": "healthy",
+          "responseTime": 84,
+          "statusCode": 200
+        },
+        {
+          "endpoint": "/api/admin/content/tags",
+          "status": "unhealthy",
+          "responseTime": 225,
+          "error": "Connection timeout"
+        }
+      ],
+      "overallStatus": "unhealthy",
+      "responseTime": 690,
+      "errors": [
+        "/api/admin/content/tags: Connection timeout"
+      ]
+    },
+    {
+      "checkId": 4,
+      "timestamp": "2025-09-23T11:02:36.155Z",
+      "endpoints": [
+        {
+          "endpoint": "/api/health",
+          "status": "healthy",
+          "responseTime": 236,
+          "statusCode": 200
+        },
+        {
+          "endpoint": "/api/admin/dashboards/statistics",
+          "status": "healthy",
+          "responseTime": 131,
+          "statusCode": 200
+        },
+        {
+          "endpoint": "/api/admin/users",
+          "status": "healthy",
+          "responseTime": 140,
+          "statusCode": 200
+        },
+        {
+          "endpoint": "/api/admin/content/tags",
+          "status": "unhealthy",
+          "responseTime": 219,
+          "error": "Connection timeout"
+        }
+      ],
+      "overallStatus": "unhealthy",
+      "responseTime": 726,
+      "errors": [
+        "/api/admin/content/tags: Connection timeout"
+      ]
+    },
+    {
+      "checkId": 5,
+      "timestamp": "2025-09-23T11:03:06.883Z",
+      "endpoints": [
+        {
+          "endpoint": "/api/health",
+          "status": "healthy",
+          "responseTime": 127,
+          "statusCode": 200
+        },
+        {
+          "endpoint": "/api/admin/dashboards/statistics",
+          "status": "healthy",
+          "responseTime": 151,
+          "statusCode": 200
+        },
+        {
+          "endpoint": "/api/admin/users",
+          "status": "healthy",
+          "responseTime": 171,
+          "statusCode": 200
+        },
+        {
+          "endpoint": "/api/admin/content/tags",
+          "status": "healthy",
+          "responseTime": 120,
+          "statusCode": 200
+        }
+      ],
+      "overallStatus": "healthy",
+      "responseTime": 571,
+      "errors": []
+    }
+  ],
+  "systemMetrics": {
+    "avgResponseTime": 132.6,
+    "maxResponseTime": 155.5,
+    "minResponseTime": 115.75,
+    "uptime": 60,
+    "errorRate": 40
+  },
+  "alerts": [
+    {
+      "type": "critical",
+      "message": "错误率过高: 33.3%",
+      "timestamp": "2025-09-23T11:02:06.153Z"
+    },
+    {
+      "type": "critical",
+      "message": "错误率过高: 50.0%",
+      "timestamp": "2025-09-23T11:02:36.881Z"
+    },
+    {
+      "type": "critical",
+      "message": "错误率过高: 40.0%",
+      "timestamp": "2025-09-23T11:03:07.454Z"
+    }
+  ]
+}

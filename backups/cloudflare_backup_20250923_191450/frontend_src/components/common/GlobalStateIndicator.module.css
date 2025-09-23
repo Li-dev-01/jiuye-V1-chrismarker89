@@ -1,0 +1,40 @@
+.stateButton {
+  display: flex;
+  align-items: center;
+  padding: 4px 12px;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.stateButton:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.stateIcon {
+  font-size: 16px;
+  margin-right: 4px;
+}
+
+.stateLabel {
+  font-size: 14px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.stateButton:hover .stateLabel {
+  color: rgba(255, 255, 255, 1);
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .stateLabel {
+    display: none;
+  }
+  
+  .stateButton {
+    padding: 4px 8px;
+  }
+}

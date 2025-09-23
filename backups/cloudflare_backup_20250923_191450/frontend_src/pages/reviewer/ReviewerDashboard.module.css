@@ -1,0 +1,196 @@
+.container {
+  padding: 24px;
+  background: #f6f8ff;
+  min-height: calc(100vh - 64px);
+}
+
+.welcome {
+  margin-bottom: 24px;
+  padding: 24px;
+  background: #fff;
+  border-radius: 8px;
+  border: 1px solid #e8e8e8;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+}
+
+.welcome h2 {
+  margin-bottom: 8px !important;
+  color: #1890ff !important;
+  font-weight: 600 !important;
+}
+
+.welcome p {
+  margin-bottom: 0 !important;
+  color: #666 !important;
+  font-size: 14px !important;
+}
+
+/* 卡片样式 */
+.container .ant-card {
+  border-radius: 8px !important;
+  border: 1px solid #e8e8e8 !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02) !important;
+  transition: all 0.3s ease !important;
+}
+
+.container .ant-card:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08) !important;
+  transform: translateY(-1px) !important;
+}
+
+.container .ant-card-head {
+  background: #fafafa !important;
+  border-bottom: 1px solid #e8e8e8 !important;
+}
+
+.container .ant-card-head-title {
+  color: #333 !important;
+  font-weight: 500 !important;
+}
+
+/* 统计数字样式 */
+.container .ant-statistic-title {
+  color: #666 !important;
+  font-size: 14px !important;
+  margin-bottom: 4px !important;
+}
+
+.container .ant-statistic-content {
+  font-size: 24px !important;
+  font-weight: 600 !important;
+}
+
+.container .ant-statistic-content-prefix {
+  margin-right: 8px !important;
+}
+
+/* 表格样式 */
+.container .ant-table {
+  background: #fff !important;
+}
+
+.container .ant-table-thead > tr > th {
+  background: #fafafa !important;
+  color: #333 !important;
+  font-weight: 500 !important;
+  border-bottom: 1px solid #e8e8e8 !important;
+}
+
+.container .ant-table-tbody > tr > td {
+  background: #fff !important;
+  color: #333 !important;
+  border-bottom: 1px solid #f0f0f0 !important;
+}
+
+.container .ant-table-tbody > tr:hover > td {
+  background: #f5f5f5 !important;
+}
+
+/* 标签样式 */
+.container .ant-tag {
+  border-radius: 4px !important;
+  font-size: 12px !important;
+  line-height: 1.2 !important;
+  padding: 2px 6px !important;
+  border: none !important;
+}
+
+/* 按钮样式 */
+.container .ant-btn-link {
+  color: #1890ff !important;
+  padding: 0 !important;
+  height: auto !important;
+  font-size: 12px !important;
+}
+
+.container .ant-btn-link:hover {
+  color: #40a9ff !important;
+}
+
+/* 警告框样式 */
+.container .ant-alert {
+  border-radius: 6px !important;
+}
+
+.container .ant-alert-info {
+  background: #e6f7ff !important;
+  border: 1px solid #91d5ff !important;
+}
+
+.container .ant-alert-info .ant-alert-icon {
+  color: #1890ff !important;
+}
+
+/* 响应式设计 */
+@media (max-width: 1200px) {
+  .container {
+    padding: 16px;
+  }
+  
+  .welcome {
+    padding: 16px;
+    margin-bottom: 16px;
+  }
+  
+  .welcome h2 {
+    font-size: 20px !important;
+  }
+  
+  .welcome p {
+    font-size: 13px !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 12px;
+  }
+  
+  .welcome {
+    padding: 12px;
+    margin-bottom: 12px;
+  }
+  
+  .welcome h2 {
+    font-size: 18px !important;
+  }
+  
+  .welcome p {
+    font-size: 12px !important;
+  }
+  
+  .container .ant-statistic-content {
+    font-size: 20px !important;
+  }
+  
+  .container .ant-table {
+    font-size: 12px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 8px;
+  }
+  
+  .welcome {
+    padding: 8px;
+    margin-bottom: 8px;
+  }
+  
+  .welcome h2 {
+    font-size: 16px !important;
+  }
+  
+  .welcome p {
+    font-size: 11px !important;
+  }
+  
+  .container .ant-statistic-content {
+    font-size: 18px !important;
+  }
+  
+  .container .ant-statistic-title {
+    font-size: 12px !important;
+  }
+}

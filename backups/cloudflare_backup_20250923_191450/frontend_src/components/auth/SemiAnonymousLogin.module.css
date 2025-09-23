@@ -1,0 +1,328 @@
+/* 半匿名登录组件样式 */
+
+.modal {
+  --primary-color: #1890ff;
+  --success-color: #52c41a;
+  --warning-color: #faad14;
+  --error-color: #ff4d4f;
+  --text-color: #262626;
+  --text-secondary: #8c8c8c;
+  --border-color: #d9d9d9;
+  --background-color: #ffffff;
+  --hover-color: #f5f5f5;
+}
+
+.container {
+  padding: 8px 0;
+}
+
+.description {
+  margin-bottom: 20px;
+  padding: 16px;
+  background: #f6f8fa;
+  border-radius: 8px;
+  border-left: 4px solid var(--primary-color);
+}
+
+.description p {
+  margin: 0;
+  color: var(--text-color);
+  line-height: 1.6;
+}
+
+.form {
+  margin-bottom: 24px;
+}
+
+.input {
+  height: 40px;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+.input:focus,
+.input:hover {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.1);
+}
+
+.inputHelp {
+  margin-top: -16px;
+  margin-bottom: 16px;
+  padding-left: 32px;
+}
+
+.inputHelp span {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.actions button {
+  flex: 1;
+  height: 40px;
+  border-radius: 6px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.actions button:first-child {
+  background: transparent;
+  border-color: var(--border-color);
+  color: var(--text-color);
+}
+
+.actions button:first-child:hover {
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+}
+
+.actions button:last-child {
+  background: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+.actions button:last-child:hover {
+  background: #40a9ff;
+  border-color: #40a9ff;
+}
+
+.actions button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* 帮助区域 */
+.helpSection {
+  margin: 24px 0;
+  border-top: 1px solid #f0f0f0;
+  padding-top: 20px;
+}
+
+.helpDetails {
+  cursor: pointer;
+}
+
+.helpDetails summary {
+  font-weight: 500;
+  color: var(--primary-color);
+  padding: 8px 0;
+  outline: none;
+  user-select: none;
+  transition: color 0.3s ease;
+}
+
+.helpDetails summary:hover {
+  color: #40a9ff;
+}
+
+.helpDetails summary::marker {
+  color: var(--primary-color);
+}
+
+.helpContent {
+  padding: 16px 0 8px 0;
+  border-left: 2px solid #f0f0f0;
+  padding-left: 16px;
+  margin-left: 8px;
+}
+
+.helpItem {
+  margin-bottom: 16px;
+}
+
+.helpItem:last-child {
+  margin-bottom: 0;
+}
+
+.helpItem h5 {
+  margin: 0 0 8px 0;
+  color: var(--text-color);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.helpItem ul {
+  margin: 0;
+  padding-left: 20px;
+  list-style-type: disc;
+}
+
+.helpItem li {
+  margin-bottom: 4px;
+  color: var(--text-secondary);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.helpItem li:last-child {
+  margin-bottom: 0;
+}
+
+/* 信息区域 */
+.infoSection {
+  margin-top: 20px;
+}
+
+/* 表单验证状态 */
+.form .ant-form-item-has-error .ant-input {
+  border-color: var(--error-color);
+}
+
+.form .ant-form-item-has-error .ant-input:focus {
+  border-color: var(--error-color);
+  box-shadow: 0 0 0 2px rgba(255, 77, 79, 0.1);
+}
+
+.form .ant-form-item-has-success .ant-input {
+  border-color: var(--success-color);
+}
+
+.form .ant-form-item-has-success .ant-input:focus {
+  border-color: var(--success-color);
+  box-shadow: 0 0 0 2px rgba(82, 196, 26, 0.1);
+}
+
+/* 复选框样式 */
+.form .ant-checkbox-wrapper {
+  color: var(--text-color);
+  font-size: 14px;
+}
+
+.form .ant-checkbox-wrapper:hover .ant-checkbox-inner {
+  border-color: var(--primary-color);
+}
+
+.form .ant-checkbox-checked .ant-checkbox-inner {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+/* 密码显示切换按钮 */
+.input .ant-input-suffix button {
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  transition: color 0.3s ease;
+}
+
+.input .ant-input-suffix button:hover {
+  color: var(--primary-color);
+  background: transparent;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .container {
+    padding: 4px 0;
+  }
+  
+  .description {
+    margin-bottom: 16px;
+    padding: 12px;
+  }
+  
+  .actions {
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .actions button {
+    flex: none;
+  }
+  
+  .helpContent {
+    padding-left: 12px;
+    margin-left: 4px;
+  }
+  
+  .inputHelp {
+    padding-left: 0;
+  }
+}
+
+/* 加载状态 */
+.form button[loading] {
+  pointer-events: none;
+}
+
+.form button .ant-btn-loading-icon {
+  margin-right: 8px;
+}
+
+/* 焦点状态优化 */
+.form .ant-form-item-label > label {
+  color: var(--text-color);
+  font-weight: 500;
+}
+
+.form .ant-form-item-required::before {
+  color: var(--error-color);
+}
+
+/* 动画效果 */
+.modal .ant-modal-content {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.modal .ant-modal-header {
+  border-bottom: 1px solid #f0f0f0;
+  padding: 20px 24px 16px;
+}
+
+.modal .ant-modal-body {
+  padding: 20px 24px 24px;
+}
+
+.modal .ant-modal-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+/* 输入框前缀图标 */
+.input .ant-input-prefix {
+  color: var(--text-secondary);
+  margin-right: 8px;
+}
+
+.input:focus .ant-input-prefix {
+  color: var(--primary-color);
+}
+
+/* 表单项间距 */
+.form .ant-form-item {
+  margin-bottom: 20px;
+}
+
+.form .ant-form-item:last-child {
+  margin-bottom: 0;
+}
+
+/* 错误提示样式 */
+.form .ant-form-item-explain-error {
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+/* 成功状态 */
+.form .ant-form-item-has-success .ant-form-item-explain {
+  color: var(--success-color);
+}
+
+/* 警告状态 */
+.form .ant-form-item-has-warning .ant-input {
+  border-color: var(--warning-color);
+}
+
+.form .ant-form-item-has-warning .ant-input:focus {
+  border-color: var(--warning-color);
+  box-shadow: 0 0 0 2px rgba(250, 173, 20, 0.1);
+}

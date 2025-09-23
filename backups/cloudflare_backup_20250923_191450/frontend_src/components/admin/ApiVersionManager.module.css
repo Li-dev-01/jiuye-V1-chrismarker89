@@ -1,0 +1,380 @@
+/* API版本管理组件样式 */
+
+.container {
+  width: 100%;
+}
+
+.currentVersion {
+  margin-bottom: 16px;
+}
+
+.currentVersion h4 {
+  margin-bottom: 12px;
+  color: #1890ff;
+}
+
+.versionDetails {
+  margin-bottom: 16px;
+}
+
+.versionDetails h4 {
+  margin-bottom: 12px;
+  color: #333;
+}
+
+.features {
+  margin-bottom: 16px;
+}
+
+.features h4 {
+  margin-bottom: 12px;
+  color: #333;
+}
+
+.features .ant-list-item {
+  padding: 4px 0;
+  border: none;
+}
+
+/* 版本选择器样式 */
+.versionSelector {
+  min-width: 120px;
+}
+
+.versionSelector .ant-select-selection-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* 状态标签样式 */
+.statusTag {
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.statusTag.recommended {
+  background: #f6ffed;
+  color: #52c41a;
+  border: 1px solid #b7eb8f;
+}
+
+.statusTag.deprecated {
+  background: #fff2f0;
+  color: #ff4d4f;
+  border: 1px solid #ffccc7;
+}
+
+.statusTag.stable {
+  background: #e6f7ff;
+  color: #1890ff;
+  border: 1px solid #91d5ff;
+}
+
+/* 版本信息卡片 */
+.versionCard {
+  margin-bottom: 16px;
+  transition: all 0.3s ease;
+}
+
+.versionCard:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.versionCard.current {
+  border: 2px solid #1890ff;
+}
+
+.versionCard.deprecated {
+  border: 2px solid #ff4d4f;
+  background: #fff2f0;
+}
+
+/* 功能列表样式 */
+.featureList {
+  margin: 0;
+  padding: 0;
+}
+
+.featureList .ant-list-item {
+  padding: 6px 0;
+  border: none;
+  display: flex;
+  align-items: center;
+}
+
+.featureList .ant-list-item-meta {
+  margin-bottom: 0;
+}
+
+/* 设置模态框样式 */
+.settingsModal .ant-form-item {
+  margin-bottom: 16px;
+}
+
+.settingsModal .ant-form-item-label {
+  font-weight: 600;
+}
+
+.settingsModal .ant-typography {
+  margin-top: 4px;
+  font-size: 12px;
+}
+
+/* 警告和提示样式 */
+.versionWarning {
+  margin-top: 16px;
+  border-radius: 6px;
+}
+
+.versionWarning .ant-alert-message {
+  font-weight: 600;
+}
+
+.connectionStatus {
+  margin-top: 16px;
+  border-radius: 6px;
+}
+
+.connectionStatus.loading {
+  text-align: center;
+  padding: 16px;
+}
+
+/* 紧凑模式样式 */
+.compact {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.compact .versionSelector {
+  min-width: 80px;
+}
+
+.compact .ant-btn {
+  padding: 4px 8px;
+  height: auto;
+}
+
+/* 版本比较样式 */
+.versionComparison {
+  margin-top: 16px;
+}
+
+.versionComparison .ant-table {
+  font-size: 12px;
+}
+
+.versionComparison .ant-table-thead > tr > th {
+  background: #fafafa;
+  font-weight: 600;
+  padding: 8px 12px;
+}
+
+.versionComparison .ant-table-tbody > tr > td {
+  padding: 8px 12px;
+}
+
+/* 版本时间线样式 */
+.versionTimeline {
+  margin-top: 16px;
+}
+
+.versionTimeline .ant-timeline-item-content {
+  margin-left: 16px;
+}
+
+.versionTimeline .ant-timeline-item-head {
+  width: 12px;
+  height: 12px;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .container {
+    padding: 12px;
+  }
+  
+  .currentVersion,
+  .versionDetails,
+  .features {
+    margin-bottom: 12px;
+  }
+  
+  .versionSelector {
+    width: 100%;
+    min-width: auto;
+  }
+  
+  .settingsModal {
+    margin: 0;
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 8px;
+  }
+  
+  .versionCard {
+    margin-bottom: 12px;
+  }
+  
+  .features .ant-list-item {
+    padding: 3px 0;
+    font-size: 13px;
+  }
+  
+  .compact {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+}
+
+/* 动画效果 */
+.fadeIn {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.slideIn {
+  animation: slideIn 0.3s ease-in-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* 版本状态指示器 */
+.versionIndicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.versionIndicator.current {
+  background: #e6f7ff;
+  color: #1890ff;
+  border: 1px solid #91d5ff;
+}
+
+.versionIndicator.recommended {
+  background: #f6ffed;
+  color: #52c41a;
+  border: 1px solid #b7eb8f;
+}
+
+.versionIndicator.deprecated {
+  background: #fff2f0;
+  color: #ff4d4f;
+  border: 1px solid #ffccc7;
+}
+
+/* 加载状态 */
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.loading .ant-spin {
+  margin-right: 8px;
+}
+
+/* 错误状态 */
+.error {
+  text-align: center;
+  padding: 20px;
+  color: #ff4d4f;
+}
+
+.error .anticon {
+  font-size: 24px;
+  margin-bottom: 8px;
+}
+
+/* 成功状态 */
+.success {
+  text-align: center;
+  padding: 20px;
+  color: #52c41a;
+}
+
+.success .anticon {
+  font-size: 24px;
+  margin-bottom: 8px;
+}
+
+/* 工具提示样式 */
+.tooltip {
+  max-width: 300px;
+}
+
+.tooltip .tooltipContent {
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+/* 版本徽章 */
+.versionBadge {
+  position: relative;
+  display: inline-block;
+}
+
+.versionBadge .ant-badge-count {
+  font-size: 10px;
+  min-width: 16px;
+  height: 16px;
+  line-height: 16px;
+  padding: 0 4px;
+}
+
+/* 自定义滚动条 */
+.customScrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #d9d9d9 #f0f0f0;
+}
+
+.customScrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.customScrollbar::-webkit-scrollbar-track {
+  background: #f0f0f0;
+  border-radius: 3px;
+}
+
+.customScrollbar::-webkit-scrollbar-thumb {
+  background: #d9d9d9;
+  border-radius: 3px;
+}
+
+.customScrollbar::-webkit-scrollbar-thumb:hover {
+  background: #bfbfbf;
+}

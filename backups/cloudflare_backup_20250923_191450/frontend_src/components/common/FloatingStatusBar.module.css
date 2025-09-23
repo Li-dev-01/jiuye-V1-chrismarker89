@@ -1,0 +1,272 @@
+/* 悬浮状态栏样式 */
+
+.container {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 12px;
+  animation: slideInFromRight 0.5s ease-out;
+}
+
+@keyframes slideInFromRight {
+  from {
+    transform: translateX(100px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.floatingButton {
+  width: 56px;
+  height: 56px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border: none;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.floatingButton::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: all 0.3s ease;
+}
+
+.floatingButton:hover {
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+}
+
+.floatingButton:hover::before {
+  width: 100%;
+  height: 100%;
+}
+
+.floatingButton:active {
+  transform: translateY(-1px) scale(1.02);
+  transition: all 0.1s ease;
+}
+
+.floatingButton.guest {
+  background: #8c8c8c;
+  border-color: #8c8c8c;
+}
+
+.floatingButton.guest:hover {
+  background: #595959;
+  border-color: #595959;
+}
+
+.floatingButton.loggedIn {
+  background: #52c41a;
+  border-color: #52c41a;
+}
+
+.floatingButton.loggedIn:hover {
+  background: #389e0d;
+  border-color: #389e0d;
+}
+
+.floatingButton.loading {
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+.floatingButton.loading::after {
+  content: '';
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border: 2px solid transparent;
+  border-top: 2px solid currentColor;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* 错误状态 */
+.floatingButton.error {
+  background: #ff4d4f !important;
+  border-color: #ff4d4f !important;
+  animation: shake 0.5s ease-in-out;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
+/* 成功状态 */
+.floatingButton.success {
+  background: #52c41a !important;
+  border-color: #52c41a !important;
+  animation: pulse 0.6s ease-in-out;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+.userInfo {
+  background: white;
+  border-radius: 8px;
+  padding: 12px 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border: 1px solid #f0f0f0;
+  min-width: 200px;
+  animation: slideInUp 0.3s ease;
+}
+
+.userDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.userName {
+  font-size: 14px;
+  color: #262626;
+  line-height: 1.2;
+}
+
+.userType {
+  font-size: 12px;
+  color: #8c8c8c;
+  line-height: 1.2;
+}
+
+.logoutButton {
+  color: #ff4d4f;
+  padding: 4px;
+}
+
+.logoutButton:hover {
+  background: #fff2f0;
+  color: #cf1322;
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .container {
+    bottom: 16px;
+    right: 16px;
+    gap: 8px;
+  }
+
+  .floatingButton {
+    width: 48px;
+    height: 48px;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+  }
+
+  .floatingButton:hover {
+    transform: translateY(-1px) scale(1.02);
+    box-shadow: 0 5px 12px rgba(0, 0, 0, 0.2);
+  }
+
+  .userInfo {
+    min-width: 180px;
+    padding: 10px 12px;
+    max-width: calc(100vw - 32px);
+  }
+
+  .userName {
+    font-size: 13px;
+  }
+
+  .userType {
+    font-size: 11px;
+  }
+}
+
+/* 超小屏幕优化 */
+@media (max-width: 480px) {
+  .container {
+    bottom: 12px;
+    right: 12px;
+  }
+
+  .floatingButton {
+    width: 44px;
+    height: 44px;
+  }
+
+  .userInfo {
+    min-width: 160px;
+    padding: 8px 10px;
+    max-width: calc(100vw - 24px);
+  }
+}
+
+/* 触摸设备优化 */
+@media (hover: none) and (pointer: coarse) {
+  .floatingButton {
+    width: 52px;
+    height: 52px;
+  }
+
+  .floatingButton:hover {
+    transform: none;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  .floatingButton:active {
+    transform: scale(0.95);
+    transition: transform 0.1s ease;
+  }
+}
+
+/* 深色模式支持 */
+@media (prefers-color-scheme: dark) {
+  .userInfo {
+    background: #1f1f1f;
+    border-color: #434343;
+  }
+  
+  .userName {
+    color: #ffffff;
+  }
+  
+  .userType {
+    color: #bfbfbf;
+  }
+  
+  .logoutButton:hover {
+    background: #2a1215;
+  }
+}

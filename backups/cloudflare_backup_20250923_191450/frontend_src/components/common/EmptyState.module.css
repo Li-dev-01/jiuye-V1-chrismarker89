@@ -1,0 +1,98 @@
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  background: #fafafa;
+  border-radius: 8px;
+  border: 1px dashed #d9d9d9;
+  transition: all 0.3s ease;
+}
+
+.emptyState:hover {
+  border-color: #1890ff;
+  background: #f6f8ff;
+}
+
+.emptyStateContent {
+  text-align: center;
+  max-width: 400px;
+}
+
+.emptyStateIcon {
+  margin-bottom: 16px;
+  opacity: 0.6;
+}
+
+.emptyStateTitle {
+  color: #595959;
+  font-size: 16px;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+.emptyStateDescription {
+  color: #8c8c8c;
+  font-size: 14px;
+  line-height: 1.6;
+  margin-bottom: 24px;
+  white-space: pre-line;
+}
+
+.emptyStateAction {
+  margin-top: 16px;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .emptyState {
+    padding: 32px 16px;
+    min-height: 160px;
+  }
+  
+  .emptyStateTitle {
+    font-size: 14px;
+  }
+  
+  .emptyStateDescription {
+    font-size: 12px;
+  }
+}
+
+/* 不同尺寸变体 */
+.emptyState.small {
+  min-height: 120px;
+  padding: 24px 16px;
+}
+
+.emptyState.large {
+  min-height: 300px;
+  padding: 64px 32px;
+}
+
+/* 主题变体 */
+.emptyState.questionnaire {
+  border-color: #1890ff;
+  background: linear-gradient(135deg, #f6f8ff 0%, #e6f7ff 100%);
+}
+
+.emptyState.heartVoice {
+  border-color: #f5222d;
+  background: linear-gradient(135deg, #fff2f0 0%, #ffece6 100%);
+}
+
+.emptyState.story {
+  border-color: #52c41a;
+  background: linear-gradient(135deg, #f6ffed 0%, #e6f7d6 100%);
+}
+
+.emptyState.analytics {
+  border-color: #722ed1;
+  background: linear-gradient(135deg, #f9f0ff 0%, #efdbff 100%);
+}
+
+.emptyState.error {
+  border-color: #fa8c16;
+  background: linear-gradient(135deg, #fff7e6 0%, #ffecc7 100%);
+}

@@ -1,0 +1,334 @@
+/* 增强搜索组件样式 */
+
+.enhanced-search {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-md);
+  background: white;
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--shadow-sm);
+  margin-bottom: var(--spacing-md);
+}
+
+/* 主搜索区域 */
+.search-main {
+  display: flex;
+  gap: var(--spacing-sm);
+  align-items: center;
+}
+
+.search-main .ant-input-affix-wrapper {
+  border-radius: var(--border-radius-sm);
+  border-color: #d9d9d9;
+  transition: all 0.3s ease;
+}
+
+.search-main .ant-input-affix-wrapper:hover {
+  border-color: var(--primary-500);
+}
+
+.search-main .ant-input-affix-wrapper-focused {
+  border-color: var(--primary-500);
+  box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+}
+
+.search-main .ant-input {
+  font-size: var(--font-size-base);
+  padding: var(--spacing-xs) var(--spacing-sm);
+}
+
+.search-main .ant-input-prefix {
+  color: var(--text-secondary);
+  margin-right: var(--spacing-xs);
+}
+
+.search-main .ant-input-suffix {
+  margin-left: var(--spacing-xs);
+}
+
+/* 搜索建议下拉 */
+.search-suggestions {
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--shadow-lg);
+  border: 1px solid #f0f0f0;
+}
+
+.suggestion-item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-xs) 0;
+  transition: all 0.3s ease;
+}
+
+.suggestion-item .anticon {
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+}
+
+.suggestion-item.history .anticon {
+  color: #faad14;
+}
+
+.suggestion-item.hot .anticon {
+  color: #ff4d4f;
+}
+
+.suggestion-item:hover {
+  background-color: var(--primary-50);
+}
+
+/* 已选标签区域 */
+.selected-tags {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  flex-wrap: wrap;
+  padding: var(--spacing-sm);
+  background-color: var(--bg-secondary);
+  border-radius: var(--border-radius-sm);
+}
+
+.selected-tags .ant-typography {
+  font-size: var(--font-size-sm);
+  margin: 0;
+  white-space: nowrap;
+}
+
+.selected-tags .ant-tag {
+  margin: 2px 0;
+  border-radius: var(--border-radius-sm);
+  font-size: var(--font-size-sm);
+  display: inline-flex;
+  align-items: center;
+  transition: all 0.3s ease;
+}
+
+.selected-tags .ant-tag:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+
+/* 快速筛选区域 */
+.quick-filters {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  flex-wrap: wrap;
+}
+
+.quick-filters .ant-typography {
+  font-size: var(--font-size-sm);
+  margin: 0;
+  white-space: nowrap;
+}
+
+.quick-filter-tag {
+  cursor: pointer;
+  margin: 2px 0;
+  border-radius: var(--border-radius-sm);
+  font-size: var(--font-size-sm);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: all 0.3s ease;
+  border: 1px solid #d9d9d9;
+  background-color: white;
+  color: var(--text-primary);
+}
+
+.quick-filter-tag:hover {
+  border-color: var(--primary-500);
+  color: var(--primary-500);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+
+.quick-filter-tag.active {
+  background-color: var(--primary-500);
+  border-color: var(--primary-500);
+  color: white;
+}
+
+.quick-filter-tag .filter-icon {
+  font-size: var(--font-size-sm);
+}
+
+/* 标签下拉菜单 */
+.enhanced-search .ant-dropdown-menu {
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--shadow-lg);
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.enhanced-search .ant-dropdown-menu-item {
+  border-radius: var(--border-radius-sm);
+  margin: 2px 4px;
+  transition: all 0.3s ease;
+}
+
+.enhanced-search .ant-dropdown-menu-item:hover {
+  background-color: var(--primary-50);
+}
+
+/* 按钮样式 */
+.enhanced-search .ant-btn {
+  border-radius: var(--border-radius-sm);
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.enhanced-search .ant-btn:hover {
+  transform: translateY(-1px);
+}
+
+.enhanced-search .ant-btn-primary {
+  background-color: var(--primary-500);
+  border-color: var(--primary-500);
+}
+
+.enhanced-search .ant-btn-primary:hover {
+  background-color: var(--primary-600);
+  border-color: var(--primary-600);
+}
+
+.enhanced-search .ant-btn-text {
+  color: var(--text-secondary);
+}
+
+.enhanced-search .ant-btn-text:hover {
+  color: var(--primary-500);
+  background-color: var(--primary-50);
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .enhanced-search {
+    padding: var(--spacing-sm);
+    gap: var(--spacing-xs);
+  }
+  
+  .search-main {
+    flex-direction: column;
+    gap: var(--spacing-xs);
+  }
+  
+  .search-main .ant-auto-complete {
+    width: 100%;
+  }
+  
+  .search-main .ant-input-affix-wrapper {
+    font-size: var(--font-size-sm);
+  }
+  
+  .search-main .ant-input-suffix {
+    flex-direction: column;
+    gap: var(--spacing-xs);
+  }
+  
+  .selected-tags {
+    padding: var(--spacing-xs);
+  }
+  
+  .selected-tags .ant-typography {
+    font-size: var(--font-size-xs);
+  }
+  
+  .quick-filters .ant-typography {
+    font-size: var(--font-size-xs);
+  }
+  
+  .quick-filter-tag {
+    font-size: var(--font-size-xs);
+    padding: 2px 6px;
+  }
+  
+  .suggestion-item {
+    padding: var(--spacing-xs);
+  }
+}
+
+@media (max-width: 480px) {
+  .enhanced-search {
+    padding: var(--spacing-xs);
+  }
+  
+  .search-main .ant-input {
+    font-size: var(--font-size-sm);
+  }
+  
+  .search-main .ant-btn {
+    font-size: var(--font-size-xs);
+    padding: 4px 8px;
+    height: auto;
+  }
+  
+  .selected-tags,
+  .quick-filters {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-xs);
+  }
+  
+  .quick-filter-tag {
+    font-size: var(--font-size-xs);
+    padding: 1px 4px;
+  }
+}
+
+/* 动画效果 */
+.selected-tags,
+.quick-filters {
+  animation: fadeInUp 0.3s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 自动完成下拉样式优化 */
+.enhanced-search .ant-select-dropdown {
+  border-radius: var(--border-radius-md);
+}
+
+.enhanced-search .ant-select-item {
+  border-radius: var(--border-radius-sm);
+  margin: 2px 4px;
+}
+
+.enhanced-search .ant-select-item:hover {
+  background-color: var(--primary-50);
+}
+
+.enhanced-search .ant-select-item-option-selected {
+  background-color: var(--primary-100);
+  color: var(--primary-700);
+}
+
+/* 焦点状态优化 */
+.enhanced-search .ant-input:focus,
+.enhanced-search .ant-select-selector:focus {
+  outline: none;
+}
+
+/* 清空按钮特殊样式 */
+.quick-filters .ant-btn[aria-label*="清空"] {
+  color: #ff4d4f;
+  border-color: #ff4d4f;
+}
+
+.quick-filters .ant-btn[aria-label*="清空"]:hover {
+  background-color: #ff4d4f;
+  color: white;
+}

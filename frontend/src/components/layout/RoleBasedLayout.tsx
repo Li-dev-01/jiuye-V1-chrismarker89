@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Layout, Alert, Button, Space, Divider } from 'antd';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { SettingOutlined } from '@ant-design/icons';
 import { RoleBasedHeader } from './RoleBasedHeader';
 import { MobileNavigation } from './MobileNavigation';
@@ -155,6 +155,41 @@ export const ReviewerLayout: React.FC<{ children: React.ReactNode }> = ({ childr
 
 // 管理员专用布局
 export const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const navigate = useNavigate();
+  const { isAuthenticated, currentUser } = useManagementAuthStore();
+
+  useEffect(() => {
+    // 检查管理员认证状态
+    if (!isAuthenticated || !currentUser) {
+      console.log('管理员未认证，重定向到登录页面');
+      navigate('/admin/login', { replace: true });
+      return;
+    }
+
+    // 检查用户权限
+    if (!['ADMIN', 'SUPER_ADMIN'].includes(currentUser.userType)) {
+      console.log('用户权限不足，重定向到登录页面');
+      navigate('/admin/login', { replace: true });
+      return;
+    }
+
+    console.log('管理员认证通过:', {
+      userType: currentUser.userType,
+      username: currentUser.username
+    });
+  }, [isAuthenticated, currentUser, navigate]);
+
+  // 如果未认证，显示加载状态
+  if (!isAuthenticated || !currentUser) {
+    return (
+      <Layout>
+        <div style={{ padding: '50px', textAlign: 'center' }}>
+          <p>正在验证管理员权限...</p>
+        </div>
+      </Layout>
+    );
+  }
+
   return (
     <RoleBasedLayout role="admin" showUserStatus={false}>
       {children}

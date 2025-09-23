@@ -169,41 +169,7 @@ export interface ExportResponses {
   updated_at: string;
 }
 
-export interface HeartVoicesFts {
-  content?: any;
-  category?: any;
-  tags?: any;
-  content_id?: any;
-}
 
-export interface HeartVoicesFtsConfig {
-  k: any;
-  v?: any;
-}
-
-export interface HeartVoicesFtsContent {
-  id: number;
-  c0?: any;
-  c1?: any;
-  c2?: any;
-  c3?: any;
-}
-
-export interface HeartVoicesFtsData {
-  id: number;
-  block?: Buffer;
-}
-
-export interface HeartVoicesFtsDocsize {
-  id: number;
-  sz?: Buffer;
-}
-
-export interface HeartVoicesFtsIdx {
-  segid: any;
-  term: any;
-  pgno?: any;
-}
 
 export interface PerformanceAlertHistory {
   id: number;
@@ -253,27 +219,7 @@ export interface PerformanceMetrics {
   created_at?: string;
 }
 
-export interface QuestionnaireHeartVoices {
-  id: number;
-  questionnaire_response_id?: number;
-  questionnaire_id: string;
-  user_id: string;
-  content: string;
-  word_count?: number;
-  category?: string;
-  tags?: string;
-  emotion_score?: number;
-  emotion_category?: string;
-  is_public?: any;
-  is_approved?: any;
-  status?: string;
-  submission_type?: string;
-  anonymous_nickname?: string;
-  ip_address?: string;
-  user_agent?: string;
-  created_at?: any;
-  updated_at?: any;
-}
+
 
 export interface QuestionnaireResponses {
   id: string;
@@ -423,13 +369,7 @@ export interface UserContentMappings {
   updated_at: string;
 }
 
-export interface UserQuestionnaireHeartVoiceMapping {
-  id: number;
-  user_id: string;
-  questionnaire_response_id: number;
-  heart_voice_id: number;
-  created_at?: any;
-}
+
 
 export interface UserSessions {
   session_id: string;

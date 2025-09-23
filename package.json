@@ -24,7 +24,6 @@
     "db:create": "pnpm --filter backend db:create",
     "db:migrate": "pnpm --filter backend db:migrate",
     "db:seed": "pnpm --filter backend db:seed",
-
     "db:extract": "node database/tools/schema-extractor.cjs",
     "db:validate": "node database/tools/schema-validator.cjs",
     "db:sync": "node -e \"const {SchemaSyncer} = require('./database/tools/schema-validator.cjs'); new SchemaSyncer().syncToLocal()\"",
@@ -38,11 +37,9 @@
     "api:audit": "node database/tools/api-endpoint-auditor.cjs",
     "api:audit-global": "node database/tools/global-api-endpoint-auditor.cjs",
     "data:validate-mapping": "node -e \"const { validateMappingConfig } = require('./frontend/src/config/unifiedDataMapping.ts'); console.log(validateMappingConfig());\"",
-
     "data:import": "cd database/test-data/generated && ./import.sh",
     "data:clean": "wrangler d1 execute college-employment-survey --remote --command=\"DELETE FROM analytics_responses WHERE is_test_data = 1; DELETE FROM universal_questionnaire_responses WHERE response_data LIKE '%test_user_identifier%'; DELETE FROM users WHERE id LIKE 'test_%';\" --yes",
     "data:status": "wrangler d1 execute college-employment-survey --remote --command=\"SELECT 'users' as table_name, COUNT(*) as count FROM users UNION ALL SELECT 'questionnaires', COUNT(*) FROM universal_questionnaire_responses UNION ALL SELECT 'analytics', COUNT(*) FROM analytics_responses;\"",
-
     "workflow:setup": "npm run db:extract && npm run db:sync && npm run db:generate-data",
     "workflow:deploy": "npm run db:pre-deploy-check && npm run build && npm run deploy && npm run db:post-deploy-validate",
     "workflow:test-data": "npm run data:clean && npm run db:generate-data && npm run data:import && npm run data:status"
@@ -53,8 +50,12 @@
     "shared"
   ],
   "devDependencies": {
+    "@types/jest": "^30.0.0",
     "@types/node": "^22.0.0",
+    "@types/supertest": "^6.0.3",
     "concurrently": "^8.2.2",
+    "jest": "^30.1.3",
+    "supertest": "^7.1.4",
     "typescript": "^5.5.4"
   },
   "engines": {

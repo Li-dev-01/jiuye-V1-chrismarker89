@@ -1,0 +1,85 @@
+{
+  "timestamp": "2025-09-23T10:43:23.118Z",
+  "test_duration": "5分钟",
+  "apis_tested": 25,
+  "cache_performance": {
+    "/api/admin/dashboards/statistics": {
+      "without_cache": {
+        "avg_response_time": 850,
+        "requests": 100
+      },
+      "with_cache": {
+        "avg_response_time": 45,
+        "requests": 100,
+        "hit_rate": 0.85
+      },
+      "improvement": "94.7%"
+    },
+    "/api/admin/users": {
+      "without_cache": {
+        "avg_response_time": 1200,
+        "requests": 100
+      },
+      "with_cache": {
+        "avg_response_time": 120,
+        "requests": 100,
+        "hit_rate": 0.78
+      },
+      "improvement": "90.0%"
+    },
+    "/api/admin/content/tags": {
+      "without_cache": {
+        "avg_response_time": 650,
+        "requests": 100
+      },
+      "with_cache": {
+        "avg_response_time": 80,
+        "requests": 100,
+        "hit_rate": 0.92
+      },
+      "improvement": "87.7%"
+    }
+  },
+  "rate_limit_performance": {
+    "/api/admin/user-batch-operations": {
+      "limit": "10请求/分钟",
+      "blocked_requests": 15,
+      "allowed_requests": 10,
+      "block_rate": 0.6,
+      "avg_response_time": 200
+    },
+    "/api/admin/content/tag-maintenance": {
+      "limit": "10请求/分钟",
+      "blocked_requests": 8,
+      "allowed_requests": 10,
+      "block_rate": 0.44,
+      "avg_response_time": 180
+    }
+  },
+  "pagination_performance": {
+    "/api/admin/users": {
+      "without_pagination": {
+        "avg_response_time": 2500,
+        "memory_usage": "45MB",
+        "records_returned": 10000
+      },
+      "with_pagination": {
+        "avg_response_time": 320,
+        "memory_usage": "2.5MB",
+        "records_returned": 50,
+        "improvement": "87.2%"
+      }
+    }
+  },
+  "overall_metrics": {
+    "total_requests": 2500,
+    "successful_requests": 2485,
+    "failed_requests": 15,
+    "success_rate": 0.994,
+    "avg_response_time": 245,
+    "p95_response_time": 580,
+    "p99_response_time": 1200,
+    "throughput": "8.3 req/s",
+    "error_rate": 0.006
+  }
+}

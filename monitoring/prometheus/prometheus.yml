@@ -1,0 +1,92 @@
+# Prometheus配置文件
+# 用于监控就业调查系统的API和服务
+
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+# 告警规则文件
+rule_files:
+  - "alert_rules.yml"
+
+# 告警管理器配置
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+          - alertmanager:9093
+
+# 抓取配置
+scrape_configs:
+  # Prometheus自身监控
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+
+  # 主应用API监控
+  - job_name: 'jiuye-api'
+    static_configs:
+      - targets: ['localhost:8787']  # Cloudflare Workers本地开发端口
+    metrics_path: '/metrics'
+    scrape_interval: 10s
+    scrape_timeout: 5s
+    scheme: http
+
+  # Python微服务监控
+  - job_name: 'python-services'
+    static_configs:
+      - targets: 
+        - 'localhost:8001'  # 问卷服务
+        - 'localhost:8003'  # 审核服务
+        - 'localhost:8004'  # 分析服务
+    metrics_path: '/metrics'
+    scrape_interval: 15s
+    scrape_timeout: 10s
+
+  # 数据库监控 (如果使用PostgreSQL/MySQL)
+  - job_name: 'database'
+    static_configs:
+      - targets: ['localhost:9187']  # postgres_exporter
+    scrape_interval: 30s
+
+  # 系统监控
+  - job_name: 'node-exporter'
+    static_configs:
+      - targets: ['localhost:9100']
+    scrape_interval: 15s
+
+  # Cloudflare Workers监控 (通过自定义端点)
+  - job_name: 'cloudflare-workers'
+    static_configs:
+      - targets: ['your-worker.your-subdomain.workers.dev']
+    metrics_path: '/api/metrics'
+    scrape_interval: 30s
+    scheme: https
+    params:
+      format: ['prometheus']
+
+  # 应用健康检查
+  - job_name: 'health-checks'
+    static_configs:
+      - targets: 
+        - 'localhost:8787'
+        - 'localhost:8001'
+        - 'localhost:8003'
+        - 'localhost:8004'
+    metrics_path: '/health'
+    scrape_interval: 30s
+    scrape_timeout: 5s
+
+# 远程写入配置 (可选，用于长期存储)
+# remote_write:
+#   - url: "https://your-remote-storage/api/v1/write"
+#     basic_auth:
+#       username: "your-username"
+#       password: "your-password"
+
+# 远程读取配置 (可选)
+# remote_read:
+#   - url: "https://your-remote-storage/api/v1/read"
+#     basic_auth:
+#       username: "your-username"
+#       password: "your-password"

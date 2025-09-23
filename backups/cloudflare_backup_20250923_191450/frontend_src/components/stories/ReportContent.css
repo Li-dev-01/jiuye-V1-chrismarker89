@@ -1,0 +1,291 @@
+/* 内容举报组件样式 */
+
+.report-trigger {
+  color: #8c8c8c;
+  transition: all 0.3s ease;
+}
+
+.report-trigger:hover {
+  color: #ff4d4f;
+  background-color: rgba(255, 77, 79, 0.1);
+}
+
+.report-modal .ant-modal-header {
+  border-bottom: 1px solid #f0f0f0;
+  padding: var(--spacing-md);
+}
+
+.report-modal .ant-modal-body {
+  padding: var(--spacing-lg);
+}
+
+.report-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.content-info {
+  padding: var(--spacing-sm);
+  background-color: var(--bg-secondary);
+  border-radius: var(--border-radius-sm);
+  border-left: 3px solid var(--primary-500);
+}
+
+.content-info .ant-typography {
+  margin: 0;
+  display: block;
+}
+
+.report-form {
+  margin-top: var(--spacing-md);
+}
+
+.report-form .ant-form-item {
+  margin-bottom: var(--spacing-md);
+}
+
+.report-form .ant-form-item-label {
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.report-form .ant-select {
+  border-radius: var(--border-radius-sm);
+}
+
+.report-form .ant-select-selector {
+  border-color: #d9d9d9;
+  transition: all 0.3s ease;
+}
+
+.report-form .ant-select-selector:hover {
+  border-color: var(--primary-500);
+}
+
+.report-form .ant-select-focused .ant-select-selector {
+  border-color: var(--primary-500);
+  box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+}
+
+.report-type-option {
+  padding: var(--spacing-xs) 0;
+}
+
+.type-label {
+  font-weight: 500;
+  color: var(--text-primary);
+  margin-bottom: 2px;
+}
+
+.type-description {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+.report-form .ant-input {
+  border-radius: var(--border-radius-sm);
+  border-color: #d9d9d9;
+  transition: all 0.3s ease;
+}
+
+.report-form .ant-input:hover {
+  border-color: var(--primary-500);
+}
+
+.report-form .ant-input:focus {
+  border-color: var(--primary-500);
+  box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+}
+
+.report-notice {
+  padding: var(--spacing-sm);
+  background-color: #fffbe6;
+  border: 1px solid #ffe58f;
+  border-radius: var(--border-radius-sm);
+  margin: var(--spacing-md) 0;
+}
+
+.report-notice .ant-typography {
+  margin: 0;
+  line-height: 1.6;
+}
+
+.form-actions {
+  margin-bottom: 0;
+  text-align: right;
+}
+
+.form-actions .ant-btn {
+  border-radius: var(--border-radius-sm);
+  transition: all 0.3s ease;
+}
+
+.form-actions .ant-btn:hover {
+  transform: translateY(-1px);
+}
+
+.form-actions .ant-btn-primary {
+  background-color: #ff4d4f;
+  border-color: #ff4d4f;
+}
+
+.form-actions .ant-btn-primary:hover {
+  background-color: #ff7875;
+  border-color: #ff7875;
+}
+
+/* 快速举报按钮 */
+.quick-report-btn {
+  color: #8c8c8c;
+  font-size: var(--font-size-sm);
+  padding: 2px 6px;
+  height: auto;
+  transition: all 0.3s ease;
+}
+
+.quick-report-btn:hover {
+  color: #ff4d4f;
+  background-color: rgba(255, 77, 79, 0.1);
+  transform: translateY(-1px);
+}
+
+.quick-report-btn .anticon {
+  font-size: var(--font-size-sm);
+}
+
+/* 下拉选项样式 */
+.report-modal .ant-select-dropdown {
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--shadow-lg);
+}
+
+.report-modal .ant-select-item {
+  border-radius: var(--border-radius-sm);
+  margin: 2px 4px;
+  transition: all 0.3s ease;
+}
+
+.report-modal .ant-select-item:hover {
+  background-color: rgba(255, 77, 79, 0.1);
+}
+
+.report-modal .ant-select-item-option-selected {
+  background-color: rgba(255, 77, 79, 0.2);
+  color: #ff4d4f;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .report-modal {
+    width: 90% !important;
+    max-width: 400px;
+  }
+  
+  .report-modal .ant-modal-body {
+    padding: var(--spacing-md);
+  }
+  
+  .content-info {
+    padding: var(--spacing-xs);
+  }
+  
+  .report-form .ant-form-item {
+    margin-bottom: var(--spacing-sm);
+  }
+  
+  .type-label {
+    font-size: var(--font-size-sm);
+  }
+  
+  .type-description {
+    font-size: var(--font-size-xs);
+  }
+  
+  .report-notice {
+    padding: var(--spacing-xs);
+    margin: var(--spacing-sm) 0;
+  }
+  
+  .report-notice .ant-typography {
+    font-size: var(--font-size-xs);
+  }
+}
+
+@media (max-width: 480px) {
+  .report-modal .ant-modal-body {
+    padding: var(--spacing-sm);
+  }
+  
+  .form-actions {
+    text-align: center;
+  }
+  
+  .form-actions .ant-btn {
+    font-size: var(--font-size-sm);
+    padding: 4px 12px;
+    height: auto;
+  }
+  
+  .quick-report-btn {
+    font-size: var(--font-size-xs);
+    padding: 1px 4px;
+  }
+}
+
+/* 动画效果 */
+.report-content,
+.content-info,
+.report-notice {
+  animation: fadeInUp 0.3s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 焦点状态优化 */
+.report-form .ant-input:focus,
+.report-form .ant-select-selector:focus {
+  outline: none;
+}
+
+/* 表单验证样式 */
+.report-form .ant-form-item-has-error .ant-select-selector,
+.report-form .ant-form-item-has-error .ant-input {
+  border-color: #ff4d4f;
+}
+
+.report-form .ant-form-item-has-error .ant-select-focused .ant-select-selector,
+.report-form .ant-form-item-has-error .ant-input:focus {
+  border-color: #ff4d4f;
+  box-shadow: 0 0 0 2px rgba(255, 77, 79, 0.2);
+}
+
+/* 加载状态 */
+.report-form .ant-btn-loading {
+  pointer-events: none;
+}
+
+/* 模态框遮罩 */
+.report-modal .ant-modal-mask {
+  background-color: rgba(0, 0, 0, 0.45);
+}
+
+/* 模态框关闭按钮 */
+.report-modal .ant-modal-close {
+  color: #8c8c8c;
+  transition: color 0.3s ease;
+}
+
+.report-modal .ant-modal-close:hover {
+  color: var(--text-primary);
+}

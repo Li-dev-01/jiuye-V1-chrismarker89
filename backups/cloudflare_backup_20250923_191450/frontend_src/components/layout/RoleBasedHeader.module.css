@@ -1,0 +1,332 @@
+.header {
+  background: #fff !important;
+  border-bottom: 1px solid #e8e8e8 !important;
+  padding: 0 24px !important;
+  height: 64px !important;
+  line-height: 64px !important;
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 1000 !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06) !important;
+}
+
+/* 移动端头部优化 */
+@media (max-width: 768px) {
+  .header {
+    padding: 0 12px !important;
+    height: 56px !important;
+    line-height: 56px !important;
+  }
+}
+
+.headerContent {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.logoSection {
+  flex-shrink: 0;
+  margin-right: 24px;
+}
+
+.logo {
+  margin: 0 !important;
+  color: #000 !important;
+  font-weight: 500 !important;
+  font-size: 16px !important;
+  line-height: 1.2 !important;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.logo:hover {
+  color: #333 !important;
+}
+
+.menu {
+  border: none !important;
+  background: transparent !important;
+  flex: 1;
+  justify-content: center;
+  display: flex;
+  min-width: 0;
+}
+
+/* 移动端菜单优化 */
+@media (max-width: 768px) {
+  .menu {
+    display: none; /* 移动端隐藏水平菜单 */
+  }
+
+  .logoSection {
+    margin-right: 12px;
+  }
+
+  .logo {
+    font-size: 14px !important;
+  }
+}
+
+.menu .ant-menu-item {
+  color: #333 !important;
+  font-weight: 400;
+  margin: 0 4px;
+  padding: 0 12px;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+  font-size: 14px;
+}
+
+.menu .ant-menu-item:hover {
+  color: #000 !important;
+  background: #f5f5f5 !important;
+}
+
+.menu .ant-menu-item-selected {
+  color: #000 !important;
+  background: #f0f0f0 !important;
+  font-weight: 500;
+}
+
+.menu .ant-menu-item-selected::after {
+  display: none !important;
+}
+
+.menu .ant-menu-item a {
+  color: inherit !important;
+  text-decoration: none !important;
+}
+
+.userActions {
+  flex-shrink: 0;
+  margin-left: 24px;
+}
+
+/* 移动端用户操作区域优化 */
+@media (max-width: 768px) {
+  .userActions {
+    margin-left: 8px;
+  }
+
+  .userButton {
+    height: 36px !important;
+    padding: 0 8px !important;
+  }
+
+  .username {
+    display: none; /* 移动端隐藏用户名 */
+  }
+
+  .loginButton,
+  .registerButton,
+  .adminButton {
+    height: 32px !important;
+    padding: 0 8px !important;
+    font-size: 12px !important;
+  }
+}
+
+.userButton {
+  height: 40px !important;
+  padding: 0 12px !important;
+  border-radius: 6px !important;
+  border: 1px solid #e8e8e8 !important;
+  background: #fff !important;
+  color: #333 !important;
+  transition: all 0.3s ease !important;
+}
+
+.userButton:hover {
+  background: #f5f5f5 !important;
+  border-color: #d9d9d9 !important;
+  color: #000 !important;
+}
+
+.username {
+  font-size: 14px;
+  font-weight: 400;
+  max-width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.loginButton,
+.registerButton {
+  background: #fff !important;
+  color: #333 !important;
+  border: 1px solid #e8e8e8 !important;
+  height: 36px !important;
+  padding: 0 16px !important;
+  font-size: 14px !important;
+  font-weight: 400 !important;
+  border-radius: 4px !important;
+  transition: all 0.3s ease !important;
+}
+
+.loginButton:hover,
+.registerButton:hover {
+  background: #f5f5f5 !important;
+  border-color: #d9d9d9 !important;
+  color: #000 !important;
+}
+
+.registerButton {
+  background: #1890ff !important;
+  color: #fff !important;
+  border-color: #1890ff !important;
+}
+
+.registerButton:hover {
+  background: #40a9ff !important;
+  border-color: #40a9ff !important;
+  color: #fff !important;
+}
+
+/* 审核员专用样式 */
+.header.reviewer {
+  background: #f6f8ff !important;
+  border-bottom-color: #d6e3ff !important;
+}
+
+.header.reviewer .logo {
+  color: #1890ff !important;
+}
+
+.header.reviewer .menu .ant-menu-item-selected {
+  background: #e6f7ff !important;
+  color: #1890ff !important;
+}
+
+/* 管理员专用样式 */
+.header.admin {
+  background: #fff7e6 !important;
+  border-bottom-color: #ffd591 !important;
+}
+
+.header.admin .logo {
+  color: #fa8c16 !important;
+}
+
+.header.admin .menu .ant-menu-item-selected {
+  background: #fff2e8 !important;
+  color: #fa8c16 !important;
+}
+
+/* 响应式设计 */
+@media (max-width: 1200px) {
+  .header {
+    padding: 0 16px !important;
+  }
+  
+  .headerContent {
+    max-width: none;
+  }
+  
+  .logoSection {
+    margin-right: 16px;
+  }
+  
+  .userActions {
+    margin-left: 16px;
+  }
+}
+
+@media (max-width: 992px) {
+  .menu .ant-menu-item {
+    margin: 0 2px;
+    padding: 0 8px;
+    font-size: 13px;
+  }
+  
+  .username {
+    max-width: 80px;
+  }
+}
+
+@media (max-width: 768px) {
+  .header {
+    padding: 0 12px !important;
+  }
+  
+  .headerContent {
+    flex-wrap: wrap;
+    height: auto;
+    min-height: 64px;
+    padding: 8px 0;
+  }
+  
+  .logoSection {
+    margin-right: 12px;
+    margin-bottom: 8px;
+  }
+  
+  .logo {
+    font-size: 14px !important;
+  }
+  
+  .menu {
+    order: 3;
+    width: 100%;
+    justify-content: flex-start;
+    margin-top: 8px;
+  }
+  
+  .menu .ant-menu-item {
+    margin: 0 1px;
+    padding: 0 6px;
+    font-size: 12px;
+  }
+  
+  .userActions {
+    order: 2;
+    margin-left: auto;
+    margin-bottom: 8px;
+  }
+  
+  .loginButton,
+  .registerButton {
+    height: 32px !important;
+    padding: 0 12px !important;
+    font-size: 12px !important;
+  }
+  
+  .userButton {
+    height: 32px !important;
+    padding: 0 8px !important;
+  }
+  
+  .username {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .headerContent {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+    padding: 12px 0;
+  }
+  
+  .logoSection {
+    text-align: center;
+    margin: 0;
+  }
+  
+  .menu {
+    order: 2;
+    margin: 0;
+    justify-content: center;
+  }
+  
+  .userActions {
+    order: 3;
+    justify-content: center;
+    margin: 0;
+  }
+}

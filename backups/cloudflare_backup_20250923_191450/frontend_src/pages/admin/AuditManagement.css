@@ -1,0 +1,356 @@
+/* 审核管理页面样式 */
+
+.audit-management {
+  padding: 24px;
+  background-color: #f5f5f5;
+  min-height: 100vh;
+}
+
+/* 页面头部 */
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  padding: 24px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 12px;
+  color: white;
+}
+
+.page-header h2 {
+  color: white;
+  margin-bottom: 0;
+}
+
+.page-header .ant-btn {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.3);
+  color: white;
+  backdrop-filter: blur(10px);
+}
+
+.page-header .ant-btn:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.5);
+  color: white;
+}
+
+.page-header .ant-btn-primary {
+  background-color: rgba(24, 144, 255, 0.8);
+  border-color: rgba(24, 144, 255, 0.9);
+}
+
+.page-header .ant-btn-primary:hover {
+  background-color: rgba(24, 144, 255, 0.9);
+  border-color: rgba(24, 144, 255, 1);
+}
+
+/* 统计卡片 */
+.audit-management .ant-card {
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.audit-management .ant-statistic-title {
+  color: #8c8c8c;
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+
+.audit-management .ant-statistic-content {
+  font-size: 24px;
+  font-weight: 600;
+}
+
+/* 表格样式 */
+.audit-management .ant-table {
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.audit-management .ant-table-thead > tr > th {
+  background-color: #fafafa;
+  border-bottom: 1px solid #f0f0f0;
+  font-weight: 600;
+  color: #262626;
+}
+
+.audit-management .ant-table-tbody > tr > td {
+  border-bottom: 1px solid #f5f5f5;
+  vertical-align: top;
+  padding: 16px;
+}
+
+.audit-management .ant-table-tbody > tr:hover > td {
+  background-color: #fafafa;
+}
+
+/* 内容预览样式 */
+.audit-management .ant-typography {
+  margin-bottom: 0;
+}
+
+.audit-management .ant-typography p {
+  margin-bottom: 4px;
+  line-height: 1.5;
+}
+
+/* 标签样式 */
+.audit-management .ant-tag {
+  border-radius: 4px;
+  font-size: 12px;
+  padding: 2px 8px;
+  border: none;
+  font-weight: 500;
+}
+
+/* 操作按钮样式 */
+.audit-management .ant-btn {
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.audit-management .ant-btn-text {
+  padding: 4px 8px;
+  height: auto;
+}
+
+.audit-management .ant-btn-text:hover {
+  background-color: #f5f5f5;
+}
+
+/* 置信度颜色 */
+.confidence-high {
+  color: #52c41a;
+  font-weight: 600;
+}
+
+.confidence-medium {
+  color: #faad14;
+  font-weight: 600;
+}
+
+.confidence-low {
+  color: #ff4d4f;
+  font-weight: 600;
+}
+
+/* 模态框样式 */
+.audit-management .ant-modal {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.audit-management .ant-modal-header {
+  background-color: #fafafa;
+  border-bottom: 1px solid #f0f0f0;
+  padding: 20px 24px;
+}
+
+.audit-management .ant-modal-title {
+  font-weight: 600;
+  color: #262626;
+}
+
+.audit-management .ant-modal-body {
+  padding: 24px;
+}
+
+.audit-management .ant-modal-footer {
+  padding: 16px 24px;
+  border-top: 1px solid #f0f0f0;
+}
+
+/* 详情内容样式 */
+.audit-detail-content {
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  padding: 16px;
+  margin: 16px 0;
+  border-left: 4px solid #1890ff;
+}
+
+.audit-detail-content pre {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  margin: 0;
+  font-family: inherit;
+  line-height: 1.6;
+}
+
+/* 审核原因列表 */
+.audit-reasons {
+  background-color: #fff2e8;
+  border: 1px solid #ffbb96;
+  border-radius: 6px;
+  padding: 12px;
+  margin: 12px 0;
+}
+
+.audit-reasons ul {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.audit-reasons li {
+  margin-bottom: 4px;
+  color: #d4380d;
+}
+
+/* 配置项样式 */
+.config-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.config-item:last-child {
+  border-bottom: none;
+}
+
+.config-item-label {
+  font-weight: 500;
+  color: #262626;
+}
+
+.config-item-control {
+  margin-left: 16px;
+}
+
+/* 筛选器样式 */
+.filter-card {
+  margin-bottom: 16px;
+}
+
+.filter-card .ant-card-body {
+  padding: 16px 20px;
+}
+
+/* 分页样式 */
+.audit-management .ant-pagination {
+  margin-top: 16px;
+  text-align: center;
+}
+
+.audit-management .ant-pagination-item {
+  border-radius: 6px;
+}
+
+.audit-management .ant-pagination-item-active {
+  background-color: #1890ff;
+  border-color: #1890ff;
+}
+
+.audit-management .ant-pagination-item-active a {
+  color: white;
+}
+
+/* 空状态样式 */
+.audit-management .ant-empty {
+  padding: 60px 20px;
+}
+
+.audit-management .ant-empty-description {
+  color: #8c8c8c;
+  font-size: 16px;
+}
+
+/* 加载状态 */
+.audit-management .ant-spin-container {
+  min-height: 400px;
+}
+
+/* 响应式设计 */
+@media (max-width: 1200px) {
+  .audit-management {
+    padding: 16px;
+  }
+  
+  .page-header {
+    flex-direction: column;
+    gap: 16px;
+    padding: 20px;
+  }
+  
+  .page-header .ant-space {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .audit-management {
+    padding: 12px;
+  }
+  
+  .page-header {
+    padding: 16px;
+  }
+  
+  .page-header h2 {
+    font-size: 20px;
+  }
+  
+  .page-header .ant-btn {
+    width: 100%;
+  }
+  
+  .audit-management .ant-table {
+    font-size: 14px;
+  }
+  
+  .audit-management .ant-table-tbody > tr > td {
+    padding: 12px 8px;
+  }
+  
+  /* 移动端隐藏部分列 */
+  .audit-management .ant-table-thead > tr > th:nth-child(4),
+  .audit-management .ant-table-tbody > tr > td:nth-child(4),
+  .audit-management .ant-table-thead > tr > th:nth-child(5),
+  .audit-management .ant-table-tbody > tr > td:nth-child(5) {
+    display: none;
+  }
+  
+  .audit-management .ant-modal {
+    margin: 0;
+    max-width: 100vw;
+    top: 0;
+  }
+  
+  .audit-management .ant-modal-body {
+    padding: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .page-header h2 {
+    font-size: 18px;
+  }
+  
+  .audit-management .ant-table-thead > tr > th:nth-child(3),
+  .audit-management .ant-table-tbody > tr > td:nth-child(3),
+  .audit-management .ant-table-thead > tr > th:nth-child(6),
+  .audit-management .ant-table-tbody > tr > td:nth-child(6) {
+    display: none;
+  }
+  
+  .audit-management .ant-btn-text {
+    padding: 2px 4px;
+  }
+  
+  .config-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  
+  .config-item-control {
+    margin-left: 0;
+    align-self: flex-end;
+  }
+}

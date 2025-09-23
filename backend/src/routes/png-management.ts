@@ -131,12 +131,8 @@ export function createPngManagementRoutes() {
     }
   });
 
-  return pngManagement;
-}
-
-// 默认导出
-const pngManagementRoutes = createPngManagementRoutes();
-export default pngManagementRoutes;
+  // 手动触发队列处理
+  pngManagement.post('/trigger/manual', async (c) => {
     try {
       const schedulerService = new PngSchedulerService(c.env);
       const result = await schedulerService.triggerProcessing();
