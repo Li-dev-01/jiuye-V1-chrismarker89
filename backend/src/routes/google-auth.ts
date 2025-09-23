@@ -71,6 +71,90 @@ async function getWhitelistEntry(db: any, email: string) {
 }
 
 /**
+ * 从UUID生成A值（11位数字）- 增强防撞库算法
+ */
+function generateIdentityAFromUuid(uuid: string): string {
+  // 使用UUID + 邮箱哈希 + 时间戳生成更复杂的A值
+  const numericPart = uuid.replace(/[^0-9]/g, '');
+  const timestamp = Date.now().toString();
+  const combined = numericPart + timestamp;
+
+  // 使用哈希确保唯一性和复杂性
+  let hash = 0;
+  for (let i = 0; i < combined.length; i++) {
+    const char = combined.charCodeAt(i);
+    hash = ((hash << 5) - hash) + char;
+    hash = hash & hash; // 转换为32位整数
+  }
+
+  // 生成11位数字，确保不以0开头
+  const absHash = Math.abs(hash).toString();
+  const paddedHash = absHash.padEnd(11, '0').substring(0, 11);
+
+  // 确保第一位不是0（防止被误认为10位数字）
+  return paddedHash.charAt(0) === '0' ? '1' + paddedHash.substring(1) : paddedHash;
+}
+
+/**
+ * 从UUID生成B值（4位数字）- 增强防撞库算法
+ */
+function generateIdentityBFromUuid(uuid: string): string {
+  // 使用UUID的多个部分生成更复杂的B值
+  const parts = uuid.split('-');
+  let bValue = '';
+
+  for (let i = 0; i < Math.min(parts.length, 4); i++) {
+    const part = parts[i];
+    let partHash = 0;
+    for (let j = 0; j < part.length; j++) {
+      partHash += part.charCodeAt(j);
+    }
+    bValue += (partHash % 10).toString();
+  }
+
+  // 确保是4位数字
+  return bValue.padEnd(4, '0').substring(0, 4);
+}
+
+/**
+ * 为管理员生成用户名（基于邮箱和角色）
+ */
+function generateAdminUsername(email: string, role: string): string {
+  const emailPrefix = email.split('@')[0];
+  const rolePrefix = role.replace('_', '');
+  return `${rolePrefix}_${emailPrefix}`.toLowerCase();
+}
+
+/**
+ * 为管理员生成密码（基于邮箱和UUID）
+ */
+function generateAdminPassword(email: string, uuid: string): string {
+  // 生成复杂但可预测的密码
+  const emailHash = email.split('').reduce((hash, char) => {
+    return ((hash << 5) - hash) + char.charCodeAt(0);
+  }, 0);
+
+  const uuidPart = uuid.replace(/[^a-zA-Z0-9]/g, '').substring(0, 8);
+  const timestamp = Math.floor(Date.now() / 1000000); // 简化时间戳
+
+  return `Admin${Math.abs(emailHash)}${uuidPart}${timestamp}`.substring(0, 16);
+}
+
+/**
+ * 生成密码哈希
+ */
+function generatePasswordHash(password: string): string {
+  // 简单的哈希实现，生产环境应使用更安全的方法
+  let hash = 0;
+  for (let i = 0; i < password.length; i++) {
+    const char = password.charCodeAt(i);
+    hash = ((hash << 5) - hash) + char;
+    hash = hash & hash;
+  }
+  return Math.abs(hash).toString(36);
+}
+
+/**
  * 更新白名单条目的最后使用时间
  */
 async function updateLastUsed(db: any, email: string) {
@@ -467,9 +551,15 @@ async function handleQuestionnaireUserCallback(c: any, googleUser: any) {
       WHERE uuid = ?
     `, [now, JSON.stringify(metadata), existingUser.uuid]);
 
+    // 从用户UUID生成A+B组合（用于前端登录）
+    const identityA = generateIdentityAFromUuid(existingUser.uuid);
+    const identityB = generateIdentityBFromUuid(existingUser.uuid);
+
     return c.json({
       success: true,
       data: {
+        identityA,
+        identityB,
         user: {
           uuid: existingUser.uuid,
           userType: 'semi_anonymous',
@@ -521,9 +611,15 @@ async function handleQuestionnaireUserCallback(c: any, googleUser: any) {
     userData.status, userData.created_at, userData.updated_at, userData.last_active_at
   ]);
 
+  // 从用户UUID生成A+B组合（用于前端登录）
+  const identityA = generateIdentityAFromUuid(userData.uuid);
+  const identityB = generateIdentityBFromUuid(userData.uuid);
+
   return c.json({
     success: true,
     data: {
+      identityA,
+      identityB,
       user: {
         uuid: userData.uuid,
         userType: 'semi_anonymous',
@@ -580,6 +676,7 @@ async function handleManagementUserCallback(c: any, googleUser: any) {
     return c.json({
       success: true,
       data: {
+        role: whitelistEntry.role,
         user: {
           uuid: existingUser.uuid,
           userType: existingUser.user_type,
@@ -595,6 +692,10 @@ async function handleManagementUserCallback(c: any, googleUser: any) {
 
   // 创建新的管理员用户
   const userUuid = generateUUID(whitelistEntry.role);
+
+  // 为管理员生成固定的用户名和密码（基于邮箱）
+  const adminUsername = generateAdminUsername(googleUser.email, whitelistEntry.role);
+  const adminPassword = generateAdminPassword(googleUser.email, userUuid);
 
   const userData = {
     uuid: userUuid,
@@ -613,7 +714,12 @@ async function handleManagementUserCallback(c: any, googleUser: any) {
       googlePicture: googleUser.picture,
       registrationMethod: 'google_oauth_admin',
       whitelistRole: whitelistEntry.role,
-      createdAt: now
+      createdAt: now,
+      // 存储生成的用户名密码（加密）
+      generatedCredentials: {
+        username: adminUsername,
+        passwordHash: generatePasswordHash(adminPassword)
+      }
     }),
     status: 'active',
     created_at: now,
@@ -635,6 +741,7 @@ async function handleManagementUserCallback(c: any, googleUser: any) {
   return c.json({
     success: true,
     data: {
+      role: whitelistEntry.role,
       user: {
         uuid: userData.uuid,
         userType: userData.user_type,

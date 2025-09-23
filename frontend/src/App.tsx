@@ -78,6 +78,7 @@ const IPAccessControlPage = React.lazy(() => import('./pages/admin/IPAccessContr
 const IntelligentSecurityPage = React.lazy(() => import('./pages/admin/IntelligentSecurityPage').then(module => ({ default: module.IntelligentSecurityPage })));
 const LoginHistoryPage = React.lazy(() => import('./pages/user/LoginHistoryPage').then(module => ({ default: module.LoginHistoryPage })));
 const TwoFactorAuthPage = React.lazy(() => import('./pages/user/TwoFactorAuthPage').then(module => ({ default: module.TwoFactorAuthPage })));
+const UserProfile = React.lazy(() => import('./pages/user/UserProfile').then(module => ({ default: module.default })));
 
 // PNG缓存管理页面
 const AdminPage = React.lazy(() => import('./pages/Admin'));
@@ -395,6 +396,8 @@ function App() {
                     <Route path="/auth/guide" element={<PublicRouteGuard><LoginMethodGuide /></PublicRouteGuard>} />
 
                     {/* 用户个人页面 */}
+                    <Route path="/user/profile" element={<UserRouteGuard><UserProfile /></UserRouteGuard>} />
+                    <Route path="/user/settings" element={<PublicRouteGuard><div style={{padding: '24px'}}><h2>设置</h2><p>设置页面开发中...</p></div></PublicRouteGuard>} />
                     <Route path="/user/login-history" element={<UserRouteGuard><LoginHistoryPage /></UserRouteGuard>} />
                     <Route path="/user/two-factor" element={<UserRouteGuard><TwoFactorAuthPage /></UserRouteGuard>} />
 

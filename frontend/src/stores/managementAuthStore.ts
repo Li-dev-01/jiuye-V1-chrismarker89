@@ -56,6 +56,7 @@ interface ManagementAuthState {
   // 认证操作
   login: (credentials: ManagementCredentials) => Promise<boolean>;
   autoLogin: (params: { email: string; role: string }) => Promise<boolean>;
+  setUser: (userData: any) => void;
   logout: () => void;
   
   // 权限检查
@@ -165,6 +166,81 @@ export const useManagementAuthStore = create<ManagementAuthState>()(
             error: error.message || '登录过程中发生错误'
           });
           return false;
+        }
+      },
+
+      // 设置用户（用于Google OAuth回调）
+      setUser: (userData: any): void => {
+        try {
+          // 将后端返回的用户数据转换为ManagementUser格式
+          const managementUser: ManagementUser = {
+            id: userData.user?.uuid || userData.uuid || `google_${Date.now()}`,
+            username: userData.user?.displayName || userData.displayName || 'Google用户',
+            email: userData.user?.email || userData.email || '',
+            userType: (userData.user?.role || userData.role || 'admin') as ManagementUserType,
+            displayName: userData.user?.displayName || userData.displayName || 'Google用户',
+            permissions: userData.user?.permissions || getPermissionsByRole(userData.user?.role || userData.role || 'admin'),
+            profile: {
+              language: 'zh-CN',
+              timezone: 'Asia/Shanghai',
+              notifications: {
+                email: true,
+                push: false,
+                sms: false
+              }
+            },
+            metadata: {
+              loginMethod: 'google_oauth',
+              source: 'google',
+              createdAt: new Date().toISOString(),
+              googleLinked: true
+            },
+            status: 'active',
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+            lastActiveAt: new Date().toISOString()
+          };
+
+          // 创建会话
+          const managementSession: ManagementSession = {
+            sessionId: `google_session_${Date.now()}`,
+            userUuid: managementUser.id,
+            userType: managementUser.userType,
+            loginMethod: 'google_oauth',
+            deviceInfo: {
+              userAgent: navigator.userAgent,
+              timestamp: new Date().toISOString()
+            },
+            ipAddress: 'google_oauth',
+            userAgent: navigator.userAgent,
+            createdAt: new Date().toISOString(),
+            expiresAt: new Date(Date.now() + 8 * 60 * 60 * 1000).toISOString() // 8小时
+          };
+
+          const authToken = `google_token_${Date.now()}`;
+
+          // 设置状态
+          set({
+            currentUser: managementUser,
+            currentSession: managementSession,
+            authToken,
+            isAuthenticated: true,
+            isLoading: false,
+            error: null
+          });
+
+          console.log('✅ Google OAuth用户设置成功:', {
+            userType: managementUser.userType,
+            email: managementUser.email,
+            displayName: managementUser.displayName
+          });
+
+        } catch (error: any) {
+          console.error('❌ 设置Google OAuth用户失败:', error);
+          set({
+            isLoading: false,
+            error: error.message || '设置用户信息失败'
+          });
         }
       },
 

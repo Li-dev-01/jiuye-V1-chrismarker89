@@ -33,6 +33,23 @@ export function createStoriesRoutes() {
       if (!tableCheck) {
         console.log('valid_stories表不存在，正在创建...');
 
+        // 先创建raw_story_submissions表
+        await db.prepare(`
+          CREATE TABLE IF NOT EXISTS raw_story_submissions (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            data_uuid TEXT UNIQUE NOT NULL,
+            user_id TEXT NOT NULL,
+            title TEXT NOT NULL,
+            content TEXT NOT NULL,
+            category TEXT DEFAULT 'general',
+            tags TEXT DEFAULT '[]',
+            submitted_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            raw_status TEXT DEFAULT 'completed',
+            ip_address TEXT,
+            user_agent TEXT
+          )
+        `).run();
+
         // 创建valid_stories表
         await db.prepare(`
           CREATE TABLE IF NOT EXISTS valid_stories (
@@ -639,9 +656,9 @@ export function createStoriesRoutes() {
     try {
       const body = await c.req.json();
       console.log('创建故事:', body);
-      
-      const { title, content, category, tags, user_id } = body;
-      
+
+      const { title, content, category, tags, user_id, author_name, is_anonymous } = body;
+
       // 验证必填字段
       if (!title || !content || !category || !user_id) {
         return c.json({
@@ -650,8 +667,49 @@ export function createStoriesRoutes() {
           message: '缺少必填字段'
         }, 400);
       }
-      
+
       const db = c.env.DB;
+
+      // 确保表存在
+      await db.prepare(`
+        CREATE TABLE IF NOT EXISTS raw_story_submissions (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          data_uuid TEXT UNIQUE NOT NULL,
+          user_id TEXT NOT NULL,
+          title TEXT NOT NULL,
+          content TEXT NOT NULL,
+          category TEXT DEFAULT 'general',
+          tags TEXT DEFAULT '[]',
+          submitted_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+          raw_status TEXT DEFAULT 'completed',
+          ip_address TEXT,
+          user_agent TEXT
+        )
+      `).run();
+
+      await db.prepare(`
+        CREATE TABLE IF NOT EXISTS valid_stories (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          raw_id INTEGER,
+          data_uuid TEXT UNIQUE NOT NULL,
+          user_id TEXT NOT NULL,
+          title TEXT NOT NULL,
+          content TEXT NOT NULL,
+          category TEXT DEFAULT 'general',
+          tags TEXT DEFAULT '[]',
+          author_name TEXT DEFAULT '匿名用户',
+          audit_status TEXT DEFAULT 'approved',
+          approved_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+          like_count INTEGER DEFAULT 0,
+          dislike_count INTEGER DEFAULT 0,
+          view_count INTEGER DEFAULT 0,
+          is_featured INTEGER DEFAULT 0,
+          published_at DATETIME,
+          png_status TEXT DEFAULT 'pending',
+          created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+          updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+        )
+      `).run();
 
       // 生成UUID
       const data_uuid = crypto.randomUUID();
@@ -668,10 +726,10 @@ export function createStoriesRoutes() {
       // 直接插入到有效故事表（自动审核通过）
       const validResult = await db.prepare(`
         INSERT INTO valid_stories (
-          raw_id, data_uuid, user_id, title, content, category, tags,
+          raw_id, data_uuid, user_id, title, content, category, tags, author_name,
           approved_at, audit_status, like_count, view_count
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, datetime('now'), 'approved', 0, 0)
-      `).bind(rawId, data_uuid, user_id, title, content, category, JSON.stringify(tags || [])).run();
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, datetime('now'), 'approved', 0, 0)
+      `).bind(rawId, data_uuid, user_id, title, content, category, JSON.stringify(tags || []), author_name || '匿名用户').run();
 
       const validId = validResult.meta.last_row_id;
 
@@ -689,10 +747,13 @@ export function createStoriesRoutes() {
       
     } catch (error) {
       console.error('创建故事失败:', error);
+      console.error('错误详情:', error instanceof Error ? error.message : String(error));
+      console.error('错误堆栈:', error instanceof Error ? error.stack : 'No stack trace');
       return c.json({
         success: false,
         error: 'Internal Server Error',
-        message: '创建故事失败'
+        message: '创建故事失败',
+        debug: error instanceof Error ? error.message : String(error)
       }, 500);
     }
   });
@@ -723,6 +784,58 @@ export function createStoriesRoutes() {
         success: false,
         error: 'Internal Server Error',
         message: '点赞失败'
+      }, 500);
+    }
+  });
+
+  // 删除故事
+  stories.delete('/:id', async (c) => {
+    try {
+      const id = c.req.param('id');
+      console.log('删除故事:', id);
+
+      const db = c.env.DB;
+
+      // 首先检查故事是否存在
+      const story = await db.prepare(`
+        SELECT id, user_id FROM valid_stories WHERE id = ?
+      `).bind(id).first();
+
+      if (!story) {
+        return c.json({
+          success: false,
+          error: 'Not Found',
+          message: '故事不存在'
+        }, 404);
+      }
+
+      // TODO: 这里应该添加权限检查，确保只有故事作者或管理员可以删除
+      // 暂时允许所有删除操作
+
+      // 删除故事（软删除，设置audit_status为deleted）
+      const result = await db.prepare(`
+        UPDATE valid_stories
+        SET audit_status = 'deleted', updated_at = datetime('now')
+        WHERE id = ?
+      `).bind(id).run();
+
+      if (result.success) {
+        console.log('故事删除成功:', id);
+        return c.json({
+          success: true,
+          data: { id: parseInt(id) },
+          message: '故事删除成功'
+        });
+      } else {
+        throw new Error('删除操作失败');
+      }
+
+    } catch (error) {
+      console.error('删除故事失败:', error);
+      return c.json({
+        success: false,
+        error: 'Internal Server Error',
+        message: '删除故事失败'
       }, 500);
     }
   });

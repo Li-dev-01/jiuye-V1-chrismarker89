@@ -69,8 +69,8 @@ export const GoogleManagementCallbackPage: React.FC = () => {
         message: '正在验证管理员权限...'
       });
 
-      // 调用管理员专用的后端API
-      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/auth/google/management`, {
+      // 调用Google OAuth回调API处理授权码交换
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/auth/google/callback`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

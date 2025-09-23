@@ -69,8 +69,8 @@ export const GoogleQuestionnaireCallbackPage: React.FC = () => {
         message: '正在创建您的匿名身份...'
       });
 
-      // 调用问卷用户专用的后端API
-      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/auth/google/questionnaire`, {
+      // 调用Google OAuth回调API处理授权码交换
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/auth/google/callback`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

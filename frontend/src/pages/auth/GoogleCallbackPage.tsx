@@ -40,7 +40,7 @@ export const GoogleCallbackPage: React.FC = () => {
       },
       body: JSON.stringify({
         code,
-        redirectUri: import.meta.env.VITE_GOOGLE_REDIRECT_URI,
+        redirectUri: `${window.location.origin}/auth/google/callback`,
         userType: 'questionnaire'
       })
     });
@@ -61,7 +61,7 @@ export const GoogleCallbackPage: React.FC = () => {
       },
       body: JSON.stringify({
         code,
-        redirectUri: import.meta.env.VITE_GOOGLE_REDIRECT_URI,
+        redirectUri: `${window.location.origin}/auth/google/callback`,
         userType: 'management'
       })
     });

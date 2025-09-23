@@ -48,13 +48,37 @@ const MyContent: React.FC = () => {
   const [cardsVisible, setCardsVisible] = useState<boolean>(false);
   const [userCards, setUserCards] = useState<any[]>([]);
   
-  // 检查用户权限
-  const hasContentAccess = isAuthenticated && currentUser?.userType === UserType.SEMI_ANONYMOUS;
+  // 检查用户权限 - 与发布故事逻辑保持一致
+  // 如果用户能发布故事，就应该能查看自己的内容
+  const hasContentAccess = !!(currentUser?.uuid);
+
+  // 调试日志 - 增强版
+  console.log('🔍 MyContent权限检查 (简化版):', {
+    isAuthenticated,
+    currentUser: currentUser ? {
+      uuid: currentUser.uuid,
+      userType: currentUser.userType,
+      displayName: currentUser.displayName || currentUser.profile?.displayName,
+      username: currentUser.username,
+      email: currentUser.email
+    } : null,
+    hasContentAccess,
+    checkLogic: 'currentUser?.uuid (与发布故事逻辑一致)'
+  });
+
+  // 对比发布故事的权限检查逻辑
+  const storyPublishAccess = !!(currentUser?.uuid);
+  console.log('📝 对比发布故事权限:', {
+    storyPublishAccess,
+    contentViewAccess: hasContentAccess,
+    isConsistent: storyPublishAccess === hasContentAccess
+  });
   
   useEffect(() => {
     if (hasContentAccess) {
       loadUserContent();
-      loadUserCards();
+      // 暂时禁用卡片功能，避免调用不存在的localhost:8002服务
+      // loadUserCards();
     }
   }, [hasContentAccess]);
   
@@ -62,25 +86,94 @@ const MyContent: React.FC = () => {
   const loadUserContent = async () => {
     setLoading(true);
     try {
-      // 调用真实API获取用户内容
-      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/user/content`, {
+      if (!currentUser?.uuid) {
+        console.warn('用户UUID不存在，无法加载内容');
+        setStories([]);
+        return;
+      }
+
+      console.log('开始加载用户内容，用户UUID:', currentUser.uuid);
+
+      // 获取认证信息
+      const getAuthHeaders = () => {
+        const sessionToken = localStorage.getItem('current_user_session');
+        const universalAuth = localStorage.getItem('universal-auth-storage');
+
+        if (sessionToken) {
+          try {
+            const sessionData = JSON.parse(sessionToken);
+            if (sessionData.sessionId) {
+              return { 'Authorization': `Bearer ${sessionData.sessionId}` };
+            }
+          } catch (e) {
+            console.warn('Failed to parse session token:', e);
+          }
+        }
+
+        if (universalAuth) {
+          try {
+            const authData = JSON.parse(universalAuth);
+            if (authData.state?.currentSession?.sessionId) {
+              return { 'Authorization': `Bearer ${authData.state.currentSession.sessionId}` };
+            }
+          } catch (e) {
+            console.warn('Failed to parse universal auth:', e);
+          }
+        }
+
+        return {};
+      };
+
+      // 调用正确的API端点获取用户故事
+      const apiUrl = `${import.meta.env.VITE_API_BASE_URL}/api/stories/user/${currentUser.uuid}`;
+      console.log('调用API:', apiUrl);
+
+      const response = await fetch(apiUrl, {
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          ...getAuthHeaders(),
           'Content-Type': 'application/json'
         }
       });
 
+      console.log('API响应状态:', response.status, response.statusText);
+
       if (response.ok) {
         const data = await response.json();
-        setStories(data.stories || []);
+        console.log('API响应数据:', data);
+
+        if (data.success && data.data?.stories) {
+          const stories = data.data.stories.map((story: any) => ({
+            id: story.id,
+            uuid: story.uuid || story.data_uuid,
+            title: story.title,
+            content: story.content,
+            summary: story.summary,
+            type: 'story',
+            status: story.audit_status || 'approved',
+            createdAt: story.created_at || story.createdAt,
+            publishedAt: story.published_at || story.publishedAt,
+            category: story.category,
+            authorName: story.author_name || story.authorName,
+            isAnonymous: story.is_anonymous || story.isAnonymous,
+            viewCount: story.view_count || story.viewCount || 0,
+            likeCount: story.like_count || story.likeCount || 0
+          }));
+
+          console.log('处理后的故事数据:', stories);
+          setStories(stories);
+        } else {
+          console.log('API返回数据格式异常:', data);
+          setStories([]);
+        }
       } else {
-        // API未配置或失败时显示空数据
+        console.error('API请求失败:', response.status, response.statusText);
+        const errorText = await response.text();
+        console.error('错误详情:', errorText);
         setStories([]);
-        message.warning('用户内容API未配置，请联系管理员');
       }
     } catch (error) {
-      message.error('加载内容失败');
-      console.error('Load content error:', error);
+      console.error('加载内容失败:', error);
+      setStories([]);
     } finally {
       setLoading(false);
     }
@@ -101,12 +194,71 @@ const MyContent: React.FC = () => {
   // 删除内容
   const deleteContent = async (contentId: number, contentType: string) => {
     try {
-      // 这里需要实现删除内容的API
-      message.success('内容删除成功');
-      loadUserContent();
+      console.log('🗑️ 开始删除内容:', { contentId, contentType });
+
+      // 获取认证信息
+      const getAuthHeaders = () => {
+        const sessionToken = localStorage.getItem('current_user_session');
+        const universalAuth = localStorage.getItem('universal-auth-storage');
+
+        if (sessionToken) {
+          try {
+            const sessionData = JSON.parse(sessionToken);
+            if (sessionData.sessionId) {
+              return { 'Authorization': `Bearer ${sessionData.sessionId}` };
+            }
+          } catch (e) {
+            console.warn('Failed to parse session token:', e);
+          }
+        }
+
+        if (universalAuth) {
+          try {
+            const authData = JSON.parse(universalAuth);
+            if (authData.state?.currentSession?.sessionId) {
+              return { 'Authorization': `Bearer ${authData.state.currentSession.sessionId}` };
+            }
+          } catch (e) {
+            console.warn('Failed to parse universal auth:', e);
+          }
+        }
+
+        return {};
+      };
+
+      // 调用删除API
+      const apiUrl = `${import.meta.env.VITE_API_BASE_URL}/api/stories/${contentId}`;
+      console.log('调用删除API:', apiUrl);
+
+      const response = await fetch(apiUrl, {
+        method: 'DELETE',
+        headers: {
+          ...getAuthHeaders(),
+          'Content-Type': 'application/json'
+        }
+      });
+
+      console.log('删除API响应状态:', response.status, response.statusText);
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log('删除API响应数据:', data);
+
+        if (data.success) {
+          message.success('内容删除成功');
+          // 重新加载用户内容
+          loadUserContent();
+        } else {
+          message.error(data.message || '删除失败');
+        }
+      } else {
+        const errorText = await response.text();
+        console.error('删除API错误:', response.status, errorText);
+        message.error('删除失败，请稍后重试');
+      }
     } catch (error) {
-      message.error('删除失败');
-      console.error('Delete content error:', error);
+      console.error('删除内容失败:', error);
+      message.error('删除失败，请检查网络连接');
     }
   };
   
@@ -224,7 +376,8 @@ const MyContent: React.FC = () => {
             />
           </Tooltip>
           
-          <CardDownloadButton
+          {/* 暂时禁用卡片下载功能，避免调用不存在的localhost:8002服务 */}
+          {/* <CardDownloadButton
             contentType={record.type}
             contentId={record.id}
             buttonText=""
@@ -236,7 +389,14 @@ const MyContent: React.FC = () => {
               loadUserCards();
               loadUserContent();
             }}
-          />
+          /> */}
+          <Tooltip title="下载卡片功能暂时不可用">
+            <Button
+              type="text"
+              disabled
+              icon={<DownloadOutlined />}
+            />
+          </Tooltip>
           
           <Popconfirm
             title="确定要删除这个内容吗？"

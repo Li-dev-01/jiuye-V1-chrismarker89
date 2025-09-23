@@ -33,6 +33,30 @@ export const QuestionnaireLayout: React.FC<QuestionnaireLayoutProps> = ({ childr
   const navigate = useNavigate();
   const { currentUser, logout, isAuthenticated } = useUniversalAuthStore();
 
+  // 获取用户显示名称
+  const getUserDisplayName = () => {
+    if (!currentUser) return '未登录';
+
+    // 如果有displayName，直接使用
+    if (currentUser.displayName) {
+      return currentUser.displayName;
+    }
+
+    // 如果有username，使用username + 后6位ID
+    if (currentUser.username) {
+      const suffix = currentUser.id?.toString().slice(-6) || currentUser.uuid?.slice(-6) || '000000';
+      return `${currentUser.username}_${suffix}`;
+    }
+
+    // 根据用户类型生成显示名称
+    const suffix = currentUser.id?.toString().slice(-6) || currentUser.uuid?.slice(-6) || '000000';
+    if (currentUser.userType === 'semi_anonymous' || currentUser.userType === 'semi-anonymous') {
+      return `半匿名用户_${suffix}`;
+    }
+
+    return `用户_${suffix}`;
+  };
+
   // 问卷项目导航菜单
   const menuItems = [
     {
@@ -64,12 +88,20 @@ export const QuestionnaireLayout: React.FC<QuestionnaireLayoutProps> = ({ childr
     {
       key: 'profile',
       icon: <UserOutlined />,
-      label: '个人信息'
+      label: '个人信息',
+      onClick: () => navigate('/user/profile')
+    },
+    {
+      key: 'my-content',
+      icon: <FileTextOutlined />,
+      label: '我的内容',
+      onClick: () => navigate('/my-content')
     },
     {
       key: 'settings',
       icon: <SettingOutlined />,
-      label: '设置'
+      label: '设置',
+      onClick: () => navigate('/user/settings')
     },
     {
       type: 'divider'
@@ -130,7 +162,7 @@ export const QuestionnaireLayout: React.FC<QuestionnaireLayoutProps> = ({ childr
                       className={styles.avatar}
                     />
                     <span className={styles.username}>
-                      {currentUser.displayName || '匿名用户'}
+                      {getUserDisplayName()}
                     </span>
                   </Space>
                 </Button>

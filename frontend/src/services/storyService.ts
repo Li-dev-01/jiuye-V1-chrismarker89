@@ -44,7 +44,7 @@ export interface CreateStoryData {
   author_name: string;
   is_anonymous: boolean;
   questionnaire_id?: number;
-  user_id: number;
+  user_id: string; // 修改为string类型以支持UUID
 }
 
 export interface StoryListParams {
@@ -96,13 +96,37 @@ class StoryService {
       }
     });
 
-    // 请求拦截器 - 添加认证token
+    // 请求拦截器 - 添加认证信息
     this.client.interceptors.request.use(
       (config) => {
-        const token = localStorage.getItem('auth_token');
-        if (token) {
-          config.headers.Authorization = `Bearer ${token}`;
+        // 尝试多种token获取方式
+        const authToken = localStorage.getItem('auth_token');
+        const sessionToken = localStorage.getItem('current_user_session');
+        const universalAuth = localStorage.getItem('universal-auth-storage');
+
+        // 优先使用会话token
+        if (sessionToken) {
+          try {
+            const sessionData = JSON.parse(sessionToken);
+            if (sessionData.sessionId) {
+              config.headers.Authorization = `Bearer ${sessionData.sessionId}`;
+            }
+          } catch (e) {
+            console.warn('Failed to parse session token:', e);
+          }
+        } else if (universalAuth) {
+          try {
+            const authData = JSON.parse(universalAuth);
+            if (authData.state?.currentSession?.sessionId) {
+              config.headers.Authorization = `Bearer ${authData.state.currentSession.sessionId}`;
+            }
+          } catch (e) {
+            console.warn('Failed to parse universal auth:', e);
+          }
+        } else if (authToken) {
+          config.headers.Authorization = `Bearer ${authToken}`;
         }
+
         return config;
       },
       (error) => {
@@ -128,7 +152,7 @@ class StoryService {
    */
   async createStory(data: CreateStoryData): Promise<StoryResponse> {
     try {
-      const response = await this.client.post('/', data);
+      const response = await this.client.post('', data);
       return response.data;
     } catch (error) {
       console.error('Create story error:', error);

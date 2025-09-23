@@ -88,7 +88,8 @@ const InternalFloatingStatusBar: React.FC = () => {
     if (type === 'voice') {
       navigate('/voices');
     } else {
-      navigate('/stories');
+      // 跳转到故事提交页面
+      navigate('/story-submit');
     }
   }, [isAuthenticated, navigate]);
 

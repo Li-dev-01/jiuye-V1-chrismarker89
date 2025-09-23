@@ -25,6 +25,7 @@ import {
   TagsOutlined
 } from '@ant-design/icons';
 import { useAuth } from '../stores/universalAuthStore';
+import { storyService } from '../services/storyService';
 import styles from './StorySubmitPage.module.css';
 
 const { Title, Paragraph, Text } = Typography;
@@ -77,7 +78,7 @@ export const StorySubmitPage: React.FC = () => {
 
   // 提交故事
   const handleSubmit = async (values: any) => {
-    if (!currentUser?.id) {
+    if (!currentUser?.uuid) {
       message.error('用户信息异常，请重新登录');
       return;
     }
@@ -90,24 +91,28 @@ export const StorySubmitPage: React.FC = () => {
         content: values.content.trim(),
         category: values.category,
         tags: selectedTags,
-        user_id: currentUser.id,
+        user_id: currentUser.uuid,
+        author_name: currentUser.displayName || currentUser.nickname || currentUser.username || '匿名用户',
         is_anonymous: false
       };
 
-      // TODO: 调用故事提交API
-      // const result = await storyService.createStory(storyData);
+      console.log('📝 提交故事数据:', storyData);
 
-      // 模拟API调用
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      // 调用故事提交API
+      const result = await storyService.createStory(storyData);
 
-      message.success('故事发布成功！');
-      
-      // 跳转到故事页面
-      navigate('/stories', {
-        state: {
-          showSuccess: true
-        }
-      });
+      if (result.success) {
+        message.success('故事发布成功！');
+
+        // 跳转到故事页面
+        navigate('/stories', {
+          state: {
+            showSuccess: true
+          }
+        });
+      } else {
+        throw new Error(result.error || '故事发布失败');
+      }
     } catch (error) {
       console.error('故事提交失败:', error);
       message.error('提交失败，请稍后重试');
