@@ -21,22 +21,22 @@ export const ENV_CONFIG = {
     allowBypassInDev: true
   },
   
-  // 登录方式配置
+  // 统一登录配置
   loginMethods: {
-    // 直接登录（传统方式）
-    direct: {
+    // 统一管理入口（唯一入口）
+    management: {
       enabled: true,
-      routes: ['/admin/login', '/management-portal'],
-      description: '直接访问管理登录页面'
+      route: '/management',
+      description: '统一项目管理入口'
     },
-    
+
     // 自动登录（来自多项目中心）
     autoLogin: {
       enabled: true,
       route: '/auth/auto-login',
       description: '来自多项目管理中心的自动登录'
     },
-    
+
     // 开发者快捷登录
     devQuickLogin: {
       enabled: process.env.NODE_ENV === 'development',

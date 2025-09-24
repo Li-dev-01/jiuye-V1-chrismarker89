@@ -21,7 +21,7 @@ export async function corsMiddleware(c: Context<{ Bindings: Env }>, next: Next) 
   const origin = c.req.header('Origin');
 
   // 如果没有环境变量，使用默认值
-  const corsOrigin = env?.CORS_ORIGIN || 'http://localhost:5173,http://localhost:5174,http://localhost:5175,http://localhost:5176,http://localhost:5177';
+  const corsOrigin = env?.CORS_ORIGIN || 'http://localhost:5173,http://localhost:5174,http://localhost:5175,http://localhost:5176,http://localhost:5177,http://localhost:3000,https://*.reviewer-admin-dashboard.pages.dev,https://0d9c0363.reviewer-admin-dashboard.pages.dev';
   const allowedOrigins = corsOrigin.split(',').map((o: string) => o.trim());
 
   // 设置CORS头
@@ -58,7 +58,7 @@ export async function corsMiddleware(c: Context<{ Bindings: Env }>, next: Next) 
   }
 
   c.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-  c.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Request-Time, X-Requested-With, X-API-Version, X-User-ID, X-Human-Token');
+  c.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Request-Time, X-Requested-With, X-API-Version, X-User-ID, X-Human-Token, X-Session-ID');
   c.header('Access-Control-Allow-Credentials', 'true');
   c.header('Access-Control-Max-Age', '86400');
 

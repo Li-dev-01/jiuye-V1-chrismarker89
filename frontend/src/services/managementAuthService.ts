@@ -164,16 +164,46 @@ class ManagementAuthService {
    * 调用远程API
    */
   private async callRemoteAPI(
-    username: string, 
-    password: string, 
+    username: string,
+    password: string,
     userType?: ManagementUserType
   ): Promise<any> {
-    const response = await fetch(`${this.API_BASE_URL}/auth/admin`, {
+    // 首先尝试生成token的端点
+    try {
+      const response = await fetch(`${this.API_BASE_URL}/api/auth/admin/generate-token`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password })
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        if (data.success) {
+          return {
+            success: true,
+            data: {
+              token: data.data.token,
+              user: {
+                id: 'admin',
+                username: data.data.username,
+                userType: data.data.userType,
+                permissions: ['ALL']
+              }
+            }
+          };
+        }
+      }
+    } catch (error) {
+      console.warn('Token生成端点调用失败:', error);
+    }
+
+    // 回退到原来的端点（如果存在）
+    const response = await fetch(`${this.API_BASE_URL}/api/auth/admin`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ 
-        username, 
-        password, 
+      body: JSON.stringify({
+        username,
+        password,
         userType: userType || 'ADMIN',
         deviceInfo: {
           fingerprint: await generateDeviceFingerprint(),

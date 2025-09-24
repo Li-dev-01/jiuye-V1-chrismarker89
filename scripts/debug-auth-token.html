@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>认证Token调试</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 1000px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #1890ff;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .section {
+            margin: 20px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-left: 4px solid #1890ff;
+            border-radius: 4px;
+        }
+        .code {
+            background: #f1f1f1;
+            padding: 10px;
+            border-radius: 4px;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 14px;
+            margin: 10px 0;
+            word-break: break-all;
+            white-space: pre-wrap;
+        }
+        .button {
+            background: #1890ff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 5px;
+        }
+        .button:hover {
+            background: #40a9ff;
+        }
+        .success {
+            color: #52c41a;
+            font-weight: bold;
+        }
+        .error {
+            color: #ff4d4f;
+            font-weight: bold;
+        }
+        .warning {
+            color: #fa8c16;
+            font-weight: bold;
+        }
+        .result {
+            background: #fff;
+            border: 1px solid #d9d9d9;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 10px 0;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 认证Token调试工具</h1>
+        
+        <div class="section">
+            <h3>1. 设置正确的Token</h3>
+            <button class="button" onclick="setCorrectToken()">设置管理员Token</button>
+            <div id="tokenSetResult" class="result"></div>
+        </div>
+
+        <div class="section">
+            <h3>2. 检查localStorage状态</h3>
+            <button class="button" onclick="checkLocalStorage()">检查localStorage</button>
+            <div id="localStorageResult" class="result"></div>
+        </div>
+
+        <div class="section">
+            <h3>3. 测试API请求</h3>
+            <button class="button" onclick="testApiRequest()">测试API请求</button>
+            <div id="apiTestResult" class="result"></div>
+        </div>
+
+        <div class="section">
+            <h3>4. 检查网络请求</h3>
+            <button class="button" onclick="checkNetworkRequests()">监控网络请求</button>
+            <div id="networkResult" class="result"></div>
+        </div>
+
+        <div class="section">
+            <h3>5. 清除所有缓存并重新设置</h3>
+            <button class="button" onclick="clearAndReset()" style="background: #ff4d4f;">清除缓存并重置</button>
+            <div id="resetResult" class="result"></div>
+        </div>
+
+        <div class="section">
+            <h3>6. 快速链接</h3>
+            <button class="button" onclick="openAdminPage()">打开管理员页面</button>
+            <button class="button" onclick="openLoginPage()">打开登录页面</button>
+        </div>
+    </div>
+
+    <script>
+        const CORRECT_TOKEN = 'mgmt_token_SUPER_ADMIN_1758632380252';
+        const ADMIN_URL = 'https://adfe3dcb.college-employment-survey-frontend-l84.pages.dev/admin';
+        const LOGIN_URL = 'https://adfe3dcb.college-employment-survey-frontend-l84.pages.dev/admin/login';
+        const API_BASE = 'https://employment-survey-api-prod.chrismarker89.workers.dev';
+
+        function setCorrectToken() {
+            try {
+                localStorage.setItem('management_auth_token', CORRECT_TOKEN);
+                document.getElementById('tokenSetResult').innerHTML = `
+                    <div class="success">✅ Token设置成功</div>
+                    <div class="code">management_auth_token = ${CORRECT_TOKEN}</div>
+                `;
+            } catch (error) {
+                document.getElementById('tokenSetResult').innerHTML = `
+                    <div class="error">❌ Token设置失败: ${error.message}</div>
+                `;
+            }
+        }
+
+        function checkLocalStorage() {
+            const managementToken = localStorage.getItem('management_auth_token');
+            const authToken = localStorage.getItem('auth_token');
+            const allKeys = Object.keys(localStorage).filter(key => key.includes('token') || key.includes('auth'));
+            
+            document.getElementById('localStorageResult').innerHTML = `
+                <div><strong>management_auth_token:</strong> ${managementToken || '<span class="error">未设置</span>'}</div>
+                <div><strong>auth_token:</strong> ${authToken || '<span class="warning">未设置</span>'}</div>
+                <div><strong>所有认证相关的keys:</strong></div>
+                <div class="code">${allKeys.length > 0 ? allKeys.join('\n') : '无认证相关keys'}</div>
+                <div><strong>localStorage总大小:</strong> ${JSON.stringify(localStorage).length} 字符</div>
+            `;
+        }
+
+        async function testApiRequest() {
+            const token = localStorage.getItem('management_auth_token');
+            
+            if (!token) {
+                document.getElementById('apiTestResult').innerHTML = `
+                    <div class="error">❌ 没有找到management_auth_token，请先设置token</div>
+                `;
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE}/api/admin/dashboard/stats`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                const responseText = await response.text();
+                let responseData;
+                try {
+                    responseData = JSON.parse(responseText);
+                } catch {
+                    responseData = responseText;
+                }
+
+                document.getElementById('apiTestResult').innerHTML = `
+                    <div><strong>请求状态:</strong> ${response.status} ${response.statusText}</div>
+                    <div><strong>使用的Token:</strong> ${token.substring(0, 30)}...</div>
+                    <div><strong>响应数据:</strong></div>
+                    <div class="code">${JSON.stringify(responseData, null, 2)}</div>
+                `;
+            } catch (error) {
+                document.getElementById('apiTestResult').innerHTML = `
+                    <div class="error">❌ API请求失败: ${error.message}</div>
+                `;
+            }
+        }
+
+        function checkNetworkRequests() {
+            // 监控fetch请求
+            const originalFetch = window.fetch;
+            const requests = [];
+
+            window.fetch = function(...args) {
+                const url = args[0];
+                const options = args[1] || {};
+                
+                requests.push({
+                    url: url,
+                    method: options.method || 'GET',
+                    headers: options.headers || {},
+                    timestamp: new Date().toISOString()
+                });
+
+                return originalFetch.apply(this, args);
+            };
+
+            document.getElementById('networkResult').innerHTML = `
+                <div class="success">✅ 网络请求监控已启动</div>
+                <div>现在访问管理员页面，然后点击下面的按钮查看请求</div>
+                <button class="button" onclick="showNetworkRequests()">显示捕获的请求</button>
+                <div id="requestsList"></div>
+            `;
+
+            window.capturedRequests = requests;
+        }
+
+        function showNetworkRequests() {
+            const requests = window.capturedRequests || [];
+            const adminRequests = requests.filter(req => 
+                req.url.includes('/api/admin/') || req.url.includes('dashboard') || req.url.includes('questionnaire')
+            );
+
+            document.getElementById('requestsList').innerHTML = `
+                <div><strong>捕获到的管理API请求 (${adminRequests.length}个):</strong></div>
+                <div class="code">${JSON.stringify(adminRequests, null, 2)}</div>
+            `;
+        }
+
+        function clearAndReset() {
+            // 清除所有localStorage
+            localStorage.clear();
+            
+            // 重新设置正确的token
+            localStorage.setItem('management_auth_token', CORRECT_TOKEN);
+            
+            document.getElementById('resetResult').innerHTML = `
+                <div class="success">✅ 已清除所有localStorage并重新设置token</div>
+                <div class="warning">⚠️ 请刷新管理员页面</div>
+                <div class="code">新设置的token: ${CORRECT_TOKEN}</div>
+            `;
+        }
+
+        function openAdminPage() {
+            window.open(ADMIN_URL, '_blank');
+        }
+
+        function openLoginPage() {
+            window.open(LOGIN_URL, '_blank');
+        }
+
+        // 页面加载时自动检查状态
+        window.onload = function() {
+            checkLocalStorage();
+        };
+    </script>
+</body>
+</html>

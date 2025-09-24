@@ -81,7 +81,7 @@
         <div class="step">
             <h3>步骤 1: 复制管理员Token</h3>
             <p>最新生成的管理员token：</p>
-            <div class="code" id="token">mgmt_token_SUPER_ADMIN_1758631557171</div>
+            <div class="code" id="token">mgmt_token_SUPER_ADMIN_1758632380252</div>
             <button class="button" onclick="copyToken()">复制Token</button>
         </div>
 
@@ -96,7 +96,7 @@
         <div class="step">
             <h3>步骤 3: 设置认证Token</h3>
             <p>在管理员页面按 <strong>F12</strong> 打开开发者工具，在 <strong>Console</strong> 标签页中执行：</p>
-            <div class="code">localStorage.setItem('management_auth_token', 'mgmt_token_SUPER_ADMIN_1758631557171');</div>
+            <div class="code">localStorage.setItem('management_auth_token', 'mgmt_token_SUPER_ADMIN_1758632380252');</div>
             <button class="button" onclick="copyCommand()">复制命令</button>
         </div>
 
@@ -139,7 +139,7 @@
     </div>
 
     <script>
-        const token = 'mgmt_token_SUPER_ADMIN_1758631557171';
+        const token = 'mgmt_token_SUPER_ADMIN_1758632380252';
         
         function copyToken() {
             navigator.clipboard.writeText(token).then(() => {

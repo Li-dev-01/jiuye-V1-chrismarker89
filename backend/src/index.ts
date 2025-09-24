@@ -18,6 +18,8 @@ import { createDatabaseMonitorRoutes } from './routes/databaseMonitor';
 import health from './routes/health';
 import violationsRoutes from './routes/violations';
 import { createTieredAuditRoutes } from './routes/tiered-audit';
+import { createStoryAuditRoutes } from './routes/storyAudit';
+import { initAuditDatabase, checkAuditDatabaseInit } from './utils/initAuditDatabase';
 import { googleAuth } from './routes/google-auth';
 import { googleWhitelist } from './routes/google-whitelist';
 import { userLoginHistory } from './routes/user-login-history';
@@ -37,6 +39,25 @@ const app = new Hono<{ Bindings: Env }>();
 
 // 全局中间件
 app.use('*', corsMiddleware);
+
+// 数据库初始化中间件
+app.use('*', async (c, next) => {
+  try {
+    // 检查审核系统数据库是否已初始化
+    const isInitialized = await checkAuditDatabaseInit(c.env.DB);
+
+    if (!isInitialized) {
+      console.log('[MIDDLEWARE] 初始化审核系统数据库...');
+      await initAuditDatabase(c.env.DB);
+      console.log('[MIDDLEWARE] 审核系统数据库初始化完成');
+    }
+  } catch (error) {
+    console.error('[MIDDLEWARE] 数据库初始化失败:', error);
+    // 不阻断请求，继续执行
+  }
+
+  await next();
+});
 
 /**
  * @swagger
@@ -147,8 +168,14 @@ app.get('/health-test', async (c) => {
 //   return c.html(html);
 // });
 
-// API路由前缀
-app.route('/api', createApiRoutes());
+// API路由前缀 - 直接注册异步创建的路由
+(async () => {
+  const apiRoutes = await createApiRoutes();
+  app.route('/api', apiRoutes);
+})();
+
+// 故事审核系统路由
+app.route('/api/stories', createStoryAuditRoutes());
 
 // 404处理
 app.notFound((c) => {
@@ -171,7 +198,7 @@ app.onError((err, c) => {
 });
 
 // 创建API路由
-function createApiRoutes() {
+async function createApiRoutes() {
   const api = new Hono<{ Bindings: Env }>();
 
   // 认证路由
@@ -242,6 +269,33 @@ function createApiRoutes() {
   }
 
   // 问卷用户认证路由已移除
+
+  // 简化认证路由 (专为reviewer-admin-dashboard设计)
+  try {
+    const simpleAuth = (await import('./routes/simpleAuth')).default;
+    api.route('/simple-auth', simpleAuth);
+    console.log('✅ Simple auth routes registered successfully');
+  } catch (error) {
+    console.error('❌ Failed to register simple auth routes:', error);
+  }
+
+  // 简化审核员路由 (专为reviewer-admin-dashboard设计)
+  try {
+    const simpleReviewer = (await import('./routes/simpleReviewer')).default;
+    api.route('/simple-reviewer', simpleReviewer);
+    console.log('✅ Simple reviewer routes registered successfully');
+  } catch (error) {
+    console.error('❌ Failed to register simple reviewer routes:', error);
+  }
+
+  // 简化管理员路由 (专为reviewer-admin-dashboard设计)
+  try {
+    const simpleAdmin = (await import('./routes/simpleAdmin')).default;
+    api.route('/simple-admin', simpleAdmin);
+    console.log('✅ Simple admin routes registered successfully');
+  } catch (error) {
+    console.error('❌ Failed to register simple admin routes:', error);
+  }
 
   // UUID用户管理路由
   api.route('/uuid', createUUIDRoutes());

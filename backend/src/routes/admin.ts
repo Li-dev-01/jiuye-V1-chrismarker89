@@ -7,6 +7,7 @@ import { Hono } from 'hono';
 import type { Env } from '../types/api';
 import { createDatabaseService } from '../db';
 import { authMiddleware, requireRole } from '../middleware/auth';
+import { unifiedAuthMiddleware, requireUnifiedRole, requireUnifiedDomain, UnifiedUserType, UserDomain } from '../middleware/unifiedAuth';
 import { securityValidation, validatePathParams, validateRequestBody, validateQueryParams, commonValidationRules } from '../middleware/validation';
 import { securityCheck } from '../middleware/security';
 import { cache, cacheConfigs, invalidateCache } from '../middleware/cache';
@@ -83,8 +84,11 @@ export function createAdminRoutes() {
   // 应用全局安全中间件
   admin.use('*', securityCheck);
   admin.use('*', securityValidation);
-  admin.use('*', authMiddleware);
-  admin.use('*', requireRole('admin', 'super_admin'));
+
+  // 使用统一认证中间件
+  admin.use('*', unifiedAuthMiddleware);
+  admin.use('*', requireUnifiedDomain(UserDomain.MANAGEMENT));
+  admin.use('*', requireUnifiedRole(UnifiedUserType.ADMIN, UnifiedUserType.SUPER_ADMIN));
 
   // 仪表板统计 (缓存5分钟)
   admin.get('/dashboard/stats',

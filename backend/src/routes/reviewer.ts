@@ -5,8 +5,19 @@ import type { Env } from '../types/api';
 import { DatabaseManager, paginatedQuery } from '../utils/database';
 import { successResponse, errorResponse, jsonResponse, parsePaginationParams, validateRequired } from '../utils/response';
 import type { AuditRecord, ReviewRequest, ReviewStats } from '../types/entities';
+import { authMiddleware, requireRole } from '../middleware/auth';
+import { unifiedAuthMiddleware, requireUnifiedRole, requireUnifiedDomain, UnifiedUserType, UserDomain } from '../middleware/unifiedAuth';
+import { securityCheck } from '../middleware/security';
 
 const reviewer = new Hono<{ Bindings: Env }>();
+
+// 应用全局安全和认证中间件
+reviewer.use('*', securityCheck);
+
+// 使用统一认证中间件
+reviewer.use('*', unifiedAuthMiddleware);
+reviewer.use('*', requireUnifiedDomain(UserDomain.MANAGEMENT));
+reviewer.use('*', requireUnifiedRole(UnifiedUserType.REVIEWER, UnifiedUserType.ADMIN, UnifiedUserType.SUPER_ADMIN));
 
 // 生成模拟审核数据
 function generateMockReviews(contentType: string, pageSize: number) {
@@ -376,6 +387,72 @@ reviewer.get('/stats', async (c) => {
   } catch (error) {
     console.error('Get review stats error:', error);
     return errorResponse('Failed to fetch review stats', 500);
+  }
+});
+
+// 获取审核员仪表板数据
+reviewer.get('/dashboard', async (c) => {
+  try {
+    const db = new DatabaseManager(c.env);
+
+    // 获取审核统计
+    const stats = await db.queryFirst<{
+      total: number;
+      pending: number;
+      approved: number;
+      rejected: number;
+    }>(`
+      SELECT
+        COUNT(*) as total,
+        SUM(CASE WHEN audit_result = 'pending' THEN 1 ELSE 0 END) as pending,
+        SUM(CASE WHEN audit_result = 'approved' THEN 1 ELSE 0 END) as approved,
+        SUM(CASE WHEN audit_result = 'rejected' THEN 1 ELSE 0 END) as rejected
+      FROM audit_records
+    `);
+
+    // 获取今日审核数量
+    const todayStats = await db.queryFirst<{
+      today_reviews: number;
+    }>(`
+      SELECT COUNT(*) as today_reviews
+      FROM audit_records
+      WHERE DATE(created_at) = DATE(NOW())
+    `);
+
+    // 获取最近的审核活动
+    const recentActivity = await db.queryAll<{
+      id: number;
+      content_type: string;
+      audit_result: string;
+      created_at: string;
+    }>(`
+      SELECT id, content_type, audit_result, created_at
+      FROM audit_records
+      ORDER BY created_at DESC
+      LIMIT 5
+    `);
+
+    const dashboardData = {
+      stats: {
+        total: stats?.total || 0,
+        pending: stats?.pending || 0,
+        approved: stats?.approved || 0,
+        rejected: stats?.rejected || 0,
+        todayReviews: todayStats?.today_reviews || 0
+      },
+      recentActivity: recentActivity || [],
+      summary: {
+        pendingCount: stats?.pending || 0,
+        completedToday: todayStats?.today_reviews || 0,
+        approvalRate: stats?.total ? Math.round(((stats?.approved || 0) / stats.total) * 100) : 0
+      }
+    };
+
+    return jsonResponse(successResponse(dashboardData, '仪表板数据获取成功'));
+
+  } catch (error) {
+    console.error('Get dashboard data error:', error);
+    return errorResponse('Failed to fetch dashboard data', 500);
   }
 });
 

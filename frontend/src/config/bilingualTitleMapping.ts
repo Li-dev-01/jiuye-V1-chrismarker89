@@ -67,8 +67,8 @@ export const CHART_TITLE_BILINGUAL_MAP: Record<string, BilingualTitle> = {
     chinese: '同龄人就业率观察',
     english: 'Peer Employment Rate Observation'
   },
-  '当前身份状态分布': {
-    chinese: '当前身份状态分布',
+  '身份状态分布': {
+    chinese: '身份状态分布',
     english: 'Current Status Distribution'
   },
   '就业准备情况': {
@@ -99,9 +99,9 @@ export const CHART_TITLE_BILINGUAL_MAP: Record<string, BilingualTitle> = {
     chinese: '学年分布',
     english: 'Academic Year Distribution'
   },
-  '就业准备情况': {
-    chinese: '就业准备情况',
-    english: 'Career Preparation Status'
+  '学生就业准备情况': {
+    chinese: '学生就业准备情况',
+    english: 'Student Career Preparation Status'
   },
 
   // 生活成本压力

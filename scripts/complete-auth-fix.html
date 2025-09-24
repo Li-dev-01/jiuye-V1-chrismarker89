@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>完整认证修复工具</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1000px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .status {
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border-left: 4px solid;
+        }
+        .error { background: #fee; border-color: #f00; color: #c00; }
+        .success { background: #efe; border-color: #0a0; color: #060; }
+        .warning { background: #ffc; border-color: #fa0; color: #a60; }
+        .info { background: #eef; border-color: #00a; color: #006; }
+        button {
+            background: #007cba;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px 5px;
+            font-size: 16px;
+        }
+        button:hover { background: #005a87; }
+        button.danger { background: #dc3545; }
+        button.danger:hover { background: #c82333; }
+        button.success { background: #28a745; }
+        button.success:hover { background: #218838; }
+        .code {
+            background: #f8f8f8;
+            border: 1px solid #ddd;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            margin: 10px 0;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .section {
+            margin: 20px 0;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 完整认证修复工具</h1>
+        
+        <div id="status" class="status info">
+            准备进行认证诊断...
+        </div>
+        
+        <div class="grid">
+            <div class="section">
+                <h3>🔍 诊断工具</h3>
+                <button onclick="fullDiagnosis()">🔍 完整诊断</button>
+                <button onclick="checkLocalStorage()">📋 检查存储</button>
+                <button onclick="checkServices()">⚙️ 检查服务</button>
+                <button onclick="testAPI()">🧪 测试API</button>
+            </div>
+            
+            <div class="section">
+                <h3>🔧 修复工具</h3>
+                <button onclick="fixAuth()" class="success">🔧 修复认证</button>
+                <button onclick="forceLogin()">🚀 强制登录</button>
+                <button onclick="clearAuth()" class="danger">🗑️ 清除认证</button>
+                <button onclick="refreshPage()">🔄 刷新页面</button>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h3>📊 诊断结果</h3>
+            <div id="diagnosis" class="code"></div>
+        </div>
+        
+        <div class="section">
+            <h3>📝 操作日志</h3>
+            <div id="logs" class="code"></div>
+        </div>
+    </div>
+
+    <script>
+        const TOKEN = 'mgmt_token_SUPER_ADMIN_1758634751974';
+        
+        function log(message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            const logs = document.getElementById('logs');
+            logs.innerHTML += `[${timestamp}] ${message}\n`;
+            logs.scrollTop = logs.scrollHeight;
+            console.log(message);
+        }
+        
+        function updateStatus(message, type = 'info') {
+            const status = document.getElementById('status');
+            status.className = `status ${type}`;
+            status.textContent = message;
+        }
+        
+        function updateDiagnosis(content) {
+            const diagnosis = document.getElementById('diagnosis');
+            diagnosis.innerHTML = content;
+        }
+        
+        function checkLocalStorage() {
+            log('🔍 检查localStorage...');
+            
+            const token = localStorage.getItem('management_auth_token');
+            const user = localStorage.getItem('management_current_user');
+            const session = localStorage.getItem('management_current_session');
+            
+            const result = {
+                token: token ? {
+                    exists: true,
+                    value: token.substring(0, 30) + '...',
+                    isCorrect: token === TOKEN
+                } : { exists: false },
+                user: user ? {
+                    exists: true,
+                    parsed: JSON.parse(user)
+                } : { exists: false },
+                session: session ? {
+                    exists: true,
+                    parsed: JSON.parse(session)
+                } : { exists: false }
+            };
+            
+            updateDiagnosis(JSON.stringify(result, null, 2));
+            
+            if (!token) {
+                updateStatus('❌ Token缺失', 'error');
+                log('❌ 认证token缺失');
+            } else if (token !== TOKEN) {
+                updateStatus('⚠️ Token不正确', 'warning');
+                log('⚠️ 认证token不正确');
+            } else {
+                updateStatus('✅ Token正确', 'success');
+                log('✅ 认证token正确');
+            }
+            
+            return result;
+        }
+        
+        function checkServices() {
+            log('⚙️ 检查认证服务...');
+            
+            const result = {};
+            
+            // 检查managementAuthService
+            if (typeof managementAuthService !== 'undefined') {
+                result.managementAuthService = {
+                    available: true,
+                    token: managementAuthService.getAuthToken(),
+                    user: managementAuthService.getCurrentUser(),
+                    session: managementAuthService.getCurrentSession(),
+                    isValid: managementAuthService.isSessionValid()
+                };
+            } else {
+                result.managementAuthService = { available: false };
+            }
+            
+            updateDiagnosis(JSON.stringify(result, null, 2));
+            log('⚙️ 服务检查完成');
+            
+            return result;
+        }
+        
+        async function testAPI() {
+            log('🧪 测试API调用...');
+            
+            const token = localStorage.getItem('management_auth_token');
+            if (!token) {
+                updateStatus('❌ 请先修复认证', 'error');
+                log('❌ 请先修复认证');
+                return;
+            }
+            
+            const results = {};
+            
+            try {
+                // 测试仪表板API
+                log('📊 测试仪表板API...');
+                const dashboardResponse = await fetch('/api/admin/dashboard/stats', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                results.dashboard = {
+                    status: dashboardResponse.status,
+                    ok: dashboardResponse.ok,
+                    data: dashboardResponse.ok ? await dashboardResponse.json() : await dashboardResponse.text()
+                };
+                
+                // 测试用户管理API
+                log('👥 测试用户管理API...');
+                const usersResponse = await fetch('/api/admin/users', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                results.users = {
+                    status: usersResponse.status,
+                    ok: usersResponse.ok,
+                    data: usersResponse.ok ? await usersResponse.json() : await usersResponse.text()
+                };
+                
+                updateDiagnosis(JSON.stringify(results, null, 2));
+                
+                if (results.dashboard.ok && results.users.ok) {
+                    updateStatus('✅ API测试成功', 'success');
+                    log('✅ 所有API测试成功');
+                } else {
+                    updateStatus('❌ API测试失败', 'error');
+                    log('❌ 部分API测试失败');
+                }
+                
+            } catch (error) {
+                updateStatus('❌ API调用失败', 'error');
+                log(`❌ API调用失败: ${error.message}`);
+                updateDiagnosis(`API调用错误: ${error.message}`);
+            }
+            
+            return results;
+        }
+        
+        function fixAuth() {
+            log('🔧 开始修复认证状态...');
+            
+            const currentUser = {
+                id: 'admin',
+                username: 'admin',
+                email: 'admin@system.local',
+                userType: 'SUPER_ADMIN',
+                permissions: ['ALL', 'USER_MANAGEMENT', 'CONTENT_MANAGEMENT', 'SYSTEM_MANAGEMENT'],
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString()
+            };
+            
+            const currentSession = {
+                sessionId: 'session_' + Date.now(),
+                userId: 'admin',
+                userType: 'SUPER_ADMIN',
+                expires_at: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
+                expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
+                isActive: true,
+                createdAt: new Date().toISOString()
+            };
+            
+            // 设置localStorage
+            localStorage.setItem('management_auth_token', TOKEN);
+            localStorage.setItem('management_current_user', JSON.stringify(currentUser));
+            localStorage.setItem('management_current_session', JSON.stringify(currentSession));
+            
+            updateStatus('✅ 认证状态已修复', 'success');
+            log('✅ 认证状态已修复');
+            log('🔄 请刷新管理页面测试...');
+            
+            // 自动检查修复结果
+            setTimeout(() => {
+                checkLocalStorage();
+                checkServices();
+            }, 500);
+        }
+        
+        function forceLogin() {
+            log('🚀 强制登录...');
+            
+            fixAuth();
+            
+            // 如果有managementAuthStore，强制更新状态
+            if (typeof window !== 'undefined' && window.managementAuthStore) {
+                window.managementAuthStore.getState().initializeAuth();
+                log('🔄 已强制刷新认证store');
+            }
+            
+            // 触发页面事件
+            window.dispatchEvent(new Event('storage'));
+            window.dispatchEvent(new CustomEvent('auth-updated'));
+            
+            log('🚀 强制登录完成');
+        }
+        
+        function clearAuth() {
+            log('🗑️ 清除认证状态...');
+            
+            localStorage.removeItem('management_auth_token');
+            localStorage.removeItem('management_current_user');
+            localStorage.removeItem('management_current_session');
+            
+            updateStatus('🗑️ 认证状态已清除', 'warning');
+            log('🗑️ 认证状态已清除');
+            
+            setTimeout(() => {
+                checkLocalStorage();
+                checkServices();
+            }, 500);
+        }
+        
+        function refreshPage() {
+            log('🔄 刷新页面...');
+            window.location.reload();
+        }
+        
+        function fullDiagnosis() {
+            log('🔍 开始完整诊断...');
+            updateStatus('🔍 正在进行完整诊断...', 'info');
+            
+            const localStorage = checkLocalStorage();
+            const services = checkServices();
+            
+            // 综合诊断结果
+            const diagnosis = {
+                localStorage,
+                services,
+                timestamp: new Date().toISOString(),
+                recommendations: []
+            };
+            
+            // 生成建议
+            if (!localStorage.token.exists) {
+                diagnosis.recommendations.push('需要设置认证token');
+            } else if (!localStorage.token.isCorrect) {
+                diagnosis.recommendations.push('需要更正认证token');
+            }
+            
+            if (!localStorage.user.exists) {
+                diagnosis.recommendations.push('需要设置用户信息');
+            }
+            
+            if (!localStorage.session.exists) {
+                diagnosis.recommendations.push('需要设置会话信息');
+            }
+            
+            if (services.managementAuthService && !services.managementAuthService.isValid) {
+                diagnosis.recommendations.push('会话已过期，需要重新设置');
+            }
+            
+            updateDiagnosis(JSON.stringify(diagnosis, null, 2));
+            
+            if (diagnosis.recommendations.length === 0) {
+                updateStatus('✅ 诊断完成，认证状态正常', 'success');
+                log('✅ 诊断完成，认证状态正常');
+            } else {
+                updateStatus('⚠️ 诊断完成，发现问题', 'warning');
+                log('⚠️ 诊断完成，发现以下问题:');
+                diagnosis.recommendations.forEach(rec => log(`  - ${rec}`));
+            }
+        }
+        
+        // 页面加载时自动进行诊断
+        window.onload = function() {
+            fullDiagnosis();
+        };
+    </script>
+</body>
+</html>

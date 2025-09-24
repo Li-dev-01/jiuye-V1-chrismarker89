@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>前端认证状态调试</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #1890ff;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .section {
+            margin: 20px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-left: 4px solid #1890ff;
+            border-radius: 4px;
+        }
+        .code {
+            background: #f1f1f1;
+            padding: 10px;
+            border-radius: 4px;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 12px;
+            margin: 10px 0;
+            word-break: break-all;
+            white-space: pre-wrap;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .button {
+            background: #1890ff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 5px;
+        }
+        .button:hover {
+            background: #40a9ff;
+        }
+        .success {
+            color: #52c41a;
+            font-weight: bold;
+        }
+        .error {
+            color: #ff4d4f;
+            font-weight: bold;
+        }
+        .warning {
+            color: #fa8c16;
+            font-weight: bold;
+        }
+        .result {
+            background: #fff;
+            border: 1px solid #d9d9d9;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 10px 0;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 前端认证状态调试工具</h1>
+        
+        <div class="section">
+            <h3>1. 设置完整的管理员认证状态</h3>
+            <button class="button" onclick="setupCompleteAuth()">设置完整认证状态</button>
+            <div id="setupResult" class="result"></div>
+        </div>
+
+        <div class="section">
+            <h3>2. 检查localStorage状态</h3>
+            <button class="button" onclick="checkLocalStorage()">检查localStorage</button>
+            <div id="localStorageResult" class="result"></div>
+        </div>
+
+        <div class="section">
+            <h3>3. 模拟前端认证检查</h3>
+            <button class="button" onclick="simulateAuthCheck()">模拟认证检查</button>
+            <div id="authCheckResult" class="result"></div>
+        </div>
+
+        <div class="section">
+            <h3>4. 测试管理员API调用</h3>
+            <button class="button" onclick="testAdminAPIs()">测试所有管理员API</button>
+            <div id="apiTestResult" class="result"></div>
+        </div>
+
+        <div class="section">
+            <h3>5. 强制刷新管理员页面</h3>
+            <button class="button" onclick="forceRefreshAdmin()">强制刷新并跳转</button>
+            <div id="refreshResult" class="result"></div>
+        </div>
+    </div>
+
+    <script>
+        const TOKEN = 'mgmt_token_SUPER_ADMIN_1758632380252';
+        const API_BASE = 'https://employment-survey-api-prod.chrismarker89.workers.dev';
+
+        function setupCompleteAuth() {
+            // 设置所有必要的认证信息
+            const currentUser = {
+                id: 'super_admin',
+                username: 'super_admin',
+                email: 'admin@system.local',
+                userType: 'SUPER_ADMIN',
+                permissions: ['ALL', 'USER_MANAGEMENT', 'CONTENT_MANAGEMENT', 'SYSTEM_MANAGEMENT'],
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString()
+            };
+
+            const currentSession = {
+                sessionId: 'session_' + Date.now(),
+                userId: 'super_admin',
+                userType: 'SUPER_ADMIN',
+                expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
+                createdAt: new Date().toISOString()
+            };
+
+            // 设置localStorage
+            localStorage.setItem('management_auth_token', TOKEN);
+            localStorage.setItem('management_current_user', JSON.stringify(currentUser));
+            localStorage.setItem('management_current_session', JSON.stringify(currentSession));
+
+            // 设置其他可能需要的状态
+            localStorage.setItem('management_auth_state', JSON.stringify({
+                isAuthenticated: true,
+                currentUser: currentUser,
+                currentSession: currentSession,
+                authToken: TOKEN
+            }));
+
+            document.getElementById('setupResult').innerHTML = `
+                <div class="success">✅ 完整认证状态已设置</div>
+                <div><strong>用户类型:</strong> ${currentUser.userType}</div>
+                <div><strong>权限:</strong> ${currentUser.permissions.join(', ')}</div>
+                <div><strong>Token:</strong> ${TOKEN.substring(0, 30)}...</div>
+                <div><strong>会话过期时间:</strong> ${currentSession.expiresAt}</div>
+            `;
+        }
+
+        function checkLocalStorage() {
+            const keys = Object.keys(localStorage);
+            const managementKeys = keys.filter(k => k.includes('management'));
+            
+            const authData = {};
+            managementKeys.forEach(key => {
+                try {
+                    const value = localStorage.getItem(key);
+                    authData[key] = value.startsWith('{') ? JSON.parse(value) : value;
+                } catch (e) {
+                    authData[key] = localStorage.getItem(key);
+                }
+            });
+
+            document.getElementById('localStorageResult').innerHTML = `
+                <div><strong>管理相关的localStorage键:</strong></div>
+                <div class="code">${managementKeys.join('\n')}</div>
+                <div><strong>认证数据:</strong></div>
+                <div class="code">${JSON.stringify(authData, null, 2)}</div>
+            `;
+        }
+
+        function simulateAuthCheck() {
+            // 模拟前端的认证检查逻辑
+            const authToken = localStorage.getItem('management_auth_token');
+            const currentUser = localStorage.getItem('management_current_user');
+            const currentSession = localStorage.getItem('management_current_session');
+
+            let parsedUser = null;
+            let parsedSession = null;
+
+            try {
+                parsedUser = currentUser ? JSON.parse(currentUser) : null;
+                parsedSession = currentSession ? JSON.parse(currentSession) : null;
+            } catch (e) {
+                console.error('解析认证数据失败:', e);
+            }
+
+            // 检查会话是否有效
+            const isSessionValid = parsedSession && new Date(parsedSession.expiresAt) > new Date();
+            const isAuthenticated = !!(authToken && parsedUser && parsedSession && isSessionValid);
+
+            const result = {
+                hasToken: !!authToken,
+                hasUser: !!parsedUser,
+                hasSession: !!parsedSession,
+                isSessionValid: isSessionValid,
+                isAuthenticated: isAuthenticated,
+                userType: parsedUser?.userType,
+                permissions: parsedUser?.permissions,
+                sessionExpiry: parsedSession?.expiresAt
+            };
+
+            const status = isAuthenticated ? 'success' : 'error';
+            const icon = isAuthenticated ? '✅' : '❌';
+
+            document.getElementById('authCheckResult').innerHTML = `
+                <div class="${status}">${icon} 认证状态检查结果</div>
+                <div class="code">${JSON.stringify(result, null, 2)}</div>
+                ${!isAuthenticated ? '<div class="error">⚠️ 认证检查失败，这就是为什么管理页面不加载数据的原因！</div>' : ''}
+            `;
+        }
+
+        async function testAdminAPIs() {
+            const apis = [
+                { name: '仪表板统计', url: '/api/admin/dashboard/stats' },
+                { name: '用户列表', url: '/api/admin/users?page=1&pageSize=5' },
+                { name: '审核员列表', url: '/api/admin/reviewers' },
+                { name: '内容标签', url: '/api/admin/content/tags' },
+                { name: '数据库表', url: '/api/admin/database/tables' }
+            ];
+
+            let results = [];
+
+            for (const api of apis) {
+                try {
+                    const response = await fetch(`${API_BASE}${api.url}`, {
+                        headers: {
+                            'Authorization': `Bearer ${TOKEN}`,
+                            'Content-Type': 'application/json'
+                        }
+                    });
+
+                    const data = await response.json();
+                    results.push({
+                        name: api.name,
+                        status: response.status,
+                        success: response.ok,
+                        dataCount: data.data?.items?.length || data.data?.length || (data.data ? 1 : 0)
+                    });
+                } catch (error) {
+                    results.push({
+                        name: api.name,
+                        status: 'ERROR',
+                        success: false,
+                        error: error.message
+                    });
+                }
+            }
+
+            const allSuccess = results.every(r => r.success);
+            const icon = allSuccess ? '✅' : '❌';
+
+            document.getElementById('apiTestResult').innerHTML = `
+                <div class="${allSuccess ? 'success' : 'error'}">${icon} API测试结果</div>
+                <div class="code">${JSON.stringify(results, null, 2)}</div>
+                ${allSuccess ? '<div class="success">所有API都正常工作！问题确实在前端认证状态。</div>' : ''}
+            `;
+        }
+
+        function forceRefreshAdmin() {
+            // 确保认证状态正确设置
+            setupCompleteAuth();
+            
+            // 等待一下让localStorage生效
+            setTimeout(() => {
+                // 打开管理员页面
+                const adminUrl = 'https://adfe3dcb.college-employment-survey-frontend-l84.pages.dev/admin';
+                window.open(adminUrl, '_blank');
+                
+                document.getElementById('refreshResult').innerHTML = `
+                    <div class="success">✅ 已设置认证状态并打开管理员页面</div>
+                    <div>如果页面仍然显示空白数据，请：</div>
+                    <div>1. 按F12打开开发者工具</div>
+                    <div>2. 在Console中检查是否有错误</div>
+                    <div>3. 在Network标签中查看API请求是否发送</div>
+                    <div>4. 刷新页面试试</div>
+                `;
+            }, 500);
+        }
+
+        // 页面加载时自动检查
+        window.onload = function() {
+            checkLocalStorage();
+            simulateAuthCheck();
+        };
+    </script>
+</body>
+</html>

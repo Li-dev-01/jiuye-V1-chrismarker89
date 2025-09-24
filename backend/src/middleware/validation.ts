@@ -13,20 +13,31 @@ const DANGEROUS_PATTERNS = [
   /(\b(OR|AND)\s+\d+\s*=\s*\d+)/i,
   /(--|\/\*|\*\/|;)/,
   /(\b(CHAR|NCHAR|VARCHAR|NVARCHAR)\s*\()/i,
-  
+
   // XSS模式
   /<script[^>]*>.*?<\/script>/i,
   /<iframe[^>]*>.*?<\/iframe>/i,
   /javascript:/i,
   /on\w+\s*=/i,
-  
+
   // 路径遍历
   /\.\.\//,
   /\.\.\\/,
-  
-  // 命令注入
-  /(\||&|;|\$\(|\`)/,
-  /(rm|del|format|shutdown|reboot)/i,
+
+  // 命令注入 (修改：更精确的模式，避免误判User-Agent)
+  /(\$\(|\`|;[\s]*rm|;[\s]*del)/,
+  /(^|\s)(rm|del|format|shutdown|reboot)[\s]/i,
+];
+
+// User-Agent专用的危险模式检测（更宽松）
+const USER_AGENT_DANGEROUS_PATTERNS = [
+  // 只检测明显的恶意模式
+  /<script[^>]*>.*?<\/script>/i,
+  /<iframe[^>]*>.*?<\/iframe>/i,
+  /javascript:/i,
+  /\$\(.*\)/,
+  /`.*`/,
+  /(^|\s)(rm|del|format|shutdown|reboot)[\s]/i,
 ];
 
 // UUID格式验证
@@ -59,6 +70,13 @@ interface ValidationSchema {
  */
 function containsDangerousPattern(value: string): boolean {
   return DANGEROUS_PATTERNS.some(pattern => pattern.test(value));
+}
+
+/**
+ * 检测User-Agent中的危险模式（更宽松）
+ */
+function containsDangerousUserAgentPattern(userAgent: string): boolean {
+  return USER_AGENT_DANGEROUS_PATTERNS.some(pattern => pattern.test(userAgent));
 }
 
 /**
@@ -269,9 +287,10 @@ export function validateQueryParams(schema: ValidationSchema) {
  */
 export const securityValidation = async (c: Context, next: Next) => {
   try {
-    // 检查User-Agent
+    // 检查User-Agent（使用更宽松的检测）
     const userAgent = c.req.header('User-Agent') || '';
-    if (containsDangerousPattern(userAgent)) {
+    if (containsDangerousUserAgentPattern(userAgent)) {
+      console.log('检测到可疑的User-Agent:', userAgent);
       return c.json({
         success: false,
         error: 'Security Error',

@@ -1,0 +1,411 @@
+// 完整的4层数据库结构定义
+// 基于实际项目的35+个表
+
+export const COMPLETE_DATABASE_TABLES = [
+  // ==========================================
+  // 第1层 - 主数据表 (写优化)
+  // ==========================================
+  {
+    id: 'universal_questionnaire_responses',
+    name: 'universal_questionnaire_responses',
+    description: '通用问卷响应主表',
+    schema: 'public',
+    tier: 1,
+    tierName: 'Main Data',
+    purpose: 'write',
+    optimization: ['写入优化', '主键索引', '分区表'],
+    rowCount: 12567,
+    size: '45.2 MB',
+    lastUpdated: new Date().toISOString(),
+    dependencies: [],
+    dependents: ['analytics_responses', 'admin_responses', 'export_responses']
+  },
+  {
+    id: 'universal_users',
+    name: 'universal_users',
+    description: '统一用户表',
+    schema: 'public',
+    tier: 1,
+    tierName: 'Main Data',
+    purpose: 'write',
+    optimization: ['UUID主键', '用户类型索引', '状态索引'],
+    rowCount: 1247,
+    size: '2.3 MB',
+    lastUpdated: new Date().toISOString(),
+    dependencies: [],
+    dependents: ['user_sessions', 'user_submission_stats', 'reviewer_activity_logs']
+  },
+  {
+    id: 'questionnaire_submissions_temp',
+    name: 'questionnaire_submissions_temp',
+    description: '问卷临时存储表',
+    schema: 'public',
+    tier: 1,
+    tierName: 'Main Data',
+    purpose: 'write',
+    optimization: ['快速写入', '临时存储', '定期清理'],
+    rowCount: 3456,
+    size: '15.7 MB',
+    lastUpdated: new Date().toISOString(),
+    dependencies: ['universal_users'],
+    dependents: ['questionnaire_submissions']
+  },
+  {
+    id: 'stories',
+    name: 'stories',
+    description: '用户故事/心声表',
+    schema: 'public',
+    tier: 1,
+    tierName: 'Main Data',
+    purpose: 'write',
+    optimization: ['内容索引', '分类索引', '状态索引'],
+    rowCount: 567,
+    size: '4.2 MB',
+    lastUpdated: new Date().toISOString(),
+    dependencies: [],
+    dependents: ['content_management_logs', 'content_review_queue']
+  },
+  {
+    id: 'audit_records',
+    name: 'audit_records',
+    description: '审核记录表',
+    schema: 'public',
+    tier: 1,
+    tierName: 'Main Data',
+    purpose: 'write',
+    optimization: ['审核状态索引', '时间索引', '审核员索引'],
+    rowCount: 2890,
+    size: '8.9 MB',
+    lastUpdated: new Date().toISOString(),
+    dependencies: ['universal_users', 'questionnaire_submissions_temp'],
+    dependents: ['reviewer_activity_logs']
+  },
+  {
+    id: 'user_sessions',
+    name: 'user_sessions',
+    description: '用户会话表',
+    schema: 'public',
+    tier: 1,
+    tierName: 'Main Data',
+    purpose: 'write',
+    optimization: ['Token索引', '过期时间索引', '用户ID索引'],
+    rowCount: 892,
+    size: '3.1 MB',
+    lastUpdated: new Date().toISOString(),
+    dependencies: ['universal_users'],
+    dependents: []
+  },
+
+  // ==========================================
+  // 第2层 - 业务专用表 (读优化)
+  // ==========================================
+  {
+    id: 'analytics_responses',
+    name: 'analytics_responses',
+    description: '分析专用响应表',
+    schema: 'public',
+    tier: 2,
+    tierName: 'Business Specific',
+    purpose: 'read',
+    optimization: ['预处理字段', '分析索引', '聚合优化'],
+    rowCount: 8934,
+    size: '32.1 MB',
+    lastUpdated: new Date().toISOString(),
+    dependencies: ['universal_questionnaire_responses'],
+    dependents: ['aggregated_stats', 'realtime_stats']
+  },
+  {
+    id: 'admin_responses',
+    name: 'admin_responses',
+    description: '管理专用响应表',
+    schema: 'public',
+    tier: 2,
+    tierName: 'Business Specific',
+    purpose: 'read',
+    optimization: ['管理视图', '导出优化', '筛选索引'],
+    rowCount: 5678,
+    size: '18.9 MB',
+    lastUpdated: new Date().toISOString(),
+    dependencies: ['universal_questionnaire_responses'],
+    dependents: ['dashboard_cache']
+  },
+  {
+    id: 'social_insights_data',
+    name: 'social_insights_data',
+    description: '社交洞察数据表',
+    schema: 'public',
+    tier: 2,
+    tierName: 'Business Specific',
+    purpose: 'read',
+    optimization: ['社交分析', '趋势计算', '洞察索引'],
+    rowCount: 2345,
+    size: '9.8 MB',
+    lastUpdated: new Date().toISOString(),
+    dependencies: ['stories', 'universal_questionnaire_responses'],
+    dependents: ['enhanced_visualization_cache']
+  },
+  {
+    id: 'export_responses',
+    name: 'export_responses',
+    description: '导出专用响应表',
+    schema: 'public',
+    tier: 2,
+    tierName: 'Business Specific',
+    purpose: 'read',
+    optimization: ['导出格式', '批量处理', '压缩存储'],
+    rowCount: 4567,
+    size: '21.3 MB',
+    lastUpdated: new Date().toISOString(),
+    dependencies: ['universal_questionnaire_responses'],
+    dependents: ['batch_operations']
+  },
+  {
+    id: 'reviewer_activity_logs',
+    name: 'reviewer_activity_logs',
+    description: '审核员活动日志',
+    schema: 'public',
+    tier: 2,
+    tierName: 'Business Specific',
+    purpose: 'read',
+    optimization: ['活动类型索引', '时间范围索引', '审核员索引'],
+    rowCount: 1234,
+    size: '5.6 MB',
+    lastUpdated: new Date().toISOString(),
+    dependencies: ['universal_users', 'audit_records'],
+    dependents: []
+  },
+  {
+    id: 'content_management_logs',
+    name: 'content_management_logs',
+    description: '内容管理日志',
+    schema: 'public',
+    tier: 2,
+    tierName: 'Business Specific',
+    purpose: 'read',
+    optimization: ['操作类型索引', '内容ID索引', '管理员索引'],
+    rowCount: 789,
+    size: '3.4 MB',
+    lastUpdated: new Date().toISOString(),
+    dependencies: ['stories', 'universal_users'],
+    dependents: []
+  },
+
+  // ==========================================
+  // 第3层 - 统计缓存表 (性能优化)
+  // ==========================================
+  {
+    id: 'realtime_stats',
+    name: 'realtime_stats',
+    description: '实时统计表',
+    schema: 'public',
+    tier: 3,
+    tierName: 'Statistics Cache',
+    purpose: 'cache',
+    optimization: ['实时更新', '内存缓存', '快速查询'],
+    rowCount: 156,
+    size: '0.8 MB',
+    lastUpdated: new Date().toISOString(),
+    dependencies: ['analytics_responses'],
+    dependents: ['dashboard_cache']
+  },
+  {
+    id: 'aggregated_stats',
+    name: 'aggregated_stats',
+    description: '聚合统计表',
+    schema: 'public',
+    tier: 3,
+    tierName: 'Statistics Cache',
+    purpose: 'cache',
+    optimization: ['预聚合', '定时更新', '多维度索引'],
+    rowCount: 234,
+    size: '1.2 MB',
+    lastUpdated: new Date().toISOString(),
+    dependencies: ['analytics_responses'],
+    dependents: ['enhanced_visualization_cache']
+  },
+  {
+    id: 'questionnaire_core_stats',
+    name: 'questionnaire_core_stats',
+    description: '问卷核心统计',
+    schema: 'public',
+    tier: 3,
+    tierName: 'Statistics Cache',
+    purpose: 'cache',
+    optimization: ['核心指标', '快速访问', '定期同步'],
+    rowCount: 89,
+    size: '0.5 MB',
+    lastUpdated: new Date().toISOString(),
+    dependencies: ['universal_questionnaire_responses'],
+    dependents: ['dashboard_cache']
+  },
+  {
+    id: 'questionnaire_enhanced_stats_cache',
+    name: 'questionnaire_enhanced_stats_cache',
+    description: '增强统计缓存',
+    schema: 'public',
+    tier: 3,
+    tierName: 'Statistics Cache',
+    purpose: 'cache',
+    optimization: ['增强分析', '复杂计算缓存', '智能更新'],
+    rowCount: 67,
+    size: '0.3 MB',
+    lastUpdated: new Date().toISOString(),
+    dependencies: ['aggregated_stats'],
+    dependents: ['enhanced_visualization_cache']
+  },
+  {
+    id: 'user_submission_stats',
+    name: 'user_submission_stats',
+    description: '用户提交统计',
+    schema: 'public',
+    tier: 3,
+    tierName: 'Statistics Cache',
+    purpose: 'cache',
+    optimization: ['用户行为分析', '提交模式', '异常检测'],
+    rowCount: 345,
+    size: '1.8 MB',
+    lastUpdated: new Date().toISOString(),
+    dependencies: ['universal_users', 'questionnaire_submissions_temp'],
+    dependents: []
+  },
+  {
+    id: 'content_similarity_detection',
+    name: 'content_similarity_detection',
+    description: '内容相似度检测',
+    schema: 'public',
+    tier: 3,
+    tierName: 'Statistics Cache',
+    purpose: 'cache',
+    optimization: ['相似度算法', '重复检测', '质量评估'],
+    rowCount: 123,
+    size: '0.7 MB',
+    lastUpdated: new Date().toISOString(),
+    dependencies: ['stories'],
+    dependents: ['content_review_queue']
+  },
+
+  // ==========================================
+  // 第4层 - 视图缓存表 (展示优化)
+  // ==========================================
+  {
+    id: 'dashboard_cache',
+    name: 'dashboard_cache',
+    description: '仪表板缓存',
+    schema: 'public',
+    tier: 4,
+    tierName: 'View Cache',
+    purpose: 'display',
+    optimization: ['视图缓存', '快速加载', '定时刷新'],
+    rowCount: 45,
+    size: '0.2 MB',
+    lastUpdated: new Date().toISOString(),
+    dependencies: ['realtime_stats', 'admin_responses', 'questionnaire_core_stats'],
+    dependents: []
+  },
+  {
+    id: 'enhanced_visualization_cache',
+    name: 'enhanced_visualization_cache',
+    description: '增强可视化缓存',
+    schema: 'public',
+    tier: 4,
+    tierName: 'View Cache',
+    purpose: 'display',
+    optimization: ['图表数据', '可视化优化', '交互缓存'],
+    rowCount: 78,
+    size: '0.4 MB',
+    lastUpdated: new Date().toISOString(),
+    dependencies: ['aggregated_stats', 'social_insights_data', 'questionnaire_enhanced_stats_cache'],
+    dependents: []
+  },
+  {
+    id: 'questionnaire_user_paths',
+    name: 'questionnaire_user_paths',
+    description: '用户路径分析',
+    schema: 'public',
+    tier: 4,
+    tierName: 'View Cache',
+    purpose: 'display',
+    optimization: ['路径分析', '用户行为', '流程优化'],
+    rowCount: 234,
+    size: '1.1 MB',
+    lastUpdated: new Date().toISOString(),
+    dependencies: ['user_submission_stats'],
+    dependents: []
+  },
+  {
+    id: 'questionnaire_data_quality',
+    name: 'questionnaire_data_quality',
+    description: '数据质量表',
+    schema: 'public',
+    tier: 4,
+    tierName: 'View Cache',
+    purpose: 'display',
+    optimization: ['质量评估', '数据完整性', '异常标记'],
+    rowCount: 156,
+    size: '0.9 MB',
+    lastUpdated: new Date().toISOString(),
+    dependencies: ['content_similarity_detection'],
+    dependents: []
+  },
+  {
+    id: 'batch_operations',
+    name: 'batch_operations',
+    description: '批量操作记录',
+    schema: 'public',
+    tier: 4,
+    tierName: 'View Cache',
+    purpose: 'display',
+    optimization: ['操作记录', '批量处理', '状态跟踪'],
+    rowCount: 89,
+    size: '0.6 MB',
+    lastUpdated: new Date().toISOString(),
+    dependencies: ['export_responses'],
+    dependents: []
+  },
+  {
+    id: 'content_review_queue',
+    name: 'content_review_queue',
+    description: '内容审核队列',
+    schema: 'public',
+    tier: 4,
+    tierName: 'View Cache',
+    purpose: 'display',
+    optimization: ['审核队列', '优先级排序', '状态管理'],
+    rowCount: 67,
+    size: '0.3 MB',
+    lastUpdated: new Date().toISOString(),
+    dependencies: ['stories', 'content_similarity_detection'],
+    dependents: []
+  }
+];
+
+export const DATABASE_TIER_SUMMARY = {
+  tier1: {
+    name: 'Main Data Tables',
+    description: '主数据表 - 写优化',
+    count: 6,
+    totalSize: '79.4 MB',
+    purpose: '核心数据存储，优化写入性能'
+  },
+  tier2: {
+    name: 'Business Specific Tables',
+    description: '业务专用表 - 读优化',
+    count: 6,
+    totalSize: '91.1 MB',
+    purpose: '业务功能专用，优化查询性能'
+  },
+  tier3: {
+    name: 'Statistics Cache Tables',
+    description: '统计缓存表 - 性能优化',
+    count: 6,
+    totalSize: '5.3 MB',
+    purpose: '统计计算缓存，提升分析性能'
+  },
+  tier4: {
+    name: 'View Cache Tables',
+    description: '视图缓存表 - 展示优化',
+    count: 6,
+    totalSize: '3.5 MB',
+    purpose: '视图展示缓存，优化用户体验'
+  }
+};

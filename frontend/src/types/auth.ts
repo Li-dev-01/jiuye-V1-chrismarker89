@@ -195,13 +195,13 @@ export const ROUTE_PERMISSIONS: Record<string, Permission[]> = {
   '/admin/analytics': ['view_admin_analytics']
 };
 
-// 登录入口映射
+// 统一登录入口映射
 export const LOGIN_ROUTES: Record<UserRole, string> = {
   guest: '/auth/login',
   user: '/auth/login',
-  reviewer: '/reviewer/login',
-  admin: '/admin/login',
-  super_admin: '/admin/login'
+  reviewer: '/management',
+  admin: '/management',
+  super_admin: '/management'
 };
 
 // 默认重定向路由

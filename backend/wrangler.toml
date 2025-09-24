@@ -22,6 +22,10 @@ database_id = "25eee5bd-9aee-439a-8723-c73bf5f4f3d9"
 binding = "R2_BUCKET"
 bucket_name = "employment-survey-storage"
 
+# AI 配置 - Cloudflare Workers AI
+[ai]
+binding = "AI"
+
 # 定时任务配置 - 多级同步服务
 [triggers]
 crons = [

@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>审核员系统修复测试</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1000px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .status {
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border-left: 4px solid;
+        }
+        .error { background: #fee; border-color: #f00; color: #c00; }
+        .success { background: #efe; border-color: #0a0; color: #060; }
+        .warning { background: #ffc; border-color: #fa0; color: #a60; }
+        .info { background: #eef; border-color: #00a; color: #006; }
+        button {
+            background: #007cba;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px 5px;
+            font-size: 16px;
+        }
+        button:hover { background: #005a87; }
+        button.success { background: #28a745; }
+        button.success:hover { background: #218838; }
+        .code {
+            background: #f8f8f8;
+            border: 1px solid #ddd;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            margin: 10px 0;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .section {
+            margin: 20px 0;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 审核员系统修复测试</h1>
+        
+        <div id="status" class="status info">
+            准备测试审核员系统修复...
+        </div>
+        
+        <div class="grid">
+            <div class="section">
+                <h3>🔍 认证测试</h3>
+                <button onclick="testAuth()">🔐 测试认证状态</button>
+                <button onclick="setupReviewerAuth()">👤 设置审核员认证</button>
+                <button onclick="testFloatingBar()">🎈 测试悬浮窗口</button>
+            </div>
+            
+            <div class="section">
+                <h3>📊 API测试</h3>
+                <button onclick="testReviewerAPI()">📡 测试审核员API</button>
+                <button onclick="testWithToken()">🔑 带Token测试</button>
+                <button onclick="openReviewerDashboard()" class="success">🚀 打开审核员仪表板</button>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h3>📋 测试结果</h3>
+            <div id="results" class="code"></div>
+        </div>
+        
+        <div class="section">
+            <h3>📝 操作日志</h3>
+            <div id="logs" class="code"></div>
+        </div>
+    </div>
+
+    <script>
+        const REVIEWER_TOKEN = 'mgmt_token_REVIEWER_1758634751974';
+        
+        function log(message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            const logs = document.getElementById('logs');
+            logs.innerHTML += `[${timestamp}] ${message}\n`;
+            logs.scrollTop = logs.scrollHeight;
+            console.log(message);
+        }
+        
+        function updateStatus(message, type = 'info') {
+            const status = document.getElementById('status');
+            status.className = `status ${type}`;
+            status.textContent = message;
+        }
+        
+        function updateResults(content) {
+            const results = document.getElementById('results');
+            results.innerHTML = content;
+        }
+        
+        function testAuth() {
+            log('🔍 测试认证状态...');
+            
+            const token = localStorage.getItem('management_auth_token');
+            const user = localStorage.getItem('management_current_user');
+            const session = localStorage.getItem('management_current_session');
+            
+            const authStatus = {
+                hasToken: !!token,
+                hasUser: !!user,
+                hasSession: !!session,
+                tokenType: token ? (token.includes('REVIEWER') ? 'REVIEWER' : token.includes('ADMIN') ? 'ADMIN' : 'UNKNOWN') : 'NONE'
+            };
+            
+            updateResults(JSON.stringify(authStatus, null, 2));
+            
+            if (authStatus.hasToken && authStatus.hasUser && authStatus.hasSession) {
+                updateStatus('✅ 认证状态正常', 'success');
+                log('✅ 认证状态正常');
+            } else {
+                updateStatus('❌ 认证状态异常', 'error');
+                log('❌ 认证状态异常，需要设置审核员认证');
+            }
+        }
+        
+        function setupReviewerAuth() {
+            log('👤 设置审核员认证...');
+            
+            const reviewerUser = {
+                id: 'reviewer',
+                username: 'reviewer',
+                email: 'reviewer@system.local',
+                userType: 'REVIEWER',
+                permissions: ['review_questionnaires', 'review_stories', 'review_voices'],
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString()
+            };
+            
+            const reviewerSession = {
+                sessionId: 'reviewer_session_' + Date.now(),
+                userId: 'reviewer',
+                userType: 'REVIEWER',
+                expires_at: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
+                expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
+                isActive: true,
+                createdAt: new Date().toISOString()
+            };
+            
+            // 设置localStorage
+            localStorage.setItem('management_auth_token', REVIEWER_TOKEN);
+            localStorage.setItem('management_current_user', JSON.stringify(reviewerUser));
+            localStorage.setItem('management_current_session', JSON.stringify(reviewerSession));
+            
+            updateStatus('✅ 审核员认证已设置', 'success');
+            log('✅ 审核员认证已设置');
+            
+            // 验证设置结果
+            setTimeout(() => {
+                testAuth();
+            }, 500);
+        }
+        
+        async function testReviewerAPI() {
+            log('📡 测试审核员API...');
+            
+            const token = localStorage.getItem('management_auth_token');
+            if (!token) {
+                updateStatus('❌ 请先设置审核员认证', 'error');
+                log('❌ 请先设置审核员认证');
+                return;
+            }
+            
+            try {
+                const apiUrl = 'https://employment-survey-api-prod.chrismarker89.workers.dev/api/reviewer/stats';
+                
+                log(`📡 调用API: ${apiUrl}`);
+                log(`🔑 使用Token: ${token.substring(0, 20)}...`);
+                
+                const response = await fetch(apiUrl, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    }
+                });
+                
+                log(`📊 响应状态: ${response.status} ${response.statusText}`);
+                
+                const result = await response.json();
+                
+                updateResults(JSON.stringify(result, null, 2));
+                
+                if (response.ok && result.success) {
+                    updateStatus('✅ 审核员API调用成功', 'success');
+                    log('✅ 审核员API调用成功');
+                } else {
+                    updateStatus('❌ 审核员API调用失败', 'error');
+                    log(`❌ 审核员API调用失败: ${result.error || '未知错误'}`);
+                }
+                
+            } catch (error) {
+                updateStatus('❌ 网络请求失败', 'error');
+                log(`❌ 网络请求失败: ${error.message}`);
+                updateResults(`网络错误: ${error.message}`);
+            }
+        }
+        
+        async function testWithToken() {
+            log('🔑 测试带Token的API调用...');
+            
+            // 先设置认证，然后测试API
+            setupReviewerAuth();
+            
+            setTimeout(async () => {
+                await testReviewerAPI();
+            }, 1000);
+        }
+        
+        function testFloatingBar() {
+            log('🎈 测试悬浮窗口显示逻辑...');
+            
+            const currentPath = window.location.pathname;
+            
+            // 模拟不同路径的悬浮窗口显示逻辑
+            const testPaths = [
+                '/',
+                '/analytics',
+                '/stories',
+                '/admin/dashboard',
+                '/reviewer/dashboard',
+                '/management-portal'
+            ];
+            
+            const results = testPaths.map(path => {
+                const questionnaireRoutes = ['/', '/analytics', '/stories', '/voices', '/questionnaire'];
+                const isQuestionnaireRoute = questionnaireRoutes.some(route => 
+                    path === route || path.startsWith(route + '/')
+                );
+                const isManagementRoute = path.startsWith('/admin') || 
+                                         path.startsWith('/reviewer') || 
+                                         path.startsWith('/management');
+                
+                const shouldShow = isQuestionnaireRoute && !isManagementRoute;
+                
+                return {
+                    path,
+                    isQuestionnaireRoute,
+                    isManagementRoute,
+                    shouldShowFloatingBar: shouldShow
+                };
+            });
+            
+            updateResults(JSON.stringify(results, null, 2));
+            
+            const managementPaths = results.filter(r => r.isManagementRoute && !r.shouldShowFloatingBar);
+            if (managementPaths.length > 0) {
+                updateStatus('✅ 悬浮窗口逻辑正确', 'success');
+                log('✅ 悬浮窗口在管理页面正确隐藏');
+            } else {
+                updateStatus('⚠️ 悬浮窗口逻辑需要检查', 'warning');
+                log('⚠️ 悬浮窗口逻辑可能有问题');
+            }
+        }
+        
+        function openReviewerDashboard() {
+            log('🚀 打开审核员仪表板...');
+            
+            // 确保有认证
+            const token = localStorage.getItem('management_auth_token');
+            if (!token) {
+                setupReviewerAuth();
+                setTimeout(() => {
+                    window.open('https://college-employment-survey-frontend-l84.pages.dev/reviewer/dashboard', '_blank');
+                }, 1000);
+            } else {
+                window.open('https://college-employment-survey-frontend-l84.pages.dev/reviewer/dashboard', '_blank');
+            }
+        }
+        
+        // 页面加载时自动测试认证状态
+        window.onload = function() {
+            testAuth();
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>修复前端认证问题</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .status {
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border-left: 4px solid;
+        }
+        .error { background: #fee; border-color: #f00; color: #c00; }
+        .success { background: #efe; border-color: #0a0; color: #060; }
+        .warning { background: #ffc; border-color: #fa0; color: #a60; }
+        .info { background: #eef; border-color: #00a; color: #006; }
+        button {
+            background: #007cba;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px 5px;
+            font-size: 16px;
+        }
+        button:hover { background: #005a87; }
+        .code {
+            background: #f8f8f8;
+            border: 1px solid #ddd;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 修复前端认证问题</h1>
+        
+        <div id="status" class="status info">
+            正在检查认证状态...
+        </div>
+        
+        <div id="details" class="code"></div>
+        
+        <div>
+            <button onclick="checkAuth()">🔍 检查认证状态</button>
+            <button onclick="fixAuth()">🔧 修复认证</button>
+            <button onclick="testAPI()">🧪 测试API</button>
+            <button onclick="clearAuth()">🗑️ 清除认证</button>
+        </div>
+        
+        <div id="logs" class="code" style="max-height: 400px; overflow-y: auto;"></div>
+    </div>
+
+    <script>
+        const TOKEN = 'mgmt_token_SUPER_ADMIN_1758634751974';
+        
+        function log(message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            const logs = document.getElementById('logs');
+            logs.innerHTML += `[${timestamp}] ${message}\n`;
+            logs.scrollTop = logs.scrollHeight;
+            console.log(message);
+        }
+        
+        function updateStatus(message, type = 'info') {
+            const status = document.getElementById('status');
+            status.className = `status ${type}`;
+            status.textContent = message;
+        }
+        
+        function checkAuth() {
+            log('🔍 开始检查认证状态...');
+            
+            // 检查localStorage
+            const token = localStorage.getItem('management_auth_token');
+            const user = localStorage.getItem('management_current_user');
+            const session = localStorage.getItem('management_current_session');
+            
+            const details = document.getElementById('details');
+            details.innerHTML = `当前localStorage状态:
+Token: ${token ? token.substring(0, 30) + '...' : 'null'}
+User: ${user ? 'exists' : 'null'}
+Session: ${session ? 'exists' : 'null'}`;
+            
+            if (!token) {
+                updateStatus('❌ 认证token缺失', 'error');
+                log('❌ 认证token缺失');
+            } else if (token !== TOKEN) {
+                updateStatus('⚠️ 认证token不正确', 'warning');
+                log('⚠️ 认证token不正确');
+            } else {
+                updateStatus('✅ 认证token正确', 'success');
+                log('✅ 认证token正确');
+            }
+        }
+        
+        function fixAuth() {
+            log('🔧 开始修复认证状态...');
+            
+            const currentUser = {
+                id: 'admin',
+                username: 'admin',
+                email: 'admin@system.local',
+                userType: 'SUPER_ADMIN',
+                permissions: ['ALL', 'USER_MANAGEMENT', 'CONTENT_MANAGEMENT', 'SYSTEM_MANAGEMENT'],
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString()
+            };
+            
+            const currentSession = {
+                sessionId: 'session_' + Date.now(),
+                userId: 'admin',
+                userType: 'SUPER_ADMIN',
+                expires_at: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
+                expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
+                isActive: true,
+                createdAt: new Date().toISOString()
+            };
+            
+            // 设置localStorage
+            localStorage.setItem('management_auth_token', TOKEN);
+            localStorage.setItem('management_current_user', JSON.stringify(currentUser));
+            localStorage.setItem('management_current_session', JSON.stringify(currentSession));
+            
+            updateStatus('✅ 认证状态已修复', 'success');
+            log('✅ 认证状态已修复');
+            log('🔄 请刷新管理页面测试...');
+            
+            // 自动检查修复结果
+            setTimeout(checkAuth, 500);
+        }
+        
+        async function testAPI() {
+            log('🧪 开始测试API调用...');
+            
+            const token = localStorage.getItem('management_auth_token');
+            if (!token) {
+                updateStatus('❌ 请先修复认证', 'error');
+                log('❌ 请先修复认证');
+                return;
+            }
+            
+            try {
+                // 测试仪表板API
+                log('📊 测试仪表板API...');
+                const response = await fetch('/api/admin/dashboard/stats', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    updateStatus('✅ API测试成功', 'success');
+                    log('✅ 仪表板API测试成功');
+                    log(`📊 数据: ${JSON.stringify(data, null, 2)}`);
+                } else {
+                    updateStatus(`❌ API返回错误: ${response.status}`, 'error');
+                    log(`❌ 仪表板API返回错误: ${response.status}`);
+                    const errorText = await response.text();
+                    log(`错误详情: ${errorText}`);
+                }
+            } catch (error) {
+                updateStatus('❌ API调用失败', 'error');
+                log(`❌ API调用失败: ${error.message}`);
+            }
+        }
+        
+        function clearAuth() {
+            log('🗑️ 清除认证状态...');
+            
+            localStorage.removeItem('management_auth_token');
+            localStorage.removeItem('management_current_user');
+            localStorage.removeItem('management_current_session');
+            
+            updateStatus('🗑️ 认证状态已清除', 'warning');
+            log('🗑️ 认证状态已清除');
+            
+            setTimeout(checkAuth, 500);
+        }
+        
+        // 页面加载时自动检查
+        window.onload = function() {
+            checkAuth();
+        };
+    </script>
+</body>
+</html>

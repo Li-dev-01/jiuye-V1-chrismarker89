@@ -1,7 +1,28 @@
 /**
  * 分级审核服务
  * 实现三级分级审核系统，根据平台状态动态调整审核严格程度
+ * 集成AI辅助审核功能，专门针对就业平台内容安全
  */
+
+import { getRecommendedModelConfig } from '../utils/aiModelChecker';
+import { CloudflareEmploymentSafetyChecker, ContentSafetyResult } from '../utils/employmentContentSafety';
+
+// AI审核配置
+interface AIAuditConfig {
+  enabled: boolean;
+  workerUrl: string;
+  timeout: number;
+  fallbackToRules: boolean;
+  confidenceThreshold: number;
+}
+
+const AI_AUDIT_CONFIG: AIAuditConfig = {
+  enabled: true,
+  workerUrl: 'https://ai-content-moderator.your-domain.workers.dev',
+  timeout: 5000, // 5秒超时
+  fallbackToRules: true,
+  confidenceThreshold: 0.7
+};
 
 // 分级审核配置
 export const AUDIT_LEVELS = {
@@ -81,13 +102,38 @@ export interface AuditViolation {
 
 export interface AuditResult {
   passed: boolean;
-  action: 'approve' | 'reject' | 'ai_review' | 'manual_review';
+  action: 'approve' | 'reject' | 'ai_review' | 'manual_review' | 'ai_and_rules_flagged' | 'ai_approved' | string;
   requires_manual: boolean;
   confidence: number;
   reason: string;
   risk_score: number;
   violations: AuditViolation[];
   audit_level: string;
+  audit_type?: 'rule_based' | 'ai_assisted' | 'hybrid';
+  ai_analysis?: AIAuditResult;
+}
+
+export interface AIAuditResult {
+  riskScore: number;
+  confidence: number;
+  recommendation: 'approve' | 'review' | 'reject';
+  safetyResult?: ContentSafetyResult; // 详细的安全检测结果
+  details: {
+    classification: any;
+    sentiment: any;
+    safety: any;
+    semantic?: any;
+    employmentRelevance?: any;
+  };
+  processingTime: number;
+  modelVersions: {
+    classification: string;
+    sentiment: string;
+    safety: string;
+    employmentSafety?: string;
+  };
+  audit_type: 'ai_assisted';
+  cached?: boolean;
 }
 
 export interface AuditStats {
@@ -101,6 +147,7 @@ export interface AuditStats {
 // 全局状态管理
 export class TieredAuditManager {
   private currentLevel: keyof typeof AUDIT_LEVELS = 'level1';
+  private env: any; // Cloudflare Workers环境，包含AI绑定
   private stats: AuditStats = {
     total_submissions: 0,
     violation_count: 0,
@@ -108,6 +155,10 @@ export class TieredAuditManager {
     manual_review_count: 0,
     unique_ips: new Set()
   };
+
+  constructor(env?: any) {
+    this.env = env;
+  }
 
   /**
    * 文本预处理
@@ -344,25 +395,41 @@ export class TieredAuditManager {
   }
 
   /**
-   * 检查内容
+   * 检查内容 - 集成AI辅助审核
    */
-  public checkContent(content: string, contentType: string = 'story', userIP?: string): AuditResult {
+  public async checkContent(content: string, contentType: string = 'story', userIP?: string): Promise<AuditResult> {
     // 预处理内容
     const processedContent = this.preprocessText(content);
-    
+
+    // 并行执行规则审核和AI审核
+    const [ruleBasedResult, aiResult] = await Promise.all([
+      this.performRuleBasedAudit(processedContent, contentType, userIP),
+      this.performAIAudit(content, contentType, userIP)
+    ]);
+
+    // 智能决策融合
+    const finalResult = this.mergeAuditResults(ruleBasedResult, aiResult);
+
+    // 更新统计
+    this.updateStats(finalResult, finalResult.violations, userIP);
+
+    return finalResult;
+  }
+
+  /**
+   * 执行基于规则的审核
+   */
+  private performRuleBasedAudit(content: string, contentType: string, userIP?: string): AuditResult {
     // 应用当前级别的规则
-    const violations = this.applyLevelRules(processedContent, contentType);
-    
+    const violations = this.applyLevelRules(content, contentType);
+
     // 计算风险分数
     const config = AUDIT_LEVELS[this.currentLevel];
     const riskScore = this.calculateRiskScore(violations, config.rule_strictness);
-    
+
     // 做出决策
     const decision = this.makeDecision(riskScore, violations);
-    
-    // 更新统计
-    this.updateStats(decision, violations, userIP);
-    
+
     return {
       passed: decision.passed,
       action: decision.action,
@@ -371,8 +438,249 @@ export class TieredAuditManager {
       reason: decision.reason,
       risk_score: riskScore,
       violations: violations,
-      audit_level: this.currentLevel
+      audit_level: this.currentLevel,
+      audit_type: 'rule_based'
     };
+  }
+
+  /**
+   * 执行AI辅助审核 - 增强版，集成就业平台专用安全检测
+   */
+  private async performAIAudit(content: string, contentType: string, userIP?: string): Promise<AIAuditResult | null> {
+    if (!AI_AUDIT_CONFIG.enabled) {
+      return null;
+    }
+
+    try {
+      const startTime = Date.now();
+
+      // 如果有AI绑定，使用本地AI检测
+      if (this.env?.AI) {
+        return await this.performLocalAIAudit(content, contentType, userIP);
+      }
+
+      // 否则使用远程AI Worker
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), AI_AUDIT_CONFIG.timeout);
+
+      const response = await fetch(`${AI_AUDIT_CONFIG.workerUrl}/analyze`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          content,
+          contentType,
+          metadata: {
+            ip: userIP,
+            timestamp: new Date().toISOString()
+          }
+        }),
+        signal: controller.signal
+      });
+
+      clearTimeout(timeoutId);
+
+      if (!response.ok) {
+        throw new Error(`AI audit failed: ${response.status}`);
+      }
+
+      const result = await response.json();
+
+      if (result.success) {
+        return {
+          ...result.data,
+          audit_type: 'ai_assisted',
+          cached: result.cached || false,
+          processingTime: Date.now() - startTime
+        };
+      } else {
+        throw new Error(result.error || 'AI audit failed');
+      }
+
+    } catch (error) {
+      console.warn('AI审核失败，使用规则审核:', error);
+
+      // 记录AI审核失败
+      this.stats.ai_failures = (this.stats.ai_failures || 0) + 1;
+
+      return null;
+    }
+  }
+
+  /**
+   * 本地AI审核 - 使用Cloudflare Workers AI
+   */
+  private async performLocalAIAudit(content: string, contentType: string, userIP?: string): Promise<AIAuditResult | null> {
+    try {
+      const startTime = Date.now();
+
+      // 获取推荐的AI模型配置
+      const { models, availabilityReport } = await getRecommendedModelConfig(this.env.AI);
+
+      // 创建就业平台专用安全检测器
+      const safetyChecker = new CloudflareEmploymentSafetyChecker(this.env.AI, models);
+
+      // 执行安全检测
+      const safetyResult = await safetyChecker.checkContent(content, contentType);
+
+      const processingTime = Date.now() - startTime;
+
+      // 构建AI审核结果
+      const aiResult: AIAuditResult = {
+        riskScore: safetyResult.riskScore,
+        confidence: safetyResult.confidence,
+        recommendation: safetyResult.recommendation,
+        safetyResult: safetyResult,
+        details: {
+          classification: {
+            categories: safetyResult.categories,
+            violations: safetyResult.violations
+          },
+          sentiment: {
+            score: safetyResult.categories.harassment > 0.5 ? 'negative' : 'neutral'
+          },
+          safety: {
+            isSafe: safetyResult.isSafe,
+            violations: safetyResult.violations,
+            categories: safetyResult.categories
+          },
+          semantic: {
+            relevance: 1 - safetyResult.categories.offtopic
+          },
+          employmentRelevance: {
+            score: 1 - safetyResult.categories.offtopic,
+            isRelevant: safetyResult.categories.offtopic < 0.5
+          }
+        },
+        processingTime,
+        modelVersions: {
+          classification: models.textClassification || 'unknown',
+          sentiment: models.sentimentAnalysis || 'unknown',
+          safety: models.primarySafety || 'unknown',
+          employmentSafety: models.employmentContentAnalysis || 'unknown'
+        },
+        audit_type: 'ai_assisted',
+        cached: false
+      };
+
+      console.log(`[AI_AUDIT] Local AI audit completed in ${processingTime}ms, risk score: ${safetyResult.riskScore}`);
+
+      return aiResult;
+
+    } catch (error) {
+      console.error('[AI_AUDIT] Local AI audit failed:', error);
+      return null;
+    }
+  }
+
+  /**
+   * 融合审核结果
+   */
+  private mergeAuditResults(ruleResult: AuditResult, aiResult: AIAuditResult | null): AuditResult {
+    // 如果AI不可用，使用规则结果
+    if (!aiResult) {
+      return {
+        ...ruleResult,
+        reason: ruleResult.reason + '_ai_unavailable'
+      };
+    }
+
+    // 如果AI置信度太低，主要依赖规则审核
+    if (aiResult.confidence < AI_AUDIT_CONFIG.confidenceThreshold) {
+      return {
+        ...ruleResult,
+        ai_analysis: aiResult,
+        reason: ruleResult.reason + '_low_ai_confidence'
+      };
+    }
+
+    // 智能决策融合逻辑
+    const combinedRiskScore = this.calculateCombinedRiskScore(ruleResult.risk_score, aiResult.riskScore);
+
+    // 如果AI和规则都认为有风险，提高严格度
+    if (ruleResult.risk_score > 0.5 && aiResult.riskScore > 0.5) {
+      return {
+        passed: false,
+        action: 'ai_and_rules_flagged',
+        requires_manual: true,
+        confidence: Math.min(ruleResult.confidence + aiResult.confidence, 1.0),
+        reason: 'high_risk_consensus',
+        risk_score: combinedRiskScore,
+        violations: ruleResult.violations,
+        audit_level: this.currentLevel,
+        audit_type: 'hybrid',
+        ai_analysis: aiResult
+      };
+    }
+
+    // 如果AI和规则意见分歧，触发人工审核
+    if (Math.abs(ruleResult.risk_score - aiResult.riskScore) > 0.4) {
+      return {
+        passed: false,
+        action: 'manual_review',
+        requires_manual: true,
+        confidence: 0.5,
+        reason: 'ai_rule_disagreement',
+        risk_score: combinedRiskScore,
+        violations: ruleResult.violations,
+        audit_level: this.currentLevel,
+        audit_type: 'hybrid',
+        ai_analysis: aiResult
+      };
+    }
+
+    // 如果AI推荐通过且规则风险较低，自动通过
+    if (aiResult.recommendation === 'approve' && ruleResult.risk_score < 0.3) {
+      return {
+        passed: true,
+        action: 'ai_approved',
+        requires_manual: false,
+        confidence: aiResult.confidence,
+        reason: 'ai_low_risk',
+        risk_score: combinedRiskScore,
+        violations: [],
+        audit_level: this.currentLevel,
+        audit_type: 'hybrid',
+        ai_analysis: aiResult
+      };
+    }
+
+    // 默认使用更严格的结果
+    const useAIResult = aiResult.riskScore > ruleResult.risk_score;
+
+    if (useAIResult) {
+      return {
+        passed: aiResult.recommendation === 'approve',
+        action: `ai_${aiResult.recommendation}`,
+        requires_manual: aiResult.recommendation === 'review',
+        confidence: aiResult.confidence,
+        reason: 'ai_primary_decision',
+        risk_score: combinedRiskScore,
+        violations: ruleResult.violations,
+        audit_level: this.currentLevel,
+        audit_type: 'hybrid',
+        ai_analysis: aiResult
+      };
+    } else {
+      return {
+        ...ruleResult,
+        risk_score: combinedRiskScore,
+        ai_analysis: aiResult,
+        audit_type: 'hybrid'
+      };
+    }
+  }
+
+  /**
+   * 计算组合风险分数
+   */
+  private calculateCombinedRiskScore(ruleScore: number, aiScore: number): number {
+    // 加权平均，AI权重稍高
+    const ruleWeight = 0.4;
+    const aiWeight = 0.6;
+
+    return Math.min(ruleScore * ruleWeight + aiScore * aiWeight, 1.0);
   }
 
   /**
