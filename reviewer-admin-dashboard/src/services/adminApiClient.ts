@@ -2,7 +2,11 @@ import axios from 'axios';
 import { message } from 'antd';
 import { API_CONFIG, STORAGE_KEYS } from '../config/api';
 
-export const apiClient = axios.create({
+/**
+ * 管理员专用API客户端
+ * 确保使用正确的管理员token进行API调用
+ */
+export const adminApiClient = axios.create({
   baseURL: API_CONFIG.BASE_URL,
   timeout: API_CONFIG.TIMEOUT,
   headers: {
@@ -10,65 +14,61 @@ export const apiClient = axios.create({
   },
 });
 
-// 请求拦截器 - 添加认证Token (支持多角色)
-apiClient.interceptors.request.use(
+// 请求拦截器 - 专门为管理员设计
+adminApiClient.interceptors.request.use(
   (config) => {
-    // 按优先级获取token：管理员 > 超级管理员 > 审核员
-    let token = localStorage.getItem(STORAGE_KEYS.ADMIN_TOKEN) ||
-                localStorage.getItem(STORAGE_KEYS.SUPER_ADMIN_TOKEN) ||
-                localStorage.getItem(STORAGE_KEYS.REVIEWER_TOKEN);
+    // 登录请求不需要token
+    if (config.url?.includes('/login')) {
+      console.log(`[ADMIN_API_CLIENT] Login request, skipping token`);
+      return config;
+    }
+
+    // 优先使用管理员token
+    const adminToken = localStorage.getItem(STORAGE_KEYS.ADMIN_TOKEN);
+    const superAdminToken = localStorage.getItem(STORAGE_KEYS.SUPER_ADMIN_TOKEN);
+
+    const token = adminToken || superAdminToken;
 
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
-      console.log(`[API_CLIENT] Request with token: ${token.substring(0, 20)}...`);
+      console.log(`[ADMIN_API_CLIENT] Request with admin token: ${token.substring(0, 20)}...`);
     } else {
-      console.log(`[API_CLIENT] No token found in any storage`);
+      console.warn('[ADMIN_API_CLIENT] No admin token found');
     }
     return config;
   },
   (error) => {
-    console.error('[API_CLIENT] Request interceptor error:', error);
+    console.error('[ADMIN_API_CLIENT] Request interceptor error:', error);
     return Promise.reject(error);
   }
 );
 
-// 响应拦截器 - 错误处理 (简化版)
-apiClient.interceptors.response.use(
+// 响应拦截器 - 管理员专用错误处理
+adminApiClient.interceptors.response.use(
   (response) => {
-    console.log(`[API_CLIENT] Response success: ${response.config.url}`);
+    console.log(`[ADMIN_API_CLIENT] Response success: ${response.config.url}`);
     return response;
   },
   (error) => {
-    console.error('[API_CLIENT] Response error:', error);
-
-    // 详细错误日志
-    if (error.response) {
-      console.error(`[API_CLIENT] Error status: ${error.response.status}`);
-      console.error(`[API_CLIENT] Error data:`, error.response.data);
-    }
+    console.error('[ADMIN_API_CLIENT] Response error:', error);
 
     if (error.response?.status === 401) {
-      // Token过期或无效，清除所有角色的本地存储
+      // 清除管理员相关的存储
       localStorage.removeItem(STORAGE_KEYS.ADMIN_TOKEN);
       localStorage.removeItem(STORAGE_KEYS.SUPER_ADMIN_TOKEN);
-      localStorage.removeItem(STORAGE_KEYS.REVIEWER_TOKEN);
       localStorage.removeItem(STORAGE_KEYS.ADMIN_USER_INFO);
       localStorage.removeItem(STORAGE_KEYS.SUPER_ADMIN_USER_INFO);
-      localStorage.removeItem(STORAGE_KEYS.REVIEWER_USER_INFO);
-      localStorage.removeItem(STORAGE_KEYS.USER_INFO);
 
-      // 根据当前路径重定向到对应的登录页
+      // 重定向到管理员登录页
       const currentPath = window.location.pathname;
-      let redirectPath = '/login';
-
+      let redirectPath = '/admin/login';
+      
       if (currentPath.startsWith('/admin/super')) {
         redirectPath = '/admin/super-login';
-      } else if (currentPath.startsWith('/admin')) {
-        redirectPath = '/admin/login';
       }
 
       if (window.location.pathname !== redirectPath) {
-        message.error('登录已过期，请重新登录');
+        message.error('管理员登录已过期，请重新登录');
         window.location.href = redirectPath;
       }
     } else if (error.response?.status === 403) {
@@ -86,3 +86,5 @@ apiClient.interceptors.response.use(
     return Promise.reject(error);
   }
 );
+
+export default adminApiClient;

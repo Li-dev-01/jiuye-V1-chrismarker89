@@ -26,9 +26,14 @@ import {
   ApiOutlined,
   DatabaseOutlined,
   MonitorOutlined,
-  TagsOutlined
+  TagsOutlined,
+  ExperimentOutlined,
+  SecurityScanOutlined
 } from '@ant-design/icons';
 import { useAuthStore } from '../../stores/authStore';
+import { useAdminAuthStore } from '../../stores/adminAuthStore';
+import { useSuperAdminAuthStore } from '../../stores/superAdminAuthStore';
+import PermissionIndicator from '../auth/PermissionIndicator';
 
 const { Header, Sider, Content } = Layout;
 const { Text } = Typography;
@@ -37,24 +42,41 @@ const DashboardLayout: React.FC = () => {
   const [collapsed, setCollapsed] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
-  const { user, logout } = useAuthStore();
+
+  // 检测当前用户类型并使用相应的认证存储
+  const reviewerAuth = useAuthStore();
+  const adminAuth = useAdminAuthStore();
+  const superAdminAuth = useSuperAdminAuthStore();
+
+  // 确定当前活跃的认证状态
+  const currentAuth = superAdminAuth.isAuthenticated ? superAdminAuth :
+                     adminAuth.isAuthenticated ? adminAuth :
+                     reviewerAuth;
+
+  const { user, logout } = currentAuth;
   const {
     token: { colorBgContainer },
   } = theme.useToken();
 
   const handleLogout = () => {
     logout();
-    navigate('/login');
+    // 根据用户类型重定向到相应的登录页面
+    if (user?.role === 'super_admin') {
+      navigate('/admin/super-login');
+    } else if (user?.role === 'admin') {
+      navigate('/admin/login');
+    } else {
+      navigate('/login');
+    }
   };
 
-  // 根据用户角色动态生成菜单
+  // 根据用户角色动态生成菜单 - 严格权限控制
   const getMenuItems = () => {
     const isSuperAdmin = user?.role === 'super_admin' || user?.userType === 'super_admin';
     const isAdmin = user?.role === 'admin' || user?.userType === 'admin';
-    const isAnyAdmin = isAdmin || isSuperAdmin;
 
     if (isSuperAdmin) {
-      // 超级管理员菜单
+      // 超级管理员菜单 - 安全控制和最高级别管理
       return [
         {
           key: '/admin/dashboard',
@@ -86,14 +108,49 @@ const DashboardLayout: React.FC = () => {
           icon: <SettingOutlined />,
           label: '系统设置',
         },
+        // 🔥 超级管理员专属功能
         {
-          key: '/admin/super',
+          key: 'super-admin-group',
           icon: <CrownOutlined />,
-          label: '超级管理',
+          label: '超级管理功能',
+          style: {
+            background: 'linear-gradient(135deg, #ff6b6b, #ffa500)',
+            borderRadius: '6px',
+            margin: '4px 0',
+            fontWeight: 'bold'
+          },
+          children: [
+            {
+              key: '/admin/security-console',
+              icon: <SecurityScanOutlined />,
+              label: '安全控制台',
+            },
+            {
+              key: '/admin/system-logs',
+              icon: <FileTextOutlined />,
+              label: '系统日志',
+            },
+            {
+              key: '/admin/system-settings',
+              icon: <SettingOutlined />,
+              label: '系统配置',
+            },
+            {
+              key: '/admin/super-admin-panel',
+              icon: <CrownOutlined />,
+              label: '管理员管理',
+            },
+          ],
+        },
+        // 🧪 权限测试
+        {
+          key: '/admin/permission-test',
+          icon: <ExperimentOutlined />,
+          label: '权限测试',
         },
       ];
     } else if (isAdmin) {
-      // 普通管理员菜单
+      // 普通管理员菜单 - 技术管理和系统维护，无法访问超级管理功能
       return [
         {
           key: '/admin/dashboard',
@@ -120,10 +177,16 @@ const DashboardLayout: React.FC = () => {
           icon: <TagsOutlined />,
           label: '标签管理',
         },
+        // 🔧 普通管理员专属功能 - 技术管理
         {
           key: '/admin/api-management',
           icon: <ApiOutlined />,
           label: 'API管理',
+          style: {
+            background: 'rgba(24, 144, 255, 0.1)',
+            borderRadius: '6px',
+            margin: '4px 0'
+          }
         },
         {
           key: '/admin/api-documentation',
@@ -145,9 +208,16 @@ const DashboardLayout: React.FC = () => {
           icon: <SettingOutlined />,
           label: '系统设置',
         },
+        // 🧪 权限测试
+        {
+          key: '/admin/permission-test',
+          icon: <ExperimentOutlined />,
+          label: '权限测试',
+        },
+        // ❌ 注意：普通管理员无法访问超级管理功能
       ];
     } else {
-      // 审核员菜单
+      // 审核员菜单 - 只能访问审核相关功能
       return [
         {
           key: '/dashboard',
@@ -163,6 +233,11 @@ const DashboardLayout: React.FC = () => {
           key: '/history',
           icon: <HistoryOutlined />,
           label: '审核历史',
+        },
+        {
+          key: '/permission-test',
+          icon: <ExperimentOutlined />,
+          label: '权限测试',
         },
       ];
     }
@@ -246,12 +321,10 @@ const DashboardLayout: React.FC = () => {
           
           <Space>
             <Text>欢迎，{user?.display_name || user?.name || user?.username || '用户'}</Text>
-            {(user?.role === 'super_admin' || user?.userType === 'super_admin') && (
-              <CrownOutlined style={{ color: '#faad14' }} title="超级管理员" />
-            )}
-            {(user?.role === 'admin' || user?.userType === 'admin') && !(user?.role === 'super_admin' || user?.userType === 'super_admin') && (
-              <CrownOutlined style={{ color: '#1890ff' }} title="管理员" />
-            )}
+
+            {/* 权限指示器 */}
+            <PermissionIndicator compact={true} />
+
             <Dropdown
               menu={{ items: userMenuItems }}
               placement="bottomRight"

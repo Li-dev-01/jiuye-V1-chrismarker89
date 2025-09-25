@@ -2,6 +2,8 @@ import React from 'react';
 import { Navigate } from 'react-router-dom';
 import { Result, Button } from 'antd';
 import { useAuthStore } from '../../stores/authStore';
+import { useAdminAuthStore } from '../../stores/adminAuthStore';
+import { useSuperAdminAuthStore } from '../../stores/superAdminAuthStore';
 
 interface RoleGuardProps {
   children: React.ReactNode;
@@ -16,7 +18,42 @@ const RoleGuard: React.FC<RoleGuardProps> = ({
   redirectTo = '/login',
   showError = true
 }) => {
-  const { user, isAuthenticated } = useAuthStore();
+  // 获取所有三个认证状态
+  const reviewerAuth = useAuthStore();
+  const adminAuth = useAdminAuthStore();
+  const superAdminAuth = useSuperAdminAuthStore();
+
+  // 确定当前的认证状态和用户信息
+  const getCurrentAuth = () => {
+    if (superAdminAuth.isAuthenticated && superAdminAuth.user) {
+      return {
+        isAuthenticated: true,
+        user: superAdminAuth.user,
+        authType: 'super_admin'
+      };
+    } else if (adminAuth.isAuthenticated && adminAuth.user) {
+      return {
+        isAuthenticated: true,
+        user: adminAuth.user,
+        authType: 'admin'
+      };
+    } else if (reviewerAuth.isAuthenticated && reviewerAuth.user) {
+      return {
+        isAuthenticated: true,
+        user: reviewerAuth.user,
+        authType: 'reviewer'
+      };
+    } else {
+      return {
+        isAuthenticated: false,
+        user: null,
+        authType: 'none'
+      };
+    }
+  };
+
+  const currentAuth = getCurrentAuth();
+  const { isAuthenticated, user, authType } = currentAuth;
 
   console.log(`[ROLE_GUARD] 🛡️ CHECKING PERMISSIONS:`, {
     user: user?.username,
@@ -24,6 +61,7 @@ const RoleGuard: React.FC<RoleGuardProps> = ({
     userType: user?.userType,
     allowedRoles,
     isAuthenticated,
+    authType,
     redirectTo,
     showError
   });
@@ -97,6 +135,7 @@ export const ReviewerOnlyGuard: React.FC<{ children: React.ReactNode }> = ({ chi
 
 /**
  * 管理员专用守卫 - 只允许管理员和超级管理员访问
+ * ⚠️ 注意：这个守卫允许admin和super_admin都访问
  */
 export const AdminOnlyGuard: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <RoleGuard allowedRoles={['admin', 'super_admin']} redirectTo="/admin/login" showError={false}>
@@ -106,9 +145,20 @@ export const AdminOnlyGuard: React.FC<{ children: React.ReactNode }> = ({ childr
 
 /**
  * 超级管理员专用守卫 - 只允许超级管理员访问
+ * 🔒 严格权限控制：普通管理员无法访问
  */
 export const SuperAdminOnlyGuard: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <RoleGuard allowedRoles={['super_admin']} redirectTo="/admin/login" showError={false}>
+  <RoleGuard allowedRoles={['super_admin']} redirectTo="/admin/login" showError={true}>
+    {children}
+  </RoleGuard>
+);
+
+/**
+ * 普通管理员专用守卫 - 只允许普通管理员访问，超级管理员不能访问
+ * 🔧 用于普通管理员专属功能（如API管理、数据库结构等）
+ */
+export const RegularAdminOnlyGuard: React.FC<{ children: React.ReactNode }> = ({ children }) => (
+  <RoleGuard allowedRoles={['admin']} redirectTo="/admin/login" showError={true}>
     {children}
   </RoleGuard>
 );
