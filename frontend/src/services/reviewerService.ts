@@ -86,7 +86,7 @@ class ReviewerService {
   
   constructor() {
     this.client = axios.create({
-      baseURL: API_BASE_URL,
+      baseURL: `${API_BASE_URL}/api/reviewer`,
       timeout: 15000,
       headers: {
         'Content-Type': 'application/json',

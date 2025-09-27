@@ -88,7 +88,7 @@ class StoryService {
   
   constructor() {
     this.client = axios.create({
-      baseURL: `${API_BASE_URL}/stories`,
+      baseURL: `${API_BASE_URL}/api/stories`,
       timeout: 15000, // 故事内容较长，增加超时时间
       headers: {
         'Content-Type': 'application/json',
