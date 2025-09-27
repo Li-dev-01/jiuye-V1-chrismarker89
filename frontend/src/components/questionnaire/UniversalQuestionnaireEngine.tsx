@@ -3,7 +3,7 @@
  * 基于原有通用问卷系统的设计，支持多种问题类型和实时统计
  */
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { Card, Button, Progress, Space, Typography, Alert, Divider, message } from 'antd';
 import {
   LeftOutlined,
@@ -104,7 +104,7 @@ export const UniversalQuestionnaireEngine: React.FC<UniversalQuestionnaireEngine
   const progress = Math.round(((currentSectionIndex + 1) / totalSections) * 100);
 
   // 计算完成度（基于可见的问题）
-  const getCompletionStatus = useCallback(() => {
+  const completionStatus = useMemo(() => {
     const totalQuestions = visibleSections.reduce(
       (total, section) => total + section.questions.filter(shouldShowQuestion).length,
       0
@@ -118,45 +118,16 @@ export const UniversalQuestionnaireEngine: React.FC<UniversalQuestionnaireEngine
     return {
       totalQuestions,
       answeredQuestions,
-      completionPercentage: (answeredQuestions / totalQuestions) * 100
+      completionPercentage: totalQuestions > 0 ? (answeredQuestions / totalQuestions) * 100 : 0
     };
   }, [visibleSections, responses, shouldShowQuestion]);
 
   // 处理问题回答
   const handleQuestionAnswer = useCallback((questionId: string, value: any) => {
-    setResponses(prev => {
-      const newResponses = {
-        ...prev,
-        [questionId]: value
-      };
-
-      // 检查是否是影响section显示的关键问题
-      const isKeyQuestion = questionnaire.sections.some(section =>
-        section.condition?.dependsOn === questionId
-      );
-
-      // 如果是关键问题，可能需要调整当前section索引
-      if (isKeyQuestion) {
-        // 重新计算可见sections，如果当前section变为不可见，跳转到下一个可见section
-        setTimeout(() => {
-          const newVisibleSections = questionnaire.sections.filter(section => {
-            if (!section.condition) return true;
-            const dependentValue = newResponses[section.condition.dependsOn];
-            return checkCondition(section.condition, dependentValue);
-          });
-
-          const currentSectionId = currentSection?.id;
-          const newCurrentIndex = newVisibleSections.findIndex(s => s.id === currentSectionId);
-
-          if (newCurrentIndex === -1 && newVisibleSections.length > 0) {
-            // 当前section不可见了，跳转到下一个可见section
-            setCurrentSectionIndex(Math.min(currentSectionIndex, newVisibleSections.length - 1));
-          }
-        }, 0);
-      }
-
-      return newResponses;
-    });
+    setResponses(prev => ({
+      ...prev,
+      [questionId]: value
+    }));
 
     // 清除该问题的验证错误
     if (validationErrors[questionId]) {
@@ -166,13 +137,22 @@ export const UniversalQuestionnaireEngine: React.FC<UniversalQuestionnaireEngine
         return newErrors;
       });
     }
+  }, [validationErrors]);
 
-    // ❌ 移除：不再在用户选择时刷新统计数据
-    // 统计数据只在问卷提交后才会更新，避免显示不准确的实时数据
-    // setTimeout(() => {
-    //   setStatisticsRefreshTrigger(prev => prev + 1);
-    // }, 500);
-  }, [validationErrors, questionnaire.sections, checkCondition, currentSection, currentSectionIndex]);
+  // 监听响应变化，处理section跳转逻辑
+  useEffect(() => {
+    // 检查当前section是否仍然可见
+    if (currentSection && !shouldShowSection(currentSection)) {
+      // 当前section不可见了，跳转到下一个可见section
+      const nextVisibleIndex = visibleSections.findIndex((_, index) => index > currentSectionIndex);
+      if (nextVisibleIndex !== -1) {
+        setCurrentSectionIndex(nextVisibleIndex);
+      } else if (visibleSections.length > 0) {
+        // 如果没有后续可见section，跳转到最后一个可见section
+        setCurrentSectionIndex(visibleSections.length - 1);
+      }
+    }
+  }, [responses, currentSection, shouldShowSection, visibleSections, currentSectionIndex]);
 
   // 验证当前节的问题（只验证可见的问题）
   const validateCurrentSection = useCallback(() => {
@@ -235,10 +215,6 @@ export const UniversalQuestionnaireEngine: React.FC<UniversalQuestionnaireEngine
     if (validateCurrentSection()) {
       if (currentSectionIndex < totalSections - 1) {
         setCurrentSectionIndex(prev => prev + 1);
-        // 滚动到页面顶部
-        setTimeout(() => {
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-        }, 100);
       }
     }
   }, [validateCurrentSection, currentSectionIndex, totalSections]);
@@ -247,11 +223,12 @@ export const UniversalQuestionnaireEngine: React.FC<UniversalQuestionnaireEngine
   const handlePrevious = useCallback(() => {
     if (currentSectionIndex > 0) {
       setCurrentSectionIndex(prev => prev - 1);
-      // 滚动到页面顶部
-      setTimeout(() => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      }, 100);
     }
+  }, [currentSectionIndex]);
+
+  // 处理页面滚动
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [currentSectionIndex]);
 
   // 提交问卷 - 简化版本，只需要数字验证
@@ -318,9 +295,7 @@ export const UniversalQuestionnaireEngine: React.FC<UniversalQuestionnaireEngine
         console.log('✅ 问卷提交成功');
 
         // 触发统计数据刷新
-        setTimeout(() => {
-          setStatisticsRefreshTrigger(prev => prev + 1);
-        }, 2000);
+        setStatisticsRefreshTrigger(prev => prev + 1);
 
         // 调用外部回调
         if (onSubmit) {
@@ -342,10 +317,11 @@ export const UniversalQuestionnaireEngine: React.FC<UniversalQuestionnaireEngine
 
 
   // 处理数字验证成功
-  const handleAntiSpamSuccess = async () => {
+  const handleAntiSpamSuccess = useCallback(async () => {
     console.log('🔐 数字验证成功，开始提交问卷...');
     console.log('🔍 当前状态:', { isVerified, isSubmitting, showAntiSpamVerification });
 
+    // 批量更新状态
     setIsVerified(true);
     setShowAntiSpamVerification(false);
     message.success('验证成功！正在提交问卷...');
@@ -359,12 +335,12 @@ export const UniversalQuestionnaireEngine: React.FC<UniversalQuestionnaireEngine
       console.error('❌ 验证成功后提交失败:', error);
       message.error('提交失败，请重试');
     }
-  };
+  }, [isVerified, isSubmitting, showAntiSpamVerification, handleSubmit]);
 
   // 处理数字验证取消
-  const handleAntiSpamCancel = () => {
+  const handleAntiSpamCancel = useCallback(() => {
     setShowAntiSpamVerification(false);
-  };
+  }, []);
 
   // 处理内联认证成功
   const handleInlineAuthSuccess = useCallback((authData: any) => {
@@ -382,12 +358,11 @@ export const UniversalQuestionnaireEngine: React.FC<UniversalQuestionnaireEngine
   // 更新进度
   useEffect(() => {
     if (onProgress) {
-      const { completionPercentage } = getCompletionStatus();
-      onProgress(completionPercentage);
+      onProgress(completionStatus.completionPercentage);
     }
-  }, [responses, onProgress, getCompletionStatus]);
+  }, [responses, onProgress, completionStatus.completionPercentage]);
 
-  const { completionPercentage } = getCompletionStatus();
+  const { completionPercentage } = completionStatus;
 
   // 如果用户已经登录，跳过提交方式选择步骤
   const shouldSkipSubmissionTypeSection = (
