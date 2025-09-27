@@ -3,7 +3,7 @@
  * 支持多种问题类型的渲染和交互
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   Radio,
   Checkbox,
@@ -54,9 +54,13 @@ export const UniversalQuestionRenderer: React.FC<UniversalQuestionRendererProps>
   autoScrollToNext = true,
   isLastQuestion = false,
 }) => {
+  const [isScrolling, setIsScrolling] = useState(false);
   // 自动滚动到下一题的函数
-  const scrollToNextQuestion = () => {
+  const scrollToNextQuestion = useCallback(() => {
     if (!autoScrollToNext || isLastQuestion) return;
+
+    // 显示滚动提示
+    setIsScrolling(true);
 
     setTimeout(() => {
       // 查找当前问题的下一个问题元素
@@ -64,25 +68,43 @@ export const UniversalQuestionRenderer: React.FC<UniversalQuestionRendererProps>
       if (currentQuestionElement) {
         const nextQuestionElement = currentQuestionElement.nextElementSibling;
         if (nextQuestionElement) {
-          nextQuestionElement.scrollIntoView({
-            behavior: 'smooth',
-            block: 'start',
-            inline: 'nearest'
+          // 计算滚动位置，确保下一题在视窗中央偏上位置
+          const rect = nextQuestionElement.getBoundingClientRect();
+          const windowHeight = window.innerHeight;
+          const targetPosition = window.scrollY + rect.top - (windowHeight * 0.2); // 距离顶部20%的位置
+
+          window.scrollTo({
+            top: Math.max(0, targetPosition),
+            behavior: 'smooth'
           });
+
+          // 滚动完成后隐藏提示
+          setTimeout(() => {
+            setIsScrolling(false);
+          }, 800);
+        } else {
+          setIsScrolling(false);
         }
+      } else {
+        setIsScrolling(false);
       }
-    }, 300); // 延迟300ms，让用户看到选择效果
-  };
+    }, 600); // 延迟600ms，让用户看到选择效果和反馈
+  }, [autoScrollToNext, isLastQuestion, question.id]);
 
   // 处理选择变化的函数
-  const handleChange = (newValue: any) => {
+  const handleChange = useCallback((newValue: any) => {
     onChange(newValue);
 
-    // 对于单选题，选择后自动滚动到下一题
+    // 对于单选题和下拉选择题，选择后自动滚动到下一题
     if (question.type === 'radio' || question.type === 'select') {
       scrollToNextQuestion();
     }
-  };
+
+    // 对于多选题，如果选择了选项也可以滚动（可选）
+    // if (question.type === 'checkbox' && newValue && newValue.length > 0) {
+    //   scrollToNextQuestion();
+    // }
+  }, [onChange, question.type, scrollToNextQuestion]);
 
   // 渲染问题标题
   const renderQuestionTitle = () => (
@@ -316,7 +338,7 @@ export const UniversalQuestionRenderer: React.FC<UniversalQuestionRendererProps>
 
   return (
     <Card
-      className={styles.questionCard}
+      className={`${styles.questionCard} ${isScrolling ? styles.questionCardScrolling : ''}`}
       bordered={false}
       data-question-id={question.id}
     >
@@ -334,7 +356,13 @@ export const UniversalQuestionRenderer: React.FC<UniversalQuestionRendererProps>
           />
         )}
 
-
+        {/* 自动滚动提示 */}
+        {isScrolling && autoScrollToNext && !isLastQuestion && (
+          <div className={styles.scrollingHint}>
+            <span className={styles.scrollingIcon}>↓</span>
+            <span className={styles.scrollingText}>正在跳转到下一题...</span>
+          </div>
+        )}
       </div>
 
       {renderStatistics()}

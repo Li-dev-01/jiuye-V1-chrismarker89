@@ -386,3 +386,68 @@
 .statisticsWrapper {
   margin-top: 16px;
 }
+
+/* 自动滚动相关样式 */
+.questionCardScrolling {
+  border-color: var(--primary-500);
+  box-shadow: 0 4px 12px rgba(24, 144, 255, 0.15);
+  transform: scale(0.98);
+}
+
+.scrollingHint {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-xs);
+  margin-top: var(--spacing-sm);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  background: linear-gradient(135deg, #e6f7ff 0%, #bae7ff 100%);
+  border: 1px solid #91d5ff;
+  border-radius: var(--border-radius-md);
+  color: var(--primary-600);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  animation: scrollingPulse 1.5s ease-in-out infinite;
+}
+
+.scrollingIcon {
+  font-size: var(--font-size-lg);
+  animation: scrollingBounce 1s ease-in-out infinite;
+}
+
+.scrollingText {
+  white-space: nowrap;
+}
+
+/* 滚动提示动画 */
+@keyframes scrollingPulse {
+  0%, 100% {
+    opacity: 0.8;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.02);
+  }
+}
+
+@keyframes scrollingBounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(3px);
+  }
+}
+
+/* 移动端滚动提示优化 */
+@media (max-width: 768px) {
+  .scrollingHint {
+    padding: var(--spacing-xs);
+    font-size: 12px;
+  }
+
+  .scrollingIcon {
+    font-size: var(--font-size-base);
+  }
+}
