@@ -36,7 +36,7 @@ class UniversalQuestionnaireService {
   private baseUrl: string;
 
   constructor() {
-    this.baseUrl = `${API_BASE_URL}/universal-questionnaire`;
+    this.baseUrl = `${API_BASE_URL}/api/universal-questionnaire`;
   }
 
   /**
