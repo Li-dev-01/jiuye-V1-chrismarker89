@@ -1,0 +1,412 @@
+/* 移动端专用优化样式 */
+
+/* ==================== 移动端基础优化 ==================== */
+
+/* 防止iOS缩放和优化触摸体验 */
+@media (max-width: 768px) {
+  /* 全局移动端优化 */
+  * {
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
+    -webkit-touch-callout: none;
+  }
+  
+  /* 输入框防缩放 */
+  input, textarea, select {
+    font-size: 16px !important;
+    transform: scale(1);
+  }
+  
+  /* 按钮触摸优化 */
+  button, .ant-btn {
+    min-height: 44px;
+    min-width: 44px;
+    padding: 8px 16px;
+  }
+}
+
+/* ==================== 问卷组件移动端优化 ==================== */
+
+/* 问卷引擎移动端布局 */
+@media (max-width: 768px) {
+  .questionnaire-mobile-container {
+    padding: 8px;
+    margin: 0;
+  }
+  
+  /* 问题卡片优化 */
+  .mobile-question-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    border: 1px solid #f0f0f0;
+  }
+  
+  /* 问题标题优化 */
+  .mobile-question-title {
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 1.4;
+    margin-bottom: 12px;
+    color: #262626;
+  }
+  
+  /* 选项按钮优化 */
+  .mobile-option-button {
+    width: 100%;
+    min-height: 48px;
+    padding: 12px 16px;
+    margin-bottom: 8px;
+    border: 1px solid #d9d9d9;
+    border-radius: 8px;
+    background: #fff;
+    text-align: left;
+    font-size: 15px;
+    line-height: 1.4;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+  }
+  
+  .mobile-option-button:hover,
+  .mobile-option-button:focus {
+    border-color: #1890ff;
+    background: #f6f9ff;
+  }
+  
+  .mobile-option-button.selected {
+    border-color: #1890ff;
+    background: #e6f7ff;
+    color: #1890ff;
+  }
+  
+  /* 多选标签优化 */
+  .mobile-tag-container {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .mobile-tag-option {
+    width: 100%;
+    min-height: 44px;
+    padding: 10px 14px;
+    border: 1px solid #d9d9d9;
+    border-radius: 6px;
+    background: #fff;
+    font-size: 14px;
+    text-align: left;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+  }
+  
+  .mobile-tag-option.selected {
+    border-color: #1890ff;
+    background: #e6f7ff;
+    color: #1890ff;
+  }
+  
+  /* 输入框优化 */
+  .mobile-input {
+    width: 100%;
+    min-height: 48px;
+    padding: 12px 16px;
+    font-size: 16px;
+    border: 1px solid #d9d9d9;
+    border-radius: 8px;
+    background: #fff;
+  }
+  
+  .mobile-input:focus {
+    border-color: #1890ff;
+    box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+  }
+  
+  /* 导航按钮优化 */
+  .mobile-nav-buttons {
+    display: flex;
+    gap: 12px;
+    padding: 16px 0;
+    margin-top: 24px;
+    border-top: 1px solid #f0f0f0;
+  }
+  
+  .mobile-nav-button {
+    flex: 1;
+    min-height: 48px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 500;
+  }
+}
+
+/* ==================== 故事墙移动端优化 ==================== */
+
+@media (max-width: 768px) {
+  /* 故事卡片移动端布局 */
+  .mobile-story-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    border: 1px solid #f0f0f0;
+  }
+  
+  .mobile-story-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+  
+  .mobile-story-category {
+    background: #f0f2f5;
+    color: #666;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+  }
+  
+  .mobile-story-author {
+    color: #999;
+    font-size: 12px;
+  }
+  
+  .mobile-story-title {
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 1.4;
+    margin-bottom: 8px;
+    color: #262626;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  
+  .mobile-story-content {
+    font-size: 14px;
+    line-height: 1.5;
+    color: #595959;
+    margin-bottom: 12px;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  
+  .mobile-story-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .mobile-story-stats {
+    display: flex;
+    gap: 16px;
+    color: #999;
+    font-size: 12px;
+  }
+  
+  .mobile-story-buttons {
+    display: flex;
+    gap: 8px;
+  }
+  
+  .mobile-story-button {
+    min-width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    border: 1px solid #d9d9d9;
+    background: #fff;
+    color: #666;
+    font-size: 14px;
+  }
+  
+  .mobile-story-button.active {
+    border-color: #1890ff;
+    color: #1890ff;
+    background: #f6f9ff;
+  }
+}
+
+/* ==================== 导航组件移动端优化 ==================== */
+
+@media (max-width: 768px) {
+  /* 智能底部导航 */
+  .smart-bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #fff;
+    border-top: 1px solid #f0f0f0;
+    padding: 8px 0 calc(8px + env(safe-area-inset-bottom));
+    z-index: 1000;
+    transform: translateY(0);
+    transition: transform 0.3s ease;
+  }
+  
+  .smart-bottom-nav.hidden {
+    transform: translateY(100%);
+  }
+  
+  .bottom-nav-container {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    max-width: 100%;
+    margin: 0 auto;
+  }
+  
+  .bottom-nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 4px 8px;
+    min-width: 60px;
+    text-decoration: none;
+    color: #666;
+    transition: color 0.2s ease;
+  }
+  
+  .bottom-nav-item.active {
+    color: #1890ff;
+  }
+  
+  .bottom-nav-icon {
+    font-size: 20px;
+    margin-bottom: 2px;
+  }
+  
+  .bottom-nav-label {
+    font-size: 10px;
+    line-height: 1;
+  }
+  
+  /* 页面内容底部间距 */
+  .mobile-page-content {
+    padding-bottom: calc(70px + env(safe-area-inset-bottom));
+  }
+}
+
+/* ==================== 滑动浏览器优化 ==================== */
+
+@media (max-width: 768px) {
+  .mobile-swipe-viewer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: #000;
+    z-index: 1100;
+  }
+  
+  .mobile-swipe-content {
+    height: 100vh;
+    overflow: hidden;
+    position: relative;
+  }
+  
+  .mobile-swipe-item {
+    height: 100vh;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    color: #fff;
+  }
+  
+  .mobile-swipe-close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 1101;
+    background: rgba(0, 0, 0, 0.5);
+    border: none;
+    color: #fff;
+    width: 40px;
+    height: 40px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .mobile-swipe-actions {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    right: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+  }
+  
+  .mobile-swipe-action {
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: #fff;
+    width: 48px;
+    height: 48px;
+    border-radius: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(10px);
+  }
+}
+
+/* ==================== 性能优化 ==================== */
+
+@media (max-width: 768px) {
+  /* 减少动画以提升性能 */
+  .mobile-reduced-motion * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  
+  /* 优化滚动性能 */
+  .mobile-scroll-container {
+    -webkit-overflow-scrolling: touch;
+    overflow-scrolling: touch;
+  }
+  
+  /* 图片懒加载占位 */
+  .mobile-image-placeholder {
+    background: #f5f5f5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ccc;
+    font-size: 12px;
+  }
+}
+
+/* ==================== 安全区域适配 ==================== */
+
+@media (max-width: 768px) {
+  /* iPhone X+ 安全区域适配 */
+  .mobile-safe-area-top {
+    padding-top: env(safe-area-inset-top);
+  }
+  
+  .mobile-safe-area-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  
+  .mobile-safe-area-left {
+    padding-left: env(safe-area-inset-left);
+  }
+  
+  .mobile-safe-area-right {
+    padding-right: env(safe-area-inset-right);
+  }
+}

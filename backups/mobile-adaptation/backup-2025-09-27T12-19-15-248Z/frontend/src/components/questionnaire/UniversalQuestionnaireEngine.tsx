@@ -3,7 +3,7 @@
  * 基于原有通用问卷系统的设计，支持多种问题类型和实时统计
  */
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { Card, Button, Progress, Space, Typography, Alert, Divider, message } from 'antd';
 import {
   LeftOutlined,
@@ -12,7 +12,6 @@ import {
   BarChartOutlined
 } from '@ant-design/icons';
 import { UniversalQuestionRenderer } from './UniversalQuestionRenderer';
-import type { UniversalQuestionRenderer as UniversalQuestionRendererType } from './UniversalQuestionRenderer';
 import type { UniversalQuestionnaire, UniversalQuestionnaireResponse } from '../../types/universal-questionnaire';
 import { universalQuestionnaireService } from '../../services/universalQuestionnaireService';
 

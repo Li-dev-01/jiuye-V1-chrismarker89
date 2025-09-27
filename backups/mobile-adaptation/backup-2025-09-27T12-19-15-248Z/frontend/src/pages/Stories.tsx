@@ -3,9 +3,7 @@
  * 展示所有用户发布的就业故事
  */
 
-import React, { useState, useEffect, useCallback } from 'react';
-import { useMobileDetection } from '../hooks/useMobileDetection';
-import { MobileStoryCard } from '../components/mobile/MobileStoryCard';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Card, Row, Col, Typography, Space, Tag, Button,

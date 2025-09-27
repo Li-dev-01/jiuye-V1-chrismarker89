@@ -78,7 +78,7 @@ export const GoogleLoginButton: React.FC<GoogleLoginButtonProps> = ({
     message.info('正在创建您的匿名身份...');
 
     // 调用后端API创建半匿名用户
-    const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/auth/google/questionnaire`, {
+    const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/auth/google/questionnaire`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

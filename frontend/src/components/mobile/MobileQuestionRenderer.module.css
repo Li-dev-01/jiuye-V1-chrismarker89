@@ -1,0 +1,417 @@
+/* 移动端问题渲染器样式 */
+
+.questionCard {
+  background: #fff;
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  border: 1px solid #f0f0f0;
+  position: relative;
+  overflow: hidden;
+}
+
+.questionHeader {
+  margin-bottom: 16px;
+}
+
+.questionTitle {
+  margin-bottom: 8px !important;
+  color: #262626;
+  font-size: 18px !important;
+  font-weight: 600 !important;
+  line-height: 1.4 !important;
+  display: flex;
+  align-items: flex-start;
+  gap: 4px;
+}
+
+.questionNumber {
+  color: #1890ff;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.questionDescription {
+  display: block;
+  color: #595959;
+  font-size: 14px;
+  line-height: 1.5;
+  margin-bottom: 8px;
+}
+
+.requiredMark {
+  color: #ff4d4f !important;
+  font-size: 16px;
+  margin-left: 4px;
+}
+
+.questionContent {
+  position: relative;
+}
+
+/* ==================== 选项按钮样式 ==================== */
+
+.optionsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.optionButton {
+  width: 100%;
+  min-height: 52px;
+  padding: 14px 18px;
+  border: 2px solid #e8e8e8;
+  border-radius: 12px;
+  background: #fff;
+  text-align: left;
+  font-size: 16px;
+  line-height: 1.4;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.optionButton:hover {
+  border-color: #1890ff;
+  background: #f6f9ff;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(24, 144, 255, 0.15);
+}
+
+.optionButton:active {
+  transform: translateY(0);
+}
+
+.optionButton.selected {
+  border-color: #1890ff;
+  background: linear-gradient(135deg, #e6f7ff 0%, #f6f9ff 100%);
+  color: #1890ff;
+  box-shadow: 0 4px 16px rgba(24, 144, 255, 0.2);
+}
+
+.optionButton.selected::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #1890ff, #40a9ff);
+}
+
+.optionContent {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.optionText {
+  flex: 1;
+  font-weight: 500;
+}
+
+.checkIcon {
+  color: #1890ff;
+  font-size: 18px;
+  margin-left: 12px;
+  animation: checkBounce 0.3s ease;
+}
+
+@keyframes checkBounce {
+  0% { transform: scale(0); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+/* ==================== 标签样式 ==================== */
+
+.tagsContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.tagButton {
+  padding: 10px 16px;
+  border: 1px solid #d9d9d9;
+  border-radius: 20px;
+  background: #fff;
+  font-size: 14px;
+  font-weight: 500;
+  color: #595959;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 40px;
+}
+
+.tagButton:hover {
+  border-color: #1890ff;
+  color: #1890ff;
+  background: #f6f9ff;
+}
+
+.tagButton.tagSelected {
+  border-color: #1890ff;
+  background: #1890ff;
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(24, 144, 255, 0.3);
+}
+
+.tagCheckIcon {
+  font-size: 12px;
+  animation: checkBounce 0.3s ease;
+}
+
+/* ==================== 输入框样式 ==================== */
+
+.textInput,
+.textareaInput {
+  width: 100%;
+  font-size: 16px !important;
+  border-radius: 12px !important;
+  border: 2px solid #e8e8e8 !important;
+  transition: all 0.3s ease !important;
+}
+
+.textInput {
+  min-height: 52px !important;
+  padding: 14px 18px !important;
+}
+
+.textareaInput {
+  padding: 14px 18px !important;
+  resize: vertical;
+  min-height: 120px;
+}
+
+.textInput:focus,
+.textareaInput:focus {
+  border-color: #1890ff !important;
+  box-shadow: 0 0 0 3px rgba(24, 144, 255, 0.1) !important;
+}
+
+/* ==================== 评分样式 ==================== */
+
+.ratingContainer {
+  text-align: center;
+  padding: 20px 0;
+}
+
+.rating {
+  font-size: 32px !important;
+  margin-bottom: 16px;
+}
+
+.rating :global(.ant-rate-star) {
+  margin-right: 8px !important;
+}
+
+.ratingLabels {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 12px;
+  padding: 0 8px;
+}
+
+/* ==================== 滑块样式 ==================== */
+
+.sliderContainer {
+  padding: 24px 16px;
+}
+
+.slider {
+  margin-bottom: 16px !important;
+}
+
+.slider :global(.ant-slider-rail) {
+  height: 6px !important;
+  border-radius: 3px !important;
+}
+
+.slider :global(.ant-slider-track) {
+  height: 6px !important;
+  border-radius: 3px !important;
+  background: linear-gradient(90deg, #1890ff, #40a9ff) !important;
+}
+
+.slider :global(.ant-slider-handle) {
+  width: 20px !important;
+  height: 20px !important;
+  border: 3px solid #1890ff !important;
+  box-shadow: 0 2px 8px rgba(24, 144, 255, 0.3) !important;
+}
+
+.sliderValue {
+  text-align: center;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1890ff;
+  background: #f6f9ff;
+  padding: 8px 16px;
+  border-radius: 20px;
+  display: inline-block;
+}
+
+/* ==================== 反馈动画 ==================== */
+
+.feedback {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(24, 144, 255, 0.95);
+  color: #fff;
+  padding: 12px 20px;
+  border-radius: 25px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+  z-index: 10;
+  animation: feedbackPop 0.8s ease;
+  backdrop-filter: blur(10px);
+}
+
+.feedbackIcon {
+  font-size: 16px;
+}
+
+.feedbackText {
+  color: #fff !important;
+  font-size: 14px;
+}
+
+@keyframes feedbackPop {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.5);
+  }
+  50% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.1);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+/* ==================== 错误和提示 ==================== */
+
+.errorAlert {
+  margin-top: 12px !important;
+  border-radius: 8px !important;
+}
+
+.hint {
+  display: block;
+  margin-top: 12px;
+  padding: 8px 12px;
+  background: #f6f9ff;
+  border-radius: 8px;
+  font-size: 13px;
+  line-height: 1.4;
+  border-left: 3px solid #1890ff;
+}
+
+/* ==================== 响应式优化 ==================== */
+
+@media (max-width: 480px) {
+  .questionCard {
+    padding: 16px;
+    border-radius: 12px;
+  }
+  
+  .questionTitle {
+    font-size: 16px !important;
+  }
+  
+  .optionButton {
+    min-height: 48px;
+    padding: 12px 16px;
+    font-size: 15px;
+  }
+  
+  .tagButton {
+    padding: 8px 12px;
+    font-size: 13px;
+    min-height: 36px;
+  }
+  
+  .rating {
+    font-size: 28px !important;
+  }
+  
+  .textInput {
+    min-height: 48px !important;
+    padding: 12px 16px !important;
+  }
+  
+  .textareaInput {
+    padding: 12px 16px !important;
+    min-height: 100px;
+  }
+}
+
+/* ==================== 深色模式支持 ==================== */
+
+@media (prefers-color-scheme: dark) {
+  .questionCard {
+    background: #1f1f1f;
+    border-color: #333;
+  }
+  
+  .questionTitle {
+    color: #fff;
+  }
+  
+  .questionDescription {
+    color: #ccc;
+  }
+  
+  .optionButton {
+    background: #2a2a2a;
+    border-color: #444;
+    color: #ccc;
+  }
+  
+  .optionButton:hover {
+    background: #333;
+    border-color: #1890ff;
+  }
+  
+  .optionButton.selected {
+    background: #1f3a5f;
+    color: #40a9ff;
+  }
+  
+  .tagButton {
+    background: #2a2a2a;
+    border-color: #444;
+    color: #ccc;
+  }
+  
+  .tagButton.tagSelected {
+    background: #1890ff;
+    color: #fff;
+  }
+  
+  .textInput,
+  .textareaInput {
+    background: #2a2a2a !important;
+    border-color: #444 !important;
+    color: #ccc !important;
+  }
+  
+  .hint {
+    background: #1f3a5f;
+    color: #ccc;
+  }
+}
