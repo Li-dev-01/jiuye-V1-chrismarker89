@@ -1396,21 +1396,7 @@ analytics.post('/system-cleanup/:questionnaireId', async (c) => {
       cleanupResult.deletedRecords.statisticsCache = cacheResult.meta.changes || 0;
       cleanupResult.cleanupActions.push(`删除 ${cleanupResult.deletedRecords.statisticsCache} 条统计缓存`);
 
-      // 3. 清理相关的心声数据（如果存在）
-      try {
-        const heartVoiceResult = await db.execute(`
-          DELETE FROM heart_voices
-          WHERE questionnaire_response_id IN (
-            SELECT id FROM universal_questionnaire_responses
-            WHERE questionnaire_id = ?
-          )
-        `, [questionnaireId]);
 
-        cleanupResult.deletedRecords.heartVoices = heartVoiceResult.meta.changes || 0;
-        cleanupResult.cleanupActions.push(`删除 ${cleanupResult.deletedRecords.heartVoices} 条心声数据`);
-      } catch (heartVoiceError) {
-        cleanupResult.errors.push(`心声数据清理失败: ${heartVoiceError}`);
-      }
 
       // 4. 清理相关的故事数据（如果存在）
       try {

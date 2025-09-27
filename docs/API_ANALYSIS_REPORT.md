@@ -1,29 +1,32 @@
 # API分析报告
 
-生成时间: 9/23/2025, 5:52:33 PM
+生成时间: 9/27/2025, 12:58:27 PM
 
 ## 概览
 
-- **总API端点**: 194
-  - TypeScript路由: 122
+- **总API端点**: 220
+  - TypeScript路由: 148
   - Python路由: 72
-- **前端API调用**: 101
+- **前端API调用**: 105
 
 ## 问题统计
 
-- **缺失API**: 56
-- **未使用API**: 134
-- **重复定义**: 115
+- **缺失API**: 57
+- **未使用API**: 154
+- **重复定义**: 120
 
 ## 建议
 
-- **missing_apis** (high): 实现缺失的API端点 (56个)
-- **duplicate_apis** (medium): 解决重复的API定义 (115个)
-- **unused_apis** (low): 清理未使用的API端点 (134个)
+- **missing_apis** (high): 实现缺失的API端点 (57个)
+- **duplicate_apis** (medium): 解决重复的API定义 (120个)
+- **unused_apis** (low): 清理未使用的API端点 (154个)
 
 ## 详细分析
 
 ### 缺失的API端点
+- `/api/stories/precheck` - 前端调用但后端未实现
+- `/api/stories/submit` - 前端调用但后端未实现
+- `/api/stories/${storyId}/status` - 前端调用但后端未实现
 - `/api/super-admin/project/status` - 前端调用但后端未实现
 - `/api/super-admin/security/metrics` - 前端调用但后端未实现
 - `/api/super-admin/security/threats` - 前端调用但后端未实现
@@ -34,15 +37,14 @@
 - `/api/stories/${contentId}/dislike` - 前端调用但后端未实现
 - `/api/stories/${contentId}/png/${theme}` - 前端调用但后端未实现
 - `/api/v` - 前端调用但后端未实现
+- `/api/user-content-management/list` - 前端调用但后端未实现
+- `/api/user-content-management/stats` - 前端调用但后端未实现
 - `/api/admin/google-whitelist/${id}` - 前端调用但后端未实现
 - `/api/admin/google-whitelist/${editingEntry.id}` - 前端调用但后端未实现
 - `/api/admin/ip-access-control/rules/${ruleId}` - 前端调用但后端未实现
 - `/api/admin/ip-access-control/rules/${editingRule.id}` - 前端调用但后端未实现
 - `/api/auth/login` - 前端调用但后端未实现
 - `/api/auth/logout` - 前端调用但后端未实现
-- `/api/questionnaire/submit` - 前端调用但后端未实现
-- `/api/heart-voices/submit` - 前端调用但后端未实现
-- `/api/stories/submit` - 前端调用但后端未实现
 - `/api/analytics/*` - 前端调用但后端未实现
 - `/api/questionnaire/get` - 前端调用但后端未实现
 - `/api/universal/questionnaire/submit` - 前端调用但后端未实现
@@ -79,9 +81,9 @@
 - `/api/heart-voices/${id}` - 前端调用但后端未实现
 - `/api/stories/${id}` - 前端调用但后端未实现
 - `/api/errors` - 前端调用但后端未实现
-- `/api/performance-metrics` - 前端调用但后端未实现
 
 ### 未使用的API端点
+- `/api/admin/debug/tables` - 后端已定义但前端未使用
 - `/api/admin/users/:userId/status` - 后端已定义但前端未使用
 - `/api/admin/users/:userId` - 后端已定义但前端未使用
 - `/api/admin/users/export` - 后端已定义但前端未使用
@@ -101,6 +103,24 @@
 - `/api/questionnaire/` - 后端已定义但前端未使用
 - `/api/questionnaire/:id` - 后端已定义但前端未使用
 - `/api/reviewer/stats` - 后端已定义但前端未使用
+- `/api/reviewer/dashboard` - 后端已定义但前端未使用
+- `/api/endpoints` - 后端已定义但前端未使用
+- `/api/simple-auth/login` - 后端已定义但前端未使用
+- `/api/simple-auth/verify` - 后端已定义但前端未使用
+- `/api/simple-auth/me` - 后端已定义但前端未使用
+- `/api/simple-admin/dashboard` - 后端已定义但前端未使用
+- `/api/simple-admin/users` - 后端已定义但前端未使用
+- `/api/simple-admin/analytics` - 后端已定义但前端未使用
+- `/api/simple-admin/api/endpoints` - 后端已定义但前端未使用
+- `/api/simple-reviewer/dashboard` - 后端已定义但前端未使用
+- `/api/simple-reviewer/pending-reviews` - 后端已定义但前端未使用
+- `/api/reviewer/content` - 后端已定义但前端未使用
+- `/api/reviewer/audit/submit` - 后端已定义但前端未使用
+- `/api/questionnaire` - 后端已定义但前端未使用
+- `/api/universal-questionnaire/submit` - 后端已定义但前端未使用
+- `/api/universal-questionnaire/count` - 后端已定义但前端未使用
+- `/api/analytics/basic-stats` - 后端已定义但前端未使用
+- `/api/analytics/distribution` - 后端已定义但前端未使用
 - `/api/stories/` - 后端已定义但前端未使用
 - `/api/stories/featured` - 后端已定义但前端未使用
 - `/api/stories/test-tags/:storyId` - 后端已定义但前端未使用
@@ -129,7 +149,6 @@
 - `/api/api` - 后端已定义但前端未使用
 - `/api/auth` - 后端已定义但前端未使用
 - `/api/uuid` - 后端已定义但前端未使用
-- `/api/questionnaire` - 后端已定义但前端未使用
 - `/api/universal-questionnaire` - 后端已定义但前端未使用
 - `/api/analytics` - 后端已定义但前端未使用
 - `/api/reviewer` - 后端已定义但前端未使用
@@ -161,8 +180,12 @@
 - `/api/admin/database-test` - 后端已定义但前端未使用
 - `/api/stats/simple` - 后端已定义但前端未使用
 - `/api/track` - 后端已定义但前端未使用
-- `/api/admin/login-monitor` - 后端已定义但前端未使用
+- `/api/user-creation` - 后端已定义但前端未使用
 - `/api/admin/database` - 后端已定义但前端未使用
+- `/api/admin/login-monitor` - 后端已定义但前端未使用
+- `/api/simple-auth` - 后端已定义但前端未使用
+- `/api/simple-reviewer` - 后端已定义但前端未使用
+- `/api/simple-admin` - 后端已定义但前端未使用
 - `/api/audit` - 后端已定义但前端未使用
 - `/api/database-fix` - 后端已定义但前端未使用
 - `/api/png-management` - 后端已定义但前端未使用
@@ -182,8 +205,6 @@
 - `/api/heart-voices/<int:voice_id>` - 后端已定义但前端未使用
 - `/api/heart-voices/user/<int:user_id>` - 后端已定义但前端未使用
 - `/api/heart-voices/<int:voice_id>/like` - 后端已定义但前端未使用
-- `/api/analytics/basic-stats` - 后端已定义但前端未使用
-- `/api/analytics/distribution` - 后端已定义但前端未使用
 - `/api/analytics/cross-analysis` - 后端已定义但前端未使用
 - `/api/analytics/sync` - 后端已定义但前端未使用
 - `/api/analytics/sync/status` - 后端已定义但前端未使用
@@ -218,10 +239,11 @@
 - `/api/uuid/users/statistics` - 后端已定义但前端未使用
 
 ### 重复定义的API
-- `/api/admin/dashboard/stats` - API路径重复定义3次
-- `/api/admin/questionnaires` - API路径重复定义3次
+- `/api/admin/dashboard/stats` - API路径重复定义4次
+- `/api/admin/questionnaires` - API路径重复定义4次
 - `/api/admin/users` - API路径重复定义4次
 - `/api/admin/users/stats` - API路径重复定义3次
+- `/api/admin/users/export` - API路径重复定义2次
 - `/api/admin/reviewers` - API路径重复定义3次
 - `/api/admin/content/categories` - API路径重复定义6次
 - `/api/admin/content/tags` - API路径重复定义6次
@@ -240,31 +262,37 @@
 - `/api/admin/ip-access-control/rules` - API路径重复定义2次
 - `/api/admin/ip-access-control/rules/:ruleId` - API路径重复定义2次
 - `/api/questionnaire/` - API路径重复定义2次
-- `/api/questionnaire/:id` - API路径重复定义2次
+- `/api/questionnaire/:id` - API路径重复定义3次
 - `/api/reviewer/pending-reviews` - API路径重复定义3次
 - `/api/reviewer/submit-review` - API路径重复定义3次
 - `/api/reviewer/stats` - API路径重复定义3次
+- `/api/health` - API路径重复定义7次
+- `/api/stories` - API路径重复定义10次
+- `/api/questionnaire` - API路径重复定义4次
+- `/api/analytics/basic-stats` - API路径重复定义3次
+- `/api/analytics/distribution` - API路径重复定义3次
+- `/api/heart-voices` - API路径重复定义5次
+- `/api/errors/report` - API路径重复定义2次
 - `/api/stories/` - API路径重复定义2次
 - `/api/stories/featured` - API路径重复定义3次
 - `/api/stories/:id` - API路径重复定义2次
 - `/api/api-docs/swagger.json` - API路径重复定义2次
 - `/api/api-docs` - API路径重复定义2次
 - `/api/version` - API路径重复定义2次
-- `/api/health` - API路径重复定义5次
 - `/api/v1` - API路径重复定义2次
 - `/api/v2` - API路径重复定义2次
 - `/api/api` - API路径重复定义2次
-- `/api/auth` - API路径重复定义2次
-- `/api/uuid` - API路径重复定义2次
-- `/api/questionnaire` - API路径重复定义2次
-- `/api/universal-questionnaire` - API路径重复定义2次
-- `/api/analytics` - API路径重复定义2次
-- `/api/reviewer` - API路径重复定义2次
-- `/api/violations` - API路径重复定义2次
-- `/api/admin` - API路径重复定义2次
-- `/api/stories` - API路径重复定义6次
+- `/api/auth` - API路径重复定义3次
+- `/api/uuid` - API路径重复定义3次
+- `/api/universal-questionnaire` - API路径重复定义3次
+- `/api/analytics` - API路径重复定义3次
+- `/api/reviewer` - API路径重复定义3次
+- `/api/violations` - API路径重复定义3次
+- `/api/tiered-audit` - API路径重复定义2次
+- `/api/admin` - API路径重复定义3次
 - `/api/admin/data-generator` - API路径重复定义2次
-- `/api/participation-stats` - API路径重复定义2次
+- `/api/participation-stats` - API路径重复定义3次
+- `/api/questionnaire-auth` - API路径重复定义3次
 - `/api/user-content-management` - API路径重复定义2次
 - `/api/review` - API路径重复定义2次
 - `/api/security` - API路径重复定义2次
@@ -276,6 +304,7 @@
 - `/api/admin/intelligent-security` - API路径重复定义2次
 - `/api/images/auto-generate/stats` - API路径重复定义2次
 - `/api/images/auto-generate/batch-generate` - API路径重复定义2次
+- `/api/admin/database` - API路径重复定义2次
 - `/api/admin/questionnaires/<int:questionnaire_id>` - API路径重复定义2次
 - `/api/admin/audit-records` - API路径重复定义2次
 - `/api/admin/ai-sources` - API路径重复定义4次
@@ -295,12 +324,9 @@
 - `/api/audit/stats` - API路径重复定义2次
 - `/api/audit/history` - API路径重复定义2次
 - `/api/audit/test` - API路径重复定义2次
-- `/api/heart-voices` - API路径重复定义4次
 - `/api/heart-voices/<int:voice_id>` - API路径重复定义2次
 - `/api/heart-voices/user/<int:user_id>` - API路径重复定义2次
 - `/api/heart-voices/<int:voice_id>/like` - API路径重复定义2次
-- `/api/analytics/basic-stats` - API路径重复定义2次
-- `/api/analytics/distribution` - API路径重复定义2次
 - `/api/analytics/cross-analysis` - API路径重复定义2次
 - `/api/analytics/sync` - API路径重复定义2次
 - `/api/analytics/sync/status` - API路径重复定义2次

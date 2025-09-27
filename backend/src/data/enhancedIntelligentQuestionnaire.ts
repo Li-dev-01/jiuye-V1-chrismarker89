@@ -710,23 +710,18 @@ export const enhancedIntelligentQuestionnaire: UniversalQuestionnaire = {
           id: 'submission-type',
           type: 'radio',
           title: '您希望如何提交这份问卷？',
-          description: '不同提交方式的说明：\n• 匿名提交：完全匿名，无法追踪\n• 快捷注册：创建半匿名ID，可查看个人数据统计\n• 登录提交：使用现有账户，享受完整功能',
+          description: '为了确保问卷数据的真实性和防止恶意提交，我们要求用户登录后提交问卷：\n• Google一键登录：使用Google账号快速登录\n• 自动登录：系统自动创建匿名账户，无需手动注册',
           required: true,
           options: [
             {
-              value: 'anonymous',
-              label: '匿名提交（推荐）',
-              description: '完全匿名，保护隐私，数据仅用于统计分析'
+              value: 'google-login',
+              label: 'Google一键登录',
+              description: '使用Google账号登录，快速安全，会获取您的邮箱地址用于身份验证'
             },
             {
-              value: 'quick-register',
-              label: '快捷注册半匿名ID',
-              description: '创建一个半匿名身份，可以查看个人数据在整体中的位置'
-            },
-            {
-              value: 'login-submit',
-              label: '登录后提交',
-              description: '使用现有账户提交，享受个性化数据分析'
+              value: 'auto-login',
+              label: '自动登录',
+              description: '系统自动创建匿名账户，通过简单验证后即可登录提交'
             }
           ],
           statistics: {
@@ -737,8 +732,8 @@ export const enhancedIntelligentQuestionnaire: UniversalQuestionnaire = {
           branchLogic: {
             enabled: true,
             affectedSections: [
-              'quick-registration',
-              'login-form'
+              'google-auth',
+              'auto-registration'
             ]
           }
         }

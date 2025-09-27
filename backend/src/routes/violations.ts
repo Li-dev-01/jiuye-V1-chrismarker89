@@ -33,26 +33,7 @@ interface ViolationRecord {
 // 生成模拟违规数据
 function generateMockViolations(filters: any = {}) {
   const mockData: ViolationRecord[] = [
-    {
-      id: 1,
-      contentType: 'heart_voice',
-      contentId: 101,
-      contentUuid: 'heart-voices-001',
-      contentPreview: '这个工作环境太差了，老板就是个混蛋，天天压榨员工，完全不把员工当人看...',
-      fullContent: '这个工作环境太差了，老板就是个混蛋，天天压榨员工，完全不把员工当人看。每天加班到深夜，周末还要来公司，工资还特别低。我真的受不了了，想要辞职但是又怕找不到工作。整个公司的管理就是一团糟，没有任何人性化的管理。',
-      authorName: '匿名用户001',
-      authorUuid: 'user-001',
-      rejectionReason: '包含不当言论和过激情绪表达',
-      violationType: '不当言论',
-      severity: 'medium',
-      reviewerId: 'reviewer001',
-      reviewerName: '审核员A',
-      reviewNotes: '内容包含对雇主的恶意攻击和不当言论，不符合平台社区规范，建议用户以更客观的方式表达意见',
-      rejectedAt: '2024-08-10 14:30:00',
-      createdAt: '2024-08-10 10:15:00',
-      tags: ['工作环境', '负面情绪', '不当言论'],
-      metadata: { ip: '192.168.1.100', userAgent: 'Mozilla/5.0...' }
-    },
+
     {
       id: 2,
       contentType: 'story',
@@ -74,26 +55,7 @@ function generateMockViolations(filters: any = {}) {
       tags: ['面试经历', '就业歧视', '敏感话题'],
       metadata: { ip: '192.168.1.101', userAgent: 'Mozilla/5.0...' }
     },
-    {
-      id: 3,
-      contentType: 'heart_voice',
-      contentId: 102,
-      contentUuid: 'heart-voices-002',
-      contentPreview: '找工作太难了，投了几百份简历都没有回音，感觉人生没有希望了，想要放弃...',
-      fullContent: '找工作太难了，投了几百份简历都没有回音，感觉人生没有希望了，想要放弃。每天都很焦虑，睡不好觉，也不想吃饭。家里人还一直催我，压力特别大。有时候真的想要结束这一切，觉得活着没有意义。',
-      authorName: '匿名用户002',
-      authorUuid: 'user-003',
-      rejectionReason: '过度消极情绪，包含自伤倾向',
-      violationType: '消极内容',
-      severity: 'high',
-      reviewerId: 'reviewer001',
-      reviewerName: '审核员A',
-      reviewNotes: '内容过于消极且包含自伤倾向，需要关注用户心理健康状况，建议提供心理援助信息',
-      rejectedAt: '2024-08-10 18:20:00',
-      createdAt: '2024-08-10 15:30:00',
-      tags: ['求职困难', '消极情绪', '心理压力', '自伤倾向'],
-      metadata: { ip: '192.168.1.102', userAgent: 'Mozilla/5.0...' }
-    },
+
     {
       id: 4,
       contentType: 'story',
@@ -115,26 +77,7 @@ function generateMockViolations(filters: any = {}) {
       tags: ['公司爆料', '虚假信息', '诽谤'],
       metadata: { ip: '192.168.1.103', userAgent: 'Mozilla/5.0...' }
     },
-    {
-      id: 5,
-      contentType: 'heart_voice',
-      contentId: 103,
-      contentUuid: 'heart-voices-003',
-      contentPreview: '赚钱太容易了！加我微信XXXXX，教你日赚1000+的方法...',
-      fullContent: '赚钱太容易了！加我微信XXXXX，教你日赚1000+的方法，无需投资，在家就能做，先到先得，仅限前100名！',
-      authorName: '财富导师',
-      authorUuid: 'user-005',
-      rejectionReason: '垃圾广告信息',
-      violationType: '垃圾信息',
-      severity: 'medium',
-      reviewerId: 'reviewer002',
-      reviewerName: '审核员B',
-      reviewNotes: '明显的垃圾广告信息，与平台主题不符，涉嫌诈骗',
-      rejectedAt: '2024-08-09 14:30:00',
-      createdAt: '2024-08-09 13:20:00',
-      tags: ['垃圾广告', '诈骗', '微信营销'],
-      metadata: { ip: '192.168.1.104', userAgent: 'Mozilla/5.0...' }
-    }
+
   ];
 
   // 应用筛选条件

@@ -20,14 +20,13 @@ import {
 } from './components/auth/ManagementRouteGuard';
 import { GlobalSemiAnonymousLogin } from './components/auth/GlobalSemiAnonymousLogin';
 import { QuestionnaireLayout } from './components/layout/QuestionnaireLayout';
-import { SafeFloatingStatusBar } from './components/common/SafeFloatingStatusBar';
-import { floatingComponentManager } from './services/floatingComponentManager';
+
 import DevAccessPanel from './components/dev/DevAccessPanel';
 import './styles/global.css';
 
 // 懒加载组件
 const HomePage = React.lazy(() => import('./pages/HomePage'));
-const QuestionnairePage = React.lazy(() => import('./pages/EnhancedQuestionnairePage'));
+const QuestionnairePage = React.lazy(() => import('./pages/IntelligentQuestionnairePage'));
 const StoriesPage = React.lazy(() => import('./pages/Stories'));
 const StoriesSimple = React.lazy(() => import('./pages/StoriesSimple'));
 const StoriesTest1 = React.lazy(() => import('./pages/test/StoriesTest1'));
@@ -132,6 +131,7 @@ const TestPage = React.lazy(() => import('./pages/TestPage').then(module => ({ d
 const IntelligentQuestionnairePage = React.lazy(() => import('./pages/IntelligentQuestionnairePage'));
 const GoogleOAuthTestPage = React.lazy(() => import('./pages/test/GoogleOAuthTestPage').then(module => ({ default: module.default })));
 const GoogleOAuthDebugPage = React.lazy(() => import('./pages/debug/GoogleOAuthDebugPage').then(module => ({ default: module.default })));
+const AuthTestPage = React.lazy(() => import('./pages/test/AuthTestPage').then(module => ({ default: module.AuthTestPage })));
 // const FloatingComponentTestPage = React.lazy(() => import('./pages/test/FloatingComponentTestPage').then(module => ({ default: module.FloatingComponentTestPage })));
 // const AdminRoutesTestPage = React.lazy(() => import('./pages/dev/AdminRoutesTestPage').then(module => ({ default: module.default })));
 // const ManagementAuthDebugPage = React.lazy(() => import('./pages/debug/ManagementAuthDebugPage').then(module => ({ default: module.default })));
@@ -158,15 +158,14 @@ function App() {
     // 初始化管理员认证状态
     initializeAuth();
 
-    // 初始化悬浮组件管理器
-    floatingComponentManager.setGlobalEnabled(true);
+
 
     // 在开发环境中显示性能信息
     if (process.env.NODE_ENV === 'development') {
       console.log('Performance Monitor initialized');
       console.log('Cache Manager initialized');
       console.log('Management Auth initialized');
-      console.log('Floating Component Manager initialized');
+
     }
   }, [initializeAuth]);
 
@@ -447,6 +446,15 @@ function App() {
                     {/* Google OAuth测试页面 */}
                     <Route path="/test/google-oauth" element={<PublicRouteGuard><GoogleOAuthTestPage /></PublicRouteGuard>} />
 
+                    {/* 认证功能测试页面 */}
+                    <Route path="/test/auth" element={
+                      <PublicRouteGuard>
+                        <QuestionnaireLayout>
+                          <AuthTestPage />
+                        </QuestionnaireLayout>
+                      </PublicRouteGuard>
+                    } />
+
                     {/* Google OAuth调试页面 */}
                     <Route path="/debug/google-oauth" element={<PublicRouteGuard><GoogleOAuthDebugPage /></PublicRouteGuard>} />
 
@@ -478,10 +486,7 @@ function App() {
               {/* 全局半匿名登录组件 */}
               <GlobalSemiAnonymousLogin />
 
-              {/* 安全悬浮状态栏 */}
-              {floatingComponentManager.isComponentEnabled('floating-status-bar') && (
-                <SafeFloatingStatusBar />
-              )}
+
 
               {/* 开发者快捷访问面板 - 仅开发环境 */}
               <DevAccessPanel />

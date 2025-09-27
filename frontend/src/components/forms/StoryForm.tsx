@@ -408,7 +408,7 @@ const StoryForm: React.FC<StoryFormProps> = ({
       {/* 预览模态框 */}
       <Modal
         title="故事预览"
-        visible={previewVisible}
+        open={previewVisible}
         onCancel={() => setPreviewVisible(false)}
         footer={null}
         width={800}
@@ -466,11 +466,11 @@ const StoryForm: React.FC<StoryFormProps> = ({
     return (
       <Modal
         title="发布就业故事"
-        visible={visible}
+        open={visible}
         onCancel={onCancel}
         footer={null}
         width={900}
-        destroyOnHidden
+        destroyOnClose
       >
         {formContent}
       </Modal>

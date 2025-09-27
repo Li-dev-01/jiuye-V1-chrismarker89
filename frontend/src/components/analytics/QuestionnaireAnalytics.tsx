@@ -51,8 +51,8 @@ export default function QuestionnaireAnalytics() {
       setLoading(true);
 
       // 使用正确的统计API端点
-      const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || 'https://employment-survey-api-prod.chrismarker89.workers.dev';
-      const response = await fetch(`${apiBaseUrl}/api/universal-questionnaire/statistics/employment-survey-2024?include_test_data=true`);
+      const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || 'https://employment-survey-api-prod.chrismarker89.workers.dev/api';
+      const response = await fetch(`${apiBaseUrl}/universal-questionnaire/statistics/employment-survey-2024?include_test_data=true`);
 
       if (!response.ok) {
         throw new Error(`HTTP ${response.status}: ${response.statusText}`);

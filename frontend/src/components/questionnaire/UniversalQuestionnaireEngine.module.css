@@ -8,13 +8,13 @@
 
 .header {
   background: var(--bg-primary);
-  padding: var(--spacing-xl);
+  padding: var(--spacing-sm) var(--spacing-xl) var(--spacing-xs);
   border-radius: var(--border-radius-xl) var(--border-radius-xl) 0 0;
   border-bottom: 1px solid var(--border-secondary);
 }
 
 .title {
-  margin-bottom: var(--spacing-3) !important;
+  margin-bottom: var(--spacing-1) !important;
   color: var(--text-primary);
   text-align: center;
   font-size: var(--font-size-2xl);
@@ -26,19 +26,19 @@
   text-align: center;
   color: var(--text-secondary);
   font-size: var(--font-size-base);
-  margin-bottom: var(--spacing-lg);
+  margin-bottom: var(--spacing-xs);
   line-height: var(--line-height-base);
 }
 
 .progressSection {
-  margin-top: var(--spacing-lg);
+  margin-top: var(--spacing-xs);
 }
 
 .progressInfo {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: var(--spacing-3);
+  margin-bottom: var(--spacing-1);
 }
 
 .progress {
@@ -51,13 +51,21 @@
   box-shadow: var(--shadow-xl);
 }
 
+.sectionCard :global(.ant-card-body) {
+  padding: var(--spacing-lg) var(--spacing-xl) var(--spacing-md);
+}
+
+.sectionCard :global(.ant-divider) {
+  margin: var(--spacing-md) 0;
+}
+
 .sectionHeader {
   text-align: center;
   margin-bottom: 0;
 }
 
 .sectionTitle {
-  margin-bottom: var(--spacing-2) !important;
+  margin-bottom: var(--spacing-1) !important;
   color: var(--text-primary);
   font-size: var(--font-size-xl);
   font-weight: var(--font-weight-medium);
@@ -71,11 +79,11 @@
 }
 
 .questionsContainer {
-  margin: var(--spacing-xl) 0;
+  margin: var(--spacing-sm) 0 var(--spacing-xs);
 }
 
 .questionWrapper {
-  margin-bottom: var(--spacing-xl);
+  margin-bottom: var(--spacing-sm);
 }
 
 .questionWrapper:last-child {
@@ -86,7 +94,7 @@
   display: flex;
   justify-content: center;
   gap: var(--spacing-md);
-  padding-top: var(--spacing-lg);
+  padding-top: var(--spacing-xs);
   border-top: 1px solid var(--border-secondary);
 }
 
@@ -98,7 +106,7 @@
 }
 
 .completionAlert {
-  margin-top: var(--spacing-md);
+  margin-top: var(--spacing-sm);
   border-radius: var(--border-radius-lg);
 }
 
@@ -107,27 +115,27 @@
   .container {
     margin: 0 16px;
   }
-  
+
   .header {
-    padding: 24px 20px;
+    padding: var(--spacing-md) var(--spacing-lg) var(--spacing-sm);
   }
-  
+
   .progressInfo {
     flex-direction: column;
-    gap: 8px;
+    gap: var(--spacing-sm);
     text-align: center;
   }
-  
+
   .sectionCard {
-    padding: 20px;
+    padding: var(--spacing-lg);
   }
-  
+
   .questionsContainer {
-    margin: 24px 0;
+    margin: var(--spacing-md) 0;
   }
-  
+
   .questionWrapper {
-    margin-bottom: 24px;
+    margin-bottom: var(--spacing-md);
   }
 }
 
@@ -135,20 +143,28 @@
   .container {
     margin: 0 8px;
   }
-  
+
   .header {
-    padding: 20px 16px;
+    padding: var(--spacing-sm) var(--spacing-md);
   }
-  
+
   .title {
     font-size: 20px !important;
   }
-  
+
   .description {
     font-size: 14px;
   }
-  
+
   .sectionCard {
-    padding: 16px;
+    padding: var(--spacing-md);
+  }
+
+  .questionsContainer {
+    margin: var(--spacing-sm) 0;
+  }
+
+  .questionWrapper {
+    margin-bottom: var(--spacing-sm);
   }
 }

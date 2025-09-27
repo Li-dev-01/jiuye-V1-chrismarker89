@@ -69,7 +69,7 @@ export const LazyStatistics: React.FC<LazyStatisticsProps> = ({
     `statistics-${questionnaireId}`,
     async () => {
       const response = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL}/api/universal-questionnaire/statistics/${questionnaireId}`
+        `${import.meta.env.VITE_API_BASE_URL}/universal-questionnaire/statistics/${questionnaireId}`
       );
 
       if (!response.ok) {

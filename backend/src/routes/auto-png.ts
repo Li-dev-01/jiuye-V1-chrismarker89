@@ -11,69 +11,8 @@ import { AutoPngService } from '../services/autoPngService';
 
 const autoPng = new Hono<{ Bindings: Env; Variables: AuthContext }>();
 
-/**
- * @swagger
- * /api/images/auto-generate/trigger/heart-voices/{id}:
- *   post:
- *     tags: [Auto PNG]
- *     summary: 触发心声PNG自动生成
- *     description: 当心声从A表迁移到B表时触发PNG生成
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: integer
- *         description: 心声ID
- *     responses:
- *       200:
- *         description: PNG生成成功
- *       400:
- *         description: 请求参数错误
- *       500:
- *         description: 服务器内部错误
- */
-autoPng.post('/trigger/heart-voice/:id', async (c) => {
-  try {
-    const heartVoiceId = parseInt(c.req.param('id'));
-    
-    if (!heartVoiceId) {
-      return c.json({
-        success: false,
-        error: 'Validation Error',
-        message: '心声ID无效'
-      }, 400);
-    }
 
-    const autoPngService = new AutoPngService(c.env);
-    const result = await autoPngService.generatePngForNewHeartVoice(heartVoiceId);
 
-    if (!result.success) {
-      return c.json({
-        success: false,
-        error: 'Generation Failed',
-        message: result.error
-      }, 500);
-    }
-
-    return c.json({
-      success: true,
-      data: {
-        heartVoiceId,
-        generatedCards: result.generatedCards
-      },
-      message: `成功为心声 ${heartVoiceId} 生成 ${result.generatedCards} 张PNG卡片`
-    });
-
-  } catch (error) {
-    console.error('触发心声PNG生成失败:', error);
-    return c.json({
-      success: false,
-      error: 'Internal Server Error',
-      message: '服务器内部错误，请稍后重试'
-    }, 500);
-  }
-});
 
 /**
  * @swagger
@@ -157,7 +96,7 @@ autoPng.post('/trigger/story/:id', async (c) => {
  *             properties:
  *               contentType:
  *                 type: string
- *                 enum: [heart_voice, story, both]
+ *                 enum: [story]
  *               limit:
  *                 type: integer
  *                 default: 50
@@ -171,20 +110,12 @@ autoPng.post('/trigger/story/:id', async (c) => {
  */
 autoPng.post('/batch-generate', authMiddleware, async (c) => {
   try {
-    const { contentType = 'both', limit = 50 } = await c.req.json();
+    const { contentType = 'story', limit = 50 } = await c.req.json();
 
     const autoPngService = new AutoPngService(c.env);
     const results: any[] = [];
 
-    if (contentType === 'heart_voice' || contentType === 'both') {
-      const heartVoiceResult = await autoPngService.batchGeneratePng('heart_voice', limit);
-      results.push({
-        type: 'heart_voice',
-        ...heartVoiceResult
-      });
-    }
-
-    if (contentType === 'story' || contentType === 'both') {
+    if (contentType === 'story') {
       const storyResult = await autoPngService.batchGeneratePng('story', limit);
       results.push({
         type: 'story',

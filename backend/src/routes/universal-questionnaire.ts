@@ -252,11 +252,13 @@ export function createUniversalQuestionnaireRoutes() {
       const db = createDatabaseService(c.env as Env);
       const userId = c.get('user')?.id || null;
 
+      console.log('Database service created, userId:', userId);
+
       // 将通用问卷数据转换为JSON存储
       const questionnaireData = {
         questionnaire_id: questionnaireId,
-        user_id: userId,
-        responses: JSON.stringify({
+        user_id: userId, // 使用实际的字段名
+        response_data: JSON.stringify({
           sectionResponses,
           metadata
         }),
@@ -268,18 +270,27 @@ export function createUniversalQuestionnaireRoutes() {
       };
 
       // 插入到通用问卷响应表
+      console.log('Attempting to insert data:', {
+        questionnaire_id: questionnaireData.questionnaire_id,
+        user_id: questionnaireData.user_id,
+        response_data_length: questionnaireData.response_data.length,
+        submitted_at: questionnaireData.submitted_at
+      });
+
       const result = await db.execute(`
         INSERT INTO universal_questionnaire_responses (
-          questionnaire_id, user_uuid, responses, submitted_at, is_completed, completion_percentage
+          questionnaire_id, user_id, response_data, submitted_at, ip_address, user_agent
         ) VALUES (?, ?, ?, ?, ?, ?)
       `, [
         questionnaireData.questionnaire_id,
-        questionnaireData.user_id,
-        questionnaireData.responses,
+        questionnaireData.user_id, // 使用实际的字段名
+        questionnaireData.response_data,
         questionnaireData.submitted_at,
-        1, // is_completed
-        100 // completion_percentage
+        questionnaireData.ip_address,
+        questionnaireData.user_agent
       ]);
+
+      console.log('Insert result:', result);
 
       return c.json({
         success: true,
@@ -293,6 +304,63 @@ export function createUniversalQuestionnaireRoutes() {
 
     } catch (error) {
       console.error('通用问卷提交失败:', error);
+      return c.json({
+        success: false,
+        error: 'Internal Server Error',
+        message: '服务器内部错误，请稍后重试'
+      }, 500);
+    }
+  });
+
+  // 关联问卷提交到用户 (公开接口)
+  universalQuestionnaire.post('/associate-submission', async (c) => {
+    console.log('Associate submission endpoint hit');
+    try {
+      const body = await c.req.json();
+      const { submissionId, userId } = body || {};
+
+      console.log('Association request:', { submissionId, userId });
+
+      // 基础验证
+      if (!submissionId || !userId) {
+        return c.json({
+          success: false,
+          error: 'Validation Error',
+          message: '提交ID和用户ID不能为空'
+        }, 400);
+      }
+
+      const db = createDatabaseService(c.env as Env);
+
+      // 更新问卷提交记录，关联到用户
+      const result = await db.execute(`
+        UPDATE universal_questionnaire_responses
+        SET user_uuid = ?, updated_at = CURRENT_TIMESTAMP
+        WHERE id = ? AND user_uuid IS NULL
+      `, [userId, submissionId]);
+
+      if (result.meta.changes === 0) {
+        return c.json({
+          success: false,
+          error: 'Not Found',
+          message: '未找到可关联的问卷提交记录'
+        }, 404);
+      }
+
+      console.log('✅ 问卷关联成功:', { submissionId, userId });
+
+      return c.json({
+        success: true,
+        message: '问卷关联成功',
+        data: {
+          submissionId,
+          userId,
+          associatedAt: new Date().toISOString()
+        }
+      });
+
+    } catch (error) {
+      console.error('问卷关联失败:', error);
       return c.json({
         success: false,
         error: 'Internal Server Error',

@@ -38,7 +38,8 @@ interface UniversalQuestionRendererProps {
   showStatistics?: boolean;
   refreshTrigger?: number; // 用于触发统计数据刷新
   onAuthSuccess?: (authType: 'quick-register' | 'semi-anonymous-login') => void; // 认证成功回调
-
+  autoScrollToNext?: boolean; // 是否在选择后自动滚动到下一题
+  isLastQuestion?: boolean; // 是否是最后一题
 }
 
 export const UniversalQuestionRenderer: React.FC<UniversalQuestionRendererProps> = ({
@@ -50,8 +51,39 @@ export const UniversalQuestionRenderer: React.FC<UniversalQuestionRendererProps>
   showStatistics = true,
   refreshTrigger = 0,
   onAuthSuccess,
-
+  autoScrollToNext = true,
+  isLastQuestion = false,
 }) => {
+  // 自动滚动到下一题的函数
+  const scrollToNextQuestion = () => {
+    if (!autoScrollToNext || isLastQuestion) return;
+
+    setTimeout(() => {
+      // 查找当前问题的下一个问题元素
+      const currentQuestionElement = document.querySelector(`[data-question-id="${question.id}"]`);
+      if (currentQuestionElement) {
+        const nextQuestionElement = currentQuestionElement.nextElementSibling;
+        if (nextQuestionElement) {
+          nextQuestionElement.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start',
+            inline: 'nearest'
+          });
+        }
+      }
+    }, 300); // 延迟300ms，让用户看到选择效果
+  };
+
+  // 处理选择变化的函数
+  const handleChange = (newValue: any) => {
+    onChange(newValue);
+
+    // 对于单选题，选择后自动滚动到下一题
+    if (question.type === 'radio' || question.type === 'select') {
+      scrollToNextQuestion();
+    }
+  };
+
   // 渲染问题标题
   const renderQuestionTitle = () => (
     <div className={styles.questionHeader}>
@@ -88,7 +120,19 @@ export const UniversalQuestionRenderer: React.FC<UniversalQuestionRendererProps>
               <div
                 key={option.value}
                 className={`${styles.tagOption} ${value === option.value ? styles.tagOptionSelected : ''}`}
-                onClick={() => onChange(option.value)}
+                onClick={() => {
+                  handleChange(option.value);
+                  // 如果是提交方式选择，触发相应的认证流程
+                  if (question.id === 'submission-type' && onAuthSuccess) {
+                    if (option.value === 'google-login') {
+                      // 触发Google登录
+                      onAuthSuccess('quick-register');
+                    } else if (option.value === 'auto-login') {
+                      // 触发自动登录
+                      onAuthSuccess('semi-anonymous-login');
+                    }
+                  }
+                }}
               >
                 {option.label}
               </div>
@@ -110,7 +154,7 @@ export const UniversalQuestionRenderer: React.FC<UniversalQuestionRendererProps>
                     const newValues = isSelected
                       ? currentValues.filter((v: any) => v !== option.value)
                       : [...currentValues, option.value];
-                    onChange(newValues);
+                    handleChange(newValues);
                   }}
                 >
                   {option.label}
@@ -127,7 +171,7 @@ export const UniversalQuestionRenderer: React.FC<UniversalQuestionRendererProps>
               <div
                 key={option.value}
                 className={`${styles.tagOption} ${value === option.value ? styles.tagOptionSelected : ''}`}
-                onClick={() => onChange(option.value)}
+                onClick={() => handleChange(option.value)}
               >
                 {option.label}
               </div>
@@ -271,7 +315,11 @@ export const UniversalQuestionRenderer: React.FC<UniversalQuestionRendererProps>
 
 
   return (
-    <Card className={styles.questionCard} bordered={false}>
+    <Card
+      className={styles.questionCard}
+      bordered={false}
+      data-question-id={question.id}
+    >
       {renderQuestionTitle()}
 
       <div className={styles.inputContainer}>

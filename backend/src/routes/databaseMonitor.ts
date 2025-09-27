@@ -129,15 +129,7 @@ export function createDatabaseMonitorRoutes() {
           issues: [],
           status: 'healthy'
         },
-        {
-          tableName: 'valid_heart_voices',
-          recordCount: 110,
-          qualityScore: 88,
-          lastUpdate: new Date().toISOString(),
-          growthRate: 8.3,
-          issues: ['部分记录缺少分类标签'],
-          status: 'warning'
-        },
+
         {
           tableName: 'valid_stories',
           recordCount: 88,
@@ -267,41 +259,7 @@ export function createDatabaseMonitorRoutes() {
     }
   });
 
-  /**
-   * 健康检查
-   * GET /api/admin/database/health
-   */
-  monitor.get('/health', async (c) => {
-    try {
-      const db = createDatabaseService(c.env as Env);
-      
-      // 简单的健康检查
-      const testQuery = await db.queryFirst(`SELECT 1 as test`);
-      
-      return c.json({
-        success: true,
-        data: {
-          status: 'healthy',
-          checks: {
-            database: testQuery ? 'healthy' : 'error',
-            tables: 'healthy',
-            sync: 'warning',
-            performance: 'healthy'
-          },
-          timestamp: new Date().toISOString()
-        },
-        message: '健康检查完成'
-      });
 
-    } catch (error) {
-      console.error('健康检查失败:', error);
-      return c.json({
-        success: false,
-        error: 'Internal Server Error',
-        message: '健康检查失败'
-      }, 500);
-    }
-  });
 
   return monitor;
 }

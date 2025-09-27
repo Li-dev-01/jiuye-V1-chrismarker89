@@ -20,7 +20,8 @@ import {
 } from '../types/questionnaire-auth';
 
 import { generateDeviceFingerprint, generateABIdentityHash } from '../utils/crypto';
-import { api } from './api';
+import { apiClient } from './api';
+import { unifiedUserCreationService } from './unifiedUserCreationService';
 
 class QuestionnaireAuthService {
   private readonly STORAGE_KEYS = {
@@ -29,7 +30,7 @@ class QuestionnaireAuthService {
     REMEMBER_IDENTITY: 'questionnaire_remember_identity'
   };
 
-  private readonly API_BASE_URL = 'http://localhost:8787/api/uuid';
+  private readonly API_BASE_URL = 'https://employment-survey-api-prod.chrismarker89.workers.dev/api/uuid';
 
   /**
    * A+B 身份验证登录
@@ -186,24 +187,27 @@ class QuestionnaireAuthService {
    */
   private async generateUUID(identityA: string, identityB: string): Promise<string> {
     try {
-      // 尝试调用UUID服务
-      const response = await fetch(`${this.API_BASE_URL}/generate-uuid`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ identityA, identityB })
+      // 首先尝试调用修复后的UUID端点
+      const response = await fetch(`${this.API_BASE_URL}/generate-uuid?type=semi_anonymous`, {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' }
       });
 
       if (response.ok) {
         const result = await response.json();
-        if (result.success) {
-          return result.uuid;
+        if (result.success && result.data?.uuid) {
+          console.log('✅ UUID生成成功:', result.data.uuid);
+          return result.data.uuid;
         }
       }
+
+      console.warn('UUID API调用失败，状态:', response.status);
     } catch (error) {
       console.warn('UUID服务调用失败，使用本地生成:', error);
     }
 
     // 本地UUID生成（基于A+B组合的哈希）
+    console.log('🔄 使用本地UUID生成');
     return this.generateLocalUUID(identityA, identityB);
   }
 
@@ -341,7 +345,7 @@ class QuestionnaireAuthService {
    */
   async authenticateWithAPI(identityA: string, identityB: string, remember: boolean = false): Promise<QuestionnaireAuthResult> {
     try {
-      const response = await api.post('/questionnaire-auth/semi-anonymous', {
+      const response = await apiClient.post('/questionnaire-auth/semi-anonymous', {
         identityA,
         identityB,
         deviceInfo: {

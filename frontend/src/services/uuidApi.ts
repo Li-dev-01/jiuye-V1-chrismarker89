@@ -64,7 +64,7 @@ interface LinkContentRequest {
 
 class UUIDApiService {
   private api: AxiosInstance;
-  private authBaseUrl = import.meta.env.VITE_API_BASE_URL || 'https://employment-survey-api-prod.chrismarker89.workers.dev'; // 用户认证API服务
+  private authBaseUrl = import.meta.env.VITE_API_BASE_URL || 'https://employment-survey-api-prod.chrismarker89.workers.dev/api'; // 用户认证API服务
 
   constructor() {
     this.api = apiClient;
@@ -78,7 +78,7 @@ class UUIDApiService {
     identityB: string,
     deviceInfo?: any
   ): Promise<ApiResponse<{ user: UniversalUser; session: UserSession }>> {
-    const response = await fetch(`${this.authBaseUrl}/api/uuid/auth/semi-anonymous`, {
+    const response = await fetch(`${this.authBaseUrl}/uuid/auth/semi-anonymous`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

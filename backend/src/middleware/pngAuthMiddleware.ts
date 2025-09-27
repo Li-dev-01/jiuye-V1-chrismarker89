@@ -38,12 +38,10 @@ export function createPngAuthMiddleware() {
     try {
       // 提取请求参数
       const path = c.req.path;
-      let contentType: 'heart_voice' | 'story';
+      let contentType: 'story';
 
       if (path.includes('/stories/')) {
         contentType = 'story';
-      } else if (path.includes('/heart-voices/')) {
-        contentType = 'heart_voice';
       } else {
         contentType = 'story'; // 默认值
       }

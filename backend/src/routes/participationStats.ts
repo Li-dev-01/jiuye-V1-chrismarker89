@@ -287,62 +287,7 @@ export function createParticipationStatsRoutes() {
     }
   });
 
-  /**
-   * 健康检查和数据库测试
-   * GET /api/participation/stats/health
-   */
-  stats.get('/health', async (c) => {
-    try {
-      const db = createDatabaseService(c.env as Env);
 
-      // 基础连接测试
-      const connectionTest = await db.queryFirst(`SELECT 1 as test`);
-
-      // 检查统计表是否存在
-      const tableCheck = await db.queryFirst(`
-        SELECT name FROM sqlite_master
-        WHERE type='table' AND name='participation_stats'
-      `);
-
-      // 检查数据表
-      const dataCheck = await db.query(`
-        SELECT
-          (SELECT COUNT(*) FROM universal_questionnaire_responses) as questionnaire_count,
-          (SELECT COUNT(*) FROM valid_heart_voices) as voices_count,
-          (SELECT COUNT(*) FROM valid_stories) as stories_count
-      `);
-
-      // 测试统计查询
-      const testStats = await db.queryFirst(`
-        SELECT
-          COUNT(DISTINCT COALESCE(user_uuid, session_id, id)) as participants,
-          COUNT(*) as responses,
-          COUNT(CASE WHEN is_completed = 1 THEN 1 END) as completed
-        FROM universal_questionnaire_responses
-      `);
-
-      return c.json({
-        success: true,
-        data: {
-          status: 'healthy',
-          connectionTest: connectionTest,
-          tableExists: !!tableCheck,
-          dataCounts: dataCheck[0] || {},
-          testStats: testStats,
-          timestamp: new Date().toISOString()
-        },
-        message: '统计服务运行正常'
-      });
-
-    } catch (error) {
-      console.error('统计服务健康检查失败:', error);
-      return c.json({
-        success: false,
-        error: 'Internal Server Error',
-        message: '统计服务健康检查失败'
-      }, 500);
-    }
-  });
 
   return stats;
 }

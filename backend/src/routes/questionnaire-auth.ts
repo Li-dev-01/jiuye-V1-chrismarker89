@@ -38,13 +38,24 @@ interface QuestionnaireSession {
 }
 
 export function createQuestionnaireAuthRoutes() {
+  console.log('🔧 Creating questionnaire auth routes...');
   const auth = new Hono<{ Bindings: Env }>();
+
+  // 测试端点
+  auth.get('/test', async (c) => {
+    console.log('📝 Test endpoint called');
+    return c.json({
+      success: true,
+      message: 'Questionnaire auth routes are working!',
+      timestamp: new Date().toISOString()
+    });
+  });
 
   // 获取客户端IP
   function getClientIP(c: any): string {
-    return c.req.header('CF-Connecting-IP') || 
-           c.req.header('X-Forwarded-For') || 
-           c.req.header('X-Real-IP') || 
+    return c.req.header('CF-Connecting-IP') ||
+           c.req.header('X-Forwarded-For') ||
+           c.req.header('X-Real-IP') ||
            '127.0.0.1';
   }
 

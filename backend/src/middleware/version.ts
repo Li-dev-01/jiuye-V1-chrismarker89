@@ -51,11 +51,28 @@ export const VERSION_CONFIG: Record<ApiVersion, VersionInfo> = {
 export function versionMiddleware() {
   return async (c: Context<{ Bindings: Env }>, next: Next) => {
     const path = c.req.path;
-    
+
+    // 跳过特定路由的版本检查
+    const skipVersionCheck = [
+      '/api/questionnaire-auth',
+      '/api/health',
+      '/api/uuid'
+    ].some(skipPath => path.startsWith(skipPath));
+
+    if (skipVersionCheck) {
+      // 设置默认版本信息但不进行验证
+      c.set('apiVersion', DEFAULT_VERSION);
+      c.set('versionInfo', VERSION_CONFIG[DEFAULT_VERSION]);
+      c.header('X-API-Version', DEFAULT_VERSION);
+      c.header('X-API-Supported-Versions', SUPPORTED_VERSIONS.join(', '));
+      await next();
+      return;
+    }
+
     // 提取版本信息
     const versionMatch = path.match(/^\/api\/(v\d+)\//);
     const requestedVersion = versionMatch ? versionMatch[1] as ApiVersion : DEFAULT_VERSION;
-    
+
     // 验证版本
     if (!SUPPORTED_VERSIONS.includes(requestedVersion)) {
       return c.json({

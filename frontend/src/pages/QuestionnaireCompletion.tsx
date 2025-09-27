@@ -19,14 +19,20 @@ import {
 } from 'antd';
 import {
   CheckCircleOutlined,
-  UserOutlined,
-  LoginOutlined,
+  GoogleOutlined,
+  SafetyOutlined,
+  KeyOutlined,
   SendOutlined,
-  SafetyOutlined
+  UserOutlined
 } from '@ant-design/icons';
 import { useAuth } from '../stores/universalAuthStore';
 import { useQuestionnaireCompletion } from '../hooks/useQuestionnaireCompletion';
 import { universalQuestionnaireService } from '../services/universalQuestionnaireService';
+import { questionnaireAuthService } from '../services/questionnaireAuthService';
+import GoogleOAuthSecurityPrompt from '../components/auth/GoogleOAuthSecurityPrompt';
+import DigitVerification from '../components/auth/DigitVerification';
+import ABCredentialsDisplay from '../components/auth/ABCredentialsDisplay';
+import { googleOAuthService } from '../services/googleOAuthService';
 import styles from './QuestionnaireCompletion.module.css';
 
 const { Title, Paragraph, Text } = Typography;
@@ -50,80 +56,210 @@ export const QuestionnaireCompletion: React.FC<QuestionnaireCompletionProps> = (
   } = useQuestionnaireCompletion();
 
   const [submitting, setSubmitting] = useState(false);
-  const [submitChoice, setSubmitChoice] = useState<'anonymous' | 'login' | null>(null);
+
+  // 新增状态
+  const [showGoogleSecurityPrompt, setShowGoogleSecurityPrompt] = useState(false);
+  const [showDigitVerification, setShowDigitVerification] = useState(false);
+  const [showABCredentials, setShowABCredentials] = useState(false);
+  const [generatedCredentials, setGeneratedCredentials] = useState<{
+    identityA: string;
+    identityB: string;
+  } | null>(null);
 
 
-  // 从路由状态获取问卷数据
-  const questionnaire = questionnaireData || location.state?.questionnaireData;
+  // 从路由状态或sessionStorage获取问卷数据
+  const [questionnaire, setQuestionnaire] = useState(questionnaireData || location.state?.questionnaireData);
 
   useEffect(() => {
+    // 检查sessionStorage中是否有待处理的问卷数据
+    const pendingQuestionnaire = sessionStorage.getItem('pendingQuestionnaire');
+    if (pendingQuestionnaire && !questionnaire) {
+      try {
+        const parsedData = JSON.parse(pendingQuestionnaire);
+        setQuestionnaire(parsedData);
+
+        // 根据提交方式自动触发相应的登录流程
+        if (parsedData.submissionType === 'google-login') {
+          console.log('自动触发Google登录流程');
+          setTimeout(() => {
+            setShowGoogleSecurityPrompt(true);
+          }, 500);
+        } else if (parsedData.submissionType === 'auto-login') {
+          console.log('自动触发自动登录流程');
+          setTimeout(() => {
+            setShowDigitVerification(true);
+          }, 500);
+        }
+      } catch (error) {
+        console.error('解析问卷数据失败:', error);
+      }
+    }
+
     // 如果没有问卷数据，重定向到问卷页面
-    if (!questionnaire) {
+    if (!questionnaire && !pendingQuestionnaire) {
       message.warning('请先完成问卷填写');
       navigate('/questionnaire');
     }
 
+    // 处理登录成功消息
+    if (location.state?.loginSuccess && location.state?.message) {
+      message.success(location.state.message);
+      // 清理状态，避免重复显示
+      window.history.replaceState({}, document.title);
+    }
+  }, [questionnaire, navigate, location.state]);
 
-  }, [questionnaire, navigate]);
+  // Google一键登录 - 直接跳转
+  const handleGoogleLogin = () => {
+    setShowGoogleSecurityPrompt(true);
+  };
 
-  // 匿名提交问卷
-  const handleAnonymousSubmit = async () => {
-    setSubmitting(true);
-    setSubmitChoice('anonymous');
+  // Google安全提示确认
+  const handleGoogleSecurityConfirm = async () => {
+    setShowGoogleSecurityPrompt(false);
 
     try {
-      // 构造通用问卷格式
-      const questionnaireResponse = {
-        questionnaireId: 'employment-survey-2024',
-        sectionResponses: [
-          {
-            sectionId: 'basic-info',
-            responses: questionnaire
-          }
-        ],
-        metadata: {
-          userType: 'anonymous',
-          submissionSource: 'web',
-          completionTime: Date.now()
-        }
-      };
+      // 保存问卷数据到sessionStorage，登录后继续
+      sessionStorage.setItem('pendingQuestionnaire', JSON.stringify(questionnaire));
 
-      // 调用通用问卷提交API
-      await universalQuestionnaireService.submitQuestionnaire(questionnaireResponse);
-
-      message.success('问卷提交成功！');
-
-
-
-      // 跳转到结果页面
-      navigate('/results', {
-        state: {
-          questionnaireData: questionnaire,
-          submissionType: 'anonymous'
-        }
-      });
+      // 启动Google OAuth登录
+      await googleOAuthService.signIn('questionnaire');
     } catch (error) {
-      console.error('问卷提交失败:', error);
-      message.error('提交失败，请重试');
-    } finally {
+      console.error('Google登录失败:', error);
+      message.error('Google登录失败，请重试');
+    }
+  };
+
+  // 自动登录 - 弹出数字验证
+  const handleAutoLogin = () => {
+    setShowDigitVerification(true);
+  };
+
+  // 数字验证成功
+  const handleDigitVerificationSuccess = async (selectedDigit: number) => {
+    setShowDigitVerification(false);
+    setSubmitting(true);
+
+    try {
+      // 生成A值和B值
+      const identityA = generateIdentityA(selectedDigit);
+      const identityB = generateIdentityB(selectedDigit);
+
+      setGeneratedCredentials({ identityA, identityB });
+
+      // 保存问卷数据到sessionStorage
+      sessionStorage.setItem('pendingQuestionnaire', JSON.stringify(questionnaire));
+
+      // 使用生成的凭证进行认证
+      const authResult = await questionnaireAuthService.authenticateWithAPI(identityA, identityB, true);
+
+      if (authResult.success) {
+        // 显示AB凭证供用户保存
+        setShowABCredentials(true);
+        message.success('账户创建成功！请保存您的登录凭证。');
+      } else {
+        throw new Error(authResult.message || '账户创建失败');
+      }
+    } catch (error) {
+      console.error('自动登录失败:', error);
+      message.error('账户创建失败，请重试');
       setSubmitting(false);
     }
   };
 
-  // 登录后提交
-  const handleLoginSubmit = () => {
-    setSubmitChoice('login');
-    
-    // 保存问卷数据到sessionStorage，登录后继续
-    sessionStorage.setItem('pendingQuestionnaire', JSON.stringify(questionnaire));
-    
-    // 跳转到登录页面
-    navigate('/auth/login', {
+  // AB凭证确认，完成登录
+  const handleABCredentialsConfirm = async () => {
+    setShowABCredentials(false);
+    setSubmitting(false);
+
+    // 登录完成，跳转回问卷完成页面
+    navigate('/questionnaire-completion', {
       state: {
-        from: '/questionnaire-completion',
-        action: 'submit_questionnaire'
+        loginSuccess: true,
+        message: '自动登录成功！现在可以提交问卷了。'
       }
     });
+  };
+
+  // 生成A值（11位数字，以选择的数字开头）
+  const generateIdentityA = (firstDigit: number): string => {
+    const timestamp = Date.now().toString().slice(-6); // 取时间戳后6位
+    const random = Math.random().toString().slice(2, 6); // 4位随机数
+    return `${firstDigit}${timestamp}${random}`;
+  };
+
+  // 生成B值（选择的数字重复6次）
+  const generateIdentityB = (digit: number): string => {
+    return digit.toString().repeat(6);
+  };
+
+  // 认证后提交问卷
+  const submitQuestionnaireWithAuth = async () => {
+    try {
+      let questionnaireResponse;
+
+      // 检查问卷数据格式
+      if (questionnaire.responses) {
+        // 来自问卷引擎的数据格式
+        questionnaireResponse = {
+          questionnaireId: questionnaire.questionnaireId || 'employment-survey-2024',
+          sectionResponses: [{
+            sectionId: 'questionnaire-responses',
+            questionResponses: Object.entries(questionnaire.responses).map(([questionId, value]) => ({
+              questionId,
+              value,
+              timestamp: Date.now()
+            }))
+          }],
+          metadata: {
+            submittedAt: Date.now(),
+            completionTime: 0,
+            userAgent: navigator.userAgent,
+            version: '1.0',
+            submissionType: questionnaire.submissionType || 'authenticated',
+            userId: currentUser?.id
+          }
+        };
+      } else {
+        // 原有的数据格式
+        questionnaireResponse = {
+          questionnaireId: 'employment-survey-2024',
+          sectionResponses: [
+            {
+              sectionId: 'basic-info',
+              responses: questionnaire
+            }
+          ],
+          metadata: {
+            userType: userType || 'authenticated',
+            userId: currentUser?.id,
+            submissionSource: 'web',
+            completionTime: Date.now()
+          }
+        };
+      }
+
+      await universalQuestionnaireService.submitQuestionnaire(questionnaireResponse);
+      message.success('问卷提交成功！');
+
+      // 清理sessionStorage中的待处理问卷
+      sessionStorage.removeItem('pendingQuestionnaire');
+
+      // 跳转到故事墙页面
+      navigate('/stories', {
+        state: {
+          questionnaireData: questionnaire,
+          submissionType: 'authenticated',
+          fromQuestionnaire: true
+        }
+      });
+
+      setSubmitting(false);
+    } catch (error) {
+      console.error('问卷提交失败:', error);
+      message.error('问卷提交失败，请重试');
+      setSubmitting(false);
+    }
   };
 
   // 已登录用户直接提交
@@ -131,33 +267,63 @@ export const QuestionnaireCompletion: React.FC<QuestionnaireCompletionProps> = (
     setSubmitting(true);
 
     try {
-      // 构造通用问卷格式（已登录用户）
-      const questionnaireResponse = {
-        questionnaireId: 'employment-survey-2024',
-        sectionResponses: [
-          {
-            sectionId: 'basic-info',
-            responses: questionnaire
+      let questionnaireResponse;
+
+      // 检查问卷数据格式
+      if (questionnaire.responses) {
+        // 来自问卷引擎的数据格式
+        questionnaireResponse = {
+          questionnaireId: questionnaire.questionnaireId || 'employment-survey-2024',
+          sectionResponses: [{
+            sectionId: 'questionnaire-responses',
+            questionResponses: Object.entries(questionnaire.responses).map(([questionId, value]) => ({
+              questionId,
+              value,
+              timestamp: Date.now()
+            }))
+          }],
+          metadata: {
+            submittedAt: Date.now(),
+            completionTime: 0,
+            userAgent: navigator.userAgent,
+            version: '1.0',
+            submissionType: questionnaire.submissionType || 'authenticated',
+            userId: currentUser?.id
           }
-        ],
-        metadata: {
-          userType: userType || 'authenticated',
-          userId: currentUser?.id,
-          submissionSource: 'web',
-          completionTime: Date.now()
-        }
-      };
+        };
+      } else {
+        // 原有的数据格式
+        questionnaireResponse = {
+          questionnaireId: 'employment-survey-2024',
+          sectionResponses: [
+            {
+              sectionId: 'basic-info',
+              responses: questionnaire
+            }
+          ],
+          metadata: {
+            userType: userType || 'authenticated',
+            userId: currentUser?.id,
+            submissionSource: 'web',
+            completionTime: Date.now()
+          }
+        };
+      }
 
       // 调用通用问卷提交API
       await universalQuestionnaireService.submitQuestionnaire(questionnaireResponse);
 
       message.success('问卷提交成功！');
 
-      // 跳转到结果页面
-      navigate('/results', {
+      // 清理sessionStorage中的待处理问卷
+      sessionStorage.removeItem('pendingQuestionnaire');
+
+      // 跳转到故事墙页面
+      navigate('/stories', {
         state: {
           questionnaireData: questionnaire,
-          submissionType: 'authenticated'
+          submissionType: 'authenticated',
+          fromQuestionnaire: true
         }
       });
     } catch (error) {
@@ -235,74 +401,83 @@ export const QuestionnaireCompletion: React.FC<QuestionnaireCompletionProps> = (
 
     // 未登录用户选择提交方式
     return (
-      <Row gutter={[16, 16]}>
-        <Col xs={24} md={12}>
-          <Card className={styles.optionCard}>
-            <Space direction="vertical" size="middle" style={{ width: '100%' }}>
-              <div className={styles.optionHeader}>
-                <SendOutlined style={{ color: '#1890ff' }} />
-                <Title level={4}>匿名提交</Title>
-              </div>
-              
-              <Paragraph>
-                快速提交问卷，无需注册。匿名提交但无法保存个人数据。
-              </Paragraph>
+      <>
+        <Alert
+          message="安全提示"
+          description="为了确保问卷数据的真实性和防止恶意提交，我们要求用户登录后提交问卷。请选择以下任一方式进行注册/登录："
+          type="info"
+          showIcon
+          style={{ marginBottom: 24 }}
+        />
 
-              <ul className={styles.featureList}>
-                <li>✓ 快速提交</li>
-                <li>✓ 匿名参与</li>
-                <li>✗ 无法保存数据</li>
-                <li>✗ 无法查看历史</li>
-              </ul>
+        <Row gutter={[16, 16]}>
+          <Col xs={24} md={12}>
+            <Card className={styles.optionCard}>
+              <Space direction="vertical" size="middle" style={{ width: '100%' }}>
+                <div className={styles.optionHeader}>
+                  <GoogleOutlined style={{ color: '#4285f4' }} />
+                  <Title level={4}>Google一键登录</Title>
+                </div>
 
-              <Button
-                type="primary"
-                size="large"
-                icon={<SendOutlined />}
-                loading={submitting && submitChoice === 'anonymous'}
-                onClick={handleAnonymousSubmit}
-                block
-              >
-                匿名提交
-              </Button>
-            </Space>
-          </Card>
-        </Col>
+                <Paragraph>
+                  使用Google账号快速登录，安全便捷。会获取您的邮箱地址用于身份验证。
+                </Paragraph>
 
-        <Col xs={24} md={12}>
-          <Card className={styles.optionCard}>
-            <Space direction="vertical" size="middle" style={{ width: '100%' }}>
-              <div className={styles.optionHeader}>
-                <LoginOutlined style={{ color: '#52c41a' }} />
-                <Title level={4}>登录后提交</Title>
-              </div>
-              
-              <Paragraph>
-                注册或登录后提交，享受完整功能。可以保存数据、查看历史记录。
-              </Paragraph>
+                <ul className={styles.featureList}>
+                  <li>✓ 快速安全</li>
+                  <li>✓ 无需注册</li>
+                  <li>✓ 隐私保护</li>
+                  <li>✓ 一键登录</li>
+                </ul>
 
-              <ul className={styles.featureList}>
-                <li>✓ 保存问卷数据</li>
-                <li>✓ 个性化体验</li>
-                <li>✓ 查看历史记录</li>
-                <li>✓ 管理个人内容</li>
-              </ul>
+                <Button
+                  type="primary"
+                  size="large"
+                  icon={<GoogleOutlined />}
+                  onClick={handleGoogleLogin}
+                  block
+                  style={{ background: '#4285f4', borderColor: '#4285f4' }}
+                >
+                  Google一键登录
+                </Button>
+              </Space>
+            </Card>
+          </Col>
 
-              <Button
-                type="primary"
-                size="large"
-                icon={<LoginOutlined />}
-                loading={submitting && submitChoice === 'login'}
-                onClick={handleLoginSubmit}
-                block
-                style={{ background: '#52c41a', borderColor: '#52c41a' }}
-              >
-                登录后提交
-              </Button>
-            </Space>
-          </Card>
-        </Col>
-      </Row>
+          <Col xs={24} md={12}>
+            <Card className={styles.optionCard}>
+              <Space direction="vertical" size="middle" style={{ width: '100%' }}>
+                <div className={styles.optionHeader}>
+                  <KeyOutlined style={{ color: '#52c41a' }} />
+                  <Title level={4}>自动登录</Title>
+                </div>
+
+                <Paragraph>
+                  系统自动创建匿名账户，通过简单验证后即可登录提交。
+                </Paragraph>
+
+                <ul className={styles.featureList}>
+                  <li>✓ 自动创建账户</li>
+                  <li>✓ 完全匿名</li>
+                  <li>✓ 防脚本验证</li>
+                  <li>✓ 凭证下载</li>
+                </ul>
+
+                <Button
+                  type="primary"
+                  size="large"
+                  icon={<SafetyOutlined />}
+                  onClick={handleAutoLogin}
+                  block
+                  style={{ background: '#52c41a', borderColor: '#52c41a' }}
+                >
+                  自动登录
+                </Button>
+              </Space>
+            </Card>
+          </Col>
+        </Row>
+      </>
     );
   };
 
@@ -333,9 +508,43 @@ export const QuestionnaireCompletion: React.FC<QuestionnaireCompletionProps> = (
 
         {/* 提交选项 */}
         {renderSubmitOptions()}
-
-
       </Space>
+
+      {/* Google OAuth安全提示弹窗 */}
+      <GoogleOAuthSecurityPrompt
+        visible={showGoogleSecurityPrompt}
+        onAgree={handleGoogleSecurityConfirm}
+        onCancel={() => {
+          setShowGoogleSecurityPrompt(false);
+          setSubmitting(false);
+        }}
+      />
+
+      {/* 数字验证弹窗 */}
+      <DigitVerification
+        visible={showDigitVerification}
+        onSuccess={handleDigitVerificationSuccess}
+        onCancel={() => {
+          setShowDigitVerification(false);
+          setSubmitting(false);
+        }}
+        title="防脚本验证"
+        description="为了防止恶意提交，请选择正确的数字"
+      />
+
+      {/* AB凭证展示弹窗 */}
+      {generatedCredentials && (
+        <ABCredentialsDisplay
+          visible={showABCredentials}
+          identityA={generatedCredentials.identityA}
+          identityB={generatedCredentials.identityB}
+          onConfirm={handleABCredentialsConfirm}
+          onCancel={() => {
+            setShowABCredentials(false);
+            setSubmitting(false);
+          }}
+        />
+      )}
     </div>
   );
 };

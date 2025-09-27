@@ -178,7 +178,7 @@ export const QueryTemplates = {
       END as content_preview
     FROM audit_records ar
     LEFT JOIN raw_questionnaire_responses qr ON ar.content_type = 'questionnaire' AND ar.content_id = qr.id
-    LEFT JOIN raw_heart_voices hv ON ar.content_type = 'heart_voice' AND ar.content_id = hv.id
+
     LEFT JOIN raw_story_submissions s ON ar.content_type = 'story' AND ar.content_id = s.id
     WHERE ar.audit_result = 'pending'
     ORDER BY ar.created_at DESC

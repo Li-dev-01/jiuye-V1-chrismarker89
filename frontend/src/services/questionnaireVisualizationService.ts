@@ -71,7 +71,7 @@ export interface VisualizationSummary {
 }
 
 class QuestionnaireVisualizationService {
-  private baseUrl = `${API_CONFIG.BASE_URL}/api`;
+  private baseUrl = API_CONFIG.BASE_URL;
   private universalQuestionnaireUrl = `${this.baseUrl}/universal-questionnaire`;
 
   /**

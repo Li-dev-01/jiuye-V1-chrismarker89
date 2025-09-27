@@ -21,7 +21,7 @@ class MockDatabase {
 
     // Analytics 需要的表
     this.data.set('questionnaire_responses', []);
-    this.data.set('valid_heart_voices', []);
+
     this.data.set('valid_stories', []);
 
     // 预加载管理员用户数据

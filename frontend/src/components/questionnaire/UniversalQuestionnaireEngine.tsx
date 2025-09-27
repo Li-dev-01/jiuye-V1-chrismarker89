@@ -4,7 +4,7 @@
  */
 
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import { Card, Button, Progress, Space, Typography, Alert, Divider } from 'antd';
+import { Card, Button, Progress, Space, Typography, Alert, Divider, message } from 'antd';
 import {
   LeftOutlined,
   RightOutlined,
@@ -15,7 +15,12 @@ import { UniversalQuestionRenderer } from './UniversalQuestionRenderer';
 import type { UniversalQuestionnaire, UniversalQuestionnaireResponse } from '../../types/universal-questionnaire';
 import { universalQuestionnaireService } from '../../services/universalQuestionnaireService';
 
-import { RegistrationPrompt } from './RegistrationPrompt';
+// 导入状态管理相关
+import { questionnaireStateManager } from '../../services/questionnaireStateManager';
+import { globalStateManager, GlobalUserState } from '../../services/globalStateManager';
+
+// 使用通用防刷验证组件
+import UniversalAntiSpamVerification from '../common/UniversalAntiSpamVerification';
 import styles from './UniversalQuestionnaireEngine.module.css';
 
 const { Title, Text } = Typography;
@@ -38,8 +43,15 @@ export const UniversalQuestionnaireEngine: React.FC<UniversalQuestionnaireEngine
   const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [statisticsRefreshTrigger, setStatisticsRefreshTrigger] = useState(0);
-  const [showRegistrationPrompt, setShowRegistrationPrompt] = useState(false);
+  // 只保留数字验证相关状态
+  const [showAntiSpamVerification, setShowAntiSpamVerification] = useState(false);
+  const [isVerified, setIsVerified] = useState(false);
 
+  // 状态管理
+  const [questionnaireAuthState, setQuestionnaireAuthState] = useState(() =>
+    questionnaireStateManager.getCurrentState()
+  );
+  const [globalState, setGlobalState] = useState<any>(null);
 
   // 条件判断函数
   const checkCondition = useCallback((condition: any, value: any): boolean => {
@@ -241,33 +253,31 @@ export const UniversalQuestionnaireEngine: React.FC<UniversalQuestionnaireEngine
     }
   }, [currentSectionIndex]);
 
-  // 提交问卷
+  // 提交问卷 - 简化版本，只需要数字验证
   const handleSubmit = useCallback(async () => {
+    console.log('📝 开始提交问卷流程...');
+    console.log('🔍 当前验证状态:', { isVerified, isSubmitting });
+
     if (!validateCurrentSection()) {
+      console.log('❌ 当前部分验证失败');
       return;
     }
 
+    // 临时关闭数字验证 - 用于调试
+    // if (!isVerified) {
+    //   console.log('🔐 需要数字验证，显示验证弹窗');
+    //   setShowAntiSpamVerification(true);
+    //   return;
+    // }
+    console.log('🚫 数字验证已临时关闭，直接提交');
+
+    console.log('✅ 数字验证已通过，开始提交问卷数据');
+    console.log('🔍 设置提交状态为 true...');
     setIsSubmitting(true);
 
     try {
-      // 检查提交方式
-      const submissionType = responses['submission-type'] || 'anonymous';
-      const anonymousNickname = responses['anonymous-nickname'];
-
-      // 处理快捷注册
-      let userId = null;
-      if (submissionType === 'quick-register' && anonymousNickname) {
-        try {
-          // 创建半匿名用户ID
-          userId = `anon_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-          // 可以在这里调用用户注册API，暂时使用本地生成的ID
-          console.log('创建半匿名用户:', { userId, nickname: anonymousNickname });
-        } catch (error) {
-          console.warn('创建半匿名用户失败，将使用匿名提交:', error);
-        }
-      }
-
-      const response: UniversalQuestionnaireResponse = {
+      // 构建问卷响应数据
+      const submissionData: UniversalQuestionnaireResponse = {
         questionnaireId: questionnaire.id,
         sectionResponses: visibleSections.map(section => ({
           sectionId: section.id,
@@ -281,106 +291,90 @@ export const UniversalQuestionnaireEngine: React.FC<UniversalQuestionnaireEngine
         })),
         metadata: {
           submittedAt: Date.now(),
-          completionTime: 0, // 可以计算实际完成时间
-          userAgent: navigator.userAgent,
-          version: questionnaire.metadata.version,
-          submissionType,
-          userId,
-          anonymousNickname: submissionType === 'quick-register' ? anonymousNickname : undefined
-        }
-      };
-
-      // 准备问卷数据
-      const questionnaireResponses = { ...responses };
-
-      // 重新构建问卷响应（不包含心声数据）
-      const cleanResponse: UniversalQuestionnaireResponse = {
-        questionnaireId: questionnaire.id,
-        sectionResponses: visibleSections.map(section => ({
-          sectionId: section.id,
-          questionResponses: section.questions
-            .filter(shouldShowQuestion)
-
-            .map(question => ({
-              questionId: question.id,
-              value: questionnaireResponses[question.id] || null,
-              timestamp: Date.now()
-            }))
-        })),
-        metadata: {
-          submittedAt: Date.now(),
           completionTime: 0,
           userAgent: navigator.userAgent,
           version: questionnaire.metadata.version,
-          submissionType,
-          userId,
-          anonymousNickname: submissionType === 'quick-register' ? anonymousNickname : undefined
+          submissionType: 'anonymous', // 简化为匿名提交
+          submissionSource: 'web'
         }
       };
 
       // 验证问卷数据
-      const validation = universalQuestionnaireService.validateQuestionnaireResponse(cleanResponse);
+      const validation = universalQuestionnaireService.validateQuestionnaireResponse(submissionData);
       if (!validation.isValid) {
+        message.error('问卷数据验证失败，请检查填写内容');
         console.error('问卷数据验证失败:', validation.errors);
         return;
       }
 
-      // 提交问卷数据和心声数据
-      try {
-        // 1. 先提交问卷数据
-        const questionnaireResult = await universalQuestionnaireService.submitQuestionnaire(cleanResponse);
-        console.log('✅ 问卷数据已成功提交到服务器');
+      // 提交问卷数据
+      console.log('🚀 调用API提交问卷数据...');
+      const result = await universalQuestionnaireService.submitQuestionnaire(submissionData);
+      console.log('📡 API响应:', result);
 
-        // ✅ 问卷提交成功后，触发统计数据刷新
-        // 延迟2秒刷新，给后端时间处理数据
+      if (result.success) {
+        message.success('问卷提交成功！感谢您的参与');
+        console.log('✅ 问卷提交成功');
+
+        // 触发统计数据刷新
         setTimeout(() => {
           setStatisticsRefreshTrigger(prev => prev + 1);
-          console.log('📊 触发统计数据刷新 - 问卷提交成功');
         }, 2000);
 
-      } catch (error) {
-        console.warn('⚠️ 服务器暂时不可用，数据已保存到本地存储');
-        // 保存到本地存储作为备份
-        const localData = {
-          ...response,
-          localSubmittedAt: new Date().toISOString(),
-          status: 'pending_upload'
-        };
-        localStorage.setItem(`questionnaire_${Date.now()}`, JSON.stringify(localData));
-      }
-
-      // 调用外部回调
-      if (onSubmit) {
-        await onSubmit(response);
+        // 调用外部回调
+        if (onSubmit) {
+          onSubmit(submissionData);
+        }
+      } else {
+        console.error('❌ API返回失败:', result);
+        throw new Error(result.error || '提交失败');
       }
     } catch (error) {
-      console.error('提交问卷失败:', error);
+      console.error('❌ 提交问卷失败:', error);
+      message.error(`问卷提交失败：${error.message || '请重试'}`);
     } finally {
+      console.log('🔄 重置提交状态');
       setIsSubmitting(false);
     }
   }, [validateCurrentSection, questionnaire, responses, onSubmit]);
 
 
 
-  // 处理注册提示
-  const handleRegistrationPrompt = (action: string) => {
-    if (action === 'quick-register') {
-      // 触发快捷注册流程
-      setResponses(prev => ({ ...prev, 'submission-type': 'quick-register' }));
-      setShowRegistrationPrompt(false);
-    } else if (action === 'skip') {
-      setShowRegistrationPrompt(false);
+  // 处理数字验证成功
+  const handleAntiSpamSuccess = async () => {
+    console.log('🔐 数字验证成功，开始提交问卷...');
+    console.log('🔍 当前状态:', { isVerified, isSubmitting, showAntiSpamVerification });
+
+    setIsVerified(true);
+    setShowAntiSpamVerification(false);
+    message.success('验证成功！正在提交问卷...');
+
+    // 验证成功后自动触发提交
+    try {
+      console.log('🚀 调用 handleSubmit...');
+      await handleSubmit();
+      console.log('✅ handleSubmit 执行完成');
+    } catch (error) {
+      console.error('❌ 验证成功后提交失败:', error);
+      message.error('提交失败，请重试');
     }
   };
 
-  // 处理内联认证成功
-  const handleInlineAuthSuccess = (authType: 'quick-register' | 'semi-anonymous-login') => {
-    // 更新提交方式
-    setResponses(prev => ({
-      ...prev,
-      'submission-type': authType === 'quick-register' ? 'quick-register' : 'login-submit'
-    }));
+  // 处理数字验证取消
+  const handleAntiSpamCancel = () => {
+    setShowAntiSpamVerification(false);
   };
+
+  // 处理内联认证成功
+  const handleInlineAuthSuccess = useCallback((authData: any) => {
+    console.log('✅ 内联认证成功:', authData);
+    // 更新问卷认证状态
+    const newState = questionnaireStateManager.getCurrentState();
+    setQuestionnaireAuthState(newState);
+
+    // 触发统计数据刷新
+    setStatisticsRefreshTrigger(prev => prev + 1);
+  }, []);
 
 
 
@@ -393,7 +387,51 @@ export const UniversalQuestionnaireEngine: React.FC<UniversalQuestionnaireEngine
   }, [responses, onProgress, getCompletionStatus]);
 
   const { completionPercentage } = getCompletionStatus();
-  const isLastSection = currentSectionIndex === totalSections - 1;
+
+  // 如果用户已经登录，跳过提交方式选择步骤
+  const shouldSkipSubmissionTypeSection = (
+    (questionnaireAuthState && questionnaireAuthState.isAuthenticated) ||
+    (globalState && globalState.currentState !== GlobalUserState.ANONYMOUS)
+  );
+  const effectiveTotalSections = shouldSkipSubmissionTypeSection ? totalSections - 1 : totalSections;
+  const isLastSection = shouldSkipSubmissionTypeSection
+    ? currentSectionIndex === totalSections - 2  // 跳过最后一个提交方式选择步骤
+    : currentSectionIndex === totalSections - 1;
+
+  // 在到达第6步时，强制检查全局状态
+  useEffect(() => {
+    if (currentSectionIndex === totalSections - 1) {
+      console.log('🔍 到达第6步，检查全局状态...');
+      console.log('📊 当前localStorage数据:');
+      console.log('- questionnaire_current_user:', localStorage.getItem('questionnaire_current_user'));
+      console.log('- questionnaire_current_session:', localStorage.getItem('questionnaire_current_session'));
+      console.log('- uuid_current_user:', localStorage.getItem('uuid_current_user'));
+
+      // 检查问卷专用认证状态
+      const questionnaireState = questionnaireStateManager.getCurrentState();
+      console.log('🔍 第6步问卷认证状态检查:');
+      console.log('- 是否已认证:', questionnaireState.isAuthenticated);
+      console.log('- 用户信息:', questionnaireState.user);
+      console.log('- 会话信息:', questionnaireState.session);
+
+      // 同时检查全局状态（用于调试）
+      const recheckState = async () => {
+        try {
+          const newState = await globalStateManager.detectCurrentState();
+          setGlobalState(newState);
+          console.log('🔍 第6步全局状态检查结果:');
+          console.log('- 当前状态:', newState.currentState);
+          console.log('- 用户信息:', newState.user);
+          console.log('- 会话信息:', newState.session);
+          console.log('- 是否有效:', newState.isValid);
+          console.log('- 冲突:', newState.conflicts);
+        } catch (error) {
+          console.error('❌ 第6步状态检查失败:', error);
+        }
+      };
+      recheckState();
+    }
+  }, [currentSectionIndex, totalSections]);
 
   return (
     <div className={`${styles.container} ${className}`}>
@@ -412,14 +450,14 @@ export const UniversalQuestionnaireEngine: React.FC<UniversalQuestionnaireEngine
         <div className={styles.progressSection}>
           <div className={styles.progressInfo}>
             <Text strong>
-              第 {currentSectionIndex + 1} 部分，共 {totalSections} 部分
+              第 {currentSectionIndex + 1} 部分，共 {shouldSkipSubmissionTypeSection ? totalSections - 1 : totalSections} 部分
             </Text>
             <Text type="secondary">
               整体完成度: {Math.round(completionPercentage)}%
             </Text>
           </div>
-          <Progress 
-            percent={progress} 
+          <Progress
+            percent={shouldSkipSubmissionTypeSection && currentSectionIndex === totalSections - 1 ? 100 : progress}
             strokeColor="#1890ff"
             className={styles.progress}
           />
@@ -443,20 +481,34 @@ export const UniversalQuestionnaireEngine: React.FC<UniversalQuestionnaireEngine
 
         {/* 问题列表 */}
         <div className={styles.questionsContainer}>
-          {visibleQuestions.map((question, index) => (
-            <div key={question.id} className={styles.questionWrapper}>
-              <UniversalQuestionRenderer
-                question={question}
-                value={responses[question.id]}
-                onChange={(value) => handleQuestionAnswer(question.id, value)}
-                error={validationErrors[question.id]}
-                questionNumber={index + 1}
-                refreshTrigger={statisticsRefreshTrigger}
-                onAuthSuccess={handleInlineAuthSuccess}
-
+          {/* 如果用户已登录且当前是提交方式选择步骤，显示特殊提示 */}
+          {shouldSkipSubmissionTypeSection && currentSectionIndex === totalSections - 1 ? (
+            <div className={styles.loginStatusInfo}>
+              <Alert
+                message="您已登录"
+                description={`当前登录用户：${questionnaireAuthState?.user?.displayName || globalState?.user?.displayName || '未知用户'}。您可以直接提交问卷，无需重新登录。`}
+                type="success"
+                showIcon
+                style={{ marginBottom: 24 }}
               />
             </div>
-          ))}
+          ) : (
+            visibleQuestions.map((question, index) => (
+              <div key={question.id} className={styles.questionWrapper}>
+                <UniversalQuestionRenderer
+                  question={question}
+                  value={responses[question.id]}
+                  onChange={(value) => handleQuestionAnswer(question.id, value)}
+                  error={validationErrors[question.id]}
+                  questionNumber={index + 1}
+                  refreshTrigger={statisticsRefreshTrigger}
+                  onAuthSuccess={handleInlineAuthSuccess}
+                  autoScrollToNext={true}
+                  isLastQuestion={index === visibleQuestions.length - 1}
+                />
+              </div>
+            ))
+          )}
         </div>
 
         {/* 导航按钮 */}
@@ -505,13 +557,17 @@ export const UniversalQuestionnaireEngine: React.FC<UniversalQuestionnaireEngine
         />
       )}
 
-      {/* 注册提示弹窗 */}
-      <RegistrationPrompt
-        visible={showRegistrationPrompt}
-        onClose={() => setShowRegistrationPrompt(false)}
-        onQuickRegister={() => handleRegistrationPrompt('quick-register')}
-        onSkip={() => handleRegistrationPrompt('skip')}
+      {/* 移除注册提示弹窗 */}
 
+      {/* 防刷验证弹窗 */}
+      <UniversalAntiSpamVerification
+        visible={showAntiSpamVerification}
+        onClose={() => setShowAntiSpamVerification(false)}
+        onSuccess={handleAntiSpamSuccess}
+        onCancel={handleAntiSpamCancel}
+        title="防刷本验证"
+        description="为了防止恶意提交，请选择正确的数字"
+        autoSubmit={true}
       />
     </div>
   );

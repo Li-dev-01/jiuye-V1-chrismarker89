@@ -23,12 +23,25 @@ simpleAdmin.get('/dashboard', async (c) => {
       // 获取统一统计数据
       const unifiedStats = await getUnifiedStats(db);
 
-      // 获取今日新用户
+      // 获取今日统计数据
       const todayUsersResult = await db.prepare(`
         SELECT COUNT(*) as count FROM universal_users
         WHERE DATE(created_at) = DATE('now')
       `).first();
-      const todaySubmissions = todayUsersResult?.count || 0;
+
+      const todayQuestionnairesResult = await db.prepare(`
+        SELECT COUNT(*) as count FROM universal_questionnaire_responses
+        WHERE DATE(submitted_at) = DATE('now')
+      `).first();
+
+      const todayStoriesResult = await db.prepare(`
+        SELECT COUNT(*) as count FROM valid_stories
+        WHERE DATE(created_at) = DATE('now')
+      `).first();
+
+      const todayUsers = todayUsersResult?.count || 0;
+      const todayQuestionnaires = todayQuestionnairesResult?.count || 0;
+      const todayStories = todayStoriesResult?.count || 0;
 
       realStats = {
         totalUsers: unifiedStats.totalUsers,
@@ -38,7 +51,9 @@ simpleAdmin.get('/dashboard', async (c) => {
         totalReviews: unifiedStats.totalReviews,
         pendingReviews: Math.floor(unifiedStats.totalReviews * 0.2), // 估算待审核
         completedReviews: Math.floor(unifiedStats.totalReviews * 0.8), // 估算已完成
-        todaySubmissions: todaySubmissions,
+        todaySubmissions: todayUsers,
+        todayQuestionnaires: todayQuestionnaires,
+        todayStories: todayStories,
         systemHealth: 98.5,
         storageUsed: 67.3,
         dataSource: unifiedStats.dataSource
@@ -1312,37 +1327,7 @@ simpleAdmin.get('/api/endpoints', simpleAuthMiddleware, requireRole(['admin', 's
         database: ['questionnaire_submissions'],
         dependencies: []
       },
-      // 心声API
-      {
-        id: 'heart-voices-list',
-        method: 'GET',
-        path: '/api/heart-voices',
-        description: '心声列表',
-        category: 'Stories',
-        status: 'active',
-        responseTime: 200,
-        lastChecked: new Date().toISOString(),
-        errorRate: 0.06,
-        usageCount: 1234,
-        authentication: false,
-        database: ['heart_voices'],
-        dependencies: []
-      },
-      {
-        id: 'heart-voices-submit',
-        method: 'POST',
-        path: '/api/heart-voices/submit',
-        description: '提交心声',
-        category: 'Stories',
-        status: 'active',
-        responseTime: 180,
-        lastChecked: new Date().toISOString(),
-        errorRate: 0.04,
-        usageCount: 567,
-        authentication: false,
-        database: ['heart_voices'],
-        dependencies: []
-      },
+
       // 错误监控API
       {
         id: 'errors-report',

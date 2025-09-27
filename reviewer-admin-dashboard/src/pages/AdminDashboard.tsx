@@ -54,22 +54,22 @@ const AdminDashboard: React.FC = () => {
           systemHealth: stats.systemHealth >= 90 ? 'good' : stats.systemHealth >= 70 ? 'warning' : 'error'
         });
 
-        // 从简化API中提取问卷统计
+        // 从简化API中提取问卷统计 - 使用真实今日数据
         setQuestionnaireStats({
           total: stats.totalQuestionnaires || 0,
           pending: stats.pendingReviews || 0,
           approved: Math.floor((stats.totalQuestionnaires || 0) * 0.7), // 模拟数据
           rejected: Math.floor((stats.totalQuestionnaires || 0) * 0.1), // 模拟数据
-          todayCount: Math.floor((stats.totalQuestionnaires || 0) * 0.05) // 模拟数据
+          todayCount: stats.todayQuestionnaires || 0 // 真实数据
         });
 
-        // 从简化API中提取故事统计
+        // 从简化API中提取故事统计 - 使用真实今日数据
         setStoryStats({
           total: stats.totalStories || 0,
           pending: Math.floor((stats.totalStories || 0) * 0.2), // 模拟数据
           approved: Math.floor((stats.totalStories || 0) * 0.7), // 模拟数据
           rejected: Math.floor((stats.totalStories || 0) * 0.1), // 模拟数据
-          todayCount: Math.floor((stats.totalStories || 0) * 0.03) // 模拟数据
+          todayCount: stats.todayStories || 0 // 真实数据
         });
 
         // 使用API返回的真实用户数据

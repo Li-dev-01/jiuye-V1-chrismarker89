@@ -66,6 +66,35 @@ class UniversalQuestionnaireService {
   }
 
   /**
+   * 关联问卷提交到用户
+   */
+  async associateSubmissionToUser(submissionId: number, userId: string): Promise<ApiResponse> {
+    try {
+      const res = await fetch(`${this.baseUrl}/associate-submission`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          submissionId,
+          userId
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.message || '关联失败');
+      }
+
+      return data;
+    } catch (error) {
+      console.error('关联问卷失败:', error);
+      throw error;
+    }
+  }
+
+  /**
    * 获取问卷统计数据
    */
   async getQuestionnaireStatistics(questionnaireId: string): Promise<QuestionnaireStatistics> {

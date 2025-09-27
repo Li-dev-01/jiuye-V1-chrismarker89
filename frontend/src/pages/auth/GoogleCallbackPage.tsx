@@ -135,11 +135,23 @@ export const GoogleCallbackPage: React.FC = () => {
       });
 
       // 延迟跳转
-      setTimeout(() => {
+      setTimeout(async () => {
         if (userType === 'management') {
           navigate('/management-portal');
         } else {
-          navigate('/');
+          // 检查是否有待提交的问卷
+          const pendingQuestionnaire = sessionStorage.getItem('pendingQuestionnaire');
+          if (pendingQuestionnaire) {
+            // 登录成功，跳转回问卷完成页面让用户手动提交
+            navigate('/questionnaire-completion', {
+              state: {
+                loginSuccess: true,
+                message: 'Google登录成功！现在可以提交问卷了。'
+              }
+            });
+          } else {
+            navigate('/');
+          }
         }
         // 清理临时存储
         sessionStorage.removeItem('google_oauth_state');

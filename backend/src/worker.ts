@@ -9,7 +9,6 @@ import { createQuestionnaireRoutes } from './routes/questionnaire';
 import { createUniversalQuestionnaireRoutes } from './routes/universal-questionnaire';
 import { createUUIDRoutes } from './routes/uuid';
 import { createSuperAdminRoutes } from './routes/super-admin';
-import { createAdminRoutes } from './routes/admin';
 import { createAISourcesRoutes } from './routes/ai-sources';
 import { createStoriesRoutes } from './routes/stories';
 import { dataGenerator } from './routes/dataGenerator';
@@ -19,12 +18,14 @@ import reviewerRoutes from './routes/reviewer';
 import violationsRoutes from './routes/violations';
 import { createTieredAuditRoutes } from './routes/tiered-audit';
 import { createQuestionnaireAuthRoutes } from './routes/questionnaire-auth';
-import { createFileManagementRoutes } from './routes/file-management';
-import { createAutoPngRoutes } from './routes/auto-png';
-import { createPngTestRoutes } from './routes/png-test';
+// import { createFileManagementRoutes } from './routes/file-management';
+// import { createAutoPngRoutes } from './routes/auto-png';
+// import { createPngTestRoutes } from './routes/png-test';
 // import { createReviewRoutes } from './routes/review'; // 文件不存在，暂时注释
 import { createDatabaseMonitorRoutes } from './routes/databaseMonitor';
 import securityRoutes from './routes/security';
+import simpleAdmin from './routes/simpleAdmin';
+import simpleAuth from './routes/simpleAuth';
 import { googleAuth } from './routes/google-auth';
 import { googleWhitelist } from './routes/google-whitelist';
 import { userLoginHistory } from './routes/user-login-history';
@@ -147,12 +148,9 @@ app.get('/api-docs', (c) => {
   return c.html(html);
 });
 
-// 健康检查路由（在API前缀之外）
-app.route('/health', health);
 
-// API路由前缀 - 支持版本化
-app.route('/api/v1', createApiRoutes());
-app.route('/api/v2', createApiRoutes());
+
+
 
 // 向后兼容：无版本前缀的API路由映射到v1
 app.route('/api', createApiRoutes());
@@ -206,8 +204,7 @@ function createApiRoutes() {
   // 分级审核路由
   api.route('/tiered-audit', createTieredAuditRoutes());
 
-  // 管理员路由
-  api.route('/admin', createAdminRoutes());
+
 
 
 
@@ -217,21 +214,30 @@ function createApiRoutes() {
   // AI源管理路由
   api.route('/ai-sources', createAISourcesRoutes());
 
-  // 数据生成器路由（管理员专用）
-  api.route('/admin/data-generator', dataGenerator);
+
 
   // 超级管理员路由
   api.route('/super-admin', createSuperAdminRoutes());
+
+  // 简化认证系统路由 (reviewer-admin-dashboard使用)
+  api.route('/simple-auth', simpleAuth);
+
+  // 简化管理系统路由 (reviewer-admin-dashboard使用)
+  api.route('/simple-admin', simpleAdmin);
 
   // 页面参与统计路由
   api.route('/participation-stats', createParticipationStatsRoutes());
 
   // 问卷用户认证路由（独立系统）
   try {
-    api.route('/questionnaire-auth', createQuestionnaireAuthRoutes());
-    console.log('✅ Questionnaire auth routes registered');
+    console.log('🔧 Registering questionnaire auth routes...');
+    const questionnaireAuthRoutes = createQuestionnaireAuthRoutes();
+    console.log('🔧 Questionnaire auth routes created:', questionnaireAuthRoutes);
+    api.route('/questionnaire-auth', questionnaireAuthRoutes);
+    console.log('✅ Questionnaire auth routes registered successfully');
   } catch (error) {
     console.error('❌ Failed to register questionnaire auth routes:', error);
+    console.error('❌ Error details:', error.stack);
   }
 
 
@@ -246,28 +252,28 @@ function createApiRoutes() {
   }
 
   // 文件管理路由（R2存储、PNG生成、数据备份）
-  try {
-    api.route('/file-management', createFileManagementRoutes());
-    console.log('✅ File management routes registered');
-  } catch (error) {
-    console.error('❌ Failed to register file management routes:', error);
-  }
+  // try {
+  //   api.route('/file-management', createFileManagementRoutes());
+  //   console.log('✅ File management routes registered');
+  // } catch (error) {
+  //   console.error('❌ Failed to register file management routes:', error);
+  // }
 
   // 自动PNG生成路由
-  try {
-    api.route('/auto-png', createAutoPngRoutes());
-    console.log('✅ Auto PNG routes registered');
-  } catch (error) {
-    console.error('❌ Failed to register auto PNG routes:', error);
-  }
+  // try {
+  //   api.route('/auto-png', createAutoPngRoutes());
+  //   console.log('✅ Auto PNG routes registered');
+  // } catch (error) {
+  //   console.error('❌ Failed to register auto PNG routes:', error);
+  // }
 
   // PNG测试路由
-  try {
-    api.route('/png-test', createPngTestRoutes());
-    console.log('✅ PNG test routes registered');
-  } catch (error) {
-    console.error('❌ Failed to register PNG test routes:', error);
-  }
+  // try {
+  //   api.route('/png-test', createPngTestRoutes());
+  //   console.log('✅ PNG test routes registered');
+  // } catch (error) {
+  //   console.error('❌ Failed to register PNG test routes:', error);
+  // }
 
   // 审核路由 - 暂时注释，文件不存在
   // try {
@@ -301,13 +307,7 @@ function createApiRoutes() {
     console.error('❌ Failed to register Google auth routes:', error);
   }
 
-  // Google白名单管理路由
-  try {
-    api.route('/admin/google-whitelist', googleWhitelist);
-    console.log('✅ Google whitelist routes registered');
-  } catch (error) {
-    console.error('❌ Failed to register Google whitelist routes:', error);
-  }
+
 
   // 用户登录历史路由
   try {
@@ -317,13 +317,7 @@ function createApiRoutes() {
     console.error('❌ Failed to register user login history routes:', error);
   }
 
-  // IP访问控制路由
-  try {
-    api.route('/admin/ip-access-control', ipAccessControl);
-    console.log('✅ IP access control routes registered');
-  } catch (error) {
-    console.error('❌ Failed to register IP access control routes:', error);
-  }
+
 
   // 双因素认证路由
   try {
@@ -333,13 +327,7 @@ function createApiRoutes() {
     console.error('❌ Failed to register two factor auth routes:', error);
   }
 
-  // 智能安全路由
-  try {
-    api.route('/admin/intelligent-security', intelligentSecurity);
-    console.log('✅ Intelligent security routes registered');
-  } catch (error) {
-    console.error('❌ Failed to register intelligent security routes:', error);
-  }
+
 
   // 健康检查路由（也在API前缀下提供）
   api.route('/health', health);

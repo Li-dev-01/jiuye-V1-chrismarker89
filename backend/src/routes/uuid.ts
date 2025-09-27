@@ -44,6 +44,35 @@ export function createUUIDRoutes() {
   const uuid = new Hono<{ Bindings: Env; Variables: AuthContext }>();
 
   // =====================================================
+  // UUID生成相关路由
+  // =====================================================
+
+  // 生成UUID端点（兼容性支持）
+  uuid.get('/generate-uuid', async (c) => {
+    try {
+      const userType = c.req.query('type') || 'semi_anonymous';
+      const userUuid = generateUUID(userType);
+
+      return c.json({
+        success: true,
+        data: {
+          uuid: userUuid,
+          type: userType,
+          timestamp: new Date().toISOString()
+        },
+        message: 'UUID生成成功'
+      });
+    } catch (error) {
+      console.error('UUID生成失败:', error);
+      return c.json({
+        success: false,
+        error: 'UUID Generation Error',
+        message: 'UUID生成失败'
+      }, 500);
+    }
+  });
+
+  // =====================================================
   // 认证相关路由
   // =====================================================
 

@@ -18,6 +18,7 @@ import { createDatabaseMonitorRoutes } from './routes/databaseMonitor';
 import health from './routes/health';
 import violationsRoutes from './routes/violations';
 import { createTieredAuditRoutes } from './routes/tiered-audit';
+import { createQuestionnaireAuthRoutes } from './routes/questionnaire-auth';
 import { createStoryAuditRoutes } from './routes/storyAudit';
 import { initAuditDatabase, checkAuditDatabaseInit } from './utils/initAuditDatabase';
 import { googleAuth } from './routes/google-auth';
@@ -31,6 +32,7 @@ import userContentManagement from './routes/user-content-management';
 import { createVisualizationRoutes } from './routes/visualization';
 import { createUniversalQuestionnaireRoutes } from './routes/universal-questionnaire';
 import { createDatabaseFixRoutes } from './routes/database-fix';
+import { createUnifiedUserCreationRoutes } from './routes/unified-user-creation';
 // import { CronHandler, type CronEvent } from './handlers/cronHandler';
 import pngManagementRoutes from './routes/png-management-simple';
 
@@ -168,11 +170,65 @@ app.get('/health-test', async (c) => {
 //   return c.html(html);
 // });
 
-// API路由前缀 - 直接注册异步创建的路由
-(async () => {
-  const apiRoutes = await createApiRoutes();
-  app.route('/api', apiRoutes);
-})();
+// 创建API路由实例
+const api = new Hono<{ Bindings: Env }>();
+
+// 认证路由
+api.route('/auth', createAuthRoutes());
+
+// UUID用户管理路由
+api.route('/uuid', createUUIDRoutes());
+
+// 统一用户创建路由
+api.route('/user-creation', createUnifiedUserCreationRoutes());
+
+// 问卷路由
+api.route('/questionnaire', createQuestionnaireRoutes());
+
+// 通用问卷路由
+api.route('/universal-questionnaire', createUniversalQuestionnaireRoutes());
+
+// 问卷用户认证路由（独立系统）
+try {
+  console.log('🔧 Registering questionnaire auth routes...');
+  const questionnaireAuthRoutes = createQuestionnaireAuthRoutes();
+  console.log('🔧 Questionnaire auth routes created:', questionnaireAuthRoutes);
+  api.route('/questionnaire-auth', questionnaireAuthRoutes);
+  console.log('✅ Questionnaire auth routes registered successfully');
+} catch (error) {
+  console.error('❌ Failed to register questionnaire auth routes:', error);
+  console.error('❌ Error details:', error.stack);
+}
+
+// 分析路由
+api.route('/analytics', analyticsRoutes);
+
+// 审核员路由
+api.route('/reviewer', reviewerRoutes);
+
+// 管理员路由
+api.route('/admin', createAdminRoutes());
+
+// 故事路由
+api.route('/stories', createStoriesRoutes());
+
+// 违规内容管理路由
+api.route('/violations', violationsRoutes);
+
+// 分级审核路由
+api.route('/tiered-audit', createTieredAuditRoutes());
+
+// 页面参与统计路由
+api.route('/participation-stats', createParticipationStatsRoutes());
+
+// 数据库监测管理路由
+api.route('/admin/database', createDatabaseMonitorRoutes());
+
+// 健康检查路由（也在API前缀下提供）
+api.route('/health', health);
+
+// API路由前缀
+app.route('/api', api);
 
 // 故事审核系统路由
 app.route('/api/stories', createStoryAuditRoutes());
@@ -384,6 +440,18 @@ async function createApiRoutes() {
 
   // 页面参与统计路由
   api.route('/participation-stats', createParticipationStatsRoutes());
+
+  // 问卷用户认证路由（独立系统）
+  try {
+    console.log('🔧 Registering questionnaire auth routes...');
+    const questionnaireAuthRoutes = createQuestionnaireAuthRoutes();
+    console.log('🔧 Questionnaire auth routes created:', questionnaireAuthRoutes);
+    api.route('/questionnaire-auth', questionnaireAuthRoutes);
+    console.log('✅ Questionnaire auth routes registered successfully');
+  } catch (error) {
+    console.error('❌ Failed to register questionnaire auth routes:', error);
+    console.error('❌ Error details:', error.stack);
+  }
 
   // 数据库监测管理路由
   api.route('/admin/database', createDatabaseMonitorRoutes());

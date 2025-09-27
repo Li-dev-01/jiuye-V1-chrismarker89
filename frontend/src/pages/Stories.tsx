@@ -4,6 +4,7 @@
  */
 
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   Card, Row, Col, Typography, Space, Tag, Button,
   Select, Input, Pagination, Empty, Spin, Modal, Avatar, Tabs, message
@@ -25,7 +26,6 @@ import StoryStatsPanel from '../components/stories/StoryStatsPanel';
 import AdvancedFilter, { type FilterOptions } from '../components/stories/AdvancedFilter';
 import EnhancedSearch, { type SearchOptions } from '../components/stories/EnhancedSearch';
 import { getAllCategories, getCategoryInfo } from '../config/storyCategories';
-import StoryForm from '../components/forms/StoryForm';
 import SwipeViewer from '../components/common/SwipeViewer';
 import { StoriesDebugPanel } from '../components/debug/StoriesDebugPanel';
 import '../styles/UnifiedPages.css';
@@ -47,6 +47,7 @@ const cleanContent = (content: string): string => {
 };
 
 const Stories: React.FC = () => {
+  const navigate = useNavigate();
   const { currentUser, isAuthenticated } = useAuth();
   const [stories, setStories] = useState<Story[]>([]);
   const [allStories, setAllStories] = useState<Story[]>([]); // 存储所有故事，用于客户端筛选
@@ -64,7 +65,7 @@ const Stories: React.FC = () => {
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [availableTags, setAvailableTags] = useState<any[]>([]);
   const [sortBy, setSortBy] = useState<string>('published_at');
-  const [createModalVisible, setCreateModalVisible] = useState<boolean>(false);
+
   const [selectedStory, setSelectedStory] = useState<Story | null>(null);
   const [detailModalVisible, setDetailModalVisible] = useState<boolean>(false);
   const [activeTab, setActiveTab] = useState<string>('latest');
@@ -1211,7 +1212,7 @@ const Stories: React.FC = () => {
               type="primary"
               icon={<PlusOutlined />}
               size="large"
-              onClick={() => setCreateModalVisible(true)}
+              onClick={() => navigate('/story-submit')}
             >
               发布故事
             </Button>
@@ -1382,7 +1383,7 @@ const Stories: React.FC = () => {
                         <Button
                           type="primary"
                           icon={<PlusOutlined />}
-                          onClick={() => setCreateModalVisible(true)}
+                          onClick={() => navigate('/story-submit')}
                         >
                           发布第一个故事
                         </Button>
@@ -1396,16 +1397,7 @@ const Stories: React.FC = () => {
         </Tabs>
       </Card>
 
-      {/* 发布故事模态框 */}
-      <StoryForm
-        mode="modal"
-        visible={createModalVisible}
-        onCancel={() => setCreateModalVisible(false)}
-        onSuccess={() => {
-          setCreateModalVisible(false);
-          loadStories(); // 重新加载列表
-        }}
-      />
+
 
       {/* 故事详情模态框 */}
       <Modal
