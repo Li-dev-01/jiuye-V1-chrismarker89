@@ -26,12 +26,20 @@ const SIMPLE_USERS = {
   },
   
   // 管理员
-  'admin1': {
+  'admin': {
     id: 'admin_001',
-    username: 'admin1',
+    username: 'admin',
     password: 'admin123',
     role: 'admin',
     name: '管理员',
+    permissions: ['review_content', 'view_dashboard', 'manage_users', 'view_analytics']
+  },
+  'admin1': {
+    id: 'admin_002',
+    username: 'admin1',
+    password: 'admin123',
+    role: 'admin',
+    name: '管理员1',
     permissions: ['review_content', 'view_dashboard', 'manage_users', 'view_analytics']
   },
   
@@ -163,16 +171,54 @@ simpleAuth.post('/login', async (c) => {
 simpleAuth.post('/verify', async (c) => {
   try {
     const authHeader = c.req.header('Authorization');
-    
+
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
       return jsonResponse(errorResponse('缺少认证token', 401));
     }
 
     const token = authHeader.substring(7); // 移除 "Bearer " 前缀
-    
+
     console.log(`[SIMPLE_AUTH] Verifying token: ${token.substring(0, 20)}...`);
 
-    // 验证简化token
+    // 检查是否为新的 sessionId 格式（以 "session_" 开头）
+    if (token.startsWith('session_')) {
+      console.log(`[SIMPLE_AUTH] Detected sessionId format, using email-role auth verification`);
+
+      const db = createDatabaseService(c.env as Env);
+      const now = new Date().toISOString();
+
+      // 查找会话
+      const session = await db.queryFirst(`
+        SELECT ls.*, ra.email, ra.role, ra.username, ra.display_name, ra.permissions
+        FROM login_sessions ls
+        JOIN role_accounts ra ON ls.account_id = ra.id
+        WHERE ls.session_id = ? AND ls.is_active = 1 AND ls.expires_at > ?
+      `, [token, now]);
+
+      if (!session) {
+        console.error('[SIMPLE_AUTH] Session not found or expired');
+        return jsonResponse(errorResponse('会话无效或已过期', 401));
+      }
+
+      console.log(`[SIMPLE_AUTH] Session verification successful: ${session.username}`);
+
+      // 返回用户信息
+      return jsonResponse(successResponse({
+        user: {
+          id: session.account_id,
+          accountId: session.account_id,
+          username: session.username,
+          role: session.role,
+          userType: session.role, // 兼容前端
+          name: session.display_name,
+          displayName: session.display_name,
+          email: session.email,
+          permissions: JSON.parse(session.permissions || '[]')
+        }
+      }, '验证成功'));
+    }
+
+    // 旧的 JWT token 验证逻辑
     const payload = verifySimpleToken(token);
 
     console.log(`[SIMPLE_AUTH] Token verification successful: ${payload.username}`);
@@ -199,12 +245,49 @@ simpleAuth.post('/verify', async (c) => {
 simpleAuth.get('/me', async (c) => {
   try {
     const authHeader = c.req.header('Authorization');
-    
+
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
       return jsonResponse(errorResponse('缺少认证token', 401));
     }
 
     const token = authHeader.substring(7);
+
+    // 检查是否为新的 sessionId 格式
+    if (token.startsWith('session_')) {
+      console.log(`[SIMPLE_AUTH] /me - Detected sessionId format`);
+
+      const db = createDatabaseService(c.env as Env);
+      const now = new Date().toISOString();
+
+      // 查找会话
+      const session = await db.queryFirst(`
+        SELECT ls.*, ra.email, ra.role, ra.username, ra.display_name, ra.permissions
+        FROM login_sessions ls
+        JOIN role_accounts ra ON ls.account_id = ra.id
+        WHERE ls.session_id = ? AND ls.is_active = 1 AND ls.expires_at > ?
+      `, [token, now]);
+
+      if (!session) {
+        console.error('[SIMPLE_AUTH] /me - Session not found or expired');
+        return jsonResponse(errorResponse('会话无效或已过期', 401));
+      }
+
+      return jsonResponse(successResponse({
+        user: {
+          id: session.account_id,
+          accountId: session.account_id,
+          username: session.username,
+          role: session.role,
+          userType: session.role,
+          name: session.display_name,
+          displayName: session.display_name,
+          email: session.email,
+          permissions: JSON.parse(session.permissions || '[]')
+        }
+      }, '获取用户信息成功'));
+    }
+
+    // 旧的 JWT token 验证逻辑
     const payload = verifySimpleToken(token);
 
     return jsonResponse(successResponse({

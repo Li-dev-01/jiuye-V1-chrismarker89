@@ -107,15 +107,9 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
     );
   }
 
-  // 如果未认证，根据路径重定向到对应的登录页
+  // 如果未认证，重定向到统一登录页
   if (!isAuthenticated) {
-    let redirectTo = '/login';
-
-    if (location.pathname.startsWith('/admin/super')) {
-      redirectTo = '/admin/super-login';
-    } else if (location.pathname.startsWith('/admin')) {
-      redirectTo = '/admin/login';
-    }
+    const redirectTo = '/unified-login';
 
     console.log(`[PROTECTED_ROUTE] 🔄 Not authenticated, redirecting to ${redirectTo} from ${location.pathname}`);
     return <Navigate to={redirectTo} state={{ from: location }} replace />;

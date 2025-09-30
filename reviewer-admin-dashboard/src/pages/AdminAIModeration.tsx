@@ -20,18 +20,20 @@ import {
   Table,
   Tag
 } from 'antd';
+import type { TabsProps } from 'antd';
 import {
   RobotOutlined,
   SettingOutlined,
   BarChartOutlined,
   ExperimentOutlined,
   ReloadOutlined,
-  SaveOutlined
+  SaveOutlined,
+  ThunderboltOutlined
 } from '@ant-design/icons';
 import { apiClient } from '../services/apiClient';
+import AIGatewayConfigPanel from '../components/AIGatewayConfigPanel';
 
 const { Title, Text, Paragraph } = Typography;
-const { TabPane } = Tabs;
 const { Option } = Select;
 
 interface AIConfig {
@@ -319,9 +321,9 @@ const AdminAIModeration: React.FC = () => {
       key: 'riskScore',
       width: 100,
       render: (score: number) => (
-        <Progress 
-          percent={Math.round(score * 100)} 
-          size="small" 
+        <Progress
+          percent={Math.round(score * 100)}
+          size="small"
           status={score > 0.7 ? 'exception' : score > 0.4 ? 'active' : 'success'}
         />
       )
@@ -353,6 +355,510 @@ const AdminAIModeration: React.FC = () => {
     }
   ];
 
+  const tabItems: TabsProps['items'] = [
+    {
+      key: 'config',
+      label: <span><SettingOutlined />配置管理</span>,
+      children: (
+        <Row gutter={[16, 16]}>
+          <Col span={24}>
+            <Card title="基础配置">
+              <Form layout="vertical">
+                <Form.Item label="启用AI审核">
+                  <Switch
+                    checked={aiConfig.enabled}
+                    onChange={(checked) => setAiConfig({...aiConfig, enabled: checked})}
+                    checkedChildren="开启"
+                    unCheckedChildren="关闭"
+                  />
+                  <Text type="secondary" style={{ marginLeft: 8 }}>
+                    关闭后将仅使用规则审核
+                  </Text>
+                </Form.Item>
+
+                <Divider />
+
+                <Form.Item label="AI模型配置">
+                  <Row gutter={[16, 16]}>
+                    <Col span={12}>
+                      <Text strong>文本分类模型</Text>
+                      <Select
+                        value={aiConfig.models.textClassification}
+                        onChange={(value) => updateModel('textClassification', value)}
+                        style={{ width: '100%', marginTop: 8 }}
+                      >
+                        {availableModels.textClassification.map(model => (
+                          <Option key={model} value={model}>{model}</Option>
+                        ))}
+                      </Select>
+                    </Col>
+                    <Col span={12}>
+                      <Text strong>内容安全模型</Text>
+                      <Select
+                        value={aiConfig.models.contentSafety}
+                        onChange={(value) => updateModel('contentSafety', value)}
+                        style={{ width: '100%', marginTop: 8 }}
+                      >
+                        {availableModels.contentSafety.map(model => (
+                          <Option key={model} value={model}>{model}</Option>
+                        ))}
+                      </Select>
+                    </Col>
+                  </Row>
+                </Form.Item>
+
+                <Divider />
+
+                <Form.Item label="风险阈值设置">
+                  <Row gutter={[16, 16]}>
+                    <Col span={8}>
+                      <Text strong>自动通过阈值</Text>
+                      <Slider
+                        min={0}
+                        max={1}
+                        step={0.1}
+                        value={aiConfig.thresholds.autoApprove}
+                        onChange={(value) => updateThreshold('autoApprove', value)}
+                        marks={{ 0: '0', 0.5: '0.5', 1: '1' }}
+                      />
+                      <Text type="secondary">当前值: {aiConfig.thresholds.autoApprove}</Text>
+                    </Col>
+                    <Col span={8}>
+                      <Text strong>人工审核阈值</Text>
+                      <Slider
+                        min={0}
+                        max={1}
+                        step={0.1}
+                        value={aiConfig.thresholds.humanReview}
+                        onChange={(value) => updateThreshold('humanReview', value)}
+                        marks={{ 0: '0', 0.5: '0.5', 1: '1' }}
+                      />
+                      <Text type="secondary">当前值: {aiConfig.thresholds.humanReview}</Text>
+                    </Col>
+                    <Col span={8}>
+                      <Text strong>自动拒绝阈值</Text>
+                      <Slider
+                        min={0}
+                        max={1}
+                        step={0.1}
+                        value={aiConfig.thresholds.autoReject}
+                        onChange={(value) => updateThreshold('autoReject', value)}
+                        marks={{ 0: '0', 0.5: '0.5', 1: '1' }}
+                      />
+                      <Text type="secondary">当前值: {aiConfig.thresholds.autoReject}</Text>
+                    </Col>
+                  </Row>
+                </Form.Item>
+
+                <Divider />
+
+                <Form.Item label="功能特性">
+                  <Row gutter={[16, 16]}>
+                    <Col span={6}>
+                      <Switch
+                        checked={aiConfig.features.parallelAnalysis}
+                        onChange={(checked) => updateFeature('parallelAnalysis', checked)}
+                      />
+                      <Text style={{ marginLeft: 8 }}>并行分析</Text>
+                    </Col>
+                    <Col span={6}>
+                      <Switch
+                        checked={aiConfig.features.semanticAnalysis}
+                        onChange={(checked) => updateFeature('semanticAnalysis', checked)}
+                      />
+                      <Text style={{ marginLeft: 8 }}>语义分析</Text>
+                    </Col>
+                    <Col span={6}>
+                      <Switch
+                        checked={aiConfig.features.caching}
+                        onChange={(checked) => updateFeature('caching', checked)}
+                      />
+                      <Text style={{ marginLeft: 8 }}>结果缓存</Text>
+                    </Col>
+                    <Col span={6}>
+                      <Switch
+                        checked={aiConfig.features.batchProcessing}
+                        onChange={(checked) => updateFeature('batchProcessing', checked)}
+                      />
+                      <Text style={{ marginLeft: 8 }}>批量处理</Text>
+                    </Col>
+                  </Row>
+                </Form.Item>
+              </Form>
+            </Card>
+          </Col>
+        </Row>
+      )
+    },
+    {
+      key: 'stats',
+      label: <span><BarChartOutlined />性能统计</span>,
+      children: aiStats ? (
+        <Row gutter={[16, 16]}>
+          <Col span={6}>
+            <Card>
+              <Statistic
+                title="总分析次数"
+                value={aiStats.totalAnalyses}
+                prefix={<RobotOutlined />}
+              />
+            </Card>
+          </Col>
+          <Col span={6}>
+            <Card>
+              <Statistic
+                title="成功率"
+                value={aiStats.successRate}
+                suffix="%"
+                precision={1}
+                valueStyle={{ color: aiStats.successRate > 95 ? '#3f8600' : '#cf1322' }}
+              />
+            </Card>
+          </Col>
+          <Col span={6}>
+            <Card>
+              <Statistic
+                title="平均处理时间"
+                value={aiStats.averageProcessingTime}
+                suffix="ms"
+                precision={0}
+              />
+            </Card>
+          </Col>
+          <Col span={6}>
+            <Card>
+              <Statistic
+                title="缓存命中率"
+                value={aiStats.cacheHitRate}
+                suffix="%"
+                precision={1}
+                valueStyle={{ color: '#3f8600' }}
+              />
+            </Card>
+          </Col>
+
+          <Col span={24}>
+            <Card title="最近分析记录">
+              <Table
+                columns={recentAnalysesColumns}
+                dataSource={aiStats.recentAnalyses}
+                rowKey="id"
+                size="small"
+                pagination={{ pageSize: 10 }}
+              />
+            </Card>
+          </Col>
+        </Row>
+      ) : (
+        <Alert message="暂无统计数据" type="info" />
+      )
+    },
+    {
+      key: 'test',
+      label: <span><ExperimentOutlined />测试工具</span>,
+      children: (
+        <Row gutter={[16, 16]}>
+          <Col span={12}>
+            <Card title="内容测试">
+              <Form layout="vertical">
+                <Form.Item label="测试内容">
+                  <Input.TextArea
+                    rows={6}
+                    value={testContent}
+                    onChange={(e) => setTestContent(e.target.value)}
+                    placeholder="输入要测试的内容..."
+                  />
+                </Form.Item>
+                <Form.Item>
+                  <Button
+                    type="primary"
+                    onClick={testAIModeration}
+                    loading={testing}
+                    disabled={!testContent.trim()}
+                  >
+                    开始AI分析
+                  </Button>
+                </Form.Item>
+              </Form>
+            </Card>
+          </Col>
+
+          <Col span={12}>
+            <Card title="分析结果">
+              {testResult ? (
+                <div>
+                  <Row gutter={[16, 16]}>
+                    <Col span={12}>
+                      <Statistic
+                        title="风险分数"
+                        value={testResult.riskScore}
+                        precision={3}
+                        valueStyle={{
+                          color: testResult.riskScore > 0.7 ? '#cf1322' :
+                                 testResult.riskScore > 0.4 ? '#fa8c16' : '#3f8600'
+                        }}
+                      />
+                    </Col>
+                    <Col span={12}>
+                      <Statistic
+                        title="置信度"
+                        value={testResult.confidence}
+                        precision={3}
+                      />
+                    </Col>
+                  </Row>
+
+                  <Divider />
+
+                  <div>
+                    <Text strong>推荐操作: </Text>
+                    <Tag color={
+                      testResult.recommendation === 'approve' ? 'green' :
+                      testResult.recommendation === 'reject' ? 'red' : 'orange'
+                    }>
+                      {testResult.recommendation === 'approve' ? '通过' :
+                       testResult.recommendation === 'reject' ? '拒绝' : '人工审核'}
+                    </Tag>
+                  </div>
+
+                  <div style={{ marginTop: 16 }}>
+                    <Text strong>处理时间: </Text>
+                    <Text>{testResult.processingTime}ms</Text>
+                  </div>
+                </div>
+              ) : (
+                <Alert
+                  message="暂无测试结果"
+                  description="请在左侧输入内容并点击分析按钮"
+                  type="info"
+                  showIcon
+                />
+              )}
+            </Card>
+          </Col>
+        </Row>
+      )
+    },
+    {
+      key: 'audit-stats',
+      label: <span><BarChartOutlined />审核统计</span>,
+      children: auditStats ? (
+        <Row gutter={[16, 16]}>
+          <Col span={6}>
+            <Card>
+              <Statistic
+                title="待审核故事"
+                value={auditStats.total_pending}
+                valueStyle={{ color: '#faad14' }}
+              />
+            </Card>
+          </Col>
+          <Col span={6}>
+            <Card>
+              <Statistic
+                title="已通过"
+                value={auditStats.total_approved}
+                valueStyle={{ color: '#52c41a' }}
+              />
+            </Card>
+          </Col>
+          <Col span={6}>
+            <Card>
+              <Statistic
+                title="已拒绝"
+                value={auditStats.total_rejected}
+                valueStyle={{ color: '#ff4d4f' }}
+              />
+            </Card>
+          </Col>
+          <Col span={6}>
+            <Card>
+              <Statistic
+                title="人工审核"
+                value={auditStats.total_manual_review}
+                valueStyle={{ color: '#722ed1' }}
+              />
+            </Card>
+          </Col>
+
+          <Col span={12}>
+            <Card title="批量AI审核状态">
+              <Row gutter={[16, 16]}>
+                <Col span={12}>
+                  <Statistic
+                    title="处理批次"
+                    value={auditStats.batch_ai_stats.total_batches}
+                  />
+                </Col>
+                <Col span={12}>
+                  <Statistic
+                    title="队列长度"
+                    value={auditStats.batch_ai_stats.queue_length}
+                    valueStyle={{
+                      color: auditStats.batch_ai_stats.queue_length > 5 ? '#ff4d4f' : '#52c41a'
+                    }}
+                  />
+                </Col>
+                <Col span={12}>
+                  <Statistic
+                    title="平均处理时间"
+                    value={Math.round(auditStats.batch_ai_stats.avg_processing_time)}
+                    suffix="ms"
+                  />
+                </Col>
+                <Col span={12}>
+                  <div>
+                    <Text strong>处理状态: </Text>
+                    <Tag color={auditStats.batch_ai_stats.is_processing ? 'processing' : 'success'}>
+                      {auditStats.batch_ai_stats.is_processing ? '处理中' : '空闲'}
+                    </Tag>
+                  </div>
+                </Col>
+              </Row>
+            </Card>
+          </Col>
+
+          <Col span={12}>
+            <Card title="状态分布">
+              <div className="space-y-2">
+                {auditStats.story_status_distribution.map((item) => (
+                  <div key={item.status} className="flex justify-between items-center">
+                    <span>{item.status}</span>
+                    <div>
+                      <Tag color="blue">{item.count}</Tag>
+                      <Text type="secondary">
+                        {item.avg_processing_time_ms ? `${Math.round(item.avg_processing_time_ms)}ms` : '-'}
+                      </Text>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </Card>
+          </Col>
+        </Row>
+      ) : statsLoading ? (
+        <div className="text-center py-8">
+          <Text>加载统计数据中...</Text>
+        </div>
+      ) : (
+        <Alert message="暂无审核统计数据" type="info" />
+      )
+    },
+    {
+      key: 'manual-review',
+      label: <span><RobotOutlined />人工审核</span>,
+      children: (
+        <Row gutter={[16, 16]}>
+          <Col span={24}>
+            <Card
+              title="人工审核队列"
+              extra={
+                <Button
+                  icon={<ReloadOutlined />}
+                  onClick={loadManualReviewQueue}
+                >
+                  刷新
+                </Button>
+              }
+            >
+              <Table
+                dataSource={manualReviewQueue}
+                rowKey="id"
+                pagination={{ pageSize: 10 }}
+                columns={[
+                  {
+                    title: 'ID',
+                    dataIndex: 'pending_story_id',
+                    key: 'pending_story_id',
+                    width: 80,
+                  },
+                  {
+                    title: '用户ID',
+                    dataIndex: 'user_id',
+                    key: 'user_id',
+                    width: 80,
+                  },
+                  {
+                    title: '内容预览',
+                    dataIndex: 'content_preview',
+                    key: 'content_preview',
+                    ellipsis: true,
+                    render: (text: string) => (
+                      <Text ellipsis={{ tooltip: text }}>
+                        {text}
+                      </Text>
+                    ),
+                  },
+                  {
+                    title: '优先级',
+                    dataIndex: 'priority',
+                    key: 'priority',
+                    width: 80,
+                    render: (priority: number) => (
+                      <Tag color={priority <= 3 ? 'red' : priority <= 6 ? 'orange' : 'green'}>
+                        {priority}
+                      </Tag>
+                    ),
+                  },
+                  {
+                    title: '状态',
+                    dataIndex: 'status',
+                    key: 'status',
+                    width: 100,
+                    render: (status: string) => (
+                      <Tag color={
+                        status === 'waiting' ? 'orange' :
+                        status === 'assigned' ? 'blue' :
+                        status === 'reviewing' ? 'processing' : 'success'
+                      }>
+                        {status === 'waiting' ? '等待中' :
+                         status === 'assigned' ? '已分配' :
+                         status === 'reviewing' ? '审核中' : '已完成'}
+                      </Tag>
+                    ),
+                  },
+                  {
+                    title: '创建时间',
+                    dataIndex: 'created_at',
+                    key: 'created_at',
+                    width: 150,
+                    render: (time: string) => new Date(time).toLocaleString(),
+                  },
+                  {
+                    title: '操作',
+                    key: 'action',
+                    width: 120,
+                    render: (_, record) => (
+                      <Space>
+                        <Button size="small" type="primary">
+                          审核
+                        </Button>
+                        <Button size="small">
+                          详情
+                        </Button>
+                      </Space>
+                    ),
+                  },
+                ]}
+              />
+            </Card>
+          </Col>
+        </Row>
+      )
+    },
+    {
+      key: 'gateway',
+      label: <span><ThunderboltOutlined />Gateway 优化</span>,
+      children: (
+        <Row gutter={[16, 16]}>
+          <Col span={24}>
+            <AIGatewayConfigPanel />
+          </Col>
+        </Row>
+      )
+    }
+  ];
+
   return (
     <div style={{ padding: '24px' }}>
       <Row gutter={[16, 16]}>
@@ -369,16 +875,16 @@ const AdminAIModeration: React.FC = () => {
               </Col>
               <Col>
                 <Space>
-                  <Button 
-                    icon={<ReloadOutlined />} 
+                  <Button
+                    icon={<ReloadOutlined />}
                     onClick={() => { loadAIConfig(); loadAIStats(); }}
                     loading={loading}
                   >
                     刷新
                   </Button>
-                  <Button 
-                    type="primary" 
-                    icon={<SaveOutlined />} 
+                  <Button
+                    type="primary"
+                    icon={<SaveOutlined />}
                     onClick={saveConfig}
                     loading={saving}
                   >
@@ -391,484 +897,7 @@ const AdminAIModeration: React.FC = () => {
         </Col>
 
         <Col span={24}>
-          <Tabs defaultActiveKey="config">
-            <TabPane tab={<span><SettingOutlined />配置管理</span>} key="config">
-              <Row gutter={[16, 16]}>
-                <Col span={24}>
-                  <Card title="基础配置">
-                    <Form layout="vertical">
-                      <Form.Item label="启用AI审核">
-                        <Switch 
-                          checked={aiConfig.enabled}
-                          onChange={(checked) => setAiConfig({...aiConfig, enabled: checked})}
-                          checkedChildren="开启"
-                          unCheckedChildren="关闭"
-                        />
-                        <Text type="secondary" style={{ marginLeft: 8 }}>
-                          关闭后将仅使用规则审核
-                        </Text>
-                      </Form.Item>
-
-                      <Divider />
-
-                      <Form.Item label="AI模型配置">
-                        <Row gutter={[16, 16]}>
-                          <Col span={12}>
-                            <Text strong>文本分类模型</Text>
-                            <Select
-                              value={aiConfig.models.textClassification}
-                              onChange={(value) => updateModel('textClassification', value)}
-                              style={{ width: '100%', marginTop: 8 }}
-                            >
-                              {availableModels.textClassification.map(model => (
-                                <Option key={model} value={model}>{model}</Option>
-                              ))}
-                            </Select>
-                          </Col>
-                          <Col span={12}>
-                            <Text strong>内容安全模型</Text>
-                            <Select
-                              value={aiConfig.models.contentSafety}
-                              onChange={(value) => updateModel('contentSafety', value)}
-                              style={{ width: '100%', marginTop: 8 }}
-                            >
-                              {availableModels.contentSafety.map(model => (
-                                <Option key={model} value={model}>{model}</Option>
-                              ))}
-                            </Select>
-                          </Col>
-                        </Row>
-                      </Form.Item>
-
-                      <Divider />
-
-                      <Form.Item label="风险阈值设置">
-                        <Row gutter={[16, 16]}>
-                          <Col span={8}>
-                            <Text strong>自动通过阈值</Text>
-                            <Slider
-                              min={0}
-                              max={1}
-                              step={0.1}
-                              value={aiConfig.thresholds.autoApprove}
-                              onChange={(value) => updateThreshold('autoApprove', value)}
-                              marks={{ 0: '0', 0.5: '0.5', 1: '1' }}
-                            />
-                            <Text type="secondary">当前值: {aiConfig.thresholds.autoApprove}</Text>
-                          </Col>
-                          <Col span={8}>
-                            <Text strong>人工审核阈值</Text>
-                            <Slider
-                              min={0}
-                              max={1}
-                              step={0.1}
-                              value={aiConfig.thresholds.humanReview}
-                              onChange={(value) => updateThreshold('humanReview', value)}
-                              marks={{ 0: '0', 0.5: '0.5', 1: '1' }}
-                            />
-                            <Text type="secondary">当前值: {aiConfig.thresholds.humanReview}</Text>
-                          </Col>
-                          <Col span={8}>
-                            <Text strong>自动拒绝阈值</Text>
-                            <Slider
-                              min={0}
-                              max={1}
-                              step={0.1}
-                              value={aiConfig.thresholds.autoReject}
-                              onChange={(value) => updateThreshold('autoReject', value)}
-                              marks={{ 0: '0', 0.5: '0.5', 1: '1' }}
-                            />
-                            <Text type="secondary">当前值: {aiConfig.thresholds.autoReject}</Text>
-                          </Col>
-                        </Row>
-                      </Form.Item>
-
-                      <Divider />
-
-                      <Form.Item label="功能特性">
-                        <Row gutter={[16, 16]}>
-                          <Col span={6}>
-                            <Switch
-                              checked={aiConfig.features.parallelAnalysis}
-                              onChange={(checked) => updateFeature('parallelAnalysis', checked)}
-                            />
-                            <Text style={{ marginLeft: 8 }}>并行分析</Text>
-                          </Col>
-                          <Col span={6}>
-                            <Switch
-                              checked={aiConfig.features.semanticAnalysis}
-                              onChange={(checked) => updateFeature('semanticAnalysis', checked)}
-                            />
-                            <Text style={{ marginLeft: 8 }}>语义分析</Text>
-                          </Col>
-                          <Col span={6}>
-                            <Switch
-                              checked={aiConfig.features.caching}
-                              onChange={(checked) => updateFeature('caching', checked)}
-                            />
-                            <Text style={{ marginLeft: 8 }}>结果缓存</Text>
-                          </Col>
-                          <Col span={6}>
-                            <Switch
-                              checked={aiConfig.features.batchProcessing}
-                              onChange={(checked) => updateFeature('batchProcessing', checked)}
-                            />
-                            <Text style={{ marginLeft: 8 }}>批量处理</Text>
-                          </Col>
-                        </Row>
-                      </Form.Item>
-                    </Form>
-                  </Card>
-                </Col>
-              </Row>
-            </TabPane>
-
-            <TabPane tab={<span><BarChartOutlined />性能统计</span>} key="stats">
-              {aiStats && (
-                <Row gutter={[16, 16]}>
-                  <Col span={6}>
-                    <Card>
-                      <Statistic
-                        title="总分析次数"
-                        value={aiStats.totalAnalyses}
-                        prefix={<RobotOutlined />}
-                      />
-                    </Card>
-                  </Col>
-                  <Col span={6}>
-                    <Card>
-                      <Statistic
-                        title="成功率"
-                        value={aiStats.successRate}
-                        suffix="%"
-                        precision={1}
-                        valueStyle={{ color: aiStats.successRate > 95 ? '#3f8600' : '#cf1322' }}
-                      />
-                    </Card>
-                  </Col>
-                  <Col span={6}>
-                    <Card>
-                      <Statistic
-                        title="平均处理时间"
-                        value={aiStats.averageProcessingTime}
-                        suffix="ms"
-                        precision={0}
-                      />
-                    </Card>
-                  </Col>
-                  <Col span={6}>
-                    <Card>
-                      <Statistic
-                        title="缓存命中率"
-                        value={aiStats.cacheHitRate}
-                        suffix="%"
-                        precision={1}
-                        valueStyle={{ color: '#3f8600' }}
-                      />
-                    </Card>
-                  </Col>
-
-                  <Col span={24}>
-                    <Card title="最近分析记录">
-                      <Table
-                        columns={recentAnalysesColumns}
-                        dataSource={aiStats.recentAnalyses}
-                        rowKey="id"
-                        size="small"
-                        pagination={{ pageSize: 10 }}
-                      />
-                    </Card>
-                  </Col>
-                </Row>
-              )}
-            </TabPane>
-
-            <TabPane tab={<span><ExperimentOutlined />测试工具</span>} key="test">
-              <Row gutter={[16, 16]}>
-                <Col span={12}>
-                  <Card title="内容测试">
-                    <Form layout="vertical">
-                      <Form.Item label="测试内容">
-                        <Input.TextArea
-                          rows={6}
-                          value={testContent}
-                          onChange={(e) => setTestContent(e.target.value)}
-                          placeholder="输入要测试的内容..."
-                        />
-                      </Form.Item>
-                      <Form.Item>
-                        <Button
-                          type="primary"
-                          onClick={testAIModeration}
-                          loading={testing}
-                          disabled={!testContent.trim()}
-                        >
-                          开始AI分析
-                        </Button>
-                      </Form.Item>
-                    </Form>
-                  </Card>
-                </Col>
-
-                <Col span={12}>
-                  <Card title="分析结果">
-                    {testResult ? (
-                      <div>
-                        <Row gutter={[16, 16]}>
-                          <Col span={12}>
-                            <Statistic
-                              title="风险分数"
-                              value={testResult.riskScore}
-                              precision={3}
-                              valueStyle={{ 
-                                color: testResult.riskScore > 0.7 ? '#cf1322' : 
-                                       testResult.riskScore > 0.4 ? '#fa8c16' : '#3f8600' 
-                              }}
-                            />
-                          </Col>
-                          <Col span={12}>
-                            <Statistic
-                              title="置信度"
-                              value={testResult.confidence}
-                              precision={3}
-                            />
-                          </Col>
-                        </Row>
-                        
-                        <Divider />
-                        
-                        <div>
-                          <Text strong>推荐操作: </Text>
-                          <Tag color={
-                            testResult.recommendation === 'approve' ? 'green' : 
-                            testResult.recommendation === 'reject' ? 'red' : 'orange'
-                          }>
-                            {testResult.recommendation === 'approve' ? '通过' : 
-                             testResult.recommendation === 'reject' ? '拒绝' : '人工审核'}
-                          </Tag>
-                        </div>
-                        
-                        <div style={{ marginTop: 16 }}>
-                          <Text strong>处理时间: </Text>
-                          <Text>{testResult.processingTime}ms</Text>
-                        </div>
-                      </div>
-                    ) : (
-                      <Alert
-                        message="暂无测试结果"
-                        description="请在左侧输入内容并点击分析按钮"
-                        type="info"
-                        showIcon
-                      />
-                    )}
-                  </Card>
-                </Col>
-              </Row>
-            </TabPane>
-
-            <TabPane tab={<span><BarChartOutlined />审核统计</span>} key="audit-stats">
-              {auditStats && (
-                <Row gutter={[16, 16]}>
-                  <Col span={6}>
-                    <Card>
-                      <Statistic
-                        title="待审核故事"
-                        value={auditStats.total_pending}
-                        valueStyle={{ color: '#faad14' }}
-                      />
-                    </Card>
-                  </Col>
-                  <Col span={6}>
-                    <Card>
-                      <Statistic
-                        title="已通过"
-                        value={auditStats.total_approved}
-                        valueStyle={{ color: '#52c41a' }}
-                      />
-                    </Card>
-                  </Col>
-                  <Col span={6}>
-                    <Card>
-                      <Statistic
-                        title="已拒绝"
-                        value={auditStats.total_rejected}
-                        valueStyle={{ color: '#ff4d4f' }}
-                      />
-                    </Card>
-                  </Col>
-                  <Col span={6}>
-                    <Card>
-                      <Statistic
-                        title="人工审核"
-                        value={auditStats.total_manual_review}
-                        valueStyle={{ color: '#722ed1' }}
-                      />
-                    </Card>
-                  </Col>
-
-                  <Col span={12}>
-                    <Card title="批量AI审核状态">
-                      <Row gutter={[16, 16]}>
-                        <Col span={12}>
-                          <Statistic
-                            title="处理批次"
-                            value={auditStats.batch_ai_stats.total_batches}
-                          />
-                        </Col>
-                        <Col span={12}>
-                          <Statistic
-                            title="队列长度"
-                            value={auditStats.batch_ai_stats.queue_length}
-                            valueStyle={{
-                              color: auditStats.batch_ai_stats.queue_length > 5 ? '#ff4d4f' : '#52c41a'
-                            }}
-                          />
-                        </Col>
-                        <Col span={12}>
-                          <Statistic
-                            title="平均处理时间"
-                            value={Math.round(auditStats.batch_ai_stats.avg_processing_time)}
-                            suffix="ms"
-                          />
-                        </Col>
-                        <Col span={12}>
-                          <div>
-                            <Text strong>处理状态: </Text>
-                            <Tag color={auditStats.batch_ai_stats.is_processing ? 'processing' : 'success'}>
-                              {auditStats.batch_ai_stats.is_processing ? '处理中' : '空闲'}
-                            </Tag>
-                          </div>
-                        </Col>
-                      </Row>
-                    </Card>
-                  </Col>
-
-                  <Col span={12}>
-                    <Card title="状态分布">
-                      <div className="space-y-2">
-                        {auditStats.story_status_distribution.map((item) => (
-                          <div key={item.status} className="flex justify-between items-center">
-                            <span>{item.status}</span>
-                            <div>
-                              <Tag color="blue">{item.count}</Tag>
-                              <Text type="secondary">
-                                {item.avg_processing_time_ms ? `${Math.round(item.avg_processing_time_ms)}ms` : '-'}
-                              </Text>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </Card>
-                  </Col>
-                </Row>
-              )}
-
-              {statsLoading && (
-                <div className="text-center py-8">
-                  <Text>加载统计数据中...</Text>
-                </div>
-              )}
-            </TabPane>
-
-            <TabPane tab={<span><RobotOutlined />人工审核</span>} key="manual-review">
-              <Row gutter={[16, 16]}>
-                <Col span={24}>
-                  <Card
-                    title="人工审核队列"
-                    extra={
-                      <Button
-                        icon={<ReloadOutlined />}
-                        onClick={loadManualReviewQueue}
-                      >
-                        刷新
-                      </Button>
-                    }
-                  >
-                    <Table
-                      dataSource={manualReviewQueue}
-                      rowKey="id"
-                      pagination={{ pageSize: 10 }}
-                      columns={[
-                        {
-                          title: 'ID',
-                          dataIndex: 'pending_story_id',
-                          key: 'pending_story_id',
-                          width: 80,
-                        },
-                        {
-                          title: '用户ID',
-                          dataIndex: 'user_id',
-                          key: 'user_id',
-                          width: 80,
-                        },
-                        {
-                          title: '内容预览',
-                          dataIndex: 'content_preview',
-                          key: 'content_preview',
-                          ellipsis: true,
-                          render: (text: string) => (
-                            <Text ellipsis={{ tooltip: text }}>
-                              {text}
-                            </Text>
-                          ),
-                        },
-                        {
-                          title: '优先级',
-                          dataIndex: 'priority',
-                          key: 'priority',
-                          width: 80,
-                          render: (priority: number) => (
-                            <Tag color={priority <= 3 ? 'red' : priority <= 6 ? 'orange' : 'green'}>
-                              {priority}
-                            </Tag>
-                          ),
-                        },
-                        {
-                          title: '状态',
-                          dataIndex: 'status',
-                          key: 'status',
-                          width: 100,
-                          render: (status: string) => (
-                            <Tag color={
-                              status === 'waiting' ? 'orange' :
-                              status === 'assigned' ? 'blue' :
-                              status === 'reviewing' ? 'processing' : 'success'
-                            }>
-                              {status === 'waiting' ? '等待中' :
-                               status === 'assigned' ? '已分配' :
-                               status === 'reviewing' ? '审核中' : '已完成'}
-                            </Tag>
-                          ),
-                        },
-                        {
-                          title: '创建时间',
-                          dataIndex: 'created_at',
-                          key: 'created_at',
-                          width: 150,
-                          render: (time: string) => new Date(time).toLocaleString(),
-                        },
-                        {
-                          title: '操作',
-                          key: 'action',
-                          width: 120,
-                          render: (_, record) => (
-                            <Space>
-                              <Button size="small" type="primary">
-                                审核
-                              </Button>
-                              <Button size="small">
-                                详情
-                              </Button>
-                            </Space>
-                          ),
-                        },
-                      ]}
-                    />
-                  </Card>
-                </Col>
-              </Row>
-            </TabPane>
-          </Tabs>
+          <Tabs defaultActiveKey="config" items={tabItems} />
         </Col>
       </Row>
     </div>

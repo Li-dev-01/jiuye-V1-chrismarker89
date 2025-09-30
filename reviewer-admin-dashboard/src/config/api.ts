@@ -1,6 +1,6 @@
 export const API_CONFIG = {
   BASE_URL: 'https://employment-survey-api-prod.chrismarker89.workers.dev',
-  TIMEOUT: 10000,
+  TIMEOUT: 30000, // 增加到 30 秒，用于数据库结构等复杂查询
   ENDPOINTS: {
     // 简化认证相关 (新的简化API)
     LOGIN: '/api/simple-auth/login',

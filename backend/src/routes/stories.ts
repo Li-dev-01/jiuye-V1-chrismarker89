@@ -651,11 +651,14 @@ export function createStoriesRoutes() {
     }
   });
 
-  // 创建故事
+  // 创建故事 - 使用三层审核流程
   stories.post('/', async (c) => {
     try {
       const body = await c.req.json();
-      console.log('创建故事:', body);
+      console.log('📝 [STORY_SUBMIT] 收到故事提交请求:', {
+        user_id: body.user_id,
+        title: body.title?.substring(0, 20)
+      });
 
       const { title, content, category, tags, user_id, author_name, is_anonymous } = body;
 
@@ -670,19 +673,30 @@ export function createStoriesRoutes() {
 
       const db = c.env.DB;
 
-      // 确保表存在
+      // 确保审核系统表存在
       await db.prepare(`
-        CREATE TABLE IF NOT EXISTS raw_story_submissions (
+        CREATE TABLE IF NOT EXISTS pending_stories (
           id INTEGER PRIMARY KEY AUTOINCREMENT,
-          data_uuid TEXT UNIQUE NOT NULL,
           user_id TEXT NOT NULL,
           title TEXT NOT NULL,
           content TEXT NOT NULL,
           category TEXT DEFAULT 'general',
           tags TEXT DEFAULT '[]',
-          submitted_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-          raw_status TEXT DEFAULT 'completed',
-          ip_address TEXT,
+          author_name TEXT DEFAULT '匿名用户',
+          status TEXT DEFAULT 'pending' CHECK (status IN (
+            'pending', 'rule_checking', 'rule_passed', 'ai_checking',
+            'ai_passed', 'manual_review', 'approved', 'rejected'
+          )),
+          audit_level INTEGER DEFAULT 1,
+          created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+          rule_audit_at DATETIME,
+          ai_audit_at DATETIME,
+          manual_audit_at DATETIME,
+          approved_at DATETIME,
+          rule_audit_result TEXT,
+          ai_audit_result TEXT,
+          manual_audit_result TEXT,
+          user_ip TEXT,
           user_agent TEXT
         )
       `).run();
@@ -711,38 +725,31 @@ export function createStoriesRoutes() {
         )
       `).run();
 
-      // 生成UUID
-      const data_uuid = crypto.randomUUID();
+      // 🔥 使用审核控制器处理提交
+      const { StoryAuditController } = await import('../services/storyAuditController');
+      const auditController = new StoryAuditController(c.env, db);
 
-      // 插入到原始故事表
-      const rawResult = await db.prepare(`
-        INSERT INTO raw_story_submissions (
-          data_uuid, user_id, title, content, category, tags, submitted_at, raw_status
-        ) VALUES (?, ?, ?, ?, ?, ?, datetime('now'), 'completed')
-      `).bind(data_uuid, user_id, title, content, category, JSON.stringify(tags || [])).run();
+      const auditResult = await auditController.processStorySubmission({
+        user_id: user_id,
+        title: title,
+        content: content,
+        category: category,
+        tags: tags,
+        author_name: author_name || '匿名用户',
+        user_ip: c.req.header('CF-Connecting-IP') || c.req.header('X-Forwarded-For'),
+        user_agent: c.req.header('User-Agent')
+      });
 
-      const rawId = rawResult.meta.last_row_id;
-
-      // 直接插入到有效故事表（自动审核通过）
-      const validResult = await db.prepare(`
-        INSERT INTO valid_stories (
-          raw_id, data_uuid, user_id, title, content, category, tags, author_name,
-          approved_at, audit_status, like_count, view_count
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, datetime('now'), 'approved', 0, 0)
-      `).bind(rawId, data_uuid, user_id, title, content, category, JSON.stringify(tags || []), author_name || '匿名用户').run();
-
-      const validId = validResult.meta.last_row_id;
-
-      // PNG生成功能已移除
+      console.log('✅ [STORY_SUBMIT] 审核结果:', auditResult);
 
       return c.json({
-        success: true,
+        success: auditResult.success,
         data: {
-          id: validId,
-          uuid: data_uuid,
-          message: '故事创建成功'
+          story_id: auditResult.story_id,
+          status: auditResult.status,
+          message: auditResult.message
         },
-        message: '故事创建成功'
+        message: auditResult.message
       });
       
     } catch (error) {

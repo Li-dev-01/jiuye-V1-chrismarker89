@@ -1689,28 +1689,30 @@ simpleAdmin.post('/ai-moderation/test', async (c) => {
       return c.json({ success: false, message: '内容不能为空' }, 400);
     }
 
-    // 模拟AI分析结果
-    const mockResult = {
-      riskScore: Math.random() * 0.8, // 随机风险分数
-      confidence: 0.85 + Math.random() * 0.15,
-      recommendation: Math.random() > 0.7 ? 'approve' : Math.random() > 0.3 ? 'review' : 'reject',
-      details: {
-        classification: { label: 'NEUTRAL', score: 0.85 },
-        sentiment: { sentiment: 'neutral', confidence: 0.78 },
-        safety: { status: 'safe', confidence: 0.92 }
-      },
-      processingTime: Math.floor(200 + Math.random() * 300),
-      modelVersions: {
-        classification: '@cf/huggingface/distilbert-sst-2-int8',
-        sentiment: '@cf/meta/llama-3-8b-instruct',
-        safety: '@cf/meta/llama-guard-3-8b'
-      }
-    };
+    // 使用增强的 AI 审核服务
+    const { enhancedAIModerationService } = await import('../services/enhancedAIModerationService');
 
-    return successResponse(c, mockResult, 'AI审核测试完成');
+    const result = await enhancedAIModerationService.analyze(
+      {
+        content,
+        contentType: contentType || 'story',
+        userId: c.get('user')?.id || 'admin-test',
+        metadata: {
+          ip: c.req.header('cf-connecting-ip'),
+          userAgent: c.req.header('user-agent'),
+          timestamp: new Date().toISOString()
+        }
+      },
+      c.env.AI
+    );
+
+    return successResponse(c, result, 'AI审核测试完成');
   } catch (error) {
     console.error('[SIMPLE_ADMIN] AI test error:', error);
-    return c.json({ success: false, message: 'AI审核测试失败' }, 500);
+    return c.json({
+      success: false,
+      message: error instanceof Error ? error.message : 'AI审核测试失败'
+    }, 500);
   }
 });
 
@@ -1756,6 +1758,88 @@ simpleAdmin.get('/ai-moderation/models/check', async (c) => {
         error: error instanceof Error ? error.message : 'Unknown error'
       }
     }, 500);
+  }
+});
+
+// 获取 AI Gateway 配置
+simpleAdmin.get('/ai-moderation/gateway/config', async (c) => {
+  try {
+    const { aiGatewayConfigManager } = await import('../services/aiGatewayConfigService');
+    const config = aiGatewayConfigManager.getConfig();
+    return successResponse(c, config, 'AI Gateway配置获取成功');
+  } catch (error) {
+    console.error('[SIMPLE_ADMIN] Get AI Gateway config error:', error);
+    return c.json({ success: false, message: '获取配置失败' }, 500);
+  }
+});
+
+// 更新 AI Gateway 配置
+simpleAdmin.post('/ai-moderation/gateway/config', async (c) => {
+  try {
+    const newConfig = await c.req.json();
+    const user = c.get('user');
+    const operator = user?.username || 'admin';
+
+    const { aiGatewayConfigManager } = await import('../services/aiGatewayConfigService');
+
+    // 验证配置
+    const validation = aiGatewayConfigManager.validateConfig(newConfig);
+    if (!validation.valid) {
+      return c.json({
+        success: false,
+        message: '配置验证失败',
+        errors: validation.errors
+      }, 400);
+    }
+
+    // 更新配置
+    aiGatewayConfigManager.updateConfig(newConfig, operator);
+
+    return successResponse(c, aiGatewayConfigManager.getConfig(), 'AI Gateway配置更新成功');
+  } catch (error) {
+    console.error('[SIMPLE_ADMIN] Update AI Gateway config error:', error);
+    return c.json({ success: false, message: '更新配置失败' }, 500);
+  }
+});
+
+// 获取 AI Gateway 统计信息
+simpleAdmin.get('/ai-moderation/gateway/stats', async (c) => {
+  try {
+    const { enhancedAIModerationService } = await import('../services/enhancedAIModerationService');
+    const user = c.get('user');
+    const stats = enhancedAIModerationService.getStats(user?.id);
+
+    return successResponse(c, stats, 'AI Gateway统计信息获取成功');
+  } catch (error) {
+    console.error('[SIMPLE_ADMIN] Get AI Gateway stats error:', error);
+    return c.json({ success: false, message: '获取统计信息失败' }, 500);
+  }
+});
+
+// 清空 AI 缓存
+simpleAdmin.post('/ai-moderation/gateway/cache/clear', async (c) => {
+  try {
+    const { enhancedAIModerationService } = await import('../services/enhancedAIModerationService');
+    enhancedAIModerationService.clearCache();
+
+    return successResponse(c, { cleared: true }, 'AI缓存已清空');
+  } catch (error) {
+    console.error('[SIMPLE_ADMIN] Clear AI cache error:', error);
+    return c.json({ success: false, message: '清空缓存失败' }, 500);
+  }
+});
+
+// 获取配置历史
+simpleAdmin.get('/ai-moderation/gateway/config/history', async (c) => {
+  try {
+    const { aiGatewayConfigManager } = await import('../services/aiGatewayConfigService');
+    const limit = parseInt(c.req.query('limit') || '10');
+    const history = aiGatewayConfigManager.getConfigHistory(limit);
+
+    return successResponse(c, history, '配置历史获取成功');
+  } catch (error) {
+    console.error('[SIMPLE_ADMIN] Get config history error:', error);
+    return c.json({ success: false, message: '获取配置历史失败' }, 500);
   }
 });
 
@@ -2053,6 +2137,135 @@ simpleAdmin.delete('/content/tags/cleanup', async (c) => {
   }
 });
 
+// ==================== 数据库管理相关路由 ====================
+
+// 获取数据库结构信息（优化版本 - 批量查询）
+simpleAdmin.get('/database/schema', async (c) => {
+  try {
+    console.log('[SIMPLE_ADMIN] Getting database schema (optimized v2)');
+    const db = c.env.DB;
+    const startTime = Date.now();
+
+    // 获取所有表
+    const tablesResult = await db.prepare(`
+      SELECT name FROM sqlite_master
+      WHERE type='table'
+      AND name NOT LIKE 'sqlite_%'
+      ORDER BY name
+    `).all();
+
+    console.log('[SIMPLE_ADMIN] Found tables:', tablesResult.results?.length || 0);
+
+    const tables = [];
+    const relations = [];
+
+    // 处理所有表，但简化查询
+    const tablesToProcess = tablesResult.results || [];
+
+    // 批量处理，每次处理 10 个表
+    const batchSize = 10;
+    for (let i = 0; i < tablesToProcess.length; i += batchSize) {
+      const batch = tablesToProcess.slice(i, i + batchSize);
+
+      // 并行处理批次中的表
+      await Promise.all(batch.map(async (tableRow: any) => {
+        try {
+          const tableName = tableRow.name;
+
+          // 获取表的列信息
+          const columnsResult = await db.prepare(`PRAGMA table_info(${tableName})`).all();
+
+          // 获取表的外键信息
+          const foreignKeysResult = await db.prepare(`PRAGMA foreign_key_list(${tableName})`).all();
+
+          // 跳过索引信息查询以加快速度
+          const indexes: any[] = [];
+
+          // 跳过记录数查询以加快速度
+          const rowCount = 0;
+
+          // 构建列信息（简化版本）
+          const columns = (columnsResult.results || []).map((col: any) => ({
+            name: col.name,
+            type: col.type,
+            nullable: col.notnull === 0,
+            defaultValue: col.dflt_value,
+            description: '',
+            isPrimaryKey: col.pk === 1,
+            isForeignKey: (foreignKeysResult.results || []).some((fk: any) => fk.from === col.name)
+          }));
+
+          // 构建外键信息
+          const foreignKeys = (foreignKeysResult.results || []).map((fk: any) => ({
+            name: `fk_${tableName}_${fk.from}`,
+            columns: [fk.from],
+            referencedTable: fk.table,
+            referencedColumns: [fk.to],
+            onDelete: fk.on_delete || 'NO ACTION',
+            onUpdate: fk.on_update || 'NO ACTION'
+          }));
+
+          // 获取主键
+          const primaryKey = columns
+            .filter((col: any) => col.isPrimaryKey)
+            .map((col: any) => col.name);
+
+          // 添加表信息
+          tables.push({
+            id: tableName,
+            name: tableName,
+            description: getTableDescription(tableName),
+            schema: 'main',
+            columns,
+            indexes, // 空数组，跳过索引查询
+            foreignKeys,
+            primaryKey,
+            rowCount,
+            size: '未知', // 跳过大小计算
+            lastUpdated: new Date().toISOString(),
+            dependencies: foreignKeys.map((fk: any) => fk.referencedTable),
+            dependents: []
+          });
+
+          // 添加关系信息
+          for (const fk of foreignKeys) {
+            relations.push({
+              from: tableName,
+              to: fk.referencedTable,
+              type: 'many-to-one',
+              description: `${tableName}.${fk.columns[0]} -> ${fk.referencedTable}.${fk.referencedColumns[0]}`
+            });
+          }
+        } catch (tableError) {
+          console.error(`[SIMPLE_ADMIN] Error processing table ${tableRow.name}:`, tableError);
+          // 继续处理其他表
+        }
+      }));
+    }
+
+    const endTime = Date.now();
+    console.log('[SIMPLE_ADMIN] Successfully processed', tables.length, 'tables in', endTime - startTime, 'ms');
+
+    return successResponse(c, {
+      tables,
+      relations,
+      totalTables: tablesResult.results?.length || 0,
+      displayedTables: tables.length,
+      processingTime: endTime - startTime,
+      note: '已优化查询性能，跳过索引和记录数统计'
+    }, '获取数据库结构成功');
+
+  } catch (error) {
+    console.error('[SIMPLE_ADMIN] Get database schema error:', error);
+    return c.json({
+      success: false,
+      error: 'Internal Server Error',
+      message: '获取数据库结构失败',
+      details: error instanceof Error ? error.message : 'Unknown error'
+    }, 500);
+  }
+});
+
 // 确保内容标签表存在的函数
 async function ensureContentTagsTableExists(db: any) {
   try {
@@ -2091,5 +2304,427 @@ async function ensureContentTagsTableExists(db: any) {
     console.error('[SIMPLE_ADMIN] Failed to ensure content tags tables:', error);
   }
 }
+
+/**
+ * 获取表的描述信息
+ */
+function getTableDescription(tableName: string): string {
+  const descriptions: Record<string, string> = {
+    'users': '用户基础信息表',
+    'universal_users': '通用用户表',
+    'universal_questionnaire_responses': '通用问卷回答表',
+    'raw_story_submissions': '原始故事提交表',
+    'valid_stories': '有效故事表（已审核通过）',
+    'valid_heart_voices': '有效心声表（已审核通过）',
+    'participation_stats': '参与统计表',
+    'test_story_data': '测试故事数据表',
+    'audit_records': '审核记录表',
+    'user_sessions': '用户会话表',
+    'questionnaires': '问卷模板表',
+    'content_tags': '内容标签表',
+    'content_tag_relations': '内容标签关联表',
+    'story_tags': '故事标签关联表'
+  };
+
+  return descriptions[tableName] || `${tableName} 表`;
+}
+
+/**
+ * 格式化字节大小
+ */
+function formatBytes(bytes: number): string {
+  if (bytes === 0) return '0 Bytes';
+
+  const k = 1024;
+  const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+
+  return Math.round((bytes / Math.pow(k, i)) * 100) / 100 + ' ' + sizes[i];
+}
+
+// 故事内容管理 - 搜索故事
+simpleAdmin.get('/content/stories', async (c) => {
+  try {
+    console.log('[SIMPLE_ADMIN] Searching stories');
+    const db = c.env.DB;
+
+    // 获取查询参数
+    const page = parseInt(c.req.query('page') || '1');
+    const pageSize = parseInt(c.req.query('pageSize') || '20');
+    const keyword = c.req.query('keyword') || '';
+    const username = c.req.query('username') || '';
+    const category = c.req.query('category') || '';
+    const status = c.req.query('status') || '';
+    const startDate = c.req.query('startDate') || '';
+    const endDate = c.req.query('endDate') || '';
+
+    const offset = (page - 1) * pageSize;
+
+    // 构建查询条件
+    let whereConditions: string[] = [];
+    let params: any[] = [];
+
+    // 关键字搜索（标题或内容）
+    if (keyword) {
+      whereConditions.push('(vs.title LIKE ? OR vs.content LIKE ?)');
+      params.push(`%${keyword}%`, `%${keyword}%`);
+    }
+
+    // 用户名搜索
+    if (username) {
+      whereConditions.push('(vs.user_id LIKE ? OR vs.author_name LIKE ?)');
+      params.push(`%${username}%`, `%${username}%`);
+    }
+
+    // 分类筛选
+    if (category) {
+      whereConditions.push('vs.category = ?');
+      params.push(category);
+    }
+
+    // 状态筛选
+    if (status) {
+      whereConditions.push('vs.audit_status = ?');
+      params.push(status);
+    }
+
+    // 日期范围筛选
+    if (startDate) {
+      whereConditions.push('DATE(vs.created_at) >= DATE(?)');
+      params.push(startDate);
+    }
+    if (endDate) {
+      whereConditions.push('DATE(vs.created_at) <= DATE(?)');
+      params.push(endDate);
+    }
+
+    const whereClause = whereConditions.length > 0
+      ? 'WHERE ' + whereConditions.join(' AND ')
+      : '';
+
+    // 获取总数
+    const countQuery = `
+      SELECT COUNT(*) as total
+      FROM valid_stories vs
+      ${whereClause}
+    `;
+
+    const countResult = await db.prepare(countQuery).bind(...params).first();
+    const total = (countResult as any)?.total || 0;
+
+    // 获取故事列表
+    const storiesQuery = `
+      SELECT
+        vs.id,
+        vs.data_uuid,
+        vs.user_id,
+        vs.title,
+        vs.content,
+        vs.category,
+        vs.tags,
+        vs.author_name,
+        vs.audit_status,
+        vs.like_count,
+        vs.dislike_count,
+        vs.view_count,
+        vs.is_featured,
+        vs.created_at,
+        vs.updated_at,
+        vs.approved_at
+      FROM valid_stories vs
+      ${whereClause}
+      ORDER BY vs.created_at DESC
+      LIMIT ? OFFSET ?
+    `;
+
+    const storiesResult = await db.prepare(storiesQuery)
+      .bind(...params, pageSize, offset)
+      .all();
+
+    const stories = (storiesResult.results || []).map((story: any) => ({
+      id: story.id,
+      dataUuid: story.data_uuid,
+      userId: story.user_id,
+      title: story.title,
+      content: story.content,
+      category: story.category,
+      tags: story.tags ? JSON.parse(story.tags) : [],
+      authorName: story.author_name,
+      auditStatus: story.audit_status,
+      likeCount: story.like_count || 0,
+      dislikeCount: story.dislike_count || 0,
+      viewCount: story.view_count || 0,
+      isFeatured: story.is_featured === 1,
+      createdAt: story.created_at,
+      updatedAt: story.updated_at,
+      approvedAt: story.approved_at
+    }));
+
+    return successResponse(c, {
+      stories,
+      pagination: {
+        page,
+        pageSize,
+        total,
+        totalPages: Math.ceil(total / pageSize)
+      }
+    }, '获取故事列表成功');
+
+  } catch (error) {
+    console.error('[SIMPLE_ADMIN] Search stories error:', error);
+    return c.json({
+      success: false,
+      error: 'Internal Server Error',
+      message: '搜索故事失败',
+      details: error instanceof Error ? error.message : 'Unknown error'
+    }, 500);
+  }
+});
+
+// 故事内容管理 - 删除故事
+simpleAdmin.delete('/content/stories/:id', async (c) => {
+  try {
+    const id = c.req.param('id');
+    console.log('[SIMPLE_ADMIN] Deleting story:', id);
+    const db = c.env.DB;
+
+    // 检查故事是否存在
+    const story = await db.prepare(`
+      SELECT id, title FROM valid_stories WHERE id = ?
+    `).bind(id).first();
+
+    if (!story) {
+      return c.json({
+        success: false,
+        error: 'Not Found',
+        message: '故事不存在'
+      }, 404);
+    }
+
+    // 软删除故事
+    const result = await db.prepare(`
+      UPDATE valid_stories
+      SET audit_status = 'deleted', updated_at = datetime('now')
+      WHERE id = ?
+    `).bind(id).run();
+
+    if (result.success) {
+      console.log('[SIMPLE_ADMIN] Story deleted successfully:', id);
+      return successResponse(c, { id: parseInt(id) }, '故事删除成功');
+    } else {
+      throw new Error('删除操作失败');
+    }
+
+  } catch (error) {
+    console.error('[SIMPLE_ADMIN] Delete story error:', error);
+    return c.json({
+      success: false,
+      error: 'Internal Server Error',
+      message: '删除故事失败',
+      details: error instanceof Error ? error.message : 'Unknown error'
+    }, 500);
+  }
+});
+
+// 故事内容管理 - 批量删除故事
+simpleAdmin.post('/content/stories/batch-delete', async (c) => {
+  try {
+    const body = await c.req.json();
+    const { ids } = body;
+
+    if (!ids || !Array.isArray(ids) || ids.length === 0) {
+      return c.json({
+        success: false,
+        error: 'Validation Error',
+        message: '请提供要删除的故事ID列表'
+      }, 400);
+    }
+
+    console.log('[SIMPLE_ADMIN] Batch deleting stories:', ids);
+    const db = c.env.DB;
+
+    // 批量软删除
+    const placeholders = ids.map(() => '?').join(',');
+    const result = await db.prepare(`
+      UPDATE valid_stories
+      SET audit_status = 'deleted', updated_at = datetime('now')
+      WHERE id IN (${placeholders})
+    `).bind(...ids).run();
+
+    if (result.success) {
+      console.log('[SIMPLE_ADMIN] Batch delete successful, count:', ids.length);
+      return successResponse(c, {
+        deletedCount: ids.length,
+        ids
+      }, `成功删除 ${ids.length} 个故事`);
+    } else {
+      throw new Error('批量删除操作失败');
+    }
+
+  } catch (error) {
+    console.error('[SIMPLE_ADMIN] Batch delete stories error:', error);
+    return c.json({
+      success: false,
+      error: 'Internal Server Error',
+      message: '批量删除故事失败',
+      details: error instanceof Error ? error.message : 'Unknown error'
+    }, 500);
+  }
+});
+
+// 获取 API 文档
+simpleAdmin.get('/api/documentation', async (c) => {
+  try {
+    console.log('[SIMPLE_ADMIN] Getting API documentation');
+
+    const version = c.req.query('version') || 'current';
+
+    // 返回 API 文档数据
+    const docs = [
+      {
+        id: 'simple-auth-login',
+        path: '/api/simple-auth/login',
+        method: 'POST',
+        summary: '用户登录认证',
+        description: '简化的用户登录认证接口，支持用户名密码登录，返回JWT token用于后续API调用认证。',
+        tags: ['Authentication', 'Core'],
+        version: 'current',
+        deprecated: false,
+        parameters: [
+          {
+            name: 'username',
+            in: 'body',
+            type: 'string',
+            required: true,
+            description: '用户名',
+            example: 'admin1'
+          },
+          {
+            name: 'password',
+            in: 'body',
+            type: 'string',
+            required: true,
+            description: '密码',
+            example: 'admin123'
+          }
+        ],
+        responses: [
+          {
+            code: 200,
+            description: '登录成功',
+            schema: {
+              type: 'object',
+              properties: {
+                success: { type: 'boolean' },
+                data: {
+                  type: 'object',
+                  properties: {
+                    token: { type: 'string' },
+                    user: { type: 'object' }
+                  }
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        id: 'simple-auth-verify',
+        path: '/api/simple-auth/verify',
+        method: 'POST',
+        summary: '验证 Token',
+        description: '验证 JWT token 的有效性',
+        tags: ['Authentication'],
+        version: 'current',
+        deprecated: false,
+        parameters: [
+          {
+            name: 'Authorization',
+            in: 'header',
+            type: 'string',
+            required: true,
+            description: 'Bearer token',
+            example: 'Bearer eyJhbGc...'
+          }
+        ],
+        responses: [
+          {
+            code: 200,
+            description: '验证成功',
+            schema: {
+              type: 'object',
+              properties: {
+                success: { type: 'boolean' },
+                data: {
+                  type: 'object',
+                  properties: {
+                    valid: { type: 'boolean' },
+                    user: { type: 'object' }
+                  }
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        id: 'simple-admin-dashboard',
+        path: '/api/simple-admin/dashboard',
+        method: 'GET',
+        summary: '管理员仪表板数据',
+        description: '获取管理员仪表板的统计数据',
+        tags: ['Admin', 'Dashboard'],
+        version: 'current',
+        deprecated: false,
+        parameters: [
+          {
+            name: 'Authorization',
+            in: 'header',
+            type: 'string',
+            required: true,
+            description: 'Admin Bearer token',
+            example: 'Bearer eyJhbGc...'
+          }
+        ],
+        responses: [
+          {
+            code: 200,
+            description: '获取成功',
+            schema: {
+              type: 'object',
+              properties: {
+                success: { type: 'boolean' },
+                data: {
+                  type: 'object',
+                  properties: {
+                    stats: { type: 'object' },
+                    recentUsers: { type: 'array' },
+                    recentActivities: { type: 'array' }
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    ];
+
+    return successResponse(c, {
+      docs,
+      version,
+      total: docs.length,
+      lastUpdated: new Date().toISOString()
+    }, '获取API文档成功');
+
+  } catch (error) {
+    console.error('[SIMPLE_ADMIN] Get API documentation error:', error);
+    return c.json({
+      success: false,
+      error: 'Internal Server Error',
+      message: '获取API文档失败',
+      details: error instanceof Error ? error.message : 'Unknown error'
+    }, 500);
+  }
+});
 
 export default simpleAdmin;

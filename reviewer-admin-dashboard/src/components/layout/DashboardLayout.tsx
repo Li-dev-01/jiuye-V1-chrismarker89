@@ -28,7 +28,9 @@ import {
   MonitorOutlined,
   TagsOutlined,
   ExperimentOutlined,
-  SecurityScanOutlined
+  SecurityScanOutlined,
+  FlagOutlined,
+  BookOutlined
 } from '@ant-design/icons';
 import { useAuthStore } from '../../stores/authStore';
 import { useAdminAuthStore } from '../../stores/adminAuthStore';
@@ -104,6 +106,16 @@ const DashboardLayout: React.FC = () => {
           label: '标签管理',
         },
         {
+          key: '/admin/reputation-management',
+          icon: <FlagOutlined />,
+          label: '信誉管理',
+        },
+        {
+          key: '/admin/story-management',
+          icon: <BookOutlined />,
+          label: '故事内容管理',
+        },
+        {
           key: '/admin/settings',
           icon: <SettingOutlined />,
           label: '系统设置',
@@ -136,9 +148,9 @@ const DashboardLayout: React.FC = () => {
               label: '系统配置',
             },
             {
-              key: '/admin/super-admin-panel',
+              key: '/admin/email-role-accounts',
               icon: <CrownOutlined />,
-              label: '管理员管理',
+              label: '账户管理',
             },
             {
               key: '/admin/security-switches',
@@ -181,6 +193,16 @@ const DashboardLayout: React.FC = () => {
           key: '/admin/tag-management',
           icon: <TagsOutlined />,
           label: '标签管理',
+        },
+        {
+          key: '/admin/reputation-management',
+          icon: <FlagOutlined />,
+          label: '信誉管理',
+        },
+        {
+          key: '/admin/story-management',
+          icon: <BookOutlined />,
+          label: '故事内容管理',
         },
         // 🔧 普通管理员专属功能 - 技术管理
         {

@@ -7,6 +7,7 @@ export interface User {
   email?: string;
   name?: string;
   display_name?: string;
+  twoFactorEnabled?: boolean;
 }
 
 export interface LoginCredentials {

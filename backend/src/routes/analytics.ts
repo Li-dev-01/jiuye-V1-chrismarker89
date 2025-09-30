@@ -6,9 +6,12 @@ import { DatabaseManager } from '../utils/database';
 import { createDatabaseService } from '../db';
 import { successResponse, errorResponse, jsonResponse } from '../utils/response';
 import type { AnalyticsData, DistributionData, MonthlyTrendData } from '../types/entities';
+import { AnalyticsQueryService } from '../services/analyticsEngine';
 // import { VisualizationCacheService, CacheKeyGenerator } from '../services/visualizationCache';
 
 const analytics = new Hono<{ Bindings: Env }>();
+
+const ACCOUNT_ID = '9b1815e8844907e320a6ca924e44366f';
 
 // 仪表板数据
 analytics.get('/dashboard', async (c) => {
@@ -2089,5 +2092,166 @@ function analyzeEducationValue(educationEmploymentData: any) {
     trend: highest[1] > 80 ? 'positive' : 'neutral'
   };
 }
+
+// ==================== Cloudflare Analytics Engine API ====================
+
+/**
+ * 获取 Cloudflare Analytics 综合指标
+ */
+analytics.get('/cloudflare/metrics', async (c) => {
+  try {
+    const timeRange = c.req.query('timeRange') || '24h';
+    const apiToken = c.env.CLOUDFLARE_API_TOKEN;
+
+    if (!apiToken) {
+      return c.json({
+        success: false,
+        error: 'CLOUDFLARE_API_TOKEN not configured'
+      }, 500);
+    }
+
+    const queryService = new AnalyticsQueryService(ACCOUNT_ID, apiToken);
+
+    // 并行查询所有指标
+    const [
+      requestStats,
+      geographyStats,
+      databaseStats,
+      errorStats,
+      topPaths
+    ] = await Promise.all([
+      queryService.getRequestStats(timeRange),
+      queryService.getGeographyStats(timeRange),
+      queryService.getDatabaseStats(timeRange),
+      queryService.getErrorStats(timeRange),
+      queryService.getTopPaths(timeRange, 10)
+    ]);
+
+    // 处理请求统计
+    const reqData = requestStats.data?.[0] || {};
+    const totalRequests = reqData.total_requests || 0;
+    const cacheHits = reqData.cache_hits || 0;
+    const cacheMisses = reqData.cache_misses || 0;
+    const cacheTotal = cacheHits + cacheMisses;
+
+    // 处理数据库统计
+    const dbData = databaseStats.data?.[0] || {};
+
+    // 格式化响应
+    const response = {
+      success: true,
+      timeRange,
+      data: {
+        // 请求指标
+        requests: {
+          total: totalRequests,
+          cached: cacheHits,
+          uncached: cacheMisses,
+          cacheHitRate: cacheTotal > 0 ? (cacheHits / cacheTotal * 100) : 0
+        },
+
+        // 响应时间
+        responseTime: {
+          avg: reqData.avg_response_time || 0,
+          p50: reqData.p50_response_time || 0,
+          p95: reqData.p95_response_time || 0,
+          p99: reqData.p99_response_time || 0
+        },
+
+        // HTTP 状态码
+        statusCodes: {
+          '2xx': reqData.success_2xx || 0,
+          '3xx': reqData.redirect_3xx || 0,
+          '4xx': reqData.client_error_4xx || 0,
+          '5xx': reqData.server_error_5xx || 0
+        },
+
+        // 地理分布
+        geography: (geographyStats.data || []).map((row: any) => ({
+          country: row.country || 'Unknown',
+          requests: row.requests || 0,
+          avgResponseTime: row.avg_response_time || 0
+        })),
+
+        // Worker 指标
+        worker: {
+          invocations: totalRequests,
+          errors: reqData.server_error_5xx || 0,
+          errorRate: totalRequests > 0 ? ((reqData.server_error_5xx || 0) / totalRequests * 100) : 0,
+          duration: {
+            avg: reqData.avg_response_time || 0,
+            p50: reqData.p50_response_time || 0,
+            p95: reqData.p95_response_time || 0,
+            p99: reqData.p99_response_time || 0
+          }
+        },
+
+        // D1 数据库指标
+        database: {
+          queries: dbData.total_queries || 0,
+          reads: dbData.read_queries || 0,
+          writes: dbData.write_queries || 0,
+          avgDuration: dbData.avg_duration || 0,
+          errors: dbData.errors || 0
+        },
+
+        // 热门路径
+        topPaths: (topPaths.data || []).map((row: any) => ({
+          path: row.path || '/',
+          method: row.method || 'GET',
+          requests: row.request_count || 0,
+          avgResponseTime: row.avg_response_time || 0,
+          successRate: row.request_count > 0 ? (row.success_count / row.request_count * 100) : 0
+        })),
+
+        // 错误统计
+        errors: (errorStats.data || []).map((row: any) => ({
+          type: row.error_type || 'Unknown',
+          count: row.error_count || 0,
+          path: row.path || '/'
+        }))
+      }
+    };
+
+    return c.json(response);
+  } catch (error: any) {
+    console.error('Failed to fetch Cloudflare Analytics:', error);
+    return c.json({
+      success: false,
+      error: error.message || 'Failed to fetch analytics data'
+    }, 500);
+  }
+});
+
+/**
+ * 获取请求统计
+ */
+analytics.get('/cloudflare/requests', async (c) => {
+  try {
+    const timeRange = c.req.query('timeRange') || '24h';
+    const apiToken = c.env.CLOUDFLARE_API_TOKEN;
+
+    if (!apiToken) {
+      return c.json({
+        success: false,
+        error: 'CLOUDFLARE_API_TOKEN not configured'
+      }, 500);
+    }
+
+    const queryService = new AnalyticsQueryService(ACCOUNT_ID, apiToken);
+    const stats = await queryService.getRequestStats(timeRange);
+
+    return c.json({
+      success: true,
+      data: stats.data
+    });
+  } catch (error: any) {
+    console.error('Failed to fetch request stats:', error);
+    return c.json({
+      success: false,
+      error: error.message
+    }, 500);
+  }
+});
 
 export default analytics;

@@ -26,21 +26,56 @@ import { createDatabaseMonitorRoutes } from './routes/databaseMonitor';
 import securityRoutes from './routes/security';
 import simpleAdmin from './routes/simpleAdmin';
 import simpleAuth from './routes/simpleAuth';
+import simpleReviewer from './routes/simpleReviewer';
 import { googleAuth } from './routes/google-auth';
 import { googleWhitelist } from './routes/google-whitelist';
 import { userLoginHistory } from './routes/user-login-history';
 import { ipAccessControl } from './routes/ip-access-control';
 import { twoFactorAuth } from './routes/two-factor-auth';
 import { intelligentSecurity } from './routes/intelligent-security';
+import adminWhitelist from './routes/admin-whitelist';
+import emailRoleAuth from './routes/email-role-auth';
+import accountManagement from './routes/account-management';
 import { handleScheduledGeneration, handleScheduledSubmission } from './scheduled/dataGenerationCron';
 import health from './routes/health';
 import { handleScheduledEvent } from './services/statsScheduler';
 import { handleSyncMonitoringTask } from './services/dataSyncMonitor';
+import { WorkerAnalyticsService } from './services/analyticsEngine';
 
 const app = new Hono<{ Bindings: Env }>();
 
 // 全局中间件
 app.use('*', corsMiddleware);
+
+// Analytics Engine 数据收集中间件
+app.use('*', async (c, next) => {
+  const startTime = Date.now();
+
+  try {
+    await next();
+  } finally {
+    // 只在有 ANALYTICS 绑定时记录
+    if (c.env.ANALYTICS) {
+      try {
+        const responseTime = Date.now() - startTime;
+        const analytics = new WorkerAnalyticsService(c.env.ANALYTICS);
+
+        analytics.recordRequest({
+          path: new URL(c.req.url).pathname,
+          method: c.req.method,
+          statusCode: c.res.status,
+          responseTime,
+          userAgent: c.req.header('user-agent'),
+          country: c.req.header('cf-ipcountry'),
+          cacheStatus: c.req.header('cf-cache-status') as 'hit' | 'miss' | 'none'
+        });
+      } catch (analyticsError) {
+        // 静默失败，不影响主请求
+        console.error('Analytics recording failed:', analyticsError);
+      }
+    }
+  }
+});
 
 // 健康检查路由
 app.route('/health', health);
@@ -225,6 +260,9 @@ function createApiRoutes() {
   // 简化管理系统路由 (reviewer-admin-dashboard使用)
   api.route('/simple-admin', simpleAdmin);
 
+  // 简化审核员系统路由 (reviewer-admin-dashboard使用)
+  api.route('/simple-reviewer', simpleReviewer);
+
   // 页面参与统计路由
   api.route('/participation-stats', createParticipationStatsRoutes());
 
@@ -307,7 +345,29 @@ function createApiRoutes() {
     console.error('❌ Failed to register Google auth routes:', error);
   }
 
+  // 管理员白名单路由
+  try {
+    api.route('/admin/whitelist', adminWhitelist);
+    console.log('✅ Admin whitelist routes registered');
+  } catch (error) {
+    console.error('❌ Failed to register admin whitelist routes:', error);
+  }
 
+  // 邮箱与角色账号认证路由（新）
+  try {
+    api.route('/auth/email-role', emailRoleAuth);
+    console.log('✅ Email-role auth routes registered');
+  } catch (error) {
+    console.error('❌ Failed to register email-role auth routes:', error);
+  }
+
+  // 账户管理路由（新）
+  try {
+    api.route('/admin/account-management', accountManagement);
+    console.log('✅ Account management routes registered');
+  } catch (error) {
+    console.error('❌ Failed to register account management routes:', error);
+  }
 
   // 用户登录历史路由
   try {

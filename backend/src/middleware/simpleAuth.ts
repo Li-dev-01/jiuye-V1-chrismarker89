@@ -47,17 +47,54 @@ const ROLE_HIERARCHY = {
 export async function simpleAuthMiddleware(c: Context<{ Bindings: Env }>, next: Next) {
   try {
     const authHeader = c.req.header('Authorization');
-    
+
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
       console.log('[SIMPLE_AUTH_MIDDLEWARE] Missing or invalid Authorization header');
       return c.json({ success: false, message: '缺少认证token' }, 401);
     }
 
     const token = authHeader.substring(7); // 移除 "Bearer " 前缀
-    
+
     console.log(`[SIMPLE_AUTH_MIDDLEWARE] Verifying token: ${token.substring(0, 20)}...`);
 
-    // 验证简化token
+    // 检查是否为新的 sessionId 格式（以 "session_" 开头）
+    if (token.startsWith('session_')) {
+      console.log(`[SIMPLE_AUTH_MIDDLEWARE] Detected sessionId format, using email-role auth verification`);
+
+      const db = c.env.DB;
+      const now = new Date().toISOString();
+
+      // 查找会话
+      const session = await db.prepare(`
+        SELECT ls.*, ra.email, ra.role, ra.username, ra.display_name, ra.permissions
+        FROM login_sessions ls
+        JOIN role_accounts ra ON ls.account_id = ra.id
+        WHERE ls.session_id = ? AND ls.is_active = 1 AND ls.expires_at > ?
+      `).bind(token, now).first();
+
+      if (!session) {
+        console.error('[SIMPLE_AUTH_MIDDLEWARE] Session not found or expired');
+        return c.json({ success: false, message: '会话无效或已过期' }, 401);
+      }
+
+      console.log(`[SIMPLE_AUTH_MIDDLEWARE] Session verification successful: ${session.username}, role: ${session.role}`);
+
+      // 将用户信息添加到上下文
+      c.set('user', {
+        id: session.account_id,
+        accountId: session.account_id,
+        username: session.username,
+        role: session.role,
+        name: session.display_name,
+        displayName: session.display_name,
+        email: session.email,
+        permissions: JSON.parse(session.permissions || '[]')
+      });
+
+      return next();
+    }
+
+    // 旧的 JWT token 验证逻辑
     const payload = verifySimpleToken(token);
 
     console.log(`[SIMPLE_AUTH_MIDDLEWARE] Token verification successful: ${payload.username}, role: ${payload.role}`);
@@ -150,20 +187,48 @@ export function requirePermission(...requiredPermissions: string[]) {
 export async function optionalAuthMiddleware(c: Context<{ Bindings: Env }>, next: Next) {
   try {
     const authHeader = c.req.header('Authorization');
-    
+
     if (authHeader && authHeader.startsWith('Bearer ')) {
       const token = authHeader.substring(7);
-      
+
       try {
-        const payload = verifySimpleToken(token);
-        c.set('user', {
-          id: payload.userId,
-          username: payload.username,
-          role: payload.role,
-          name: payload.name,
-          permissions: payload.permissions
-        });
-        console.log(`[SIMPLE_AUTH_MIDDLEWARE] Optional auth successful: ${payload.username}`);
+        // 检查是否为新的 sessionId 格式
+        if (token.startsWith('session_')) {
+          const db = c.env.DB;
+          const now = new Date().toISOString();
+
+          const session = await db.prepare(`
+            SELECT ls.*, ra.email, ra.role, ra.username, ra.display_name, ra.permissions
+            FROM login_sessions ls
+            JOIN role_accounts ra ON ls.account_id = ra.id
+            WHERE ls.session_id = ? AND ls.is_active = 1 AND ls.expires_at > ?
+          `).bind(token, now).first();
+
+          if (session) {
+            c.set('user', {
+              id: session.account_id,
+              accountId: session.account_id,
+              username: session.username,
+              role: session.role,
+              name: session.display_name,
+              displayName: session.display_name,
+              email: session.email,
+              permissions: JSON.parse(session.permissions || '[]')
+            });
+            console.log(`[SIMPLE_AUTH_MIDDLEWARE] Optional auth successful (session): ${session.username}`);
+          }
+        } else {
+          // 旧的 JWT token 验证
+          const payload = verifySimpleToken(token);
+          c.set('user', {
+            id: payload.userId,
+            username: payload.username,
+            role: payload.role,
+            name: payload.name,
+            permissions: payload.permissions
+          });
+          console.log(`[SIMPLE_AUTH_MIDDLEWARE] Optional auth successful: ${payload.username}`);
+        }
       } catch (error) {
         console.log(`[SIMPLE_AUTH_MIDDLEWARE] Optional auth failed, continuing as anonymous: ${error.message}`);
       }

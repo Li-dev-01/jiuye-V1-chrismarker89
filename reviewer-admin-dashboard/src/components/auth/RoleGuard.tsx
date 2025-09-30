@@ -73,27 +73,36 @@ const RoleGuard: React.FC<RoleGuardProps> = ({
   }
 
   // 检查用户角色是否在允许的角色列表中
-  const hasPermission = allowedRoles.includes(user.role as any);
+  // 同时检查 user.role 和 user.userType，因为有些地方可能使用 userType
+  const userRole = user.role || user.userType;
+  const hasPermission = allowedRoles.includes(userRole as any);
 
   console.log(`[ROLE_GUARD] 🛡️ Permission check details:`, {
-    userRole: user.role,
+    'user.role': user.role,
+    'user.userType': user.userType,
+    'userRole (final)': userRole,
+    'user.role type': typeof user.role,
+    'user.role JSON': JSON.stringify(user.role),
     allowedRoles,
+    'allowedRoles[0]': allowedRoles[0],
+    'allowedRoles[0] type': typeof allowedRoles[0],
+    'includes result': allowedRoles.includes(userRole as any),
     hasPermission,
     currentPath: window.location.pathname
   });
 
   if (!hasPermission) {
-    console.log(`[ROLE_GUARD] Permission denied for role ${user.role}, current path: ${window.location.pathname}`);
+    console.log(`[ROLE_GUARD] Permission denied for role ${userRole}, current path: ${window.location.pathname}`);
 
     // 根据用户角色智能重定向，避免循环重定向
-    if (user.role === 'reviewer') {
+    if (userRole === 'reviewer') {
       console.log(`[ROLE_GUARD] Redirecting reviewer to /dashboard`);
       return <Navigate to="/dashboard" replace />;
-    } else if (user.role === 'admin' || user.role === 'super_admin') {
+    } else if (userRole === 'admin' || userRole === 'super_admin') {
       // 如果已经在管理员页面，重定向到登录页避免循环
       if (window.location.pathname.startsWith('/admin')) {
         console.log(`[ROLE_GUARD] Admin permission denied on admin route, redirecting to login`);
-        return <Navigate to="/admin/login" replace />;
+        return <Navigate to="/unified-login" replace />;
       } else {
         console.log(`[ROLE_GUARD] Redirecting admin to /admin/dashboard`);
         return <Navigate to="/admin/dashboard" replace />;
@@ -138,7 +147,7 @@ export const ReviewerOnlyGuard: React.FC<{ children: React.ReactNode }> = ({ chi
  * ⚠️ 注意：这个守卫允许admin和super_admin都访问
  */
 export const AdminOnlyGuard: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <RoleGuard allowedRoles={['admin', 'super_admin']} redirectTo="/admin/login" showError={false}>
+  <RoleGuard allowedRoles={['admin', 'super_admin']} redirectTo="/unified-login" showError={false}>
     {children}
   </RoleGuard>
 );
@@ -148,7 +157,7 @@ export const AdminOnlyGuard: React.FC<{ children: React.ReactNode }> = ({ childr
  * 🔒 严格权限控制：普通管理员无法访问
  */
 export const SuperAdminOnlyGuard: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <RoleGuard allowedRoles={['super_admin']} redirectTo="/admin/login" showError={true}>
+  <RoleGuard allowedRoles={['super_admin']} redirectTo="/unified-login" showError={true}>
     {children}
   </RoleGuard>
 );
@@ -158,7 +167,7 @@ export const SuperAdminOnlyGuard: React.FC<{ children: React.ReactNode }> = ({ c
  * 🔧 用于普通管理员专属功能（如API管理、数据库结构等）
  */
 export const RegularAdminOnlyGuard: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <RoleGuard allowedRoles={['admin']} redirectTo="/admin/login" showError={true}>
+  <RoleGuard allowedRoles={['admin']} redirectTo="/unified-login" showError={true}>
     {children}
   </RoleGuard>
 );

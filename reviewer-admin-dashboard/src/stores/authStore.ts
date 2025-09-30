@@ -12,6 +12,7 @@ interface AuthState {
   logout: () => void;
   checkAuth: () => Promise<boolean>;
   setLoading: (loading: boolean) => void;
+  setAuthState: (state: { user: User; token: string; isAuthenticated: boolean; isLoading: boolean }) => void;
 }
 
 export const useAuthStore = create<AuthState>((set, get) => ({
@@ -22,6 +23,11 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 
   setLoading: (loading: boolean) => {
     set({ isLoading: loading });
+  },
+
+  setAuthState: (state) => {
+    console.log('[AUTH_STORE] 🔄 Setting auth state directly:', state);
+    set(state);
   },
 
   login: async (credentials: LoginCredentials, userType: 'reviewer' | 'admin' | 'super_admin' = 'reviewer') => {
@@ -72,6 +78,9 @@ export const useAuthStore = create<AuthState>((set, get) => ({
         userType: currentState.user?.userType,
         hasToken: !!currentState.token
       });
+
+      // 返回用户数据，供调用方直接使用
+      return user;
     } catch (error: any) {
       console.error('[AUTH_STORE] ❌ LOGIN FAILED:', error);
       set({ isLoading: false });
@@ -106,15 +115,35 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     set({ isLoading: true });
 
     try {
-      console.log('[AUTH_STORE] 📡 Sending auth verification request...');
+      console.log('[AUTH_STORE] 📡 Sending session verification request...');
 
-      // 使用简化验证API，token通过Authorization header发送
-      const response = await apiClient.post('/api/simple-auth/verify', {});
+      // 使用新的会话验证API
+      const response = await fetch('https://employment-survey-api-prod.chrismarker89.workers.dev/api/auth/email-role/verify-session', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          sessionId: token
+        })
+      });
 
-      console.log('[AUTH_STORE] 📥 Auth verification response:', JSON.stringify(response.data, null, 2));
+      const data = await response.json();
+      console.log('[AUTH_STORE] 📥 Session verification response:', JSON.stringify(data, null, 2));
 
-      if (response.data.success && response.data.data.user) {
-        const user = response.data.data.user;
+      if (data.success && data.data.user) {
+        const userData = data.data.user;
+        const user = {
+          id: userData.accountId,
+          accountId: userData.accountId,
+          email: userData.email,
+          username: userData.username,
+          role: userData.role,
+          userType: userData.role,
+          displayName: userData.displayName,
+          permissions: userData.permissions,
+          googleLinked: userData.googleLinked
+        };
         console.log(`[AUTH_STORE] 👤 Verified user:`, JSON.stringify(user, null, 2));
 
         // 更新用户信息
@@ -127,7 +156,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
         console.log(`[AUTH_STORE] ✅ CHECK_AUTH SUCCESS: ${user.username}, role: ${user.role}`);
         return true;
       } else {
-        console.error('[AUTH_STORE] ❌ Invalid verification response:', response.data);
+        console.error('[AUTH_STORE] ❌ Invalid verification response:', data);
         throw new Error('验证响应无效');
       }
     } catch (error) {

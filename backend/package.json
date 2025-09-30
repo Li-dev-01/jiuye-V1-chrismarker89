@@ -30,7 +30,10 @@
   "packageManager": "pnpm@10.8.0",
   "dependencies": {
     "@hono/node-server": "^1.12.2",
-    "hono": "^4.5.8"
+    "hono": "^4.5.8",
+    "bcryptjs": "^2.4.3",
+    "speakeasy": "^2.0.0",
+    "qrcode": "^1.5.3"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20240909.0",

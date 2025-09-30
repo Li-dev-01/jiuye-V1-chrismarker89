@@ -2,20 +2,23 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { ConfigProvider, App as AntdApp } from 'antd';
 import zhCN from 'antd/locale/zh_CN';
-import LoginPage from './pages/LoginPage';
-import AdminLoginPage from './pages/AdminLoginPage';
-import SuperAdminLoginPage from './pages/SuperAdminLoginPage';
+import UnifiedLoginPage from './pages/UnifiedLoginPage';
+import GoogleOAuthCallback from './pages/GoogleOAuthCallback';
+import SuperAdminAccountManagement from './pages/SuperAdminAccountManagement';
+import EmailRoleAccountManagement from './pages/EmailRoleAccountManagement';
 import DashboardLayout from './components/layout/DashboardLayout';
 import AdminDashboard from './pages/AdminDashboard';
 import AdminAPIManagement from './pages/AdminAPIManagement';
 import AdminAPIDocumentation from './pages/AdminAPIDocumentation';
 import AdminDatabaseSchema from './pages/AdminDatabaseSchema';
-import AdminSystemMonitoring from './pages/AdminSystemMonitoring';
 import AdminUsersReal from './pages/AdminUsersReal';
 import AdminAnalytics from './pages/AdminAnalytics';
 import AdminAIModeration from './pages/AdminAIModeration';
 import AdminSettings from './pages/AdminSettings';
 import AdminTagManagement from './pages/AdminTagManagement';
+import AdminReputationManagement from './pages/AdminReputationManagement';
+import AdminStoryManagement from './pages/AdminStoryManagement';
+import AdminCloudflareMonitoring from './pages/AdminCloudflareMonitoring';
 import SuperAdminPanel from './pages/SuperAdminPanel';
 import SuperAdminSecurityConsole from './pages/SuperAdminSecurityConsole';
 import SuperAdminSystemLogs from './pages/SuperAdminSystemLogs';
@@ -35,10 +38,16 @@ function App() {
       <AntdApp>
         <Router>
           <Routes>
-            {/* 登录页面 */}
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/admin/login" element={<AdminLoginPage />} />
-            <Route path="/admin/super-login" element={<SuperAdminLoginPage />} />
+            {/* 统一登录页面 - 唯一登录入口 */}
+            <Route path="/unified-login" element={<UnifiedLoginPage />} />
+
+            {/* 旧的登录路由 - 重定向到统一登录页 */}
+            <Route path="/login" element={<Navigate to="/unified-login" replace />} />
+            <Route path="/admin/login" element={<Navigate to="/unified-login" replace />} />
+            <Route path="/admin/super-login" element={<Navigate to="/unified-login" replace />} />
+
+            {/* Google OAuth 回调 */}
+            <Route path="/auth/google/callback" element={<GoogleOAuthCallback />} />
 
             {/* 审核员路由 - 严格限制只有审核员可以访问 */}
             <Route path="/" element={
@@ -73,6 +82,8 @@ function App() {
               <Route path="analytics" element={<AdminAnalytics />} />
               <Route path="ai-moderation" element={<AdminAIModeration />} />
               <Route path="tag-management" element={<AdminTagManagement />} />
+              <Route path="reputation-management" element={<AdminReputationManagement />} />
+              <Route path="story-management" element={<AdminStoryManagement />} />
               <Route path="settings" element={<AdminSettings />} />
 
               {/* 🔧 普通管理员专属功能 - 只有普通管理员可访问 */}
@@ -93,7 +104,7 @@ function App() {
               } />
               <Route path="system-monitoring" element={
                 <RegularAdminOnlyGuard>
-                  <AdminSystemMonitoring />
+                  <AdminCloudflareMonitoring />
                 </RegularAdminOnlyGuard>
               } />
 
@@ -121,6 +132,13 @@ function App() {
               <Route path="security-switches" element={
                 <SuperAdminOnlyGuard>
                   <SuperAdminSecuritySwitches />
+                </SuperAdminOnlyGuard>
+              } />
+
+              {/* 📧 邮箱与角色账号管理（新） */}
+              <Route path="email-role-accounts" element={
+                <SuperAdminOnlyGuard>
+                  <EmailRoleAccountManagement />
                 </SuperAdminOnlyGuard>
               } />
 

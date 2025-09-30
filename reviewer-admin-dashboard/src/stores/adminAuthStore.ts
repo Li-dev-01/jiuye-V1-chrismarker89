@@ -17,6 +17,7 @@ interface AdminAuthState {
   logout: () => void;
   checkAuth: () => Promise<boolean>;
   setLoading: (loading: boolean) => void;
+  setAuthState: (state: { user: User; token: string; isAuthenticated: boolean; isLoading: boolean }) => void;
 }
 
 export const useAdminAuthStore = create<AdminAuthState>((set, get) => ({
@@ -27,6 +28,11 @@ export const useAdminAuthStore = create<AdminAuthState>((set, get) => ({
 
   setLoading: (loading: boolean) => {
     set({ isLoading: loading });
+  },
+
+  setAuthState: (state) => {
+    console.log('[ADMIN_AUTH] 🔄 Setting auth state directly:', state);
+    set(state);
   },
 
   login: async (credentials: LoginCredentials, userType: 'admin') => {
@@ -42,7 +48,10 @@ export const useAdminAuthStore = create<AdminAuthState>((set, get) => ({
         userType: userType
       });
 
-      console.log('[ADMIN_AUTH] 📥 Login API response:', JSON.stringify(response.data, null, 2));
+      console.log('[ADMIN_AUTH] 📥 Full response object:', response);
+      console.log('[ADMIN_AUTH] 📥 Response status:', response.status);
+      console.log('[ADMIN_AUTH] 📥 Response headers:', response.headers);
+      console.log('[ADMIN_AUTH] 📥 Login API response.data:', JSON.stringify(response.data, null, 2));
 
       if (!response.data.success) {
         console.error('[ADMIN_AUTH] ❌ Login API returned failure:', response.data.message);
@@ -87,6 +96,9 @@ export const useAdminAuthStore = create<AdminAuthState>((set, get) => ({
         userType: currentState.user?.userType,
         hasToken: !!currentState.token
       });
+
+      // 返回用户数据，供调用方直接使用
+      return user;
     } catch (error: any) {
       console.error('[ADMIN_AUTH] ❌ ADMIN LOGIN FAILED:', error);
       set({ isLoading: false });
@@ -125,52 +137,54 @@ export const useAdminAuthStore = create<AdminAuthState>((set, get) => ({
     }
 
     try {
-      // 从本地存储恢复用户信息
-      const storedUserInfo = localStorage.getItem(STORAGE_KEYS.ADMIN_USER_INFO);
-      if (storedUserInfo) {
-        const user = JSON.parse(storedUserInfo);
-        console.log('[ADMIN_AUTH] 📋 Restored admin user from localStorage:', user);
-        
+      console.log('[ADMIN_AUTH] 📡 Verifying admin session with API...');
+
+      // 使用新的会话验证API
+      const response = await fetch('https://employment-survey-api-prod.chrismarker89.workers.dev/api/auth/email-role/verify-session', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          sessionId: token
+        })
+      });
+
+      const data = await response.json();
+      console.log('[ADMIN_AUTH] 📥 Session verification response:', JSON.stringify(data, null, 2));
+
+      if (data.success && data.data.user) {
+        const userData = data.data.user;
+
         // 验证是否为管理员
-        if (user.role === 'admin' || user.userType === 'admin') {
-          set({ 
-            user, 
-            token, 
-            isAuthenticated: true 
-          });
-          console.log('[ADMIN_AUTH] ✅ Admin auth restored successfully');
-          return true;
-        } else {
-          console.error('[ADMIN_AUTH] ❌ Stored user is not admin:', user);
+        if (userData.role !== 'admin') {
+          console.error('[ADMIN_AUTH] ❌ Session is not for admin role:', userData.role);
           get().logout();
           return false;
         }
-      }
 
-      // 如果没有本地用户信息，尝试从API验证
-      console.log('[ADMIN_AUTH] 📡 Verifying admin token with API...');
-      const response = await adminApiClient.get('/api/simple-auth/me');
+        const user = {
+          id: userData.accountId,
+          accountId: userData.accountId,
+          email: userData.email,
+          username: userData.username,
+          role: userData.role,
+          userType: userData.role,
+          displayName: userData.displayName,
+          permissions: userData.permissions,
+          googleLinked: userData.googleLinked
+        };
 
-      if (response.data.success && response.data.data) {
-        const user = response.data.data;
-        
-        // 验证是否为管理员
-        if (user.role === 'admin' || user.userType === 'admin') {
-          localStorage.setItem(STORAGE_KEYS.ADMIN_USER_INFO, JSON.stringify(user));
-          set({ 
-            user, 
-            token, 
-            isAuthenticated: true 
-          });
-          console.log('[ADMIN_AUTH] ✅ Admin token verified successfully');
-          return true;
-        } else {
-          console.error('[ADMIN_AUTH] ❌ API returned non-admin user:', user);
-          get().logout();
-          return false;
-        }
+        localStorage.setItem(STORAGE_KEYS.ADMIN_USER_INFO, JSON.stringify(user));
+        set({
+          user,
+          token,
+          isAuthenticated: true
+        });
+        console.log('[ADMIN_AUTH] ✅ Admin session verified successfully');
+        return true;
       } else {
-        console.error('[ADMIN_AUTH] ❌ Token verification failed');
+        console.error('[ADMIN_AUTH] ❌ Invalid verification response:', data);
         get().logout();
         return false;
       }

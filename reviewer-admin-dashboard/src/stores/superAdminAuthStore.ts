@@ -17,6 +17,7 @@ interface SuperAdminAuthState {
   logout: () => void;
   checkAuth: () => Promise<boolean>;
   setLoading: (loading: boolean) => void;
+  setAuthState: (state: { user: User; token: string; isAuthenticated: boolean; isLoading: boolean }) => void;
 }
 
 export const useSuperAdminAuthStore = create<SuperAdminAuthState>((set, get) => ({
@@ -27,6 +28,11 @@ export const useSuperAdminAuthStore = create<SuperAdminAuthState>((set, get) => 
 
   setLoading: (loading: boolean) => {
     set({ isLoading: loading });
+  },
+
+  setAuthState: (state) => {
+    console.log('[SUPER_ADMIN_AUTH] 🔄 Setting auth state directly:', state);
+    set(state);
   },
 
   login: async (credentials: LoginCredentials, userType: 'super_admin') => {
@@ -87,6 +93,9 @@ export const useSuperAdminAuthStore = create<SuperAdminAuthState>((set, get) => 
         userType: currentState.user?.userType,
         hasToken: !!currentState.token
       });
+
+      // 返回用户数据，供调用方直接使用
+      return user;
     } catch (error: any) {
       console.error('[SUPER_ADMIN_AUTH] ❌ SUPER ADMIN LOGIN FAILED:', error);
       set({ isLoading: false });
@@ -120,52 +129,54 @@ export const useSuperAdminAuthStore = create<SuperAdminAuthState>((set, get) => 
     }
 
     try {
-      // 从本地存储恢复用户信息
-      const storedUserInfo = localStorage.getItem(STORAGE_KEYS.SUPER_ADMIN_USER_INFO);
-      if (storedUserInfo) {
-        const user = JSON.parse(storedUserInfo);
-        console.log('[SUPER_ADMIN_AUTH] 📋 Restored super admin user from localStorage:', user);
-        
+      console.log('[SUPER_ADMIN_AUTH] 📡 Verifying super admin session with API...');
+
+      // 使用新的会话验证API
+      const response = await fetch('https://employment-survey-api-prod.chrismarker89.workers.dev/api/auth/email-role/verify-session', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          sessionId: token
+        })
+      });
+
+      const data = await response.json();
+      console.log('[SUPER_ADMIN_AUTH] 📥 Session verification response:', JSON.stringify(data, null, 2));
+
+      if (data.success && data.data.user) {
+        const userData = data.data.user;
+
         // 验证是否为超级管理员
-        if (user.role === 'super_admin' || user.userType === 'super_admin') {
-          set({ 
-            user, 
-            token, 
-            isAuthenticated: true 
-          });
-          console.log('[SUPER_ADMIN_AUTH] ✅ Super admin auth restored successfully');
-          return true;
-        } else {
-          console.error('[SUPER_ADMIN_AUTH] ❌ Stored user is not super admin:', user);
+        if (userData.role !== 'super_admin') {
+          console.error('[SUPER_ADMIN_AUTH] ❌ Session is not for super_admin role:', userData.role);
           get().logout();
           return false;
         }
-      }
 
-      // 如果没有本地用户信息，尝试从API验证
-      console.log('[SUPER_ADMIN_AUTH] 📡 Verifying super admin token with API...');
-      const response = await adminApiClient.get('/api/simple-auth/me');
+        const user = {
+          id: userData.accountId,
+          accountId: userData.accountId,
+          email: userData.email,
+          username: userData.username,
+          role: userData.role,
+          userType: userData.role,
+          displayName: userData.displayName,
+          permissions: userData.permissions,
+          googleLinked: userData.googleLinked
+        };
 
-      if (response.data.success && response.data.data) {
-        const user = response.data.data;
-        
-        // 验证是否为超级管理员
-        if (user.role === 'super_admin' || user.userType === 'super_admin') {
-          localStorage.setItem(STORAGE_KEYS.SUPER_ADMIN_USER_INFO, JSON.stringify(user));
-          set({ 
-            user, 
-            token, 
-            isAuthenticated: true 
-          });
-          console.log('[SUPER_ADMIN_AUTH] ✅ Super admin token verified successfully');
-          return true;
-        } else {
-          console.error('[SUPER_ADMIN_AUTH] ❌ API returned non-super-admin user:', user);
-          get().logout();
-          return false;
-        }
+        localStorage.setItem(STORAGE_KEYS.SUPER_ADMIN_USER_INFO, JSON.stringify(user));
+        set({
+          user,
+          token,
+          isAuthenticated: true
+        });
+        console.log('[SUPER_ADMIN_AUTH] ✅ Super admin session verified successfully');
+        return true;
       } else {
-        console.error('[SUPER_ADMIN_AUTH] ❌ Token verification failed');
+        console.error('[SUPER_ADMIN_AUTH] ❌ Invalid verification response:', data);
         get().logout();
         return false;
       }

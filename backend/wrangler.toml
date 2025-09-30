@@ -22,9 +22,14 @@ database_id = "25eee5bd-9aee-439a-8723-c73bf5f4f3d9"
 binding = "R2_BUCKET"
 bucket_name = "employment-survey-storage"
 
-# AI 配置 - Cloudflare Workers AI
+# AI 配置 - Cloudflare Workers AI with Gateway
 [ai]
 binding = "AI"
+gateway_id = "chris-ai-01"
+
+# Analytics Engine 配置
+[[analytics_engine_datasets]]
+binding = "ANALYTICS"
 
 # 定时任务配置 - 多级同步服务
 [triggers]

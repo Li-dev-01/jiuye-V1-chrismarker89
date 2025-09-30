@@ -38,6 +38,7 @@ import pngManagementRoutes from './routes/png-management-simple';
 import turnstileTestRoutes from './routes/test/turnstile';
 import simpleTestRoutes from './routes/test/simple';
 import favorites from './routes/favorites';
+import userReports from './routes/userReports';
 
 // 创建Hono应用
 const app = new Hono<{ Bindings: Env }>();
@@ -242,6 +243,9 @@ app.route('/api', api);
 
 // 故事审核系统路由
 app.route('/api/stories', createStoryAuditRoutes());
+
+// 用户举报系统路由
+app.route('/api/reports', userReports);
 
 // 404处理
 app.notFound((c) => {

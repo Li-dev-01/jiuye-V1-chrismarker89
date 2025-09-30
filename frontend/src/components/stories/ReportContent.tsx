@@ -56,36 +56,53 @@ export const ReportContent: React.FC<ReportContentProps> = ({
 
   const handleReport = async (values: any) => {
     setLoading(true);
-    
+
     try {
-      const reportData: ReportData = {
-        contentId,
-        contentType,
-        reportType: values.reportType,
-        description: values.description || '',
-        reporterInfo: {
-          userAgent: navigator.userAgent,
-          timestamp: Date.now(),
-          // IP地址由后端获取
-        }
+      // 获取当前用户ID (从localStorage或其他地方)
+      const userId = localStorage.getItem('user_id') || 'anonymous';
+
+      const reportPayload = {
+        content_type: contentType,
+        content_id: parseInt(contentId),
+        report_type: values.reportType,
+        report_reason: values.description || '',
+        user_id: userId
       };
 
-      // 模拟API调用
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // 保存到本地存储（实际应用中应该发送到后端）
-      const existingReports = JSON.parse(localStorage.getItem('content_reports') || '[]');
-      existingReports.push(reportData);
-      localStorage.setItem('content_reports', JSON.stringify(existingReports));
-      
-      if (onReport) {
-        onReport(reportData);
+      // 提交到后端API
+      const response = await fetch('/api/reports', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(reportPayload)
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        message.success('举报已提交，感谢您的反馈');
+        setVisible(false);
+        form.resetFields();
+
+        // 调用父组件的回调 (如果有)
+        if (onReport) {
+          const reportData: ReportData = {
+            contentId,
+            contentType,
+            reportType: values.reportType,
+            description: values.description || '',
+            reporterInfo: {
+              userAgent: navigator.userAgent,
+              timestamp: Date.now()
+            }
+          };
+          onReport(reportData);
+        }
+      } else {
+        message.error('举报提交失败，请稍后重试');
       }
-      
-      message.success('举报已提交，我们会尽快处理');
-      setVisible(false);
-      form.resetFields();
-      
+
     } catch (error) {
       console.error('举报提交失败:', error);
       message.error('举报提交失败，请稍后重试');

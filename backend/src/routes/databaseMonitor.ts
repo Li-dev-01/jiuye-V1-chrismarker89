@@ -242,7 +242,7 @@ export function createDatabaseMonitorRoutes() {
           source: 'data_quality_monitor'
         }
       ];
-      
+
       return c.json({
         success: true,
         data: alerts,
@@ -259,7 +259,162 @@ export function createDatabaseMonitorRoutes() {
     }
   });
 
+  /**
+   * 获取数据库结构信息
+   * GET /api/admin/database/schema
+   */
+  monitor.get('/schema', async (c) => {
+    try {
+      const db = createDatabaseService(c.env as Env);
 
+      // 获取所有表
+      const tablesResult = await db.query(`
+        SELECT name FROM sqlite_master
+        WHERE type='table'
+        AND name NOT LIKE 'sqlite_%'
+        ORDER BY name
+      `);
+
+      const tables = [];
+      const relations = [];
+
+      // 为每个表获取详细信息
+      for (const tableRow of tablesResult) {
+        const tableName = tableRow.name;
+
+        // 获取表的列信息
+        const columnsResult = await db.query(`PRAGMA table_info(${tableName})`);
+
+        // 获取表的外键信息
+        const foreignKeysResult = await db.query(`PRAGMA foreign_key_list(${tableName})`);
+
+        // 获取表的索引信息
+        const indexesResult = await db.query(`PRAGMA index_list(${tableName})`);
+
+        // 获取记录数
+        const countResult = await db.queryFirst(`SELECT COUNT(*) as count FROM ${tableName}`);
+        const rowCount = countResult?.count || 0;
+
+        // 构建列信息
+        const columns = columnsResult.map((col: any) => ({
+          name: col.name,
+          type: col.type,
+          nullable: col.notnull === 0,
+          defaultValue: col.dflt_value,
+          description: '',
+          isPrimaryKey: col.pk === 1,
+          isForeignKey: foreignKeysResult.some((fk: any) => fk.from === col.name)
+        }));
+
+        // 构建外键信息
+        const foreignKeys = foreignKeysResult.map((fk: any) => ({
+          name: `fk_${tableName}_${fk.from}`,
+          columns: [fk.from],
+          referencedTable: fk.table,
+          referencedColumns: [fk.to],
+          onDelete: fk.on_delete || 'NO ACTION',
+          onUpdate: fk.on_update || 'NO ACTION'
+        }));
+
+        // 构建索引信息
+        const indexes = [];
+        for (const idx of indexesResult) {
+          const indexInfoResult = await db.query(`PRAGMA index_info(${idx.name})`);
+          indexes.push({
+            name: idx.name,
+            columns: indexInfoResult.map((info: any) => info.name),
+            unique: idx.unique === 1,
+            type: 'btree'
+          });
+        }
+
+        // 获取主键
+        const primaryKey = columns
+          .filter((col: any) => col.isPrimaryKey)
+          .map((col: any) => col.name);
+
+        // 添加表信息
+        tables.push({
+          id: tableName,
+          name: tableName,
+          description: getTableDescription(tableName),
+          schema: 'main',
+          columns,
+          indexes,
+          foreignKeys,
+          primaryKey,
+          rowCount,
+          size: formatBytes(rowCount * 100), // 估算大小
+          lastUpdated: new Date().toISOString(),
+          dependencies: foreignKeys.map((fk: any) => fk.referencedTable),
+          dependents: []
+        });
+
+        // 添加关系信息
+        for (const fk of foreignKeys) {
+          relations.push({
+            from: tableName,
+            to: fk.referencedTable,
+            type: 'many-to-one',
+            description: `${tableName}.${fk.columns[0]} -> ${fk.referencedTable}.${fk.referencedColumns[0]}`
+          });
+        }
+      }
+
+      return c.json({
+        success: true,
+        data: {
+          tables,
+          relations
+        },
+        message: '获取数据库结构成功'
+      });
+
+    } catch (error) {
+      console.error('获取数据库结构失败:', error);
+      return c.json({
+        success: false,
+        error: 'Internal Server Error',
+        message: '获取数据库结构失败',
+        details: error instanceof Error ? error.message : 'Unknown error'
+      }, 500);
+    }
+  });
 
   return monitor;
+}
+
+/**
+ * 获取表的描述信息
+ */
+function getTableDescription(tableName: string): string {
+  const descriptions: Record<string, string> = {
+    'users': '用户基础信息表',
+    'universal_questionnaire_responses': '通用问卷回答表',
+    'raw_story_submissions': '原始故事提交表',
+    'valid_stories': '有效故事表（已审核通过）',
+    'valid_heart_voices': '有效心声表（已审核通过）',
+    'participation_stats': '参与统计表',
+    'test_story_data': '测试故事数据表',
+    'audit_records': '审核记录表',
+    'user_sessions': '用户会话表',
+    'questionnaires': '问卷模板表',
+    'tags': '标签表',
+    'story_tags': '故事标签关联表'
+  };
+
+  return descriptions[tableName] || `${tableName} 表`;
+}
+
+/**
+ * 格式化字节大小
+ */
+function formatBytes(bytes: number): string {
+  if (bytes === 0) return '0 Bytes';
+
+  const k = 1024;
+  const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+
+  return Math.round((bytes / Math.pow(k, i)) * 100) / 100 + ' ' + sizes[i];
 }

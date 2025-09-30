@@ -87,7 +87,7 @@ const AdminTagManagement: React.FC = () => {
   const fetchTags = async () => {
     setLoading(true);
     try {
-      const token = localStorage.getItem(STORAGE_KEYS.REVIEWER_TOKEN);
+      const token = localStorage.getItem(STORAGE_KEYS.ADMIN_TOKEN);
       const response = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.CONTENT_TAGS}`, {
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -113,7 +113,7 @@ const AdminTagManagement: React.FC = () => {
   // 获取标签统计
   const fetchTagStats = async () => {
     try {
-      const token = localStorage.getItem(STORAGE_KEYS.REVIEWER_TOKEN);
+      const token = localStorage.getItem(STORAGE_KEYS.ADMIN_TOKEN);
       const response = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.CONTENT_TAGS_STATS}`, {
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -139,7 +139,7 @@ const AdminTagManagement: React.FC = () => {
   // 创建或更新标签
   const handleSaveTag = async (values: any) => {
     try {
-      const token = localStorage.getItem(STORAGE_KEYS.REVIEWER_TOKEN);
+      const token = localStorage.getItem(STORAGE_KEYS.ADMIN_TOKEN);
       const payload = {
         ...values,
         color: typeof values.color === 'string' ? values.color : values.color?.toHexString?.() || '#1890ff'
@@ -187,7 +187,7 @@ const AdminTagManagement: React.FC = () => {
   // 删除标签
   const handleDeleteTag = async (tagId: number) => {
     try {
-      const token = localStorage.getItem(STORAGE_KEYS.REVIEWER_TOKEN);
+      const token = localStorage.getItem(STORAGE_KEYS.ADMIN_TOKEN);
       const response = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.CONTENT_TAGS}/${tagId}`, {
         method: 'DELETE',
         headers: {
@@ -214,7 +214,7 @@ const AdminTagManagement: React.FC = () => {
   // 清理未使用的标签
   const handleCleanupTags = async () => {
     try {
-      const token = localStorage.getItem(STORAGE_KEYS.REVIEWER_TOKEN);
+      const token = localStorage.getItem(STORAGE_KEYS.ADMIN_TOKEN);
       const response = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.CONTENT_TAGS_CLEANUP}`, {
         method: 'DELETE',
         headers: {

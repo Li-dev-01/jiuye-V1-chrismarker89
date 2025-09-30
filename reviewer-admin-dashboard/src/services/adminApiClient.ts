@@ -47,6 +47,8 @@ adminApiClient.interceptors.request.use(
 adminApiClient.interceptors.response.use(
   (response) => {
     console.log(`[ADMIN_API_CLIENT] Response success: ${response.config.url}`);
+    console.log(`[ADMIN_API_CLIENT] Response data:`, response.data);
+    console.log(`[ADMIN_API_CLIENT] Response status:`, response.status);
     return response;
   },
   (error) => {
