@@ -15,6 +15,7 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { useUniversalAuthStore } from '../../stores/universalAuthStore';
 import { useQuestionnaireAuthStore } from '../../stores/questionnaireAuthStore';
+import { getUserDisplayName } from '../../utils/userDisplayUtils';
 import styles from './TopUserInfo.module.css';
 
 const { Text } = Typography;
@@ -48,27 +49,29 @@ export const TopUserInfo: React.FC = () => {
 
   // 获取用户显示信息
   const getUserDisplayInfo = () => {
+    const identifier = getUserDisplayName(currentUser);
+
     if (currentUser.userType === 'semi-anonymous') {
       return {
-        id: currentUser.id?.slice(-8) || '未知',
-        name: currentUser.nickname || currentUser.displayName || '半匿名用户',
+        id: identifier,
+        name: identifier,
         type: '半匿名用户',
         avatar: null
       };
     }
-    
+
     if (currentUser.userType === 'admin') {
       return {
-        id: currentUser.id?.slice(-8) || '未知',
-        name: currentUser.username || '管理员',
+        id: identifier,
+        name: currentUser.username || identifier,
         type: '管理员',
         avatar: null
       };
     }
-    
+
     return {
-      id: currentUser.id?.slice(-8) || '未知',
-      name: currentUser.username || currentUser.nickname || '用户',
+      id: identifier,
+      name: currentUser.username || identifier,
       type: '注册用户',
       avatar: null
     };

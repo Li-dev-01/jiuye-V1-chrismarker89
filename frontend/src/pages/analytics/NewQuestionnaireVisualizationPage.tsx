@@ -30,7 +30,7 @@ import {
   BankOutlined,
   BookOutlined,
   HomeOutlined,
-  BulbOutlined,
+  SettingOutlined,
   ReloadOutlined,
   DownloadOutlined,
   InfoCircleOutlined
@@ -52,7 +52,7 @@ import { getCompatibilityReport, getSupportedDimensionIds } from '../../services
 import DataSourceSwitcher from '../../components/dev/DataSourceSwitcher';
 import DataSourceIndicator from '../../components/DataSourceIndicator';
 import { UniversalChart } from '../../components/charts/UniversalChart';
-import { SocialInsightsPanel } from '../../components/analytics/SocialInsightsPanel';
+
 import { BilingualTitle } from '../../components/charts/BilingualTitle';
 
 const { Title, Paragraph, Text } = Typography;
@@ -65,7 +65,7 @@ const DIMENSION_ICONS: Record<string, React.ReactNode> = {
   'employment-market': <BankOutlined />,
   'student-preparation': <BookOutlined />,
   'living-costs': <HomeOutlined />,
-  'policy-insights': <BulbOutlined />
+  'policy-insights': <SettingOutlined />
 };
 
 // 获取真实图表数据的函数
@@ -284,9 +284,7 @@ export const NewQuestionnaireVisualizationPage: React.FC = () => {
                     {dimension.description}
                   </Paragraph>
                   <Tag color="blue">{dimension.questions.length} 个图表</Tag>
-                  <Text type="secondary" style={{ fontSize: '11px' }}>
-                    {dimension.socialImpact}
-                  </Text>
+
                 </Space>
               </Card>
             </Col>
@@ -310,12 +308,7 @@ export const NewQuestionnaireVisualizationPage: React.FC = () => {
               <Title level={3} style={{ margin: 0 }}>{dimension.title}</Title>
             </Space>
             <Paragraph>{dimension.description}</Paragraph>
-            <Alert
-              message={`社会价值：${dimension.socialImpact}`}
-              type="info"
-              showIcon
-              icon={<InfoCircleOutlined />}
-            />
+
           </Space>
         </Card>
 
@@ -328,9 +321,7 @@ export const NewQuestionnaireVisualizationPage: React.FC = () => {
                   <Card
                     title={
                       <Space>
-                        <Tooltip title={question.socialValue}>
-                          <InfoCircleOutlined />
-                        </Tooltip>
+
                         <BilingualTitle
                           title={question.questionTitle}
                           level={4}
@@ -350,9 +341,7 @@ export const NewQuestionnaireVisualizationPage: React.FC = () => {
                       showTooltip={true}
                     />
                     <Divider />
-                    <Paragraph type="secondary" style={{ fontSize: '12px', margin: 0 }}>
-                      <strong>社会价值：</strong>{question.socialValue}
-                    </Paragraph>
+
                     <Paragraph type="secondary" style={{ fontSize: '12px', margin: 0 }}>
                       <strong>描述：</strong>{question.description}
                     </Paragraph>
@@ -414,54 +403,6 @@ export const NewQuestionnaireVisualizationPage: React.FC = () => {
 
   return (
     <div style={{ padding: '24px' }}>
-      {/* 页面标题 */}
-      <div style={{ marginBottom: 24 }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-          <Space>
-            <Title level={2} style={{ margin: 0 }}>
-              就业形势可视化分析
-            </Title>
-            <DataSourceIndicator />
-            <Tag color="blue">6维度分析</Tag>
-            <Tag color="green">多级专用表优化</Tag>
-          </Space>
-          <DataSourceSwitcher />
-        </div>
-        <Paragraph type="secondary">
-          基于社会统计学方法，使用多级专用表优化架构，真实反映就业市场状况，为学生、社会人员、政府部门提供有价值的数据洞察
-        </Paragraph>
-        <DataSourceIndicator
-          showDescription={true}
-          style={{ marginBottom: 16 }}
-        />
-        
-        <Space>
-          {dataQuality && (
-            <Tooltip title={`数据质量评分: ${dataQuality.qualityScore}/100 | 完整性: ${dataQuality.dataCompleteness.toFixed(1)}%`}>
-              <Tag color={dataQuality.qualityScore >= 80 ? 'green' : dataQuality.qualityScore >= 60 ? 'orange' : 'red'}>
-                质量: {dataQuality.qualityScore}/100
-              </Tag>
-            </Tooltip>
-          )}
-          {compatibilityReport && (
-            <Tooltip title={`维度兼容性: ${compatibilityReport.supportedDimensions}/${compatibilityReport.totalDimensions} 支持API数据`}>
-              <Tag color="blue">
-                兼容: {compatibilityReport.supportedDimensions}/{compatibilityReport.totalDimensions}
-              </Tag>
-            </Tooltip>
-          )}
-          <Button
-            icon={<ReloadOutlined />}
-            onClick={loadVisualizationData}
-            loading={loading}
-          >
-            刷新数据
-          </Button>
-          <Button icon={<DownloadOutlined />}>
-            导出报告
-          </Button>
-        </Space>
-      </div>
 
       {/* 主要内容 */}
       <Tabs 
@@ -496,17 +437,7 @@ export const NewQuestionnaireVisualizationPage: React.FC = () => {
           </TabPane>
         ))}
 
-        <TabPane
-          tab={
-            <Space>
-              <BulbOutlined />
-              社会洞察
-            </Space>
-          }
-          key="insights"
-        >
-          <SocialInsightsPanel />
-        </TabPane>
+
       </Tabs>
     </div>
   );

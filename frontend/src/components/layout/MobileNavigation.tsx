@@ -25,7 +25,8 @@ import {
   CloseOutlined
 } from '@ant-design/icons';
 import { useUniversalAuthStore } from '../../stores/universalAuthStore';
-import { useManagementAuthStore } from '../../stores/managementAuthStore';
+import { getUserDisplayName } from '../../utils/userDisplayUtils';
+
 import styles from './MobileNavigation.module.css';
 
 const { Text } = Typography;
@@ -85,136 +86,8 @@ export const MobileNavigation: React.FC<MobileNavigationProps> = ({ role }) => {
       }
     ];
 
-    if (role === 'admin') {
-      // 检查当前用户是否为超级管理员
-      const { currentUser } = useManagementAuthStore();
-      const isSuperAdmin = currentUser?.userType === 'SUPER_ADMIN';
-
-      if (isSuperAdmin) {
-        // 超级管理员专用菜单 - 专注安全与可用性
-        return [
-          ...baseItems,
-          { type: 'divider' },
-          {
-            key: 'admin-super-admin',
-            icon: <UserOutlined />,
-            label: '安全控制台',
-            path: '/admin/super-admin'
-          },
-          {
-            key: 'admin-system',
-            label: '系统设置',
-            path: '/admin/system'
-          },
-          {
-            key: 'admin-logs',
-            label: '系统日志',
-            path: '/admin/logs'
-          },
-          {
-            key: 'admin-security',
-            label: '安全管理',
-            path: '/admin/security'
-          }
-        ];
-      } else {
-        // 普通管理员菜单 - 专注日常运营
-        return [
-          ...baseItems,
-          { type: 'divider' },
-          {
-            key: 'admin-dashboard',
-            icon: <UserOutlined />,
-            label: '管理控制台',
-            path: '/admin'
-          },
-          {
-            key: 'admin-users',
-            label: '用户管理',
-            path: '/admin/users'
-          },
-          {
-            key: 'admin-reviewers',
-            label: '审核员管理',
-            path: '/admin/reviewers'
-          },
-          {
-            key: 'admin-content',
-            label: '内容管理',
-            path: '/admin/content'
-          },
-          {
-            key: 'admin-user-content',
-            label: '用户内容管理',
-            path: '/admin/user-content'
-          },
-          {
-            key: 'admin-api-data',
-            label: 'API与数据',
-            path: '/admin/api-data'
-          },
-          {
-            key: 'admin-data-generator',
-            label: '数据生成器',
-            path: '/admin/data-generator'
-          },
-          {
-            key: 'admin-database-monitor',
-            label: '数据库监测',
-            path: '/admin/database-monitor'
-          },
-          { type: 'divider' },
-          {
-            key: 'admin-ai-sources',
-            label: 'AI水源配置',
-            path: '/admin/ai/sources'
-          },
-          {
-            key: 'admin-ai-monitor',
-            label: 'AI监控面板',
-            path: '/admin/ai/monitor'
-          },
-          {
-            key: 'admin-ai-cost',
-            label: 'AI成本控制',
-            path: '/admin/ai/cost'
-          },
-          {
-            key: 'admin-ai-review-assistant',
-            label: 'AI审核助手',
-            path: '/admin/ai/review-assistant'
-          }
-        ];
-      }
-    }
-
-    if (role === 'reviewer') {
-      return [
-        ...baseItems,
-        { type: 'divider' },
-        {
-          key: 'reviewer-dashboard',
-          icon: <UserOutlined />,
-          label: '审核工作台',
-          path: '/reviewer'
-        },
-        {
-          key: 'reviewer-quick-review',
-          label: '快速审核',
-          path: '/reviewer/quick-review'
-        },
-        {
-          key: 'reviewer-history',
-          label: '审核记录',
-          path: '/reviewer/history'
-        },
-        {
-          key: 'reviewer-settings',
-          label: '个人设置',
-          path: '/reviewer/settings'
-        }
-      ];
-    }
+    // 管理功能已迁移到专门的reviewer-admin-dashboard项目
+    // 这里只保留基础用户功能
 
     return baseItems;
   };
@@ -283,7 +156,7 @@ export const MobileNavigation: React.FC<MobileNavigationProps> = ({ role }) => {
             <Text strong>菜单</Text>
             {currentUser && (
               <Text type="secondary" style={{ fontSize: '12px' }}>
-                {currentUser.displayName || '匿名用户'}
+                {getUserDisplayName(currentUser)}
               </Text>
             )}
           </Space>
@@ -345,7 +218,7 @@ export const MobileNavigation: React.FC<MobileNavigationProps> = ({ role }) => {
             </Space>
           ) : (
             <Space direction="vertical" style={{ width: '100%' }}>
-              <Text strong>{currentUser.displayName || '匿名用户'}</Text>
+              <Text strong>{getUserDisplayName(currentUser)}</Text>
               <Text type="secondary" style={{ fontSize: '12px' }}>
                 {currentUser.userType === 'admin' ? '管理员' :
                  currentUser.userType === 'reviewer' ? '审核员' :

@@ -131,15 +131,7 @@ export class CronHandler {
     console.log(`✅ 导出同步完成: ${result.success ? '成功' : '失败'}`);
   }
 
-  /**
-   * 社会洞察数据同步 (每小时)
-   */
-  private async handleSocialInsightsSync(): Promise<void> {
-    console.log('🧠 执行社会洞察数据同步...');
-    
-    const result = await this.syncService.executeSync('analytics_to_social');
-    console.log(`✅ 社会洞察同步完成: ${result.success ? '成功' : '失败'}`);
-  }
+
 
   /**
    * 自动缓存优化 (每6小时)

@@ -18,8 +18,7 @@ export interface DimensionMapping {
   description: string;
   // 图标
   icon: string;
-  // 社会价值描述
-  socialImpact: string;
+
   // 包含的问题映射
   questions: QuestionMapping[];
 }
@@ -38,8 +37,7 @@ export interface QuestionMapping {
   title: string;
   // 图表类型
   chartType: 'pie' | 'donut' | 'bar' | 'line' | 'treemap';
-  // 社会价值描述
-  socialValue: string;
+
   // 问题描述
   description: string;
   // 选项映射
@@ -68,7 +66,7 @@ export const UNIFIED_DIMENSION_MAPPING: DimensionMapping[] = [
     title: '就业形势总览',
     description: '反映当前整体就业状况和市场感知',
     icon: '📈',
-    socialImpact: '为政府制定就业政策提供数据支撑',
+
     questions: [
       {
         frontendQuestionId: 'current-status',
@@ -76,7 +74,7 @@ export const UNIFIED_DIMENSION_MAPPING: DimensionMapping[] = [
         apiDataField: 'employmentStatus',
         title: '当前身份状态分布',
         chartType: 'donut',
-        socialValue: '反映社会就业结构和人群分布',
+
         description: '显示参与者的身份构成：学生、就业、失业等',
         optionMapping: [
           { apiValue: 'student', displayLabel: '在校学生', color: '#1890FF', icon: '🎓' },
@@ -95,7 +93,7 @@ export const UNIFIED_DIMENSION_MAPPING: DimensionMapping[] = [
     title: '人口结构分析',
     description: '分析参与调研人群的基本特征',
     icon: '👥',
-    socialImpact: '了解就业市场的人群结构特点',
+
     questions: [
       {
         frontendQuestionId: 'gender-distribution',
@@ -103,7 +101,7 @@ export const UNIFIED_DIMENSION_MAPPING: DimensionMapping[] = [
         apiDataField: 'genderDistribution',
         title: '性别分布',
         chartType: 'pie',
-        socialValue: '了解参与调研人群的性别构成',
+
         description: '分析不同性别群体的就业特点',
         optionMapping: [
           { apiValue: 'male', displayLabel: '男性', color: '#1890FF', icon: '👨' },

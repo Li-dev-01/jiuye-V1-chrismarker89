@@ -191,7 +191,7 @@ const livingCostsData: DimensionData = {
       questionId: 'monthly-housing-cost',
       questionTitle: '住房支出分析',
       chartType: 'bar',
-      data: generateDataPoints(['1000以下', '1000-2000', '2000-3000', '3000-5000', '5000以上']),
+      data: generateDataPoints(['2000元以下', '2000-4000元', '4000-6000元', '6000-8000元', '8000-12000元', '12000元以上']),
       totalResponses: 1247,
       lastUpdated: new Date().toISOString(),
       socialInsight: '住房成本占收入比例过高，影响生活质量'

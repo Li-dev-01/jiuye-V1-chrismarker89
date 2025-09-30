@@ -180,19 +180,7 @@ export const ROUTE_PERMISSIONS: Record<string, Permission[]> = {
   '/questionnaire': ['create_questionnaire'],
   '/profile': ['view_own_submissions'],
   '/my-submissions': ['view_own_submissions'],
-  '/reviewer': ['review_questionnaires'],
-  '/reviewer/dashboard': ['review_questionnaires'],
-  '/reviewer/questionnaires': ['review_questionnaires'],
-  '/reviewer/stories': ['review_stories'],
-  '/reviewer/voices': ['review_voices'],
-  '/reviewer/history': ['view_review_history'],
-  '/admin': ['manage_users'],
-  '/admin/users': ['manage_users'],
-  '/admin/reviewers': ['manage_reviewers'],
-  '/admin/system': ['manage_system'],
-  '/admin/logs': ['view_logs'],
-  '/admin/api-data': ['manage_api'],
-  '/admin/analytics': ['view_admin_analytics']
+
 };
 
 // 统一登录入口映射

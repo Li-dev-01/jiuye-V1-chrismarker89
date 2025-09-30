@@ -52,21 +52,6 @@ const HomePage: React.FC = () => {
 
   return (
     <div className={styles.homePage}>
-      {/* 项目介绍区域 */}
-      <div className={styles.heroSection}>
-        <div className={styles.container}>
-          <div className={styles.heroContent}>
-            <Title level={1} className={styles.heroTitle}>
-              2025大学生就业问卷调查
-            </Title>
-            <Paragraph className={styles.heroDescription}>
-              全方位的就业调研和分享平台，助力大学生职业发展。
-              通过结构化问卷收集就业数据，分享真实故事，提供数据洞察。
-            </Paragraph>
-          </div>
-        </div>
-      </div>
-
       {/* 数据可视化展示 */}
       <HomeChartsSection autoRefresh={true} />
 

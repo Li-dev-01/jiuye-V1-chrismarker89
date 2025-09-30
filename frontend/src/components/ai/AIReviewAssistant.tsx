@@ -26,7 +26,7 @@ import {
   ExclamationCircleOutlined,
   CloseCircleOutlined,
   EyeOutlined,
-  BulbOutlined,
+  InfoCircleOutlined,
   WarningOutlined
 } from '@ant-design/icons';
 import { aiReviewService, type ReviewContent } from '../../services/aiReviewService';
@@ -314,7 +314,7 @@ export const AIReviewAssistant: React.FC<AIReviewAssistantProps> = ({
           <Panel
             header={
               <Space>
-                <BulbOutlined />
+                <InfoCircleOutlined />
                 <Text>详细分析</Text>
               </Space>
             }

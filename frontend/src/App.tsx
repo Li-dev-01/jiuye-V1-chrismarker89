@@ -5,19 +5,12 @@ import zhCN from 'antd/locale/zh_CN';
 import { ErrorBoundary } from './components/common/ErrorBoundary';
 import { performanceMonitor } from './utils/performanceMonitor';
 import { cacheManager } from './utils/cacheManager';
-import { useManagementAuthStore } from './stores/managementAuthStore';
+
 import { AccessibilityProvider, AccessibilityShortcuts, SkipToContent } from './components/accessibility/AccessibilityProvider';
 import {
   PublicRouteGuard,
-  UserRouteGuard,
-  ReviewerRouteGuard,
-  AdminRouteGuard
+  UserRouteGuard
 } from './components/auth/RouteGuard';
-import {
-  AdminRouteGuard as NewAdminRouteGuard,
-  ReviewerRouteGuard as NewReviewerRouteGuard,
-  SuperAdminRouteGuard
-} from './components/auth/ManagementRouteGuard';
 import { GlobalSemiAnonymousLogin } from './components/auth/GlobalSemiAnonymousLogin';
 import { QuestionnaireLayout } from './components/layout/QuestionnaireLayout';
 
@@ -38,44 +31,22 @@ const FavoritesPage = React.lazy(() => import('./pages/FavoritesPage'));
 const QuestionnaireCompletion = React.lazy(() => import('./pages/QuestionnaireCompletion'));
 const StorySubmitPage = React.lazy(() => import('./pages/StorySubmitPage'));
 
+// 测试页面
+const TurnstileTestPage = React.lazy(() => import('./pages/TurnstileTestPage'));
+
 // 用户内容管理页面
 const MyContentPage = React.lazy(() => import('./pages/user/MyContent'));
 
-const AdminLoginPage = React.lazy(() => import('./pages/auth/AdminLoginPage').then(module => ({ default: module.AdminLoginPage })));
-const ManagementLoginPage = React.lazy(() => import('./pages/auth/ManagementLoginPage').then(module => ({ default: module.ManagementLoginPage })));
-const DashboardPage = React.lazy(() => import('./pages/admin/DashboardPage').then(module => ({ default: module.DashboardPage })));
-const UserLoginPage = React.lazy(() => import('./pages/auth/UserLoginPage').then(module => ({ default: module.UserLoginPage })));
-const ContentManagementPage = React.lazy(() => import('./pages/admin/ContentManagementPage').then(module => ({ default: module.ContentManagementPage })));
-const UserManagementPage = React.lazy(() => import('./pages/admin/UserManagementPage').then(module => ({ default: module.UserManagementPage })));
-const PngManagementPage = React.lazy(() => import('./pages/admin/PngManagement').then(module => ({ default: module.PngManagement })));
-const SimpleUserManagementPage = React.lazy(() => import('./pages/admin/SimpleUserManagementPage').then(module => ({ default: module.SimpleUserManagementPage })));
-const SystemManagementPage = React.lazy(() => import('./pages/admin/SystemManagementPage').then(module => ({ default: module.SystemManagementPage })));
-const PerformanceMonitorPage = React.lazy(() => import('./pages/admin/PerformanceMonitorPage').then(module => ({ default: module.PerformanceMonitorPage })));
-const ApiDataPage = React.lazy(() => import('./pages/admin/ApiDataPage').then(module => ({ default: module.ApiDataPage })));
-const ReviewerManagementPage = React.lazy(() => import('./pages/admin/ReviewerManagementPage').then(module => ({ default: module.ReviewerManagementPage })));
-const SystemLogsPage = React.lazy(() => import('./pages/admin/SystemLogsPage').then(module => ({ default: module.SystemLogsPage })));
-const SecurityManagementPage = React.lazy(() => import('./pages/admin/SecurityManagementPage').then(module => ({ default: module.SecurityManagementPage })));
-const DataGeneratorPage = React.lazy(() => import('./pages/admin/DataGeneratorPage').then(module => ({ default: module.DataGeneratorPage })));
-const ProjectArchitecturePage = React.lazy(() => import('./pages/admin/ProjectArchitecturePage').then(module => ({ default: module.ProjectArchitecturePage })));
-const DatabaseMonitorPage = React.lazy(() => import('./pages/admin/DatabaseMonitorPage').then(module => ({ default: module.DatabaseMonitorPage })));
-const UserContentManagementPage = React.lazy(() => import('./pages/admin/UserContentManagementPage').then(module => ({ default: module.default })));
 
-// AI管理页面
-const AISourcesPage = React.lazy(() => import('./pages/admin/ai/AISourcesPage').then(module => ({ default: module.AISourcesPage })));
-const AIMonitorPage = React.lazy(() => import('./pages/admin/ai/AIMonitorPage').then(module => ({ default: module.AIMonitorPage })));
-const AICostControlPage = React.lazy(() => import('./pages/admin/ai/AICostControlPage').then(module => ({ default: module.AICostControlPage })));
-const AIReviewAssistantPage = React.lazy(() => import('./pages/admin/ai/AIReviewAssistantPage').then(module => ({ default: module.AIReviewAssistantPage })));
-const SuperAdminPage = React.lazy(() => import('./pages/admin/SuperAdminPage').then(module => ({ default: module.default })));
-const GoogleWhitelistPage = React.lazy(() => import('./pages/admin/GoogleWhitelistPage').then(module => ({ default: module.GoogleWhitelistPage })));
-const LoginMonitorPage = React.lazy(() => import('./pages/admin/LoginMonitorPage').then(module => ({ default: module.LoginMonitorPage })));
-const IPAccessControlPage = React.lazy(() => import('./pages/admin/IPAccessControlPage').then(module => ({ default: module.IPAccessControlPage })));
-const IntelligentSecurityPage = React.lazy(() => import('./pages/admin/IntelligentSecurityPage').then(module => ({ default: module.IntelligentSecurityPage })));
+const UserLoginPage = React.lazy(() => import('./pages/auth/UserLoginPage').then(module => ({ default: module.UserLoginPage })));
+
+
+
 const LoginHistoryPage = React.lazy(() => import('./pages/user/LoginHistoryPage').then(module => ({ default: module.LoginHistoryPage })));
 const TwoFactorAuthPage = React.lazy(() => import('./pages/user/TwoFactorAuthPage').then(module => ({ default: module.TwoFactorAuthPage })));
 const UserProfile = React.lazy(() => import('./pages/user/UserProfile').then(module => ({ default: module.default })));
 
-// PNG缓存管理页面
-const AdminPage = React.lazy(() => import('./pages/Admin'));
+
 
 // 测试页面已移动到归档目录
 // const StateTest = React.lazy(() => import('./pages/test/StateTest').then(module => ({ default: module.StateTest })));
@@ -83,14 +54,7 @@ const AdminPage = React.lazy(() => import('./pages/Admin'));
 // 演示页面已移动到归档目录
 // const AIDemoPage = React.lazy(() => import('./pages/demo/AIDemoPage').then(module => ({ default: module.AIDemoPage })));
 
-// 审核员页面
-const ReviewerDashboard = React.lazy(() => import('./pages/reviewer/ReviewerDashboard').then(module => ({ default: module.ReviewerDashboard })));
-const QuestionnaireReviewPage = React.lazy(() => import('./pages/reviewer/QuestionnaireReviewPage').then(module => ({ default: module.QuestionnaireReviewPage })));
-const StoryReviewPage = React.lazy(() => import('./pages/reviewer/StoryReviewPage').then(module => ({ default: module.StoryReviewPage })));
-const ReviewHistoryPage = React.lazy(() => import('./pages/reviewer/ReviewHistoryPage').then(module => ({ default: module.ReviewHistoryPage })));
-const ReviewerQuickReviewPage = React.lazy(() => import('./pages/reviewer/ReviewerQuickReviewPage').then(module => ({ default: module.ReviewerQuickReviewPage })));
-const QuickReviewStoryPage = React.lazy(() => import('./pages/reviewer/QuickReviewStoryPage').then(module => ({ default: module.QuickReviewStoryPage })));
-const ReviewerSettingsPage = React.lazy(() => import('./pages/reviewer/ReviewerSettingsPage').then(module => ({ default: module.ReviewerSettingsPage })));
+
 
 
 // 测试页面已移动到归档目录
@@ -113,18 +77,13 @@ const AnalyticsNavigationPage = React.lazy(() => import('./pages/analytics/Analy
 // const AuthDebugPage = React.lazy(() => import('./pages/debug/AuthDebugPage').then(module => ({ default: module.AuthDebugPage })));
 // const PermissionTestPage = React.lazy(() => import('./pages/debug/PermissionTestPage').then(module => ({ default: module.PermissionTestPage })));
 // const AuthSystemTestPage = React.lazy(() => import('./pages/debug/AuthSystemTestPage').then(module => ({ default: module.AuthSystemTestPage })));
-const NewAdminLoginPage = React.lazy(() => import('./pages/auth/NewAdminLoginPage').then(module => ({ default: module.NewAdminLoginPage })));
-const AutoLoginPage = React.lazy(() => import('./pages/auth/AutoLoginPage').then(module => ({ default: module.default })));
 const GoogleCallbackPage = React.lazy(() => import('./pages/auth/GoogleCallbackPage').then(module => ({ default: module.GoogleCallbackPage })));
 const GoogleQuestionnaireCallbackPage = React.lazy(() => import('./pages/auth/GoogleQuestionnaireCallbackPage').then(module => ({ default: module.default })));
-const GoogleManagementCallbackPage = React.lazy(() => import('./pages/auth/GoogleManagementCallbackPage').then(module => ({ default: module.default })));
 const OAuthUrlDebugPage = React.lazy(() => import('./pages/debug/OAuthUrlDebugPage').then(module => ({ default: module.default })));
-const LoginMethodGuide = React.lazy(() => import('./components/auth/LoginMethodGuide').then(module => ({ default: module.default })));
 // 调试页面已移动到归档目录
 // const SimpleAdminTestPage = React.lazy(() => import('./pages/debug/SimpleAdminTestPage').then(module => ({ default: module.SimpleAdminTestPage })));
 // const AdminDataTestPage = React.lazy(() => import('./pages/debug/AdminDataTestPage').then(module => ({ default: module.AdminDataTestPage })));
-const AuditRulesPage = React.lazy(() => import('./pages/admin/AuditRulesPage').then(module => ({ default: module.default })));
-const ViolationContentPage = React.lazy(() => import('./pages/admin/ViolationContentPage').then(module => ({ default: module.default })));
+
 // 测试和调试页面已移动到归档目录
 // const ViolationContentTest = React.lazy(() => import('./pages/test/ViolationContentTest'));
 const TestPage = React.lazy(() => import('./pages/TestPage').then(module => ({ default: module.TestPage })));
@@ -146,8 +105,6 @@ const LoadingSpinner = () => (
 );
 
 function App() {
-  const { initializeAuth } = useManagementAuthStore();
-
   useEffect(() => {
     // 初始化性能监控
     performanceMonitor.reportMetrics();
@@ -155,19 +112,12 @@ function App() {
     // 清理过期缓存
     cacheManager.cleanup();
 
-    // 初始化管理员认证状态
-    initializeAuth();
-
-
-
     // 在开发环境中显示性能信息
     if (process.env.NODE_ENV === 'development') {
       console.log('Performance Monitor initialized');
       console.log('Cache Manager initialized');
-      console.log('Management Auth initialized');
-
     }
-  }, [initializeAuth]);
+  }, []);
 
   return (
     <ErrorBoundary>
@@ -331,7 +281,16 @@ function App() {
 
 
 
-                    {/* 测试路由已移动到归档目录 */}
+                    {/* 测试路由 */}
+                    <Route path="/test/turnstile" element={
+                      <PublicRouteGuard>
+                        <QuestionnaireLayout>
+                          <TurnstileTestPage />
+                        </QuestionnaireLayout>
+                      </PublicRouteGuard>
+                    } />
+
+                    {/* 其他测试路由已移动到归档目录 */}
                     {/* <Route path="/test/state" element={<PublicRouteGuard><StateTest /></PublicRouteGuard>} /> */}
 
                     {/* 用户认证路由 - A+B半匿名登录 */}
@@ -343,26 +302,14 @@ function App() {
                       </PublicRouteGuard>
                     } />
 
-                    {/* 管理系统认证路由 */}
-                    <Route path="/login" element={<Navigate to="/admin/login" replace />} />
-                    <Route path="/reviewer/login" element={<Navigate to="/admin/login" replace />} />
-                    <Route path="/admin/login" element={<PublicRouteGuard><NewAdminLoginPage /></PublicRouteGuard>} />
-                    <Route path="/admin/login-old" element={<PublicRouteGuard><AdminLoginPage /></PublicRouteGuard>} />
 
-                    {/* 独立管理登录入口 - 提高安全性 */}
-                    <Route path="/management-portal" element={<PublicRouteGuard><ManagementLoginPage /></PublicRouteGuard>} />
-                    <Route path="/management-login" element={<Navigate to="/management-portal" replace />} />
-
-                    {/* 自动登录接收页面 */}
-                    <Route path="/auth/auto-login" element={<PublicRouteGuard><AutoLoginPage /></PublicRouteGuard>} />
 
                     {/* Google OAuth回调页面 */}
                     <Route path="/auth/google/callback" element={<PublicRouteGuard><GoogleCallbackPage /></PublicRouteGuard>} />
                     <Route path="/auth/google/callback/questionnaire" element={<PublicRouteGuard><GoogleQuestionnaireCallbackPage /></PublicRouteGuard>} />
-                    <Route path="/auth/google/callback/management" element={<PublicRouteGuard><GoogleManagementCallbackPage /></PublicRouteGuard>} />
 
-                    {/* 登录方式选择引导 */}
-                    <Route path="/auth/guide" element={<PublicRouteGuard><LoginMethodGuide /></PublicRouteGuard>} />
+
+                    {/* 登录方式选择引导 - 已移除，管理功能已迁移 */}
 
                     {/* 用户个人页面 */}
                     <Route path="/user/profile" element={<UserRouteGuard><UserProfile /></UserRouteGuard>} />
@@ -392,53 +339,11 @@ function App() {
                     {/* 冗余路由已移除 - questionnaire2 重定向到主路由 */}
                     <Route path="/questionnaire2" element={<Navigate to="/questionnaire" replace />} />
 
-                    {/* 审核员路由 - 需要reviewer权限 */}
-                    <Route path="/reviewer" element={<NewReviewerRouteGuard><ReviewerDashboard /></NewReviewerRouteGuard>} />
-                    <Route path="/reviewer/dashboard" element={<NewReviewerRouteGuard><ReviewerDashboard /></NewReviewerRouteGuard>} />
-                    <Route path="/reviewer/quick-review" element={<NewReviewerRouteGuard><ReviewerQuickReviewPage /></NewReviewerRouteGuard>} />
-                    <Route path="/reviewer/history" element={<NewReviewerRouteGuard><ReviewHistoryPage /></NewReviewerRouteGuard>} />
-                    <Route path="/reviewer/settings" element={<NewReviewerRouteGuard><ReviewerSettingsPage /></NewReviewerRouteGuard>} />
 
-                    {/* 保留旧的审核路由以兼容现有功能 */}
-                    <Route path="/reviewer/questionnaires" element={<NewReviewerRouteGuard><QuestionnaireReviewPage /></NewReviewerRouteGuard>} />
-                    <Route path="/reviewer/stories" element={<NewReviewerRouteGuard><StoryReviewPage /></NewReviewerRouteGuard>} />
 
-                    <Route path="/reviewer/quick-review/story" element={<NewReviewerRouteGuard><QuickReviewStoryPage /></NewReviewerRouteGuard>} />
 
-                    {/* 管理员路由 - 需要admin权限 */}
-                    <Route path="/admin" element={<NewAdminRouteGuard><DashboardPage /></NewAdminRouteGuard>} />
-                    <Route path="/admin/content" element={<NewAdminRouteGuard><ContentManagementPage /></NewAdminRouteGuard>} />
-                    <Route path="/admin/users" element={<NewAdminRouteGuard><SimpleUserManagementPage /></NewAdminRouteGuard>} />
-                    <Route path="/admin/users-full" element={<NewAdminRouteGuard><UserManagementPage /></NewAdminRouteGuard>} />
-                    <Route path="/admin/reviewers" element={<NewAdminRouteGuard><ReviewerManagementPage /></NewAdminRouteGuard>} />
-                    <Route path="/admin/audit-rules" element={<NewAdminRouteGuard><AuditRulesPage /></NewAdminRouteGuard>} />
-                    <Route path="/admin/user-content" element={<NewAdminRouteGuard><UserContentManagementPage /></NewAdminRouteGuard>} />
-                    <Route path="/admin/violation-content" element={<NewAdminRouteGuard><ViolationContentPage /></NewAdminRouteGuard>} />
-                    <Route path="/admin/performance" element={<NewAdminRouteGuard><PerformanceMonitorPage /></NewAdminRouteGuard>} />
-                    <Route path="/admin/api-data" element={<NewAdminRouteGuard><ApiDataPage /></NewAdminRouteGuard>} />
-                    <Route path="/admin/data-generator" element={<NewAdminRouteGuard><DataGeneratorPage /></NewAdminRouteGuard>} />
-                    <Route path="/admin/png-management" element={<NewAdminRouteGuard><PngManagementPage /></NewAdminRouteGuard>} />
-                    <Route path="/admin/png-cache" element={<NewAdminRouteGuard><AdminPage /></NewAdminRouteGuard>} />
-                    <Route path="/admin/architecture" element={<NewAdminRouteGuard><ProjectArchitecturePage /></NewAdminRouteGuard>} />
-                    <Route path="/admin/database-monitor" element={<NewAdminRouteGuard><DatabaseMonitorPage /></NewAdminRouteGuard>} />
 
-                    {/* 超级管理员专用路由 - 需要super_admin权限 */}
-                    <Route path="/admin/system" element={<SuperAdminRouteGuard><SystemManagementPage /></SuperAdminRouteGuard>} />
-                    <Route path="/admin/logs" element={<SuperAdminRouteGuard><SystemLogsPage /></SuperAdminRouteGuard>} />
-                    <Route path="/admin/security" element={<SuperAdminRouteGuard><SecurityManagementPage /></SuperAdminRouteGuard>} />
-                    <Route path="/admin/google-whitelist" element={<SuperAdminRouteGuard><GoogleWhitelistPage /></SuperAdminRouteGuard>} />
-                    <Route path="/admin/ip-access-control" element={<SuperAdminRouteGuard><IPAccessControlPage /></SuperAdminRouteGuard>} />
-                    <Route path="/admin/intelligent-security" element={<SuperAdminRouteGuard><IntelligentSecurityPage /></SuperAdminRouteGuard>} />
-                    <Route path="/admin/login-monitor" element={<AdminRouteGuard><LoginMonitorPage /></AdminRouteGuard>} />
 
-                    {/* AI管理路由 - 需要AI管理权限 */}
-                    <Route path="/admin/ai/sources" element={<NewAdminRouteGuard><AISourcesPage /></NewAdminRouteGuard>} />
-                    <Route path="/admin/ai/monitor" element={<NewAdminRouteGuard><AIMonitorPage /></NewAdminRouteGuard>} />
-                    <Route path="/admin/ai/cost" element={<NewAdminRouteGuard><AICostControlPage /></NewAdminRouteGuard>} />
-                    <Route path="/admin/ai/review-assistant" element={<NewAdminRouteGuard><AIReviewAssistantPage /></NewAdminRouteGuard>} />
-
-                    {/* 超级管理员路由 - 需要超级管理员权限 */}
-                    <Route path="/admin/super-admin" element={<SuperAdminRouteGuard><SuperAdminPage /></SuperAdminRouteGuard>} />
 
                     {/* 测试路由 - 开发用 */}
                     <Route path="/test" element={<PublicRouteGuard><TestPage /></PublicRouteGuard>} />
@@ -478,7 +383,7 @@ function App() {
                     {/* <Route path="/test/violation-content" element={<PublicRouteGuard><ViolationContentTest /></PublicRouteGuard>} /> */}
                     {/* <Route path="/test/login-separation" element={<PublicRouteGuard><LoginSeparationTest /></PublicRouteGuard>} /> */}
                     {/* <Route path="/dev/admin-routes-test" element={<PublicRouteGuard><AdminRoutesTestPage /></PublicRouteGuard>} /> */}
-                    <Route path="/admin/login-new" element={<PublicRouteGuard><NewAdminLoginPage /></PublicRouteGuard>} />
+
                   </Routes>
                 </main>
               </Suspense>

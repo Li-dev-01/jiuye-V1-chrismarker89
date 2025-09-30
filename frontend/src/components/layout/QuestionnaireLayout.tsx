@@ -19,7 +19,8 @@ import {
 } from '@ant-design/icons';
 import { useUniversalAuthStore } from '../../stores/universalAuthStore';
 import { MobileNavigation } from './MobileNavigation';
-import { DevAdminAccess } from '../dev/DevAdminAccess';
+import { getUserDisplayName } from '../../utils/userDisplayUtils';
+
 import styles from './QuestionnaireLayout.module.css';
 
 const { Header, Content, Footer } = Layout;
@@ -33,28 +34,10 @@ export const QuestionnaireLayout: React.FC<QuestionnaireLayoutProps> = ({ childr
   const navigate = useNavigate();
   const { currentUser, logout, isAuthenticated } = useUniversalAuthStore();
 
-  // 获取用户显示名称
-  const getUserDisplayName = () => {
+  // 获取用户显示名称（使用8位标识符）
+  const getDisplayName = () => {
     if (!currentUser) return '未登录';
-
-    // 如果有displayName，直接使用
-    if (currentUser.displayName) {
-      return currentUser.displayName;
-    }
-
-    // 如果有username，使用username + 后6位ID
-    if (currentUser.username) {
-      const suffix = currentUser.id?.toString().slice(-6) || currentUser.uuid?.slice(-6) || '000000';
-      return `${currentUser.username}_${suffix}`;
-    }
-
-    // 根据用户类型生成显示名称
-    const suffix = currentUser.id?.toString().slice(-6) || currentUser.uuid?.slice(-6) || '000000';
-    if (currentUser.userType === 'semi_anonymous' || currentUser.userType === 'semi-anonymous') {
-      return `半匿名用户_${suffix}`;
-    }
-
-    return `用户_${suffix}`;
+    return getUserDisplayName(currentUser);
   };
 
   // 问卷项目导航菜单
@@ -162,7 +145,7 @@ export const QuestionnaireLayout: React.FC<QuestionnaireLayoutProps> = ({ childr
                       className={styles.avatar}
                     />
                     <span className={styles.username}>
-                      {getUserDisplayName()}
+                      {getDisplayName()}
                     </span>
                   </Space>
                 </Button>
@@ -208,8 +191,7 @@ export const QuestionnaireLayout: React.FC<QuestionnaireLayoutProps> = ({ childr
       {/* 移动端导航 */}
       <MobileNavigation />
 
-      {/* 开发环境管理员快速访问 */}
-      <DevAdminAccess />
+
     </Layout>
   );
 };

@@ -3,7 +3,8 @@
  * 处理PNG卡片的生成、下载和管理
  */
 
-import axios, { AxiosInstance } from 'axios';
+import axios from 'axios';
+import type { AxiosInstance } from 'axios';
 
 // API配置
 const API_BASE_URL = process.env.REACT_APP_CARD_API_URL || 'http://localhost:8002/api/cards';

@@ -7,7 +7,7 @@ import React, { useState } from 'react';
 import { Button, Dropdown, Menu, message, Modal, Spin, Tooltip } from 'antd';
 import { DownloadOutlined, PictureOutlined, ShareAltOutlined, LoadingOutlined } from '@ant-design/icons';
 import { useSafeAuth } from '../../hooks/useSafeAuth';
-import { UserRole } from '../../types/auth';
+import type { UserRole } from '../../types/auth';
 import { cardDownloadService } from '../../services/cardDownloadService';
 import './CardDownloadButton.css';
 

@@ -18,6 +18,7 @@ import {
 } from '@ant-design/icons';
 import { LikeDislikeDownload } from './LikeDislikeDownload';
 import { QuickReportButton } from '../stories/ReportContent';
+import { getUserDisplayName } from '../../utils/userDisplayUtils';
 import styles from './UnifiedCard.module.css';
 
 const { Title, Paragraph, Text } = Typography;
@@ -209,7 +210,7 @@ export const UnifiedCard: React.FC<UnifiedCardProps> = ({
             <div className={styles.authorInfo}>
               <Avatar size="small" icon={<UserOutlined />} />
               <Text type="secondary" className={styles.authorName}>
-                {data.isAnonymous ? '匿名用户' : (data.authorName || '匿名用户')}
+                {data.isAnonymous ? getUserDisplayName({ displayName: data.authorName }) : (getUserDisplayName({ displayName: data.authorName }) || getUserDisplayName(null))}
               </Text>
             </div>
             {/* 分类标签移到用户名下方 */}

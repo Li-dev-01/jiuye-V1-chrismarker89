@@ -16,16 +16,20 @@ import {
   message,
   Form,
   Row,
-  Col
+  Col,
+  Alert
 } from 'antd';
 import {
   BookOutlined,
   SendOutlined,
   UserOutlined,
-  TagsOutlined
+  TagsOutlined,
+  SafetyOutlined,
+  ExclamationCircleOutlined
 } from '@ant-design/icons';
 import { useAuth } from '../stores/universalAuthStore';
 import { storyService } from '../services/storyService';
+import { useContentFilter } from '../utils/frontendContentFilter';
 import styles from './StorySubmitPage.module.css';
 
 const { Title, Paragraph, Text } = Typography;
@@ -50,10 +54,13 @@ const COMMON_TAGS = [
 export const StorySubmitPage: React.FC = () => {
   const navigate = useNavigate();
   const { isAuthenticated, currentUser } = useAuth();
+  const { checkContent, realtimeCheck } = useContentFilter();
   const [form] = Form.useForm();
-  
+
   const [submitting, setSubmitting] = useState(false);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const [contentCheck, setContentCheck] = useState<any>(null);
+  const [realtimeAlert, setRealtimeAlert] = useState<any>(null);
 
   useEffect(() => {
     // 检查用户登录状态
@@ -76,10 +83,32 @@ export const StorySubmitPage: React.FC = () => {
     }
   };
 
+  // 内容实时检查
+  const handleContentChange = (value: string) => {
+    // 实时检查严重违规
+    const realtime = realtimeCheck(value);
+    setRealtimeAlert(realtime);
+
+    // 完整内容检查（用于提交前验证）
+    if (value.trim().length > 0) {
+      const check = checkContent(value);
+      setContentCheck(check);
+    } else {
+      setContentCheck(null);
+    }
+  };
+
   // 提交故事
   const handleSubmit = async (values: any) => {
     if (!currentUser?.uuid) {
       message.error('用户信息异常，请重新登录');
+      return;
+    }
+
+    // 提交前内容检查
+    const finalCheck = checkContent(values.content);
+    if (!finalCheck.isValid) {
+      message.error('内容不符合发布要求，请修改后重试');
       return;
     }
 
@@ -143,20 +172,122 @@ export const StorySubmitPage: React.FC = () => {
             onFinish={handleSubmit}
             className={styles.form}
           >
+            <Form.Item
+              name="title"
+              label={<Text strong>故事标题 *</Text>}
+              rules={[
+                { required: true, message: '请输入故事标题' },
+                { max: 100, message: '标题不能超过100个字符' }
+              ]}
+            >
+              <Input
+                placeholder="请输入一个吸引人的标题..."
+                size="large"
+              />
+            </Form.Item>
+
+            <Form.Item
+              name="content"
+              label={<Text strong>故事内容 *</Text>}
+              rules={[
+                { required: true, message: '请输入故事内容' },
+                { min: 50, message: '故事内容至少需要50个字符' },
+                { max: 2000, message: '故事内容不能超过2000个字符' }
+              ]}
+            >
+              <TextArea
+                placeholder="请详细分享您的就业故事，包括遇到的挑战、解决方案、收获的经验等..."
+                rows={8}
+                showCount
+                maxLength={2000}
+                onChange={(e) => handleContentChange(e.target.value)}
+              />
+
+              {/* 实时内容检查提示 */}
+              {realtimeAlert?.hasIssues && (
+                <Alert
+                  message={realtimeAlert.message}
+                  type={realtimeAlert.type}
+                  showIcon
+                  className={styles.contentAlert}
+                  icon={<ExclamationCircleOutlined />}
+                />
+              )}
+
+              {/* 内容质量提示 */}
+              {contentCheck && !contentCheck.isValid && (
+                <Alert
+                  message="内容质量提示"
+                  description={
+                    <div>
+                      {contentCheck.violations.map((violation: string, index: number) => (
+                        <div key={index}>• {violation}</div>
+                      ))}
+                      {contentCheck.suggestions.length > 0 && (
+                        <div className={styles.suggestionList}>
+                          <strong>建议：</strong>
+                          {contentCheck.suggestions.map((suggestion: string, index: number) => (
+                            <div key={index}>• {suggestion}</div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  }
+                  type="warning"
+                  showIcon
+                  className={styles.contentAlert}
+                />
+              )}
+
+              {/* 内容通过提示 */}
+              {contentCheck && contentCheck.isValid && (
+                <Alert
+                  message="内容检查通过"
+                  type="success"
+                  showIcon
+                  className={styles.contentAlert}
+                  icon={<SafetyOutlined />}
+                />
+              )}
+            </Form.Item>
+
+            {/* 故事标签和分类 - 左右布局 */}
             <Row gutter={16}>
               <Col xs={24} sm={24} md={14}>
                 <Form.Item
-                  name="title"
-                  label={<Text strong>故事标题 *</Text>}
-                  rules={[
-                    { required: true, message: '请输入故事标题' },
-                    { max: 100, message: '标题不能超过100个字符' }
-                  ]}
+                  label={<Text strong>故事标签</Text>}
                 >
-                  <Input
-                    placeholder="请输入一个吸引人的标题..."
-                    size="large"
-                  />
+                  <div className={styles.tagSection}>
+                    <div className={styles.selectedTags}>
+                      {selectedTags.map(tag => (
+                        <Tag
+                          key={tag}
+                          closable
+                          onClose={() => handleTagClick(tag)}
+                          color="blue"
+                        >
+                          {tag}
+                        </Tag>
+                      ))}
+                      {selectedTags.length === 0 && (
+                        <Text type="secondary">点击下方标签添加（最多5个）</Text>
+                      )}
+                    </div>
+                    <div className={styles.availableTags}>
+                      {COMMON_TAGS.map(tag => (
+                        <Tag
+                          key={tag}
+                          className={`${styles.clickableTag} ${
+                            selectedTags.includes(tag) ? styles.selectedTag : ''
+                          }`}
+                          onClick={() => handleTagClick(tag)}
+                        >
+                          <TagsOutlined className={styles.tagIcon} />
+                          {tag}
+                        </Tag>
+                      ))}
+                    </div>
+                  </div>
                 </Form.Item>
               </Col>
               <Col xs={24} sm={24} md={10}>
@@ -183,59 +314,6 @@ export const StorySubmitPage: React.FC = () => {
                 </Form.Item>
               </Col>
             </Row>
-
-            <Form.Item
-              name="content"
-              label={<Text strong>故事内容 *</Text>}
-              rules={[
-                { required: true, message: '请输入故事内容' },
-                { min: 50, message: '故事内容至少需要50个字符' },
-                { max: 2000, message: '故事内容不能超过2000个字符' }
-              ]}
-            >
-              <TextArea
-                placeholder="请详细分享您的就业故事，包括遇到的挑战、解决方案、收获的经验等..."
-                rows={8}
-                showCount
-                maxLength={2000}
-              />
-            </Form.Item>
-
-            <Form.Item
-              label={<Text strong>故事标签</Text>}
-            >
-              <div className={styles.tagSection}>
-                <div className={styles.selectedTags}>
-                  {selectedTags.map(tag => (
-                    <Tag
-                      key={tag}
-                      closable
-                      onClose={() => handleTagClick(tag)}
-                      color="blue"
-                    >
-                      {tag}
-                    </Tag>
-                  ))}
-                  {selectedTags.length === 0 && (
-                    <Text type="secondary">点击下方标签添加（最多5个）</Text>
-                  )}
-                </div>
-                <div className={styles.availableTags}>
-                  {COMMON_TAGS.map(tag => (
-                    <Tag
-                      key={tag}
-                      className={`${styles.clickableTag} ${
-                        selectedTags.includes(tag) ? styles.selectedTag : ''
-                      }`}
-                      onClick={() => handleTagClick(tag)}
-                    >
-                      <TagsOutlined style={{ marginRight: '4px' }} />
-                      {tag}
-                    </Tag>
-                  ))}
-                </div>
-              </div>
-            </Form.Item>
 
             <div className={styles.userInfo}>
               <UserOutlined style={{ marginRight: '8px' }} />

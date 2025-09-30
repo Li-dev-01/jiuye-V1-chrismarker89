@@ -125,7 +125,7 @@ const MyContent: React.FC = () => {
       };
 
       // 调用正确的API端点获取用户故事
-      const apiUrl = `${import.meta.env.VITE_API_BASE_URL}/stories/user/${currentUser.uuid}`;
+      const apiUrl = `${import.meta.env.VITE_API_BASE_URL}/api/stories/user/${currentUser.uuid}`;
       console.log('调用API:', apiUrl);
 
       const response = await fetch(apiUrl, {
@@ -227,7 +227,7 @@ const MyContent: React.FC = () => {
       };
 
       // 调用删除API
-      const apiUrl = `${import.meta.env.VITE_API_BASE_URL}/stories/${contentId}`;
+      const apiUrl = `${import.meta.env.VITE_API_BASE_URL}/api/stories/${contentId}`;
       console.log('调用删除API:', apiUrl);
 
       const response = await fetch(apiUrl, {

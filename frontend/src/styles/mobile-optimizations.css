@@ -410,3 +410,115 @@
     padding-right: env(safe-area-inset-right);
   }
 }
+
+/* ==================== 图表组件移动端优化 ==================== */
+
+@media (max-width: 768px) {
+  /* 图表容器优化 */
+  .ant-card .recharts-wrapper {
+    padding: 4px;
+  }
+
+  /* 图表卡片优化 */
+  .ant-card:has(.recharts-wrapper) {
+    margin-bottom: 12px;
+  }
+
+  .ant-card:has(.recharts-wrapper) .ant-card-head {
+    padding: 12px;
+    min-height: auto;
+  }
+
+  .ant-card:has(.recharts-wrapper) .ant-card-body {
+    padding: 12px;
+  }
+
+  /* 图表标题优化 */
+  .ant-card:has(.recharts-wrapper) .ant-card-head-title {
+    font-size: 14px !important;
+    font-weight: 500;
+  }
+
+  /* 图表文字大小 */
+  .recharts-text,
+  .recharts-cartesian-axis-tick-value {
+    font-size: 11px !important;
+  }
+
+  /* 图表标签优化 */
+  .recharts-label {
+    font-size: 10px !important;
+  }
+
+  /* 图表图例紧凑显示 */
+  .recharts-legend-wrapper {
+    font-size: 11px !important;
+  }
+
+  .recharts-legend-item-text {
+    font-size: 11px !important;
+  }
+}
+
+/* ==================== 卡片网格响应式优化 ==================== */
+
+@media (max-width: 768px) {
+  /* Ant Design Grid 移动端优化 */
+  .ant-row {
+    margin-left: -6px !important;
+    margin-right: -6px !important;
+  }
+
+  .ant-col {
+    padding-left: 6px !important;
+    padding-right: 6px !important;
+  }
+
+  /* 卡片间距优化 */
+  .ant-card {
+    margin-bottom: 12px;
+  }
+
+  /* 卡片内容优化 */
+  .ant-card-body {
+    padding: 12px;
+  }
+
+  .ant-card-head {
+    padding: 12px;
+    min-height: auto;
+  }
+
+  /* 卡片标题优化 */
+  .ant-card-head-title {
+    font-size: 15px;
+    font-weight: 500;
+  }
+
+  /* 卡片描述文字 */
+  .ant-card-meta-description {
+    font-size: 13px;
+    line-height: 1.4;
+  }
+}
+
+/* ==================== 内容优先级移动端优化 ==================== */
+
+@media (max-width: 768px) {
+  /* 隐藏次要信息 */
+  .mobile-hide {
+    display: none !important;
+  }
+
+  /* 紧凑显示 */
+  .mobile-compact {
+    padding: 8px !important;
+    margin: 4px 0 !important;
+  }
+
+  /* 全宽显示 */
+  .mobile-full-width {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+}

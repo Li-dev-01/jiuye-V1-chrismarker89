@@ -80,21 +80,7 @@ CREATE INDEX IF NOT EXISTS idx_questionnaire_statistics_cache_dimension ON quest
 CREATE INDEX IF NOT EXISTS idx_questionnaire_statistics_cache_include_test_data ON questionnaire_statistics_cache(include_test_data);
 CREATE INDEX IF NOT EXISTS idx_questionnaire_statistics_cache_expires_at ON questionnaire_statistics_cache(expires_at);
 
--- 社会洞察缓存表 (用于AI生成的社会观察)
-CREATE TABLE IF NOT EXISTS social_insights_cache (
-    id TEXT PRIMARY KEY DEFAULT (lower(hex(randomblob(16)))),
-    insight_date TEXT NOT NULL, -- 洞察日期 (YYYY-MM-DD)
-    questionnaire_id TEXT NOT NULL,
-    dimension TEXT NOT NULL, -- 洞察维度
-    insight_text TEXT NOT NULL, -- AI生成的洞察文本
-    data_snapshot TEXT NOT NULL, -- JSON格式存储数据快照
-    confidence_score REAL DEFAULT 0.0, -- 洞察置信度 (0-1)
-    include_test_data INTEGER DEFAULT 0,
-    created_at TEXT NOT NULL DEFAULT (datetime('now')),
-    
-    -- 唯一约束：每天每个维度只有一个洞察
-    UNIQUE(insight_date, questionnaire_id, dimension, include_test_data)
-);
+
 
 CREATE INDEX IF NOT EXISTS idx_social_insights_cache_date ON social_insights_cache(insight_date);
 CREATE INDEX IF NOT EXISTS idx_social_insights_cache_questionnaire_id ON social_insights_cache(questionnaire_id);

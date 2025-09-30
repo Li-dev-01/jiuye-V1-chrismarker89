@@ -13,6 +13,7 @@ import {
   DislikeFilled,
   LoadingOutlined
 } from '@ant-design/icons';
+import { getUserDisplayName } from '../../utils/userDisplayUtils';
 
 interface LikeDislikeDownloadProps {
   contentType: 'story';
@@ -160,7 +161,7 @@ export const LikeDislikeDownload: React.FC<LikeDislikeDownloadProps> = ({
           // 直接下载
           const link = document.createElement('a');
           link.href = result.data.downloadUrl;
-          link.download = `${contentType}-card-${contentId}-${theme}.png`;
+          link.download = `${contentType}-card-${contentId}-${getUserIdentifier()}-${theme}.png`;
           link.target = '_blank';
           document.body.appendChild(link);
           link.click();
@@ -215,6 +216,28 @@ export const LikeDislikeDownload: React.FC<LikeDislikeDownloadProps> = ({
   // 获取用户ID（可以从上下文或localStorage获取）
   const getUserId = () => {
     return localStorage.getItem('userId') || 'anonymous';
+  };
+
+  // 获取用户标识符用于文件名
+  const getUserIdentifier = () => {
+    const userId = getUserId();
+    if (userId === 'anonymous') {
+      return '00000000';
+    }
+
+    // 尝试从localStorage获取用户信息
+    const userInfo = localStorage.getItem('userInfo');
+    if (userInfo) {
+      try {
+        const user = JSON.parse(userInfo);
+        return getUserDisplayName(user);
+      } catch (e) {
+        // 解析失败，从userId提取
+      }
+    }
+
+    // 从userId提取8位标识符
+    return getUserDisplayName({ id: userId });
   };
 
   // 格式化数字显示

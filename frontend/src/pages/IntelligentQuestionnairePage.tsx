@@ -6,6 +6,7 @@ import { UniversalQuestionnaireEngine } from '../components/questionnaire/Univer
 import { enhancedIntelligentQuestionnaire } from '../data/enhancedIntelligentQuestionnaire';
 import { questionnaireTestUtils } from '../utils/testQuestionnaireSubmission';
 import type { UniversalQuestionnaireResponse } from '../types/universal-questionnaire';
+import styles from './IntelligentQuestionnairePage.module.css';
 
 const { Title, Paragraph, Text } = Typography;
 
@@ -48,20 +49,20 @@ const IntelligentQuestionnairePage: React.FC = () => {
 
   // 处理问卷提交成功后的跳转
   const handleQuestionnaireSubmit = (submissionData: UniversalQuestionnaireResponse) => {
-    console.log('📊 问卷提交成功，准备跳转到数据可视化页面');
+    console.log('📊 问卷提交成功，准备跳转到故事页面');
     console.log('📊 提交数据:', submissionData);
 
     // 延迟跳转，让用户看到成功提示
     setTimeout(() => {
-      navigate('/analytics');
+      navigate('/stories');
     }, 2000);
   };
 
   return (
-    <div style={{ padding: '24px', maxWidth: '1200px', margin: '0 auto' }}>
+    <div className={styles.container}>
       {/* 开发环境下显示详细说明 */}
       {isDevelopment && (
-        <Card style={{ marginBottom: '24px' }}>
+        <Card className={styles.introCard}>
           <Space direction="vertical" size="large" style={{ width: '100%' }}>
             <div>
               <Title level={2}>
@@ -156,8 +157,8 @@ const IntelligentQuestionnairePage: React.FC = () => {
                   查看测试数据
                 </Button>
               </Space>
-              <div style={{ marginTop: '12px' }}>
-                <Text type="secondary" style={{ fontSize: '12px' }}>
+              <div className={styles.testHint}>
+                <Text type="secondary" className={styles.testHintText}>
                   💡 提示：测试结果会在浏览器控制台显示详细信息
                 </Text>
               </div>
@@ -167,7 +168,7 @@ const IntelligentQuestionnairePage: React.FC = () => {
       )}
       
       {/* 智能问卷组件 */}
-      <Card>
+      <Card className={styles.questionnaireCard}>
         <UniversalQuestionnaireEngine
           questionnaire={enhancedIntelligentQuestionnaire}
           onSubmit={handleQuestionnaireSubmit}

@@ -38,8 +38,6 @@ interface UniversalQuestionRendererProps {
   showStatistics?: boolean;
   refreshTrigger?: number; // 用于触发统计数据刷新
   onAuthSuccess?: (authType: 'quick-register' | 'semi-anonymous-login') => void; // 认证成功回调
-  autoScrollToNext?: boolean; // 是否在选择后自动滚动到下一题
-  isLastQuestion?: boolean; // 是否是最后一题
 }
 
 export const UniversalQuestionRenderer: React.FC<UniversalQuestionRendererProps> = ({
@@ -51,60 +49,7 @@ export const UniversalQuestionRenderer: React.FC<UniversalQuestionRendererProps>
   showStatistics = true,
   refreshTrigger = 0,
   onAuthSuccess,
-  autoScrollToNext = true,
-  isLastQuestion = false,
 }) => {
-  const [isScrolling, setIsScrolling] = useState(false);
-  // 自动滚动到下一题的函数
-  const scrollToNextQuestion = useCallback(() => {
-    if (!autoScrollToNext || isLastQuestion) return;
-
-    // 显示滚动提示
-    setIsScrolling(true);
-
-    setTimeout(() => {
-      // 查找当前问题的下一个问题元素
-      const currentQuestionElement = document.querySelector(`[data-question-id="${question.id}"]`);
-      if (currentQuestionElement) {
-        const nextQuestionElement = currentQuestionElement.nextElementSibling;
-        if (nextQuestionElement) {
-          // 计算滚动位置，确保下一题在视窗中央偏上位置
-          const rect = nextQuestionElement.getBoundingClientRect();
-          const windowHeight = window.innerHeight;
-          const targetPosition = window.scrollY + rect.top - (windowHeight * 0.2); // 距离顶部20%的位置
-
-          window.scrollTo({
-            top: Math.max(0, targetPosition),
-            behavior: 'smooth'
-          });
-
-          // 滚动完成后隐藏提示
-          setTimeout(() => {
-            setIsScrolling(false);
-          }, 800);
-        } else {
-          setIsScrolling(false);
-        }
-      } else {
-        setIsScrolling(false);
-      }
-    }, 600); // 延迟600ms，让用户看到选择效果和反馈
-  }, [autoScrollToNext, isLastQuestion, question.id]);
-
-  // 处理选择变化的函数
-  const handleChange = useCallback((newValue: any) => {
-    onChange(newValue);
-
-    // 对于单选题和下拉选择题，选择后自动滚动到下一题
-    if (question.type === 'radio' || question.type === 'select') {
-      scrollToNextQuestion();
-    }
-
-    // 对于多选题，如果选择了选项也可以滚动（可选）
-    // if (question.type === 'checkbox' && newValue && newValue.length > 0) {
-    //   scrollToNextQuestion();
-    // }
-  }, [onChange, question.type, scrollToNextQuestion]);
 
   // 渲染问题标题
   const renderQuestionTitle = () => (
@@ -143,7 +88,7 @@ export const UniversalQuestionRenderer: React.FC<UniversalQuestionRendererProps>
                 key={option.value}
                 className={`${styles.tagOption} ${value === option.value ? styles.tagOptionSelected : ''}`}
                 onClick={() => {
-                  handleChange(option.value);
+                  onChange(option.value);
                   // 如果是提交方式选择，触发相应的认证流程
                   if (question.id === 'submission-type' && onAuthSuccess) {
                     if (option.value === 'google-login') {
@@ -176,7 +121,7 @@ export const UniversalQuestionRenderer: React.FC<UniversalQuestionRendererProps>
                     const newValues = isSelected
                       ? currentValues.filter((v: any) => v !== option.value)
                       : [...currentValues, option.value];
-                    handleChange(newValues);
+                    onChange(newValues);
                   }}
                 >
                   {option.label}
@@ -193,7 +138,7 @@ export const UniversalQuestionRenderer: React.FC<UniversalQuestionRendererProps>
               <div
                 key={option.value}
                 className={`${styles.tagOption} ${value === option.value ? styles.tagOptionSelected : ''}`}
-                onClick={() => handleChange(option.value)}
+                onClick={() => onChange(option.value)}
               >
                 {option.label}
               </div>
@@ -338,7 +283,7 @@ export const UniversalQuestionRenderer: React.FC<UniversalQuestionRendererProps>
 
   return (
     <Card
-      className={`${styles.questionCard} ${isScrolling ? styles.questionCardScrolling : ''}`}
+      className={styles.questionCard}
       bordered={false}
       data-question-id={question.id}
     >
@@ -354,14 +299,6 @@ export const UniversalQuestionRenderer: React.FC<UniversalQuestionRendererProps>
             showIcon
             className={styles.errorAlert}
           />
-        )}
-
-        {/* 自动滚动提示 */}
-        {isScrolling && autoScrollToNext && !isLastQuestion && (
-          <div className={styles.scrollingHint}>
-            <span className={styles.scrollingIcon}>↓</span>
-            <span className={styles.scrollingText}>正在跳转到下一题...</span>
-          </div>
         )}
       </div>
 

@@ -1,6 +1,7 @@
 /**
  * 通用图表组件
  * 支持多种图表类型的统一渲染
+ * 包含移动端响应式优化
  */
 
 import React from 'react';
@@ -22,6 +23,7 @@ import {
 } from 'recharts';
 import { Empty, Spin } from 'antd';
 import { getSmartBilingualDataLabel, formatSmartBilingualDataLabel } from '../../config/bilingualTitleMapping';
+import { useMobileDetection } from '../../hooks/useMobileDetection';
 
 // 自定义X轴标签组件，支持换行显示
 const CustomXAxisTick = (props: any) => {
@@ -90,13 +92,22 @@ export const UniversalChart: React.FC<UniversalChartProps> = ({
   showLegend = true,
   showTooltip = true
 }) => {
+  // 移动端检测
+  const { isMobile, isTablet } = useMobileDetection();
+
+  // 根据设备类型调整图表配置
+  const responsiveHeight = isMobile ? Math.min(height, 280) : (isTablet ? Math.min(height, 350) : height);
+  const responsiveLegend = isMobile ? false : showLegend; // 移动端默认隐藏图例以节省空间
+  const fontSize = isMobile ? 11 : 12;
+  const pieOuterRadius = isMobile ? 60 : 80;
+
   if (loading) {
     return (
-      <div style={{ 
-        height, 
-        display: 'flex', 
-        alignItems: 'center', 
-        justifyContent: 'center' 
+      <div style={{
+        height: responsiveHeight,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
       }}>
         <Spin size="large" />
       </div>
@@ -105,7 +116,7 @@ export const UniversalChart: React.FC<UniversalChartProps> = ({
 
   if (!data || data.length === 0) {
     return (
-      <div style={{ height, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div style={{ height: responsiveHeight, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <Empty description="暂无数据" />
       </div>
     );
@@ -176,16 +187,16 @@ export const UniversalChart: React.FC<UniversalChartProps> = ({
               data={dataWithColors}
               cx="50%"
               cy="50%"
-              outerRadius={80}
+              outerRadius={pieOuterRadius}
               dataKey="value"
-              label={({ name, payload }) => `${name}: ${payload?.percentage?.toFixed(1)}%`}
+              label={isMobile ? false : ({ name, payload }) => `${name}: ${payload?.percentage?.toFixed(1)}%`}
             >
               {dataWithColors.map((entry, index) => (
                 <Cell key={`cell-${index}`} fill={entry.color} />
               ))}
             </Pie>
             {showTooltip && <Tooltip content={renderTooltip} />}
-            {showLegend && <Legend />}
+            {responsiveLegend && <Legend wrapperStyle={{ fontSize }} />}
           </PieChart>
         );
 
@@ -196,33 +207,37 @@ export const UniversalChart: React.FC<UniversalChartProps> = ({
               data={dataWithColors}
               cx="50%"
               cy="50%"
-              innerRadius={40}
-              outerRadius={80}
+              innerRadius={isMobile ? 30 : 40}
+              outerRadius={pieOuterRadius}
               dataKey="value"
-              label={({ name, payload }) => `${name}: ${payload?.percentage?.toFixed(1)}%`}
+              label={isMobile ? false : ({ name, payload }) => `${name}: ${payload?.percentage?.toFixed(1)}%`}
             >
               {dataWithColors.map((entry, index) => (
                 <Cell key={`cell-${index}`} fill={entry.color} />
               ))}
             </Pie>
             {showTooltip && <Tooltip content={renderTooltip} />}
-            {showLegend && <Legend />}
+            {responsiveLegend && <Legend wrapperStyle={{ fontSize }} />}
           </PieChart>
         );
 
       case 'bar':
         return (
-          <BarChart data={dataWithColors} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+          <BarChart
+            data={dataWithColors}
+            margin={isMobile ? { top: 10, right: 10, left: 0, bottom: 5 } : { top: 20, right: 30, left: 20, bottom: 5 }}
+          >
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis
               dataKey="bilingualName"
-              height={80}
+              height={isMobile ? 60 : 80}
               interval={0}
               tick={<CustomXAxisTick />}
+              style={{ fontSize }}
             />
-            <YAxis />
+            <YAxis style={{ fontSize }} />
             {showTooltip && <Tooltip content={renderTooltip} />}
-            {showLegend && <Legend />}
+            {responsiveLegend && <Legend wrapperStyle={{ fontSize }} />}
             <Bar dataKey="value" fill="#1890FF">
               {dataWithColors.map((entry, index) => (
                 <Cell key={`cell-${index}`} fill={entry.color} />
@@ -233,13 +248,16 @@ export const UniversalChart: React.FC<UniversalChartProps> = ({
 
       case 'line':
         return (
-          <LineChart data={dataWithColors} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+          <LineChart
+            data={dataWithColors}
+            margin={isMobile ? { top: 10, right: 10, left: 0, bottom: 5 } : { top: 20, right: 30, left: 20, bottom: 5 }}
+          >
             <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" />
-            <YAxis />
+            <XAxis dataKey="name" style={{ fontSize }} />
+            <YAxis style={{ fontSize }} />
             {showTooltip && <Tooltip content={renderTooltip} />}
-            {showLegend && <Legend />}
-            <Line type="monotone" dataKey="value" stroke="#1890FF" strokeWidth={2} />
+            {responsiveLegend && <Legend wrapperStyle={{ fontSize }} />}
+            <Line type="monotone" dataKey="value" stroke="#1890FF" strokeWidth={isMobile ? 1.5 : 2} />
           </LineChart>
         );
 
@@ -305,13 +323,13 @@ export const UniversalChart: React.FC<UniversalChartProps> = ({
   };
 
   return (
-    <div style={{ width: '100%', height }}>
+    <div style={{ width: '100%', height: responsiveHeight }}>
       {title && (
-        <div style={{ 
-          textAlign: 'center', 
-          marginBottom: '16px', 
-          fontSize: '16px', 
-          fontWeight: 'bold' 
+        <div style={{
+          textAlign: 'center',
+          marginBottom: isMobile ? '8px' : '16px',
+          fontSize: isMobile ? '14px' : '16px',
+          fontWeight: 'bold'
         }}>
           {title}
         </div>

@@ -1,0 +1,68 @@
+/* 智能问卷页面样式 */
+
+.container {
+  padding: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.introCard {
+  margin-bottom: 24px;
+}
+
+.questionnaireCard {
+  /* 问卷主卡片样式 */
+}
+
+.testHint {
+  margin-top: 12px;
+}
+
+.testHintText {
+  font-size: 12px;
+}
+
+/* 移动端优化 */
+@media (max-width: 768px) {
+  .container {
+    padding: 8px;
+  }
+  
+  .introCard {
+    margin-bottom: 12px;
+  }
+  
+  .introCard :global(.ant-card-body) {
+    padding: 16px;
+  }
+  
+  .questionnaireCard :global(.ant-card-body) {
+    padding: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 6px;
+  }
+  
+  .introCard {
+    margin-bottom: 8px;
+  }
+  
+  .introCard :global(.ant-card-body) {
+    padding: 12px;
+  }
+  
+  .questionnaireCard :global(.ant-card-body) {
+    padding: 8px;
+  }
+  
+  .testHint {
+    margin-top: 8px;
+  }
+  
+  .testHintText {
+    font-size: 11px;
+  }
+}

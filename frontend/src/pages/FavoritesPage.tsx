@@ -5,14 +5,15 @@
 import React, { useState, useEffect } from 'react';
 import {
   Card, Row, Col, Typography, Space, Tag, Button, Input, Select, Empty,
-  message, Popconfirm, Divider
+  message, Popconfirm, Divider, Alert
 } from 'antd';
 import {
   HeartFilled, SearchOutlined, DeleteOutlined, ExportOutlined,
-  BookOutlined, CalendarOutlined, UserOutlined, EyeOutlined
+  BookOutlined, CalendarOutlined, UserOutlined, EyeOutlined, LoginOutlined
 } from '@ant-design/icons';
-import { favoriteService, type FavoriteStory } from '../services/favoriteService';
+import { enhancedFavoriteService, type FavoriteStory } from '../services/enhancedFavoriteService';
 import { SwipeViewer } from '../components/common/SwipeViewer';
+import { useAuth } from '../stores/universalAuthStore';
 import './FavoritesPage.css';
 
 const { Title, Text, Paragraph } = Typography;
@@ -20,6 +21,7 @@ const { Search } = Input;
 const { Option } = Select;
 
 const FavoritesPage: React.FC = () => {
+  const { isAuthenticated, currentUser } = useAuth();
   const [favorites, setFavorites] = useState<FavoriteStory[]>([]);
   const [filteredFavorites, setFilteredFavorites] = useState<FavoriteStory[]>([]);
   const [searchKeyword, setSearchKeyword] = useState('');
@@ -50,10 +52,10 @@ const FavoritesPage: React.FC = () => {
     filterFavorites();
   }, [favorites, searchKeyword, selectedCategory]);
 
-  const loadFavorites = () => {
+  const loadFavorites = async () => {
     setLoading(true);
     try {
-      const favoriteList = favoriteService.getFavorites();
+      const favoriteList = await enhancedFavoriteService.getFavorites();
       setFavorites(favoriteList);
     } catch (error) {
       message.error('加载收藏列表失败');
@@ -83,8 +85,8 @@ const FavoritesPage: React.FC = () => {
     setFilteredFavorites(filtered);
   };
 
-  const handleRemoveFavorite = (storyId: string) => {
-    const success = favoriteService.removeFromFavorites(storyId);
+  const handleRemoveFavorite = async (storyId: string) => {
+    const success = await enhancedFavoriteService.removeFromFavorites(storyId);
     if (success) {
       message.success('已取消收藏');
       loadFavorites();
@@ -93,8 +95,8 @@ const FavoritesPage: React.FC = () => {
     }
   };
 
-  const handleClearAll = () => {
-    const success = favoriteService.clearAllFavorites();
+  const handleClearAll = async () => {
+    const success = await enhancedFavoriteService.clearAllFavorites();
     if (success) {
       message.success('已清空所有收藏');
       loadFavorites();
@@ -156,8 +158,51 @@ const FavoritesPage: React.FC = () => {
     return new Date(dateString).toLocaleDateString('zh-CN');
   };
 
+  // 如果用户未登录，显示登录提示
+  if (!isAuthenticated) {
+    return (
+      <div className="favorites-page">
+        <Card>
+          <Empty
+            image={Empty.PRESENTED_IMAGE_SIMPLE}
+            description={
+              <div>
+                <Title level={4}>请先登录查看收藏</Title>
+                <Paragraph type="secondary">
+                  登录后可以收藏喜欢的故事，并在此页面管理您的收藏
+                </Paragraph>
+              </div>
+            }
+          >
+            <Button
+              type="primary"
+              icon={<LoginOutlined />}
+              onClick={() => {
+                // 触发登录弹窗
+                window.dispatchEvent(new Event('openSemiAnonymousLogin'));
+              }}
+            >
+              立即登录
+            </Button>
+          </Empty>
+        </Card>
+      </div>
+    );
+  }
+
   return (
     <div className="favorites-page">
+      {/* 用户身份提示 */}
+      {isAuthenticated && (
+        <Alert
+          message={`当前登录用户: ${currentUser?.displayName || '匿名用户'}`}
+          description="收藏数据已与您的账户关联，可在不同设备间同步"
+          type="info"
+          showIcon
+          style={{ marginBottom: 16 }}
+        />
+      )}
+
       {/* 页面头部 */}
       <div className="page-header">
         <div className="header-content">

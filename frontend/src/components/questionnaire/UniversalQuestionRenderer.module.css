@@ -293,23 +293,68 @@
   text-align: right;
 }
 
-/* 响应式设计 */
+/* 响应式设计 - 移动端优化 (平板和大屏手机) */
 @media (max-width: 768px) {
   .questionCard {
-    padding: var(--spacing-xs);
+    padding: 12px;                    /* 紧凑内边距,节省空间 */
+    margin-bottom: 12px;              /* 紧凑外边距,增加屏幕利用率 */
+    border-radius: 12px;              /* 统一圆角 */
+    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.06); /* 减轻阴影 */
+  }
+
+  .questionHeader {
+    margin-bottom: 10px;              /* 减少标题间距 */
+  }
+
+  .questionTitle {
+    font-size: 16px !important;       /* 保持可读性 */
+    line-height: 1.4;                 /* 优化行高 */
+    font-weight: 500;                 /* 适中的字重 */
+  }
+
+  .questionNumber {
+    font-size: 14px;                  /* 略小的问题编号 */
   }
 
   .tagOptionsContainer {
-    gap: var(--spacing-xs);
+    gap: 8px;                         /* 选项间距 */
   }
 
   .tagOption {
-    padding: var(--spacing-1) var(--spacing-sm);
-    font-size: 13px;
-    min-height: 36px;
-    min-width: calc(50% - 4px);
-    max-width: calc(50% - 4px);
-    flex: 0 1 calc(50% - 4px);
+    min-height: 44px;                 /* 确保触摸区域足够大 (Apple HIG标准) */
+    padding: 12px 16px;               /* 优化内边距 */
+    font-size: 15px;                  /* 移动端友好的字体大小 */
+    line-height: 1.4;                 /* 优化行高 */
+    border-radius: 8px;               /* 统一圆角 */
+    width: 100%;                      /* 全宽显示,避免两列布局 */
+    min-width: auto;
+    max-width: 100%;
+    flex: 0 1 100%;
+  }
+
+  .tagOptionSelected {
+    font-weight: 500;                 /* 选中状态更明显 */
+  }
+
+  .textInput,
+  .textarea,
+  .numberInput,
+  .emailInput {
+    font-size: 16px !important;       /* 防止iOS缩放 */
+    min-height: 44px;                 /* 确保触摸区域 */
+  }
+
+  .textarea {
+    padding: 12px;                    /* 优化文本域内边距 */
+  }
+
+  .inputContainer {
+    margin-top: 8px;                  /* 减少容器间距 */
+  }
+
+  .errorAlert {
+    margin-top: 8px;                  /* 减少错误提示间距 */
+    font-size: 14px;                  /* 适中的错误提示字体 */
   }
 
   .ratingContainer {
@@ -326,6 +371,7 @@
 
   .uploadButton {
     padding: var(--spacing-md);
+    min-height: 44px;                 /* 确保触摸区域 */
   }
 
   .statisticsPanel {
@@ -337,27 +383,47 @@
   }
 }
 
+/* 小屏手机进一步优化 (≤480px) */
 @media (max-width: 480px) {
   .questionCard {
-    padding: var(--spacing-xs);
+    padding: 10px;                    /* 更紧凑的内边距 */
+    margin-bottom: 10px;              /* 更紧凑的外边距 */
+    border-radius: 10px;              /* 略小的圆角 */
+  }
+
+  .questionHeader {
+    margin-bottom: 8px;               /* 进一步减少标题间距 */
   }
 
   .questionTitle {
-    font-size: 16px !important;
+    font-size: 15px !important;       /* 略小的标题,但仍保持可读性 */
+    line-height: 1.3;                 /* 紧凑行高 */
+  }
+
+  .questionNumber {
+    font-size: 13px;                  /* 更小的问题编号 */
   }
 
   .tagOptionsContainer {
-    gap: var(--spacing-xs);
+    gap: 6px;                         /* 更紧凑的选项间距 */
   }
 
   .tagOption {
-    padding: var(--spacing-1) var(--spacing-xs);
-    font-size: 12px;
-    min-height: 32px;
+    min-height: 44px;                 /* 保持触摸区域标准 */
+    padding: 10px 14px;               /* 更紧凑的选项内边距 */
+    font-size: 14px;                  /* 略小的选项字体,但仍清晰 */
     width: 100%;
     min-width: auto;
     max-width: 100%;
     flex: 0 1 100%;
+  }
+
+  .textInput,
+  .textarea,
+  .numberInput,
+  .emailInput {
+    font-size: 16px !important;       /* 保持16px防止iOS缩放 */
+    padding: 10px 12px;               /* 紧凑内边距 */
   }
 
   .ratingLabels {
@@ -385,69 +451,4 @@
 /* 懒加载统计组件包装器 */
 .statisticsWrapper {
   margin-top: 16px;
-}
-
-/* 自动滚动相关样式 */
-.questionCardScrolling {
-  border-color: var(--primary-500);
-  box-shadow: 0 4px 12px rgba(24, 144, 255, 0.15);
-  transform: scale(0.98);
-}
-
-.scrollingHint {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--spacing-xs);
-  margin-top: var(--spacing-sm);
-  padding: var(--spacing-xs) var(--spacing-sm);
-  background: linear-gradient(135deg, #e6f7ff 0%, #bae7ff 100%);
-  border: 1px solid #91d5ff;
-  border-radius: var(--border-radius-md);
-  color: var(--primary-600);
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-medium);
-  animation: scrollingPulse 1.5s ease-in-out infinite;
-}
-
-.scrollingIcon {
-  font-size: var(--font-size-lg);
-  animation: scrollingBounce 1s ease-in-out infinite;
-}
-
-.scrollingText {
-  white-space: nowrap;
-}
-
-/* 滚动提示动画 */
-@keyframes scrollingPulse {
-  0%, 100% {
-    opacity: 0.8;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 1;
-    transform: scale(1.02);
-  }
-}
-
-@keyframes scrollingBounce {
-  0%, 100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(3px);
-  }
-}
-
-/* 移动端滚动提示优化 */
-@media (max-width: 768px) {
-  .scrollingHint {
-    padding: var(--spacing-xs);
-    font-size: 12px;
-  }
-
-  .scrollingIcon {
-    font-size: var(--font-size-base);
-  }
 }

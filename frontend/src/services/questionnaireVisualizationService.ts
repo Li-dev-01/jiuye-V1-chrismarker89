@@ -270,7 +270,7 @@ class QuestionnaireVisualizationService {
       })),
       totalResponses: 0,
       lastUpdated: new Date().toISOString(),
-      socialInsight: `${question.socialValue} (使用示例数据)`
+      socialInsight: `${question.description} (使用示例数据)`
     }));
 
     return {
@@ -807,27 +807,7 @@ class QuestionnaireVisualizationService {
     }
   }
 
-  /**
-   * 获取社会统计学洞察
-   */
-  async getSocialInsights(): Promise<{
-    employmentTrends: string[];
-    demographicInsights: string[];
-    policyRecommendations: string[];
-    marketAnalysis: string[];
-    educationGaps: string[];
-  }> {
-    try {
-      const response = await fetch(`${this.baseUrl}/social-insights`);
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      return await response.json();
-    } catch (error) {
-      console.error('Failed to fetch social insights:', error);
-      throw error;
-    }
-  }
+
 }
 
 export const questionnaireVisualizationService = new QuestionnaireVisualizationService();

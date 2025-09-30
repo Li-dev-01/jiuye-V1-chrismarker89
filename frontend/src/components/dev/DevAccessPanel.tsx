@@ -14,7 +14,7 @@ import {
   EyeOutlined
 } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
-import { useManagementAuthStore } from '../../stores/managementAuthStore';
+
 import styles from './DevAccessPanel.module.css';
 
 const { Title, Text } = Typography;
@@ -22,7 +22,7 @@ const { Title, Text } = Typography;
 export const DevAccessPanel: React.FC = () => {
   const navigate = useNavigate();
   const [isVisible, setIsVisible] = useState(false);
-  const { autoLogin } = useManagementAuthStore();
+
 
   // 仅在开发环境显示
   if (process.env.NODE_ENV === 'production') {
@@ -57,22 +57,10 @@ export const DevAccessPanel: React.FC = () => {
   ];
 
   const handleQuickLogin = async (role: any) => {
-    try {
-      const success = await autoLogin({
-        email: role.email,
-        role: role.key
-      });
-
-      if (success) {
-        message.success(`已切换到${role.name}身份`);
-        navigate(role.path, { replace: true });
-      } else {
-        message.error('角色切换失败');
-      }
-    } catch (error) {
-      console.error('Quick login error:', error);
-      message.error('角色切换过程中发生错误');
-    }
+    // 管理功能已迁移到reviewer-admin-dashboard项目
+    message.info(`管理功能已迁移，请访问专门的管理面板`);
+    // 可以导航到主页或其他公开页面
+    navigate('/', { replace: true });
   };
 
   if (!isVisible) {
@@ -140,16 +128,9 @@ export const DevAccessPanel: React.FC = () => {
             <Button
               type="link"
               size="small"
-              onClick={() => navigate('/admin/login')}
+              onClick={() => window.open('https://92d7bc6e.reviewer-admin-dashboard.pages.dev', '_blank')}
             >
-              直接登录页面
-            </Button>
-            <Button
-              type="link"
-              size="small"
-              onClick={() => navigate('/management-portal')}
-            >
-              管理门户
+              管理面板
             </Button>
           </div>
         </div>

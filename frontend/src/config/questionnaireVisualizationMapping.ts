@@ -8,7 +8,6 @@ export interface QuestionVisualizationConfig {
   questionTitle: string;
   chartType: 'pie' | 'bar' | 'donut' | 'line' | 'treemap' | 'heatmap';
   category: string;
-  socialValue: string;
   description: string;
   options?: Array<{
     value: string;
@@ -24,7 +23,6 @@ export interface VisualizationDimension {
   description: string;
   icon: string;
   questions: QuestionVisualizationConfig[];
-  socialImpact: string;
 }
 
 /**
@@ -36,14 +34,14 @@ export const VISUALIZATION_DIMENSIONS: VisualizationDimension[] = [
     title: '就业形势总览',
     description: '反映当前整体就业状况和市场感知',
     icon: '📈',
-    socialImpact: '为政府制定就业政策提供数据支撑',
+
     questions: [
       {
         questionId: 'current-status',
         questionTitle: '当前身份状态分布',
         chartType: 'donut',
         category: 'employment-overview',
-        socialValue: '反映社会就业结构和人群分布',
+
         description: '显示参与者的身份构成：学生、就业、失业等',
         options: [
           { value: 'student', label: '在校学生', color: '#1890FF', icon: '🎓' },
@@ -60,7 +58,7 @@ export const VISUALIZATION_DIMENSIONS: VisualizationDimension[] = [
         questionTitle: '就业难度感知',
         chartType: 'bar',
         category: 'employment-overview',
-        socialValue: '评估就业市场紧张程度和社会预期',
+
         description: '反映社会对当前就业环境的整体感知',
         options: [
           { value: 'very-easy', label: '非常容易', color: '#52C41A', icon: '😊' },
@@ -75,7 +73,7 @@ export const VISUALIZATION_DIMENSIONS: VisualizationDimension[] = [
         questionTitle: '同龄人就业率观察',
         chartType: 'bar',
         category: 'employment-overview',
-        socialValue: '从个体视角反映就业市场真实状况',
+
         description: '通过个人观察了解周围同龄人的就业情况',
         options: [
           { value: 'very-high', label: '非常高(90%+)', color: '#52C41A', icon: '📈' },
@@ -91,7 +89,7 @@ export const VISUALIZATION_DIMENSIONS: VisualizationDimension[] = [
         questionTitle: '薪资水平感知',
         chartType: 'bar',
         category: 'employment-overview',
-        socialValue: '反映薪资期望与现实的差距',
+
         description: '了解社会对当前薪资水平的整体评价',
         options: [
           { value: 'much-higher', label: '比预期高很多', color: '#52C41A', icon: '💰' },
@@ -108,14 +106,14 @@ export const VISUALIZATION_DIMENSIONS: VisualizationDimension[] = [
     title: '人口结构分析',
     description: '分析参与者的基本人口统计特征',
     icon: '👥',
-    socialImpact: '为教育资源配置和人才培养提供参考',
+
     questions: [
       {
         questionId: 'age-range',
         questionTitle: '年龄段分布',
         chartType: 'bar',
         category: 'demographics',
-        socialValue: '了解不同年龄群体的就业特点',
+
         description: '显示参与者的年龄结构分布',
         options: [
           { value: 'under-20', label: '20岁以下', color: '#FF9A8B', icon: '👶' },
@@ -131,7 +129,7 @@ export const VISUALIZATION_DIMENSIONS: VisualizationDimension[] = [
         questionTitle: '性别分布',
         chartType: 'pie',
         category: 'demographics',
-        socialValue: '分析性别对就业状况的影响',
+
         description: '了解参与者的性别构成',
         options: [
           { value: 'male', label: '男性', color: '#4D96FF', icon: '👨' },
@@ -144,7 +142,7 @@ export const VISUALIZATION_DIMENSIONS: VisualizationDimension[] = [
         questionTitle: '学历结构',
         chartType: 'pie',
         category: 'demographics',
-        socialValue: '分析不同教育背景的就业情况',
+
         description: '显示参与者的最高学历分布',
         options: [
           { value: 'high-school', label: '高中/中专及以下', color: '#FFD93D', icon: '🏫' },
@@ -159,7 +157,7 @@ export const VISUALIZATION_DIMENSIONS: VisualizationDimension[] = [
         questionTitle: '专业分布',
         chartType: 'treemap',
         category: 'demographics',
-        socialValue: '分析不同专业的就业情况',
+
         description: '了解参与者的专业背景分布',
         options: [
           { value: 'engineering', label: '工学', color: '#4D96FF', icon: '⚙️' },
@@ -179,7 +177,7 @@ export const VISUALIZATION_DIMENSIONS: VisualizationDimension[] = [
         questionTitle: '地域分布',
         chartType: 'bar',
         category: 'demographics',
-        socialValue: '分析不同地区的就业环境差异',
+
         description: '了解参与者的工作/生活城市类型',
         options: [
           { value: 'tier1', label: '一线城市', color: '#FF4D4F', icon: '🏙️' },
@@ -197,14 +195,14 @@ export const VISUALIZATION_DIMENSIONS: VisualizationDimension[] = [
     title: '就业市场深度分析',
     description: '深入分析就业市场的行业、薪资、求职等情况',
     icon: '💼',
-    socialImpact: '为求职者和企业提供市场参考',
+
     questions: [
       {
         questionId: 'work-industry',
         questionTitle: '行业就业分布',
         chartType: 'treemap',
         category: 'employment-market',
-        socialValue: '识别热门就业领域和行业趋势',
+
         description: '显示不同行业的就业人数分布',
         options: [
           { value: 'internet-tech', label: '互联网/科技', color: '#4D96FF', icon: '💻' },
@@ -228,7 +226,7 @@ export const VISUALIZATION_DIMENSIONS: VisualizationDimension[] = [
         questionTitle: '薪资水平分布',
         chartType: 'bar',
         category: 'employment-market',
-        socialValue: '提供同行业同背景薪酬参考',
+
         description: '显示当前就业人员的月薪分布情况',
         options: [
           { value: 'below-3k', label: '3000元以下', color: '#FF4D4F', icon: '💸' },
@@ -246,7 +244,7 @@ export const VISUALIZATION_DIMENSIONS: VisualizationDimension[] = [
         questionTitle: '求职时长分析',
         chartType: 'bar',
         category: 'employment-market',
-        socialValue: '反映就业市场的竞争激烈程度',
+
         description: '显示求职者的求职时间分布',
         options: [
           { value: 'less-1month', label: '不到1个月', color: '#52C41A', icon: '⚡' },
@@ -262,7 +260,7 @@ export const VISUALIZATION_DIMENSIONS: VisualizationDimension[] = [
         questionTitle: '求职困难分析',
         chartType: 'bar',
         category: 'employment-market',
-        socialValue: '识别求职过程中的主要障碍',
+
         description: '统计求职者遇到的主要困难',
         options: [
           { value: 'lack-experience', label: '缺乏相关工作经验', color: '#FF4D4F', icon: '🔰' },
@@ -284,14 +282,14 @@ export const VISUALIZATION_DIMENSIONS: VisualizationDimension[] = [
     title: '学生就业准备',
     description: '分析在校学生的就业准备情况',
     icon: '🎓',
-    socialImpact: '为教育机构优化就业指导提供依据',
+
     questions: [
       {
         questionId: 'academic-year',
         questionTitle: '年级分布',
         chartType: 'bar',
         category: 'student-preparation',
-        socialValue: '了解不同年级学生的就业准备状况',
+
         description: '显示在校学生的年级分布',
         options: [
           { value: 'year-1', label: '一年级', color: '#FF9A8B', icon: '1️⃣' },
@@ -309,7 +307,7 @@ export const VISUALIZATION_DIMENSIONS: VisualizationDimension[] = [
         questionTitle: '就业准备情况',
         chartType: 'bar',
         category: 'student-preparation',
-        socialValue: '评估学生就业准备的充分程度',
+
         description: '统计学生为就业做的各种准备',
         options: [
           { value: 'internship', label: '参加实习', color: '#52C41A', icon: '💼' },
@@ -329,14 +327,14 @@ export const VISUALIZATION_DIMENSIONS: VisualizationDimension[] = [
     title: '生活成本与压力',
     description: '分析生活成本和经济压力状况',
     icon: '🏠',
-    socialImpact: '为城市规划和民生政策提供参考',
+
     questions: [
       {
         questionId: 'monthly-housing-cost',
         questionTitle: '住房成本分布',
         chartType: 'bar',
         category: 'living-costs',
-        socialValue: '反映住房成本对就业选择的影响',
+
         description: '统计每月住房支出情况',
         options: [
           { value: 'below-2k', label: '2000元以下', color: '#52C41A', icon: '🏡' },
@@ -352,7 +350,7 @@ export const VISUALIZATION_DIMENSIONS: VisualizationDimension[] = [
         questionTitle: '一线城市生活压力',
         chartType: 'bar',
         category: 'living-costs',
-        socialValue: '评估一线城市生活压力状况',
+
         description: '了解一线城市居民的生活压力感受',
         options: [
           { value: 'very-low', label: '压力很小', color: '#52C41A', icon: '😊' },
@@ -367,7 +365,7 @@ export const VISUALIZATION_DIMENSIONS: VisualizationDimension[] = [
         questionTitle: '经济压力状况',
         chartType: 'bar',
         category: 'living-costs',
-        socialValue: '反映失业期间的经济困难程度',
+
         description: '了解失业人员的经济压力情况',
         options: [
           { value: 'no-pressure', label: '没有经济压力', color: '#52C41A', icon: '💰' },
@@ -383,14 +381,14 @@ export const VISUALIZATION_DIMENSIONS: VisualizationDimension[] = [
     title: '政策建议洞察',
     description: '收集改善就业状况的政策建议',
     icon: '🏛️',
-    socialImpact: '为政府制定就业政策提供民意参考',
+
     questions: [
       {
         questionId: 'employment-advice',
         questionTitle: '改善建议统计',
         chartType: 'bar',
         category: 'policy-insights',
-        socialValue: '收集社会对就业政策的建议和期望',
+
         description: '统计民众认为最需要的就业改善措施',
         options: [
           { value: 'education-reform', label: '教育体系改革', color: '#4D96FF', icon: '🎓' },

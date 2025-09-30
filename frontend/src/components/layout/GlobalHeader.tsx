@@ -4,6 +4,7 @@ import { SettingOutlined, UserOutlined, LoginOutlined, LogoutOutlined } from '@a
 import { Link, useLocation } from 'react-router-dom';
 import { useUniversalAuthStore } from '../../stores/universalAuthStore';
 import { GoogleLoginButton } from '../auth/GoogleLoginButton';
+import { getUserDisplayName } from '../../utils/userDisplayUtils';
 import styles from './GlobalHeader.module.css';
 
 const { Title } = Typography;
@@ -108,7 +109,7 @@ export const GlobalHeader: React.FC = () => {
               <Button type="text" className={styles.userButton}>
                 <Space>
                   <Avatar size="small" icon={<UserOutlined />} />
-                  <span>{user.displayName || '匿名用户'}</span>
+                  <span>{getUserDisplayName(user)}</span>
                 </Space>
               </Button>
             </Dropdown>

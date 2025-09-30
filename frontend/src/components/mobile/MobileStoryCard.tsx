@@ -17,6 +17,7 @@ import {
   MoreOutlined
 } from '@ant-design/icons';
 import type { Story } from '../../types/story';
+import { getUserDisplayName } from '../../utils/userDisplayUtils';
 import styles from './MobileStoryCard.module.css';
 
 const { Text, Paragraph } = Typography;
@@ -129,7 +130,7 @@ export const MobileStoryCard: React.FC<MobileStoryCardProps> = ({
         
         <div className={styles.authorInfo}>
           <Text className={styles.authorName}>
-            {story.authorName || '匿名用户'}
+            {getUserDisplayName({ displayName: story.authorName })}
           </Text>
         </div>
       </div>

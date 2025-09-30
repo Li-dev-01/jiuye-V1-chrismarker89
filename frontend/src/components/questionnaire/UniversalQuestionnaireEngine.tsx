@@ -479,8 +479,6 @@ export const UniversalQuestionnaireEngine: React.FC<UniversalQuestionnaireEngine
                   questionNumber={index + 1}
                   refreshTrigger={statisticsRefreshTrigger}
                   onAuthSuccess={handleInlineAuthSuccess}
-                  autoScrollToNext={true}
-                  isLastQuestion={index === visibleQuestions.length - 1}
                 />
               </div>
             ))

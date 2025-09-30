@@ -140,6 +140,11 @@ const DashboardLayout: React.FC = () => {
               icon: <CrownOutlined />,
               label: '管理员管理',
             },
+            {
+              key: '/admin/security-switches',
+              icon: <SecurityScanOutlined />,
+              label: '安全开关',
+            },
           ],
         },
         // 🧪 权限测试

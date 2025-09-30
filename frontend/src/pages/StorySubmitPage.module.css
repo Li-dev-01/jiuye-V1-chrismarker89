@@ -260,3 +260,34 @@
 .clickableTag:hover::before {
   left: 100%;
 }
+
+/* 标签图标样式 */
+.tagIcon {
+  margin-right: 4px;
+}
+
+/* 内容检查提示样式 */
+.contentAlert {
+  margin-top: 8px;
+}
+
+.suggestionList {
+  margin-top: 8px;
+}
+
+/* 优化移动端标签和分类布局 */
+@media (max-width: 768px) {
+  .tagSection {
+    padding: 12px;
+  }
+
+  .categorySection {
+    margin-top: 8px;
+  }
+
+  .categoryTag {
+    margin-bottom: 6px;
+    font-size: 12px;
+    padding: 3px 10px;
+  }
+}

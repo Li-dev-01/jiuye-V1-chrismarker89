@@ -172,18 +172,7 @@ export function createVisualizationRoutes() {
     }
   });
 
-  /**
-   * 获取社会统计学洞察
-   */
-  app.get('/social-insights', async (c) => {
-    try {
-      const insights = await getSocialInsights(c.env.DB);
-      return c.json(insights);
-    } catch (error) {
-      console.error('Error fetching social insights:', error);
-      return c.json({ error: 'Failed to fetch social insights' }, 500);
-    }
-  });
+
 
   return app;
 }
@@ -345,16 +334,4 @@ async function getDataQualityReport(db: D1Database): Promise<any> {
   };
 }
 
-/**
- * 获取社会统计学洞察
- */
-async function getSocialInsights(db: D1Database): Promise<any> {
-  // 具体实现将在后续完成
-  return {
-    employmentTrends: [],
-    demographicInsights: [],
-    policyRecommendations: [],
-    marketAnalysis: [],
-    educationGaps: []
-  };
-}
+

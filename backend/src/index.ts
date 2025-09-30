@@ -35,6 +35,9 @@ import { createDatabaseFixRoutes } from './routes/database-fix';
 import { createUnifiedUserCreationRoutes } from './routes/unified-user-creation';
 // import { CronHandler, type CronEvent } from './handlers/cronHandler';
 import pngManagementRoutes from './routes/png-management-simple';
+import turnstileTestRoutes from './routes/test/turnstile';
+import simpleTestRoutes from './routes/test/simple';
+import favorites from './routes/favorites';
 
 // 创建Hono应用
 const app = new Hono<{ Bindings: Env }>();
@@ -212,6 +215,9 @@ api.route('/admin', createAdminRoutes());
 // 故事路由
 api.route('/stories', createStoriesRoutes());
 
+// 收藏功能路由
+api.route('/favorites', favorites);
+
 // 违规内容管理路由
 api.route('/violations', violationsRoutes);
 
@@ -226,6 +232,10 @@ api.route('/admin/database', createDatabaseMonitorRoutes());
 
 // 健康检查路由（也在API前缀下提供）
 api.route('/health', health);
+
+// 测试路由
+api.route('/test/simple', simpleTestRoutes);
+api.route('/test/turnstile', turnstileTestRoutes);
 
 // API路由前缀
 app.route('/api', api);
@@ -252,9 +262,6 @@ app.onError((err, c) => {
     message: c.env?.ENVIRONMENT === 'development' ? err.message : '服务器内部错误'
   }, 500);
 });
-
-
-
 
 
 

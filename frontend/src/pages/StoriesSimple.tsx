@@ -5,6 +5,7 @@
 import React, { useState, useEffect } from 'react';
 import { Card, Typography, Spin, message } from 'antd';
 import { storyService } from '../services/storyService';
+import { getUserDisplayName } from '../utils/userDisplayUtils';
 import type { Story } from '../services/storyService';
 
 const { Title } = Typography;
@@ -60,7 +61,7 @@ const StoriesSimple: React.FC = () => {
             <Card key={story.id} style={{ marginBottom: '16px' }}>
               <Title level={4}>{story.title}</Title>
               <p>分类: {story.category}</p>
-              <p>作者: {story.authorName}</p>
+              <p>作者: {getUserDisplayName({ displayName: story.authorName })}</p>
               <p>内容: {story.content?.substring(0, 100)}...</p>
             </Card>
           ))}

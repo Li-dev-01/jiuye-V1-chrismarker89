@@ -20,6 +20,7 @@ import SuperAdminPanel from './pages/SuperAdminPanel';
 import SuperAdminSecurityConsole from './pages/SuperAdminSecurityConsole';
 import SuperAdminSystemLogs from './pages/SuperAdminSystemLogs';
 import SuperAdminSystemSettings from './pages/SuperAdminSystemSettings';
+import SuperAdminSecuritySwitches from './pages/SuperAdminSecuritySwitches';
 import ReviewHistory from './pages/ReviewHistory';
 import EnhancedReviewerDashboard from './pages/EnhancedReviewerDashboard';
 import EnhancedPendingReviews from './pages/EnhancedPendingReviews';
@@ -115,6 +116,11 @@ function App() {
               <Route path="super-admin-panel" element={
                 <SuperAdminOnlyGuard>
                   <SuperAdminPanel />
+                </SuperAdminOnlyGuard>
+              } />
+              <Route path="security-switches" element={
+                <SuperAdminOnlyGuard>
+                  <SuperAdminSecuritySwitches />
                 </SuperAdminOnlyGuard>
               } />
 

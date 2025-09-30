@@ -113,51 +113,25 @@
 /* 响应式设计 */
 @media (max-width: 768px) {
   .container {
-    margin: 0 16px;
+    margin: 0 12px;
   }
 
   .header {
-    padding: var(--spacing-md) var(--spacing-lg) var(--spacing-sm);
+    padding: var(--spacing-sm) var(--spacing-md) var(--spacing-xs);
   }
 
   .progressInfo {
     flex-direction: column;
-    gap: var(--spacing-sm);
+    gap: var(--spacing-xs);
     text-align: center;
   }
 
   .sectionCard {
-    padding: var(--spacing-lg);
-  }
-
-  .questionsContainer {
-    margin: var(--spacing-md) 0;
-  }
-
-  .questionWrapper {
-    margin-bottom: var(--spacing-md);
-  }
-}
-
-@media (max-width: 480px) {
-  .container {
-    margin: 0 8px;
-  }
-
-  .header {
-    padding: var(--spacing-sm) var(--spacing-md);
-  }
-
-  .title {
-    font-size: 20px !important;
-  }
-
-  .description {
-    font-size: 14px;
-  }
-
-  .sectionCard {
     padding: var(--spacing-md);
+  }
+
+  .sectionCard :global(.ant-card-body) {
+    padding: var(--spacing-md) var(--spacing-lg) var(--spacing-sm);
   }
 
   .questionsContainer {
@@ -166,5 +140,62 @@
 
   .questionWrapper {
     margin-bottom: var(--spacing-sm);
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    margin: 0 6px;
+  }
+
+  .header {
+    padding: var(--spacing-xs) var(--spacing-sm);
+  }
+
+  .title {
+    font-size: 18px !important;
+    margin-bottom: var(--spacing-xs) !important;
+  }
+
+  .description {
+    font-size: 13px;
+    margin-bottom: var(--spacing-xs);
+  }
+
+  .sectionCard {
+    padding: var(--spacing-sm);
+    border-radius: var(--border-radius-md);
+  }
+
+  .sectionCard :global(.ant-card-body) {
+    padding: var(--spacing-sm) var(--spacing-md) var(--spacing-xs);
+  }
+
+  .sectionTitle {
+    font-size: var(--font-size-lg) !important;
+    margin-bottom: var(--spacing-xs) !important;
+  }
+
+  .sectionDescription {
+    font-size: 12px;
+  }
+
+  .questionsContainer {
+    margin: var(--spacing-xs) 0;
+  }
+
+  .questionWrapper {
+    margin-bottom: var(--spacing-xs);
+  }
+
+  .navigation {
+    gap: var(--spacing-sm);
+    padding-top: var(--spacing-xs);
+  }
+
+  .navigation .ant-btn {
+    height: var(--button-height);
+    padding: 0 var(--spacing-md);
+    font-size: 14px;
   }
 }

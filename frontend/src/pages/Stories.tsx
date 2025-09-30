@@ -20,10 +20,10 @@ import { useAuth } from '../stores/universalAuthStore';
 import { UserType } from '../types/uuid-system';
 import { storyService } from '../services/storyService';
 import type { Story } from '../services/storyService';
-import { ManagementAdminService } from '../services/ManagementAdminService';
+
 import { UnifiedCard } from '../components/common/UnifiedCard';
 import type { UnifiedCardData } from '../components/common/UnifiedCard';
-import { favoriteService } from '../services/favoriteService';
+import { enhancedFavoriteService } from '../services/enhancedFavoriteService';
 import StoryStatsPanel from '../components/stories/StoryStatsPanel';
 import AdvancedFilter, { type FilterOptions } from '../components/stories/AdvancedFilter';
 import EnhancedSearch, { type SearchOptions } from '../components/stories/EnhancedSearch';
@@ -1065,12 +1065,12 @@ const Stories: React.FC = () => {
   };
 
   // 处理收藏
-  const handleFavorite = (story: Story) => {
+  const handleFavorite = async (story: Story) => {
     const isCurrentlyFavorited = favoriteStories.has(story.id);
 
     if (isCurrentlyFavorited) {
       // 取消收藏
-      const success = favoriteService.removeFromFavorites(story.id);
+      const success = await enhancedFavoriteService.removeFromFavorites(story.id);
       if (success) {
         setFavoriteStories(prev => {
           const newSet = new Set(prev);
@@ -1092,10 +1092,10 @@ const Stories: React.FC = () => {
         publishedAt: story.publishedAt || story.createdAt
       };
 
-      const success = favoriteService.addToFavorites(favoriteData);
+      const success = await enhancedFavoriteService.addToFavorites(favoriteData);
       if (success) {
         setFavoriteStories(prev => new Set([...prev, story.id]));
-        message.success('已添加到收藏');
+        message.success(isAuthenticated ? '已添加到收藏并同步到云端' : '已添加到本地收藏');
       } else {
         message.error('收藏失败');
       }
