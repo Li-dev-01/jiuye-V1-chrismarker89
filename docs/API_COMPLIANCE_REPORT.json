@@ -8,6 +8,12 @@
         "suggestion": "将 dashboard 改为复数形式"
       },
       {
+        "api": "/api/admin/debug/tables",
+        "type": "resource_naming",
+        "issue": "资源名称应使用复数形式: debug",
+        "suggestion": "将 debug 改为复数形式"
+      },
+      {
         "api": "/api/admin/users/:userId/status",
         "type": "naming_convention",
         "issue": "URL段应使用小写: :userId",
@@ -422,6 +428,204 @@
         "suggestion": "将 reviewer 改为复数形式"
       },
       {
+        "api": "/api/reviewer/dashboard",
+        "type": "resource_naming",
+        "issue": "资源名称应使用复数形式: reviewer",
+        "suggestion": "将 reviewer 改为复数形式"
+      },
+      {
+        "api": "/api/reviewer/dashboard",
+        "type": "resource_naming",
+        "issue": "资源名称应使用复数形式: dashboard",
+        "suggestion": "将 dashboard 改为复数形式"
+      },
+      {
+        "api": "/api/simple-auth/login",
+        "type": "resource_naming",
+        "issue": "资源名称应使用复数形式: simple-auth",
+        "suggestion": "将 simple-auth 改为复数形式"
+      },
+      {
+        "api": "/api/simple-auth/verify",
+        "type": "resource_naming",
+        "issue": "资源名称应使用复数形式: simple-auth",
+        "suggestion": "将 simple-auth 改为复数形式"
+      },
+      {
+        "api": "/api/simple-auth/verify",
+        "type": "resource_naming",
+        "issue": "资源名称应使用复数形式: verify",
+        "suggestion": "将 verify 改为复数形式"
+      },
+      {
+        "api": "/api/simple-auth/me",
+        "type": "resource_naming",
+        "issue": "资源名称应使用复数形式: simple-auth",
+        "suggestion": "将 simple-auth 改为复数形式"
+      },
+      {
+        "api": "/api/simple-auth/me",
+        "type": "resource_naming",
+        "issue": "资源名称应使用复数形式: me",
+        "suggestion": "将 me 改为复数形式"
+      },
+      {
+        "api": "/api/simple-admin/dashboard",
+        "type": "resource_naming",
+        "issue": "资源名称应使用复数形式: simple-admin",
+        "suggestion": "将 simple-admin 改为复数形式"
+      },
+      {
+        "api": "/api/simple-admin/dashboard",
+        "type": "resource_naming",
+        "issue": "资源名称应使用复数形式: dashboard",
+        "suggestion": "将 dashboard 改为复数形式"
+      },
+      {
+        "api": "/api/simple-admin/users",
+        "type": "resource_naming",
+        "issue": "资源名称应使用复数形式: simple-admin",
+        "suggestion": "将 simple-admin 改为复数形式"
+      },
+      {
+        "api": "/api/simple-admin/analytics",
+        "type": "resource_naming",
+        "issue": "资源名称应使用复数形式: simple-admin",
+        "suggestion": "将 simple-admin 改为复数形式"
+      },
+      {
+        "api": "/api/simple-admin/api/endpoints",
+        "type": "resource_naming",
+        "issue": "资源名称应使用复数形式: simple-admin",
+        "suggestion": "将 simple-admin 改为复数形式"
+      },
+      {
+        "api": "/api/simple-reviewer/dashboard",
+        "type": "resource_naming",
+        "issue": "资源名称应使用复数形式: simple-reviewer",
+        "suggestion": "将 simple-reviewer 改为复数形式"
+      },
+      {
+        "api": "/api/simple-reviewer/dashboard",
+        "type": "resource_naming",
+        "issue": "资源名称应使用复数形式: dashboard",
+        "suggestion": "将 dashboard 改为复数形式"
+      },
+      {
+        "api": "/api/simple-reviewer/pending-reviews",
+        "type": "resource_naming",
+        "issue": "资源名称应使用复数形式: simple-reviewer",
+        "suggestion": "将 simple-reviewer 改为复数形式"
+      },
+      {
+        "api": "/api/questionnaire/submit",
+        "type": "resource_naming",
+        "issue": "资源名称应使用复数形式: questionnaire",
+        "suggestion": "将 questionnaire 改为复数形式"
+      },
+      {
+        "api": "/api/questionnaire/submit",
+        "type": "resource_naming",
+        "issue": "资源名称应使用复数形式: submit",
+        "suggestion": "将 submit 改为复数形式"
+      },
+      {
+        "api": "/api/admin/dashboard/stats",
+        "type": "resource_naming",
+        "issue": "资源名称应使用复数形式: dashboard",
+        "suggestion": "将 dashboard 改为复数形式"
+      },
+      {
+        "api": "/api/admin/users/export",
+        "type": "resource_naming",
+        "issue": "资源名称应使用复数形式: export",
+        "suggestion": "将 export 改为复数形式"
+      },
+      {
+        "api": "/api/reviewer/content",
+        "type": "resource_naming",
+        "issue": "资源名称应使用复数形式: reviewer",
+        "suggestion": "将 reviewer 改为复数形式"
+      },
+      {
+        "api": "/api/reviewer/content",
+        "type": "resource_naming",
+        "issue": "资源名称应使用复数形式: content",
+        "suggestion": "将 content 改为复数形式"
+      },
+      {
+        "api": "/api/reviewer/audit/submit",
+        "type": "resource_naming",
+        "issue": "资源名称应使用复数形式: reviewer",
+        "suggestion": "将 reviewer 改为复数形式"
+      },
+      {
+        "api": "/api/reviewer/audit/submit",
+        "type": "resource_naming",
+        "issue": "资源名称应使用复数形式: audit",
+        "suggestion": "将 audit 改为复数形式"
+      },
+      {
+        "api": "/api/reviewer/audit/submit",
+        "type": "resource_naming",
+        "issue": "资源名称应使用复数形式: submit",
+        "suggestion": "将 submit 改为复数形式"
+      },
+      {
+        "api": "/api/questionnaire",
+        "type": "resource_naming",
+        "issue": "资源名称应使用复数形式: questionnaire",
+        "suggestion": "将 questionnaire 改为复数形式"
+      },
+      {
+        "api": "/api/questionnaire/:id",
+        "type": "resource_naming",
+        "issue": "资源名称应使用复数形式: questionnaire",
+        "suggestion": "将 questionnaire 改为复数形式"
+      },
+      {
+        "api": "/api/universal-questionnaire/submit",
+        "type": "resource_naming",
+        "issue": "资源名称应使用复数形式: universal-questionnaire",
+        "suggestion": "将 universal-questionnaire 改为复数形式"
+      },
+      {
+        "api": "/api/universal-questionnaire/submit",
+        "type": "resource_naming",
+        "issue": "资源名称应使用复数形式: submit",
+        "suggestion": "将 submit 改为复数形式"
+      },
+      {
+        "api": "/api/universal-questionnaire/count",
+        "type": "resource_naming",
+        "issue": "资源名称应使用复数形式: universal-questionnaire",
+        "suggestion": "将 universal-questionnaire 改为复数形式"
+      },
+      {
+        "api": "/api/universal-questionnaire/count",
+        "type": "resource_naming",
+        "issue": "资源名称应使用复数形式: count",
+        "suggestion": "将 count 改为复数形式"
+      },
+      {
+        "api": "/api/analytics/distribution",
+        "type": "resource_naming",
+        "issue": "资源名称应使用复数形式: distribution",
+        "suggestion": "将 distribution 改为复数形式"
+      },
+      {
+        "api": "/api/heart-voices/submit",
+        "type": "resource_naming",
+        "issue": "资源名称应使用复数形式: submit",
+        "suggestion": "将 submit 改为复数形式"
+      },
+      {
+        "api": "/api/errors/report",
+        "type": "resource_naming",
+        "issue": "资源名称应使用复数形式: report",
+        "suggestion": "将 report 改为复数形式"
+      },
+      {
         "api": "/api/stories/featured",
         "type": "resource_naming",
         "issue": "资源名称应使用复数形式: featured",
@@ -806,6 +1010,54 @@
         "suggestion": "将 track 改为复数形式"
       },
       {
+        "api": "/api/uuid",
+        "type": "resource_naming",
+        "issue": "资源名称应使用复数形式: uuid",
+        "suggestion": "将 uuid 改为复数形式"
+      },
+      {
+        "api": "/api/user-creation",
+        "type": "resource_naming",
+        "issue": "资源名称应使用复数形式: user-creation",
+        "suggestion": "将 user-creation 改为复数形式"
+      },
+      {
+        "api": "/api/questionnaire",
+        "type": "resource_naming",
+        "issue": "资源名称应使用复数形式: questionnaire",
+        "suggestion": "将 questionnaire 改为复数形式"
+      },
+      {
+        "api": "/api/universal-questionnaire",
+        "type": "resource_naming",
+        "issue": "资源名称应使用复数形式: universal-questionnaire",
+        "suggestion": "将 universal-questionnaire 改为复数形式"
+      },
+      {
+        "api": "/api/questionnaire-auth",
+        "type": "resource_naming",
+        "issue": "资源名称应使用复数形式: questionnaire-auth",
+        "suggestion": "将 questionnaire-auth 改为复数形式"
+      },
+      {
+        "api": "/api/reviewer",
+        "type": "resource_naming",
+        "issue": "资源名称应使用复数形式: reviewer",
+        "suggestion": "将 reviewer 改为复数形式"
+      },
+      {
+        "api": "/api/tiered-audit",
+        "type": "resource_naming",
+        "issue": "资源名称应使用复数形式: tiered-audit",
+        "suggestion": "将 tiered-audit 改为复数形式"
+      },
+      {
+        "api": "/api/admin/database",
+        "type": "resource_naming",
+        "issue": "资源名称应使用复数形式: database",
+        "suggestion": "将 database 改为复数形式"
+      },
+      {
         "api": "/api/auth/google",
         "type": "resource_naming",
         "issue": "资源名称应使用复数形式: google",
@@ -866,6 +1118,24 @@
         "suggestion": "将 user-content-management 改为复数形式"
       },
       {
+        "api": "/api/simple-auth",
+        "type": "resource_naming",
+        "issue": "资源名称应使用复数形式: simple-auth",
+        "suggestion": "将 simple-auth 改为复数形式"
+      },
+      {
+        "api": "/api/simple-reviewer",
+        "type": "resource_naming",
+        "issue": "资源名称应使用复数形式: simple-reviewer",
+        "suggestion": "将 simple-reviewer 改为复数形式"
+      },
+      {
+        "api": "/api/simple-admin",
+        "type": "resource_naming",
+        "issue": "资源名称应使用复数形式: simple-admin",
+        "suggestion": "将 simple-admin 改为复数形式"
+      },
+      {
         "api": "/api/uuid",
         "type": "resource_naming",
         "issue": "资源名称应使用复数形式: uuid",
@@ -906,6 +1176,12 @@
         "type": "resource_naming",
         "issue": "资源名称应使用复数形式: data-generator",
         "suggestion": "将 data-generator 改为复数形式"
+      },
+      {
+        "api": "/api/questionnaire-auth",
+        "type": "resource_naming",
+        "issue": "资源名称应使用复数形式: questionnaire-auth",
+        "suggestion": "将 questionnaire-auth 改为复数形式"
       },
       {
         "api": "/api/admin/database",
@@ -1946,7 +2222,7 @@
         "suggestion": "将 uuid 改为复数形式"
       }
     ],
-    "score": 75.52870090634441
+    "score": 75.78534031413614
   },
   "naming": {
     "violations": [
@@ -1960,7 +2236,7 @@
         "suggestion": "统一使用kebab-case命名模式"
       }
     ],
-    "score": 37.06293706293706
+    "score": 38.666666666666664
   },
   "consistency": {
     "violations": [],
@@ -1970,15 +2246,15 @@
     "duplicates": [
       {
         "path": "/api/admin/dashboard/stats",
-        "count": 3,
+        "count": 4,
         "type": "duplicate_definition",
-        "description": "API路径重复定义3次"
+        "description": "API路径重复定义4次"
       },
       {
         "path": "/api/admin/questionnaires",
-        "count": 3,
+        "count": 4,
         "type": "duplicate_definition",
-        "description": "API路径重复定义3次"
+        "description": "API路径重复定义4次"
       },
       {
         "path": "/api/admin/users",
@@ -1991,6 +2267,12 @@
         "count": 3,
         "type": "duplicate_definition",
         "description": "API路径重复定义3次"
+      },
+      {
+        "path": "/api/admin/users/export",
+        "count": 2,
+        "type": "duplicate_definition",
+        "description": "API路径重复定义2次"
       },
       {
         "path": "/api/admin/reviewers",
@@ -2102,9 +2384,9 @@
       },
       {
         "path": "/api/questionnaire/:id",
-        "count": 2,
+        "count": 3,
         "type": "duplicate_definition",
-        "description": "API路径重复定义2次"
+        "description": "API路径重复定义3次"
       },
       {
         "path": "/api/reviewer/pending-reviews",
@@ -2123,6 +2405,48 @@
         "count": 3,
         "type": "duplicate_definition",
         "description": "API路径重复定义3次"
+      },
+      {
+        "path": "/api/health",
+        "count": 7,
+        "type": "duplicate_definition",
+        "description": "API路径重复定义7次"
+      },
+      {
+        "path": "/api/stories",
+        "count": 10,
+        "type": "duplicate_definition",
+        "description": "API路径重复定义10次"
+      },
+      {
+        "path": "/api/questionnaire",
+        "count": 4,
+        "type": "duplicate_definition",
+        "description": "API路径重复定义4次"
+      },
+      {
+        "path": "/api/analytics/basic-stats",
+        "count": 3,
+        "type": "duplicate_definition",
+        "description": "API路径重复定义3次"
+      },
+      {
+        "path": "/api/analytics/distribution",
+        "count": 3,
+        "type": "duplicate_definition",
+        "description": "API路径重复定义3次"
+      },
+      {
+        "path": "/api/heart-voices",
+        "count": 5,
+        "type": "duplicate_definition",
+        "description": "API路径重复定义5次"
+      },
+      {
+        "path": "/api/errors/report",
+        "count": 2,
+        "type": "duplicate_definition",
+        "description": "API路径重复定义2次"
       },
       {
         "path": "/api/stories/",
@@ -2161,12 +2485,6 @@
         "description": "API路径重复定义2次"
       },
       {
-        "path": "/api/health",
-        "count": 5,
-        "type": "duplicate_definition",
-        "description": "API路径重复定义5次"
-      },
-      {
         "path": "/api/v1",
         "count": 2,
         "type": "duplicate_definition",
@@ -2186,57 +2504,51 @@
       },
       {
         "path": "/api/auth",
-        "count": 2,
+        "count": 3,
         "type": "duplicate_definition",
-        "description": "API路径重复定义2次"
+        "description": "API路径重复定义3次"
       },
       {
         "path": "/api/uuid",
-        "count": 2,
+        "count": 3,
         "type": "duplicate_definition",
-        "description": "API路径重复定义2次"
-      },
-      {
-        "path": "/api/questionnaire",
-        "count": 2,
-        "type": "duplicate_definition",
-        "description": "API路径重复定义2次"
+        "description": "API路径重复定义3次"
       },
       {
         "path": "/api/universal-questionnaire",
-        "count": 2,
+        "count": 3,
         "type": "duplicate_definition",
-        "description": "API路径重复定义2次"
+        "description": "API路径重复定义3次"
       },
       {
         "path": "/api/analytics",
-        "count": 2,
+        "count": 3,
         "type": "duplicate_definition",
-        "description": "API路径重复定义2次"
+        "description": "API路径重复定义3次"
       },
       {
         "path": "/api/reviewer",
-        "count": 2,
+        "count": 3,
         "type": "duplicate_definition",
-        "description": "API路径重复定义2次"
+        "description": "API路径重复定义3次"
       },
       {
         "path": "/api/violations",
+        "count": 3,
+        "type": "duplicate_definition",
+        "description": "API路径重复定义3次"
+      },
+      {
+        "path": "/api/tiered-audit",
         "count": 2,
         "type": "duplicate_definition",
         "description": "API路径重复定义2次"
       },
       {
         "path": "/api/admin",
-        "count": 2,
+        "count": 3,
         "type": "duplicate_definition",
-        "description": "API路径重复定义2次"
-      },
-      {
-        "path": "/api/stories",
-        "count": 6,
-        "type": "duplicate_definition",
-        "description": "API路径重复定义6次"
+        "description": "API路径重复定义3次"
       },
       {
         "path": "/api/admin/data-generator",
@@ -2246,9 +2558,15 @@
       },
       {
         "path": "/api/participation-stats",
-        "count": 2,
+        "count": 3,
         "type": "duplicate_definition",
-        "description": "API路径重复定义2次"
+        "description": "API路径重复定义3次"
+      },
+      {
+        "path": "/api/questionnaire-auth",
+        "count": 3,
+        "type": "duplicate_definition",
+        "description": "API路径重复定义3次"
       },
       {
         "path": "/api/user-content-management",
@@ -2312,6 +2630,12 @@
       },
       {
         "path": "/api/images/auto-generate/batch-generate",
+        "count": 2,
+        "type": "duplicate_definition",
+        "description": "API路径重复定义2次"
+      },
+      {
+        "path": "/api/admin/database",
         "count": 2,
         "type": "duplicate_definition",
         "description": "API路径重复定义2次"
@@ -2431,12 +2755,6 @@
         "description": "API路径重复定义2次"
       },
       {
-        "path": "/api/heart-voices",
-        "count": 4,
-        "type": "duplicate_definition",
-        "description": "API路径重复定义4次"
-      },
-      {
         "path": "/api/heart-voices/<int:voice_id>",
         "count": 2,
         "type": "duplicate_definition",
@@ -2450,18 +2768,6 @@
       },
       {
         "path": "/api/heart-voices/<int:voice_id>/like",
-        "count": 2,
-        "type": "duplicate_definition",
-        "description": "API路径重复定义2次"
-      },
-      {
-        "path": "/api/analytics/basic-stats",
-        "count": 2,
-        "type": "duplicate_definition",
-        "description": "API路径重复定义2次"
-      },
-      {
-        "path": "/api/analytics/distribution",
         "count": 2,
         "type": "duplicate_definition",
         "description": "API路径重复定义2次"
@@ -3118,6 +3424,24 @@
       },
       {
         "api1": "/api/questionnaire/",
+        "api2": "/api/questionnaire/:id",
+        "similarity": 0.8636363636363636,
+        "suggestion": "考虑合并或重新设计这些相似的API"
+      },
+      {
+        "api1": "/api/questionnaire/",
+        "api2": "/api/questionnaire",
+        "similarity": 0.9473684210526315,
+        "suggestion": "考虑合并或重新设计这些相似的API"
+      },
+      {
+        "api1": "/api/questionnaire/",
+        "api2": "/api/questionnaire",
+        "similarity": 0.9473684210526315,
+        "suggestion": "考虑合并或重新设计这些相似的API"
+      },
+      {
+        "api1": "/api/questionnaire/",
         "api2": "/api/questionnaire",
         "similarity": 0.9473684210526315,
         "suggestion": "考虑合并或重新设计这些相似的API"
@@ -3142,6 +3466,24 @@
       },
       {
         "api1": "/api/questionnaire/",
+        "api2": "/api/questionnaire/:id",
+        "similarity": 0.8636363636363636,
+        "suggestion": "考虑合并或重新设计这些相似的API"
+      },
+      {
+        "api1": "/api/questionnaire/",
+        "api2": "/api/questionnaire",
+        "similarity": 0.9473684210526315,
+        "suggestion": "考虑合并或重新设计这些相似的API"
+      },
+      {
+        "api1": "/api/questionnaire/",
+        "api2": "/api/questionnaire",
+        "similarity": 0.9473684210526315,
+        "suggestion": "考虑合并或重新设计这些相似的API"
+      },
+      {
+        "api1": "/api/questionnaire/",
         "api2": "/api/questionnaire",
         "similarity": 0.9473684210526315,
         "suggestion": "考虑合并或重新设计这些相似的API"
@@ -3171,6 +3513,114 @@
         "suggestion": "考虑合并或重新设计这些相似的API"
       },
       {
+        "api1": "/api/questionnaire/:id",
+        "api2": "/api/questionnaire",
+        "similarity": 0.8181818181818182,
+        "suggestion": "考虑合并或重新设计这些相似的API"
+      },
+      {
+        "api1": "/api/questionnaire/:id",
+        "api2": "/api/questionnaire",
+        "similarity": 0.8181818181818182,
+        "suggestion": "考虑合并或重新设计这些相似的API"
+      },
+      {
+        "api1": "/api/questionnaire/:id",
+        "api2": "/api/questionnaire",
+        "similarity": 0.8181818181818182,
+        "suggestion": "考虑合并或重新设计这些相似的API"
+      },
+      {
+        "api1": "/api/questionnaire/:id",
+        "api2": "/api/questionnaire",
+        "similarity": 0.8181818181818182,
+        "suggestion": "考虑合并或重新设计这些相似的API"
+      },
+      {
+        "api1": "/api/reviewer/pending-reviews",
+        "api2": "/api/simple-reviewer/pending-reviews",
+        "similarity": 0.8055555555555556,
+        "suggestion": "考虑合并或重新设计这些相似的API"
+      },
+      {
+        "api1": "/api/simple-auth/me",
+        "api2": "/api/simple-auth",
+        "similarity": 0.8421052631578947,
+        "suggestion": "考虑合并或重新设计这些相似的API"
+      },
+      {
+        "api1": "/api/simple-reviewer/pending-reviews",
+        "api2": "/api/reviewer/pending-reviews",
+        "similarity": 0.8055555555555556,
+        "suggestion": "考虑合并或重新设计这些相似的API"
+      },
+      {
+        "api1": "/api/simple-reviewer/pending-reviews",
+        "api2": "/api/reviewer/pending-reviews",
+        "similarity": 0.8055555555555556,
+        "suggestion": "考虑合并或重新设计这些相似的API"
+      },
+      {
+        "api1": "/api/stories",
+        "api2": "/api/stories/",
+        "similarity": 0.9230769230769231,
+        "suggestion": "考虑合并或重新设计这些相似的API"
+      },
+      {
+        "api1": "/api/stories",
+        "api2": "/api/stories/",
+        "similarity": 0.9230769230769231,
+        "suggestion": "考虑合并或重新设计这些相似的API"
+      },
+      {
+        "api1": "/api/questionnaire",
+        "api2": "/api/questionnaire/:id",
+        "similarity": 0.8181818181818182,
+        "suggestion": "考虑合并或重新设计这些相似的API"
+      },
+      {
+        "api1": "/api/questionnaire/:id",
+        "api2": "/api/questionnaire",
+        "similarity": 0.8181818181818182,
+        "suggestion": "考虑合并或重新设计这些相似的API"
+      },
+      {
+        "api1": "/api/questionnaire/:id",
+        "api2": "/api/questionnaire",
+        "similarity": 0.8181818181818182,
+        "suggestion": "考虑合并或重新设计这些相似的API"
+      },
+      {
+        "api1": "/api/questionnaire/:id",
+        "api2": "/api/questionnaire",
+        "similarity": 0.8181818181818182,
+        "suggestion": "考虑合并或重新设计这些相似的API"
+      },
+      {
+        "api1": "/api/universal-questionnaire/submit",
+        "api2": "/api/universal-questionnaire/count",
+        "similarity": 0.8571428571428571,
+        "suggestion": "考虑合并或重新设计这些相似的API"
+      },
+      {
+        "api1": "/api/universal-questionnaire/count",
+        "api2": "/api/universal-questionnaire",
+        "similarity": 0.8235294117647058,
+        "suggestion": "考虑合并或重新设计这些相似的API"
+      },
+      {
+        "api1": "/api/universal-questionnaire/count",
+        "api2": "/api/universal-questionnaire",
+        "similarity": 0.8235294117647058,
+        "suggestion": "考虑合并或重新设计这些相似的API"
+      },
+      {
+        "api1": "/api/universal-questionnaire/count",
+        "api2": "/api/universal-questionnaire",
+        "similarity": 0.8235294117647058,
+        "suggestion": "考虑合并或重新设计这些相似的API"
+      },
+      {
         "api1": "/api/stories/",
         "api2": "/api/stories/:id",
         "similarity": 0.8125,
@@ -3180,6 +3630,24 @@
         "api1": "/api/stories/",
         "api2": "/api/stories/:id",
         "similarity": 0.8125,
+        "suggestion": "考虑合并或重新设计这些相似的API"
+      },
+      {
+        "api1": "/api/stories/",
+        "api2": "/api/stories",
+        "similarity": 0.9230769230769231,
+        "suggestion": "考虑合并或重新设计这些相似的API"
+      },
+      {
+        "api1": "/api/stories/",
+        "api2": "/api/stories",
+        "similarity": 0.9230769230769231,
+        "suggestion": "考虑合并或重新设计这些相似的API"
+      },
+      {
+        "api1": "/api/stories/",
+        "api2": "/api/stories",
+        "similarity": 0.9230769230769231,
         "suggestion": "考虑合并或重新设计这些相似的API"
       },
       {
@@ -3228,6 +3696,24 @@
         "api1": "/api/stories/",
         "api2": "/api/stories/:id",
         "similarity": 0.8125,
+        "suggestion": "考虑合并或重新设计这些相似的API"
+      },
+      {
+        "api1": "/api/stories/",
+        "api2": "/api/stories",
+        "similarity": 0.9230769230769231,
+        "suggestion": "考虑合并或重新设计这些相似的API"
+      },
+      {
+        "api1": "/api/stories/",
+        "api2": "/api/stories",
+        "similarity": 0.9230769230769231,
+        "suggestion": "考虑合并或重新设计这些相似的API"
+      },
+      {
+        "api1": "/api/stories/",
+        "api2": "/api/stories",
+        "similarity": 0.9230769230769231,
         "suggestion": "考虑合并或重新设计这些相似的API"
       },
       {
@@ -3333,6 +3819,12 @@
         "suggestion": "考虑合并或重新设计这些相似的API"
       },
       {
+        "api1": "/api/review",
+        "api2": "/api/reviewer",
+        "similarity": 0.8461538461538461,
+        "suggestion": "考虑合并或重新设计这些相似的API"
+      },
+      {
         "api1": "/api/*",
         "api2": "/api/",
         "similarity": 0.8333333333333334,
@@ -3360,6 +3852,12 @@
         "api1": "/api/v1/",
         "api2": "/api/v2/",
         "similarity": 0.875,
+        "suggestion": "考虑合并或重新设计这些相似的API"
+      },
+      {
+        "api1": "/api/reviewer",
+        "api2": "/api/review",
+        "similarity": 0.8461538461538461,
         "suggestion": "考虑合并或重新设计这些相似的API"
       },
       {
@@ -3501,7 +3999,7 @@
         "suggestion": "考虑合并或重新设计这些相似的API"
       }
     ],
-    "score": 22.9607250755287
+    "score": 23.56020942408377
   },
   "security": {
     "violations": [
@@ -3519,6 +4017,12 @@
       },
       {
         "api": "/api/admin/users",
+        "type": "admin_security",
+        "issue": "管理员API可能缺少认证检查",
+        "suggestion": "确保所有管理员API都有适当的认证和授权"
+      },
+      {
+        "api": "/api/admin/debug/tables",
         "type": "admin_security",
         "issue": "管理员API可能缺少认证检查",
         "suggestion": "确保所有管理员API都有适当的认证和授权"
@@ -3932,6 +4436,30 @@
         "suggestion": "确保对所有路径参数进行验证和清理"
       },
       {
+        "api": "/api/admin/dashboard/stats",
+        "type": "admin_security",
+        "issue": "管理员API可能缺少认证检查",
+        "suggestion": "确保所有管理员API都有适当的认证和授权"
+      },
+      {
+        "api": "/api/admin/questionnaires",
+        "type": "admin_security",
+        "issue": "管理员API可能缺少认证检查",
+        "suggestion": "确保所有管理员API都有适当的认证和授权"
+      },
+      {
+        "api": "/api/admin/users/export",
+        "type": "admin_security",
+        "issue": "管理员API可能缺少认证检查",
+        "suggestion": "确保所有管理员API都有适当的认证和授权"
+      },
+      {
+        "api": "/api/questionnaire/:id",
+        "type": "parameter_injection",
+        "issue": "路径参数可能存在注入风险",
+        "suggestion": "确保对所有路径参数进行验证和清理"
+      },
+      {
         "api": "/api/stories/test-tags/:storyId",
         "type": "parameter_injection",
         "issue": "路径参数可能存在注入风险",
@@ -4011,6 +4539,12 @@
       },
       {
         "api": "/api/admin/database-test",
+        "type": "admin_security",
+        "issue": "管理员API可能缺少认证检查",
+        "suggestion": "确保所有管理员API都有适当的认证和授权"
+      },
+      {
+        "api": "/api/admin/database",
         "type": "admin_security",
         "issue": "管理员API可能缺少认证检查",
         "suggestion": "确保所有管理员API都有适当的认证和授权"
@@ -4556,10 +5090,10 @@
         "suggestion": "确保对所有路径参数进行验证和清理"
       }
     ],
-    "score": 47.129909365558916
+    "score": 52.617801047120416
   },
   "overall": {
-    "score": 36.536454482073815,
+    "score": 38.1260034904014,
     "grade": "F"
   }
 }

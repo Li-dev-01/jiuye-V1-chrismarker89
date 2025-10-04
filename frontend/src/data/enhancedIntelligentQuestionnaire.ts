@@ -355,6 +355,85 @@ export const enhancedIntelligentQuestionnaire: UniversalQuestionnaire = {
             chartType: 'bar',
             showPercentage: true
           }
+        },
+        {
+          id: 'debt-situation',
+          type: 'checkbox',
+          title: '您目前有以下哪些负债或贷款？（可多选）',
+          description: '包括各种形式的借贷，这是了解经济压力的重要指标，完全匿名',
+          required: true,
+          options: [
+            { value: 'student-loan', label: '助学贷款（国家助学贷款、生源地贷款等）' },
+            { value: 'alipay-huabei', label: '支付宝花呗' },
+            { value: 'credit-card', label: '信用卡账单' },
+            { value: 'jd-baitiao', label: '京东白条' },
+            { value: 'wechat-pay-later', label: '微信分付' },
+            { value: 'consumer-loan', label: '其他消费贷款（借呗、微粒贷、360借条等）' },
+            { value: 'mortgage', label: '房贷' },
+            { value: 'car-loan', label: '车贷' },
+            { value: 'family-debt', label: '家庭债务（为家人借贷）' },
+            { value: 'business-loan', label: '创业/经营贷款' },
+            { value: 'private-loan', label: '民间借贷' },
+            { value: 'no-debt', label: '目前没有任何负债' }
+          ],
+          statistics: {
+            enabled: true,
+            chartType: 'bar',
+            showPercentage: true
+          },
+          metadata: {
+            sensitivityLevel: 'high',
+            privacyNote: '此信息仅用于统计分析，完全保密'
+          }
+        },
+        {
+          id: 'monthly-debt-burden',
+          type: 'radio',
+          title: '您每月需要偿还的各种贷款/账单总额大约是？',
+          description: '包括助学贷款、花呗、信用卡、白条等所有还款',
+          required: true,
+          options: [
+            { value: 'no-payment', label: '无需还款' },
+            { value: 'below-300', label: '300元以下' },
+            { value: '300-500', label: '300-500元' },
+            { value: '500-1000', label: '500-1000元' },
+            { value: '1000-2000', label: '1000-2000元' },
+            { value: '2000-3000', label: '2000-3000元' },
+            { value: '3000-5000', label: '3000-5000元' },
+            { value: 'above-5000', label: '5000元以上' }
+          ],
+          statistics: {
+            enabled: true,
+            chartType: 'bar',
+            showPercentage: true
+          },
+          metadata: {
+            sensitivityLevel: 'high',
+            privacyNote: '此信息仅用于统计分析，完全保密'
+          }
+        },
+        {
+          id: 'family-support',
+          type: 'radio',
+          title: '您目前的经济状况是？',
+          description: '请选择最符合您情况的选项',
+          required: true,
+          options: [
+            { value: 'fully-independent', label: '完全经济独立，无需家庭支持' },
+            { value: 'mostly-independent', label: '基本独立，偶尔需要家庭帮助' },
+            { value: 'partially-dependent', label: '部分依赖家庭支持（如住房、生活费等）' },
+            { value: 'mostly-dependent', label: '主要依靠家庭支持' },
+            { value: 'supporting-family', label: '我在经济上支持家庭' }
+          ],
+          statistics: {
+            enabled: true,
+            chartType: 'pie',
+            showPercentage: true
+          },
+          branchLogic: {
+            enabled: true,
+            affectedSections: ['economic-pressure-analysis', 'future-confidence']
+          }
         }
       ]
     },

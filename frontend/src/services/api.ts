@@ -2,6 +2,7 @@ import axios from 'axios';
 import type { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 import { ErrorHandler } from '../utils/errorHandler';
 import { apiVersionManager, type ApiVersion } from '../config/versionConfig';
+import { createApiTransformMiddleware, validateNamingConvention } from '../utils/apiTransform';
 
 // API响应类型
 interface ApiResponse<T = any> {
@@ -18,8 +19,9 @@ interface ApiResponse<T = any> {
   };
 }
 
-// API基础配置 - 修复为实际的后端服务端口
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://employment-survey-api-prod.chrismarker89.workers.dev';
+// API基础配置 - 开发环境使用本地端口，生产环境使用Workers URL
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ||
+  (import.meta.env.DEV ? 'http://localhost:53389' : 'https://employment-survey-api-prod.chrismarker89.workers.dev');
 
 // 创建axios实例
 const apiClient: AxiosInstance = axios.create({
@@ -30,9 +32,15 @@ const apiClient: AxiosInstance = axios.create({
   },
 });
 
+// 创建API转换中间件
+const transformMiddleware = createApiTransformMiddleware();
+
 // 请求拦截器
 apiClient.interceptors.request.use(
   (config) => {
+    // 应用命名转换中间件
+    config = transformMiddleware.request(config);
+
     // 添加认证token
     const token = localStorage.getItem('auth_token');
     if (token) {
@@ -53,6 +61,14 @@ apiClient.interceptors.request.use(
       config.url = fullUrl.replace(baseUrl, '');
     }
 
+    // 验证请求数据命名规范（开发环境）
+    if (import.meta.env.DEV && config.data) {
+      const validation = validateNamingConvention(config.data, 'snake_case');
+      if (!validation.isValid) {
+        console.warn('API请求数据命名规范违规:', validation.violations);
+      }
+    }
+
     return config;
   },
   (error) => {
@@ -63,6 +79,17 @@ apiClient.interceptors.request.use(
 // 响应拦截器
 apiClient.interceptors.response.use(
   (response: AxiosResponse<ApiResponse>) => {
+    // 应用命名转换中间件
+    response = transformMiddleware.response(response);
+
+    // 验证响应数据命名规范（开发环境）
+    if (import.meta.env.DEV && response.data) {
+      const validation = validateNamingConvention(response.data, 'camelCase');
+      if (!validation.isValid) {
+        console.warn('API响应数据命名规范违规:', validation.violations);
+      }
+    }
+
     // 检查版本弃用警告
     const deprecated = response.headers['x-api-deprecated'];
     const deprecationDate = response.headers['x-api-deprecation-date'];
@@ -88,6 +115,9 @@ apiClient.interceptors.response.use(
     return response;
   },
   (error) => {
+    // 应用错误转换中间件
+    error = transformMiddleware.error(error);
+
     // 处理版本不兼容错误
     if (error.response?.status === 400 && error.response?.data?.error?.code === 'UNSUPPORTED_VERSION') {
       console.error('API版本不支持:', error.response.data.error);

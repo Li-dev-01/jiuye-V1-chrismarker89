@@ -50,7 +50,12 @@ export const QuestionnaireLayout: React.FC<QuestionnaireLayoutProps> = ({ childr
     {
       key: '/questionnaire',
       icon: <FileTextOutlined />,
-      label: <Link to="/questionnaire">就业现状调查</Link>
+      label: <Link to="/questionnaire">问卷1</Link>
+    },
+    {
+      key: '/questionnaire-v2',
+      icon: <ExperimentOutlined />,
+      label: <Link to="/questionnaire-v2">问卷2</Link>
     },
     {
       key: '/analytics',

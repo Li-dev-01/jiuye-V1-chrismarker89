@@ -1,19 +1,27 @@
 /**
  * 统一问卷定义管理
- * 确保前后端使用相同的问卷配置
+ * 完全独立的问卷系统配置
  */
 
-import { enhancedIntelligentQuestionnaire } from '../data/enhancedIntelligentQuestionnaire';
+import { QUESTIONNAIRE_V1_REGISTRY } from '../data/questionnaire1/config';
+import { QUESTIONNAIRE_V2_REGISTRY } from '../data/questionnaire2/config';
+import { sampleUniversalQuestionnaire } from '../data/sampleUniversalQuestionnaire';
 import type { UniversalQuestionnaire } from '../types/universal-questionnaire';
 
-// 问卷定义注册表
+// 统一问卷定义注册表 - 合并独立的问卷系统
 export const QUESTIONNAIRE_REGISTRY: Record<string, UniversalQuestionnaire> = {
-  'employment-survey-2024': enhancedIntelligentQuestionnaire,
-  'enhanced-intelligent-employment-survey-2024': enhancedIntelligentQuestionnaire,
+  // 问卷1系统（传统问卷）
+  ...QUESTIONNAIRE_V1_REGISTRY,
+
+  // 问卷2系统（智能问卷）
+  ...QUESTIONNAIRE_V2_REGISTRY,
+
+  // 示例问卷
+  'sample-questionnaire': sampleUniversalQuestionnaire,
 };
 
 // 默认问卷ID
-export const DEFAULT_QUESTIONNAIRE_ID = 'employment-survey-2024';
+export const DEFAULT_QUESTIONNAIRE_ID = 'enhanced-intelligent-employment-survey-2024';
 
 // 问卷版本管理
 export interface QuestionnaireVersion {

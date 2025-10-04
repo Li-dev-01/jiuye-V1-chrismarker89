@@ -120,6 +120,11 @@ export interface QuestionnaireConfig {
   theme?: string;
   enableLazyLoading?: boolean;
   preloadNextSection?: boolean;
+
+  // 第二问卷特有配置
+  conversationalMode?: boolean;
+  animationEnabled?: boolean;
+  tagSelectorMode?: boolean;
   cacheStatistics?: boolean;
   enableConditionalLogic?: boolean;
   showConditionalHints?: boolean;

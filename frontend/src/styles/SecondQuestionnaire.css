@@ -1,0 +1,254 @@
+/* 第二问卷专用样式 */
+
+/* 确保动画在所有设备上都能正常工作 */
+.second-questionnaire-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f0f4ff 0%, #e6f0ff 50%, #f0e6ff 100%);
+}
+
+.second-questionnaire-container * {
+  animation-duration: 0.3s !important;
+  transition-duration: 0.3s !important;
+}
+
+/* 加载动画 */
+.second-questionnaire-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%);
+}
+
+/* 错误状态加载页面 */
+.second-questionnaire-loading.error {
+  background: linear-gradient(135deg, #fef2f2 0%, #fce7f3 100%);
+}
+
+.second-questionnaire-loading .ant-card {
+  max-width: 400px;
+  width: 90%;
+  text-align: center;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  border-radius: 12px;
+  border: none;
+}
+
+.second-questionnaire-loading .ant-spin {
+  color: #667eea;
+}
+
+.second-questionnaire-loading .ant-spin-dot-item {
+  background-color: #667eea;
+}
+
+/* 问卷内容区域 */
+.second-questionnaire-content {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 24px 16px;
+}
+
+
+
+/* 进度指示器 */
+.second-questionnaire-progress {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  border: 1px solid #e2e8f0;
+}
+
+.second-questionnaire-progress .ant-progress-line {
+  border-radius: 8px;
+}
+
+.second-questionnaire-progress .ant-progress-bg {
+  border-radius: 8px;
+}
+
+/* 问题卡片 */
+.second-questionnaire-question {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 24px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e2e8f0;
+  transition: all 0.3s ease;
+}
+
+.second-questionnaire-question:hover {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  transform: translateY(-2px);
+}
+
+/* 导航按钮 */
+.second-questionnaire-navigation {
+  background: white;
+  border-radius: 12px;
+  padding: 16px 20px;
+  margin-top: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  border: 1px solid #e2e8f0;
+}
+
+.second-questionnaire-navigation .ant-btn {
+  height: 40px;
+  border-radius: 8px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.second-questionnaire-navigation .ant-btn-primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+}
+
+.second-questionnaire-navigation .ant-btn-primary:hover {
+  background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+  transform: translateY(-1px);
+}
+
+.second-questionnaire-navigation .ant-btn-default {
+  background: white;
+  border-color: #d1d5db;
+  color: #374151;
+}
+
+.second-questionnaire-navigation .ant-btn-default:hover {
+  border-color: #9ca3af;
+  color: #1f2937;
+  background: #f9fafb;
+}
+
+/* 错误提示 */
+.second-questionnaire-error {
+  margin-top: 24px;
+}
+
+.second-questionnaire-error .ant-alert {
+  border-radius: 8px;
+  border: none;
+  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.15);
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .second-questionnaire-content {
+    padding: 16px 12px;
+  }
+  
+
+  
+  .second-questionnaire-progress {
+    padding: 16px;
+    margin-bottom: 16px;
+  }
+  
+  .second-questionnaire-question {
+    padding: 20px;
+    margin-bottom: 16px;
+  }
+  
+  .second-questionnaire-navigation {
+    padding: 12px 16px;
+    margin-top: 16px;
+  }
+  
+  .second-questionnaire-navigation .ant-btn {
+    height: 44px; /* 更大的触摸目标 */
+    font-size: 16px;
+  }
+}
+
+/* 动画类 */
+.second-questionnaire-fade-in {
+  animation: secondQuestionnaireFadeIn 0.5s ease-out;
+}
+
+@keyframes secondQuestionnaireFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.second-questionnaire-slide-in {
+  animation: secondQuestionnaireSlideIn 0.3s ease-out;
+}
+
+@keyframes secondQuestionnaireSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.second-questionnaire-slide-out {
+  animation: secondQuestionnaireSlideOut 0.3s ease-out;
+}
+
+@keyframes secondQuestionnaireSlideOut {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+}
+
+/* 确保在所有情况下都显示动画 */
+@media (prefers-reduced-motion: no-preference) {
+  .second-questionnaire-container * {
+    animation-duration: 0.3s !important;
+    transition-duration: 0.3s !important;
+  }
+}
+
+/* 高对比度模式支持 */
+@media (prefers-contrast: high) {
+  .second-questionnaire-question {
+    border: 2px solid #000;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  }
+  
+  .second-questionnaire-progress {
+    border: 2px solid #000;
+  }
+  
+  .second-questionnaire-navigation {
+    border: 2px solid #000;
+  }
+}
+
+/* 暗色主题支持 */
+@media (prefers-color-scheme: dark) {
+  .second-questionnaire-container {
+    background: linear-gradient(135deg, #1a202c 0%, #2d3748 50%, #4a5568 100%);
+  }
+  
+  .second-questionnaire-question,
+  .second-questionnaire-progress,
+  .second-questionnaire-navigation {
+    background: #2d3748;
+    border-color: #4a5568;
+    color: #e2e8f0;
+  }
+  
+
+}

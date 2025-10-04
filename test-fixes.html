@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>验证修复效果</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 20px;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+        }
+        .test-section h3 {
+            margin-top: 0;
+            color: #1890ff;
+        }
+        .button {
+            background: #1890ff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .button:hover {
+            background: #40a9ff;
+        }
+        .success {
+            color: #52c41a;
+            font-weight: bold;
+        }
+        .error {
+            color: #ff4d4f;
+            font-weight: bold;
+        }
+        .info {
+            color: #1890ff;
+        }
+        .checklist {
+            list-style-type: none;
+            padding: 0;
+        }
+        .checklist li {
+            padding: 8px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .checklist li:before {
+            content: "☐ ";
+            margin-right: 8px;
+        }
+        .checklist li.checked:before {
+            content: "✅ ";
+        }
+        .output {
+            background: #f6f6f6;
+            border: 1px solid #d9d9d9;
+            border-radius: 4px;
+            padding: 15px;
+            margin: 15px 0;
+            font-family: monospace;
+            white-space: pre-wrap;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 第二问卷修复验证</h1>
+        
+        <div class="test-section">
+            <h3>🎯 修复内容</h3>
+            <ul>
+                <li><strong>修复1</strong>：移除最后的"提交方式选择"，直接触发防刷验证</li>
+                <li><strong>修复2</strong>：修复多选题选择一个选项后自动跳转的问题</li>
+            </ul>
+        </div>
+
+        <div class="test-section">
+            <h3>🧪 测试步骤</h3>
+            <button class="button" onclick="openQuestionnaire()">1. 打开问卷页面</button>
+            <button class="button" onclick="startTest()">2. 开始验证测试</button>
+            
+            <div id="output" class="output">点击按钮开始测试...</div>
+        </div>
+
+        <div class="test-section">
+            <h3>📋 手动验证清单</h3>
+            <ul class="checklist" id="checklist">
+                <li id="check1">单选题：选择选项后自动跳转到下一题</li>
+                <li id="check2">多选题：选择选项后不自动跳转，显示"下一题"按钮</li>
+                <li id="check3">多选题：可以选择多个选项</li>
+                <li id="check4">多选题：点击"下一题"按钮才跳转</li>
+                <li id="check5">最后一题：完成后直接显示防刷验证弹窗</li>
+                <li id="check6">防刷验证：不显示"提交方式选择"页面</li>
+                <li id="check7">防刷验证：选择正确数字后成功提交</li>
+            </ul>
+            
+            <div style="margin-top: 20px;">
+                <button class="button" onclick="markChecked('check1')">✓ 单选题测试通过</button>
+                <button class="button" onclick="markChecked('check2')">✓ 多选题不自动跳转</button>
+                <button class="button" onclick="markChecked('check3')">✓ 多选题可多选</button>
+                <button class="button" onclick="markChecked('check4')">✓ 多选题手动跳转</button>
+                <button class="button" onclick="markChecked('check5')">✓ 直接显示防刷验证</button>
+                <button class="button" onclick="markChecked('check6')">✓ 无提交方式选择</button>
+                <button class="button" onclick="markChecked('check7')">✓ 防刷验证成功</button>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h3>🔍 详细测试指南</h3>
+            <div>
+                <h4>测试多选题行为：</h4>
+                <ol>
+                    <li>找到一个多选题（checkbox类型）</li>
+                    <li>点击第一个选项，观察是否自动跳转（应该不跳转）</li>
+                    <li>再点击第二个选项，确认可以多选</li>
+                    <li>点击"下一题"按钮，确认可以手动跳转</li>
+                </ol>
+                
+                <h4>测试防刷验证：</h4>
+                <ol>
+                    <li>完成所有问题直到最后一题</li>
+                    <li>回答最后一题后，应该直接弹出防刷验证窗口</li>
+                    <li>不应该显示"您希望如何提交这份问卷？"的页面</li>
+                    <li>在验证窗口中选择正确的数字</li>
+                    <li>验证成功后应该跳转到完成页面</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const output = document.getElementById('output');
+        
+        function log(message) {
+            const timestamp = new Date().toLocaleTimeString();
+            output.textContent += `[${timestamp}] ${message}\n`;
+            output.scrollTop = output.scrollHeight;
+        }
+
+        function openQuestionnaire() {
+            log('🔗 正在打开问卷页面...');
+            window.open('http://localhost:5175/questionnaire-v2/survey', '_blank');
+            log('✅ 问卷页面已在新窗口打开');
+            log('📋 请按照测试清单进行手动验证');
+        }
+
+        function startTest() {
+            log('🧪 开始自动验证测试...');
+            
+            // 检查前端服务
+            fetch('http://localhost:5175/questionnaire-v2/survey')
+                .then(response => {
+                    if (response.ok) {
+                        log('✅ 前端服务正常');
+                        return response.text();
+                    } else {
+                        throw new Error(`HTTP ${response.status}`);
+                    }
+                })
+                .then(html => {
+                    if (html.includes('questionnaire') || html.includes('问卷')) {
+                        log('✅ 问卷页面内容正常');
+                    } else {
+                        log('❌ 问卷页面内容异常');
+                    }
+                })
+                .catch(error => {
+                    log(`❌ 前端服务连接失败: ${error.message}`);
+                });
+
+            // 检查后端API
+            fetch('http://localhost:53389/api/universal-questionnaire/submit', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    questionnaireId: 'employment-survey-2024',
+                    sectionResponses: [{
+                        sectionId: 'test',
+                        questionResponses: [{ questionId: 'test', value: 'test' }]
+                    }],
+                    metadata: {
+                        participantGroup: 'test',
+                        startedAt: new Date().toISOString(),
+                        responseTimeSeconds: 1,
+                        userAgent: 'Test'
+                    }
+                })
+            })
+            .then(response => response.json())
+            .then(result => {
+                if (result.success) {
+                    log('✅ 后端API正常');
+                } else {
+                    log(`❌ 后端API错误: ${result.message}`);
+                }
+            })
+            .catch(error => {
+                log(`❌ 后端API连接失败: ${error.message}`);
+            });
+
+            log('🏁 自动测试完成，请继续手动验证');
+        }
+
+        function markChecked(checkId) {
+            const item = document.getElementById(checkId);
+            if (item) {
+                item.classList.add('checked');
+                log(`✅ 标记完成: ${item.textContent}`);
+            }
+        }
+
+        // 页面加载时初始化
+        window.onload = function() {
+            log('🎯 修复验证页面已加载');
+            log('📋 请按照步骤进行验证');
+            log('');
+        };
+    </script>
+</body>
+</html>

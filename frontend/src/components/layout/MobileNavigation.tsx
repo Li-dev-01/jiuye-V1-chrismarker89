@@ -22,7 +22,8 @@ import {
   BookOutlined,
   MessageOutlined,
   UserOutlined,
-  CloseOutlined
+  CloseOutlined,
+  ExperimentOutlined
 } from '@ant-design/icons';
 import { useUniversalAuthStore } from '../../stores/universalAuthStore';
 import { getUserDisplayName } from '../../utils/userDisplayUtils';
@@ -78,6 +79,12 @@ export const MobileNavigation: React.FC<MobileNavigationProps> = ({ role }) => {
   // 侧边菜单项
   const getDrawerMenuItems = () => {
     const baseItems = [
+      {
+        key: 'questionnaire-v2',
+        icon: <ExperimentOutlined />,
+        label: '问卷2',
+        path: '/questionnaire-v2'
+      },
       {
         key: 'results',
         icon: <BarChartOutlined />,

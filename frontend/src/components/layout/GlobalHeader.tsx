@@ -18,6 +18,7 @@ export const GlobalHeader: React.FC = () => {
   const getSelectedKey = () => {
     const path = location.pathname;
     if (path === '/') return 'home';
+    if (path.startsWith('/questionnaire-v2')) return 'survey-v2';
     if (path.startsWith('/questionnaire')) return 'survey';
     if (path.startsWith('/analytics')) return 'analysis';
     if (path.startsWith('/results')) return 'results';
@@ -40,6 +41,29 @@ export const GlobalHeader: React.FC = () => {
       label: <Link to="/questionnaire" style={{ color: 'inherit', textDecoration: 'none' }}>问卷调查</Link>
     },
     {
+      key: 'survey-v2',
+      label: (
+        <div style={{ color: 'inherit', textDecoration: 'none' }}>
+          问卷2
+          <div style={{ fontSize: '10px', color: '#1890ff', marginTop: '-2px' }}>智能版</div>
+        </div>
+      ),
+      children: [
+        {
+          key: 'survey-v2-home',
+          label: <Link to="/questionnaire-v2" style={{ color: 'inherit', textDecoration: 'none' }}>首页</Link>
+        },
+        {
+          key: 'survey-v2-survey',
+          label: <Link to="/questionnaire-v2/survey" style={{ color: 'inherit', textDecoration: 'none' }}>问卷页面</Link>
+        },
+        {
+          key: 'survey-v2-analytics',
+          label: <Link to="/questionnaire-v2/analytics" style={{ color: 'inherit', textDecoration: 'none' }}>可视化</Link>
+        }
+      ]
+    },
+    {
       key: 'analysis',
       label: <Link to="/analytics" style={{ color: 'inherit', textDecoration: 'none' }}>数据可视化</Link>
     },
@@ -54,13 +78,7 @@ export const GlobalHeader: React.FC = () => {
     {
       key: 'favorites',
       label: <Link to="/favorites" style={{ color: 'inherit', textDecoration: 'none' }}>我的收藏</Link>
-    },
-
-    {
-      key: 'test-item',
-      label: '测试菜单'
-    },
-
+    }
   ];
 
   // 简化版本，暂时移除动态菜单

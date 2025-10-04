@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>问卷2调试测试</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .section { margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 5px; }
+        .success { background-color: #d4edda; border-color: #c3e6cb; }
+        .error { background-color: #f8d7da; border-color: #f5c6cb; }
+        .info { background-color: #d1ecf1; border-color: #bee5eb; }
+        pre { background: #f8f9fa; padding: 10px; border-radius: 3px; overflow-x: auto; }
+        button { padding: 10px 20px; margin: 5px; background: #007bff; color: white; border: none; border-radius: 3px; cursor: pointer; }
+        button:hover { background: #0056b3; }
+    </style>
+</head>
+<body>
+    <h1>🔍 问卷2调试测试页面</h1>
+    
+    <div class="section info">
+        <h3>📋 测试说明</h3>
+        <p>这个页面用于测试问卷2的API连接和数据结构，验证修复效果。</p>
+        <p><strong>预期结果：</strong></p>
+        <ul>
+            <li>✅ 初始显示4个无条件章节（基本信息、当前状态、经济压力、就业信心）</li>
+            <li>✅ 总共8个问题立即可见</li>
+            <li>✅ 回答"全职工作"后显示第5个章节（收入状况），增加2个问题</li>
+            <li>✅ 最终总共10个问题</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h3>🔗 API连接测试</h3>
+        <button onclick="testAPI()">测试API连接</button>
+        <div id="api-result"></div>
+    </div>
+
+    <div class="section">
+        <h3>📊 章节结构分析</h3>
+        <button onclick="analyzeSections()">分析章节结构</button>
+        <div id="sections-result"></div>
+    </div>
+
+    <div class="section">
+        <h3>🔀 条件逻辑测试</h3>
+        <button onclick="testConditions()">测试条件逻辑</button>
+        <div id="conditions-result"></div>
+    </div>
+
+    <div class="section">
+        <h3>🚀 快速访问</h3>
+        <button onclick="openQuestionnaire()">打开问卷2</button>
+        <button onclick="openConsole()">查看浏览器控制台</button>
+    </div>
+
+    <script>
+        async function testAPI() {
+            const resultDiv = document.getElementById('api-result');
+            resultDiv.innerHTML = '<p>🔄 正在测试API连接...</p>';
+            
+            try {
+                const response = await fetch('http://localhost:8787/api/universal-questionnaire/questionnaires/questionnaire-v2-2024');
+                const data = await response.json();
+                
+                if (data.success) {
+                    resultDiv.innerHTML = `
+                        <div class="success">
+                            <h4>✅ API连接成功</h4>
+                            <p><strong>问卷标题：</strong>${data.data.title}</p>
+                            <p><strong>章节数量：</strong>${data.data.sections.length}</p>
+                            <p><strong>问卷ID：</strong>${data.data.id}</p>
+                        </div>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `<div class="error"><h4>❌ API返回错误</h4><pre>${JSON.stringify(data, null, 2)}</pre></div>`;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `<div class="error"><h4>❌ API连接失败</h4><p>${error.message}</p></div>`;
+            }
+        }
+
+        async function analyzeSections() {
+            const resultDiv = document.getElementById('sections-result');
+            resultDiv.innerHTML = '<p>🔄 正在分析章节结构...</p>';
+            
+            try {
+                const response = await fetch('http://localhost:8787/api/universal-questionnaire/questionnaires/questionnaire-v2-2024');
+                const data = await response.json();
+                
+                if (data.success) {
+                    const sections = data.data.sections;
+                    const unconditionalSections = sections.filter(s => !s.condition);
+                    const conditionalSections = sections.filter(s => s.condition);
+                    const totalQuestions = sections.reduce((sum, s) => sum + s.questions.length, 0);
+                    const initialQuestions = unconditionalSections.reduce((sum, s) => sum + s.questions.length, 0);
+                    
+                    resultDiv.innerHTML = `
+                        <div class="success">
+                            <h4>📊 章节结构分析</h4>
+                            <p><strong>总章节数：</strong>${sections.length}</p>
+                            <p><strong>无条件章节：</strong>${unconditionalSections.length} 个（立即显示）</p>
+                            <p><strong>条件章节：</strong>${conditionalSections.length} 个（需满足条件）</p>
+                            <p><strong>总问题数：</strong>${totalQuestions} 个</p>
+                            <p><strong>初始问题数：</strong>${initialQuestions} 个</p>
+                            
+                            <h5>🔍 无条件章节详情：</h5>
+                            <ul>
+                                ${unconditionalSections.map(s => `<li>${s.id}: ${s.title} (${s.questions.length}题)</li>`).join('')}
+                            </ul>
+                            
+                            <h5>🔀 条件章节详情：</h5>
+                            <ul>
+                                ${conditionalSections.map(s => `<li>${s.id}: ${s.title} (${s.questions.length}题) - 依赖: ${s.condition.dependsOn} = ${s.condition.value}</li>`).join('')}
+                            </ul>
+                        </div>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `<div class="error"><h4>❌ 数据获取失败</h4><pre>${JSON.stringify(data, null, 2)}</pre></div>`;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `<div class="error"><h4>❌ 分析失败</h4><p>${error.message}</p></div>`;
+            }
+        }
+
+        async function testConditions() {
+            const resultDiv = document.getElementById('conditions-result');
+            resultDiv.innerHTML = '<p>🔄 正在测试条件逻辑...</p>';
+            
+            try {
+                const response = await fetch('http://localhost:8787/api/universal-questionnaire/questionnaires/questionnaire-v2-2024');
+                const data = await response.json();
+                
+                if (data.success) {
+                    const sections = data.data.sections;
+                    const conditionalSection = sections.find(s => s.condition);
+                    
+                    if (conditionalSection) {
+                        const condition = conditionalSection.condition;
+                        const dependentSection = sections.find(s => s.id === condition.dependsOn);
+                        const dependentQuestion = dependentSection ? dependentSection.questions[0] : null;
+                        
+                        resultDiv.innerHTML = `
+                            <div class="info">
+                                <h4>🔀 条件逻辑分析</h4>
+                                <p><strong>条件章节：</strong>${conditionalSection.id} - ${conditionalSection.title}</p>
+                                <p><strong>依赖章节：</strong>${condition.dependsOn}</p>
+                                <p><strong>依赖问题：</strong>${dependentQuestion ? dependentQuestion.id : '未找到'}</p>
+                                <p><strong>触发条件：</strong>${condition.operator} "${condition.value}"</p>
+                                
+                                <h5>⚠️ 潜在问题检查：</h5>
+                                <ul>
+                                    <li>章节ID vs 问题ID: ${condition.dependsOn} vs ${dependentQuestion ? dependentQuestion.id : '未找到'}</li>
+                                    <li>ID匹配: ${condition.dependsOn === (dependentQuestion ? dependentQuestion.id : '') ? '✅ 匹配' : '❌ 不匹配 - 需要映射'}</li>
+                                </ul>
+                                
+                                <h5>🔧 修复状态：</h5>
+                                <p>前端代码已添加ID映射逻辑：current-status-v2 → current-status-question-v2</p>
+                            </div>
+                        `;
+                    } else {
+                        resultDiv.innerHTML = `<div class="info"><h4>ℹ️ 没有找到条件章节</h4></div>`;
+                    }
+                } else {
+                    resultDiv.innerHTML = `<div class="error"><h4>❌ 数据获取失败</h4><pre>${JSON.stringify(data, null, 2)}</pre></div>`;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `<div class="error"><h4>❌ 测试失败</h4><p>${error.message}</p></div>`;
+            }
+        }
+
+        function openQuestionnaire() {
+            window.open('http://localhost:5173/questionnaire-v2/survey', '_blank');
+        }
+
+        function openConsole() {
+            alert('请按 F12 或右键选择"检查元素"打开开发者工具，查看Console标签页的日志输出。');
+        }
+
+        // 页面加载时自动运行测试
+        window.onload = function() {
+            testAPI();
+        };
+    </script>
+</body>
+</html>

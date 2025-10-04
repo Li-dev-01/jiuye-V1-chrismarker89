@@ -234,7 +234,114 @@ export const enhancedIntelligentQuestionnaire: UniversalQuestionnaire = {
       ]
     },
 
-    // 第3部分：在职人员详细信息（条件显示）
+    // 第3部分：通用就业信心与经济压力评估（所有群体）
+    {
+      id: 'universal-employment-confidence',
+      title: '就业信心与经济压力',
+      description: '了解您对就业市场的感受和经济压力状况，这是重要的生活态度指标',
+      metadata: {
+        estimatedTime: 120,
+        cognitiveLoad: 'medium',
+        targetAudience: 'all-groups',
+        priority: 'high'
+      },
+      questions: [
+        {
+          id: 'employment-confidence-6months',
+          type: 'radio',
+          title: '您对未来6个月的就业前景信心如何？',
+          description: '无论您当前是学生、在职还是求职，都请根据您的真实感受选择',
+          required: true,
+          options: [
+            { value: 'very-confident', label: '非常有信心' },
+            { value: 'confident', label: '比较有信心' },
+            { value: 'neutral', label: '一般' },
+            { value: 'worried', label: '比较担心' },
+            { value: 'very-worried', label: '非常担心' }
+          ],
+          statistics: {
+            enabled: true,
+            chartType: 'bar',
+            showPercentage: true
+          }
+        },
+        {
+          id: 'employment-confidence-1year',
+          type: 'radio',
+          title: '您对未来1年的就业前景信心如何？',
+          description: '请根据您的实际感受选择',
+          required: true,
+          options: [
+            { value: 'very-confident', label: '非常有信心' },
+            { value: 'confident', label: '比较有信心' },
+            { value: 'neutral', label: '一般' },
+            { value: 'worried', label: '比较担心' },
+            { value: 'very-worried', label: '非常担心' }
+          ],
+          statistics: {
+            enabled: true,
+            chartType: 'bar',
+            showPercentage: true
+          }
+        },
+        {
+          id: 'economic-pressure-level',
+          type: 'radio',
+          title: '您目前感受到的经济压力程度是？',
+          description: '请根据您的真实感受选择',
+          required: true,
+          options: [
+            { value: 'no-pressure', label: '没有压力，经济状况良好' },
+            { value: 'mild-pressure', label: '轻微压力，基本能应对' },
+            { value: 'moderate-pressure', label: '中等压力，需要谨慎规划' },
+            { value: 'high-pressure', label: '较大压力，经常为钱发愁' },
+            { value: 'severe-pressure', label: '巨大压力，严重影响生活' }
+          ],
+          statistics: {
+            enabled: true,
+            chartType: 'bar',
+            showPercentage: true
+          },
+          branchLogic: {
+            enabled: true,
+            affectedSections: ['high-pressure-coping', 'economic-support-needs']
+          }
+        },
+        {
+          id: 'confidence-factors',
+          type: 'checkbox',
+          title: '影响您就业信心的主要因素有哪些？（可多选）',
+          description: '请选择对您信心影响最大的因素',
+          required: true,
+          config: {
+            maxSelections: 5
+          },
+          options: [
+            { value: 'economic-environment', label: '整体经济环境' },
+            { value: 'industry-prospects', label: '所在/目标行业前景' },
+            { value: 'personal-skills', label: '个人技能水平' },
+            { value: 'education-background', label: '教育背景' },
+            { value: 'work-experience', label: '工作经验' },
+            { value: 'age-factor', label: '年龄因素' },
+            { value: 'gender-factor', label: '性别因素' },
+            { value: 'location-factor', label: '地域因素' },
+            { value: 'family-support', label: '家庭支持' },
+            { value: 'social-network', label: '人脉关系' },
+            { value: 'policy-environment', label: '政策环境' },
+            { value: 'competition-intensity', label: '竞争激烈程度' },
+            { value: 'debt-burden', label: '债务负担' },
+            { value: 'living-costs', label: '生活成本压力' }
+          ],
+          statistics: {
+            enabled: true,
+            chartType: 'bar',
+            showPercentage: true
+          }
+        }
+      ]
+    },
+
+    // 第4部分：在职人员详细信息（条件显示）
     {
       id: 'employment-details',
       title: '工作情况',
@@ -299,6 +406,85 @@ export const enhancedIntelligentQuestionnaire: UniversalQuestionnaire = {
             chartType: 'bar',
             showPercentage: true
           }
+        },
+        {
+          id: 'debt-situation',
+          type: 'checkbox',
+          title: '您目前有以下哪些负债或贷款？（可多选）',
+          description: '包括各种形式的借贷，这是了解经济压力的重要指标，完全匿名',
+          required: true,
+          options: [
+            { value: 'student-loan', label: '助学贷款（国家助学贷款、生源地贷款等）' },
+            { value: 'alipay-huabei', label: '支付宝花呗' },
+            { value: 'credit-card', label: '信用卡账单' },
+            { value: 'jd-baitiao', label: '京东白条' },
+            { value: 'wechat-pay-later', label: '微信分付' },
+            { value: 'consumer-loan', label: '其他消费贷款（借呗、微粒贷、360借条等）' },
+            { value: 'mortgage', label: '房贷' },
+            { value: 'car-loan', label: '车贷' },
+            { value: 'family-debt', label: '家庭债务（为家人借贷）' },
+            { value: 'business-loan', label: '创业/经营贷款' },
+            { value: 'private-loan', label: '民间借贷' },
+            { value: 'no-debt', label: '目前没有任何负债' }
+          ],
+          statistics: {
+            enabled: true,
+            chartType: 'bar',
+            showPercentage: true
+          },
+          metadata: {
+            sensitivityLevel: 'high',
+            privacyNote: '此信息仅用于统计分析，完全保密'
+          }
+        },
+        {
+          id: 'monthly-debt-burden',
+          type: 'radio',
+          title: '您每月需要偿还的各种贷款/账单总额大约是？',
+          description: '包括助学贷款、花呗、信用卡、白条等所有还款',
+          required: true,
+          options: [
+            { value: 'no-payment', label: '无需还款' },
+            { value: 'below-300', label: '300元以下' },
+            { value: '300-500', label: '300-500元' },
+            { value: '500-1000', label: '500-1000元' },
+            { value: '1000-2000', label: '1000-2000元' },
+            { value: '2000-3000', label: '2000-3000元' },
+            { value: '3000-5000', label: '3000-5000元' },
+            { value: 'above-5000', label: '5000元以上' }
+          ],
+          statistics: {
+            enabled: true,
+            chartType: 'bar',
+            showPercentage: true
+          },
+          metadata: {
+            sensitivityLevel: 'high',
+            privacyNote: '此信息仅用于统计分析，完全保密'
+          }
+        },
+        {
+          id: 'family-support',
+          type: 'radio',
+          title: '您目前的经济状况是？',
+          description: '请选择最符合您情况的选项',
+          required: true,
+          options: [
+            { value: 'fully-independent', label: '完全经济独立，无需家庭支持' },
+            { value: 'mostly-independent', label: '基本独立，偶尔需要家庭帮助' },
+            { value: 'partially-dependent', label: '部分依赖家庭支持（如住房、生活费等）' },
+            { value: 'mostly-dependent', label: '主要依靠家庭支持' },
+            { value: 'supporting-family', label: '我在经济上支持家庭' }
+          ],
+          statistics: {
+            enabled: true,
+            chartType: 'pie',
+            showPercentage: true
+          },
+          branchLogic: {
+            enabled: true,
+            affectedSections: ['economic-pressure-analysis', 'future-confidence']
+          }
         }
       ]
     },
@@ -360,6 +546,51 @@ export const enhancedIntelligentQuestionnaire: UniversalQuestionnaire = {
           config: {
             maxSelections: 5
           },
+          statistics: {
+            enabled: true,
+            chartType: 'bar',
+            showPercentage: true
+          }
+        },
+        {
+          id: 'student-economic-pressure',
+          type: 'radio',
+          title: '作为学生，您目前感受到的经济压力主要来自？',
+          description: '请选择给您带来最大压力的方面',
+          required: true,
+          options: [
+            { value: 'tuition-fees', label: '学费压力' },
+            { value: 'living-expenses', label: '生活费不够' },
+            { value: 'loan-repayment-worry', label: '担心毕业后还贷' },
+            { value: 'consumer-debt', label: '花呗/信用卡还款压力' },
+            { value: 'family-burden', label: '不想增加家庭负担' },
+            { value: 'future-employment', label: '担心毕业后找不到工作' },
+            { value: 'internship-costs', label: '实习/求职成本高' },
+            { value: 'no-pressure', label: '目前没有明显经济压力' }
+          ],
+          statistics: {
+            enabled: true,
+            chartType: 'bar',
+            showPercentage: true
+          }
+        },
+        {
+          id: 'student-income-sources',
+          type: 'checkbox',
+          title: '您目前的收入来源有哪些？（可多选）',
+          description: '了解学生的经济来源情况',
+          required: true,
+          options: [
+            { value: 'family-support', label: '家庭提供生活费' },
+            { value: 'scholarship', label: '奖学金/助学金' },
+            { value: 'part-time-job', label: '兼职工作' },
+            { value: 'internship-salary', label: '实习工资' },
+            { value: 'tutoring', label: '家教/培训' },
+            { value: 'online-work', label: '网络兼职（代写、设计等）' },
+            { value: 'student-loan', label: '助学贷款' },
+            { value: 'savings', label: '个人储蓄' },
+            { value: 'other', label: '其他收入' }
+          ],
           statistics: {
             enabled: true,
             chartType: 'bar',
@@ -536,6 +767,62 @@ export const enhancedIntelligentQuestionnaire: UniversalQuestionnaire = {
             sensitivityLevel: 'high',
             privacyNote: '此信息仅用于统计分析，完全保密'
           }
+        },
+        {
+          id: 'unemployment-financial-impact',
+          type: 'checkbox',
+          title: '失业对您造成了哪些经济影响？（可多选）',
+          description: '请选择您遇到的实际困难',
+          required: false,
+          options: [
+            { value: 'unable-pay-rent', label: '无法支付房租/房贷' },
+            { value: 'reduced-living-standard', label: '生活水平明显下降' },
+            { value: 'debt-accumulation', label: '债务增加' },
+            { value: 'family-burden', label: '增加家庭经济负担' },
+            { value: 'savings-depletion', label: '储蓄快速消耗' },
+            { value: 'social-isolation', label: '减少社交活动' },
+            { value: 'health-impact', label: '影响医疗保健支出' },
+            { value: 'education-impact', label: '影响学习/培训计划' },
+            { value: 'no-significant-impact', label: '暂时没有明显影响' }
+          ],
+          statistics: {
+            enabled: true,
+            chartType: 'bar',
+            showPercentage: true
+          },
+          metadata: {
+            sensitivityLevel: 'high',
+            privacyNote: '此信息仅用于统计分析，完全保密'
+          }
+        },
+        {
+          id: 'survival-strategies',
+          type: 'checkbox',
+          title: '为了维持生活，您采取了哪些措施？（可多选）',
+          description: '了解失业群体的应对策略',
+          required: false,
+          options: [
+            { value: 'family-support', label: '依靠家庭支持' },
+            { value: 'savings-use', label: '使用个人储蓄' },
+            { value: 'part-time-work', label: '做兼职/临时工' },
+            { value: 'freelance-work', label: '接零散工作/外包' },
+            { value: 'sell-assets', label: '出售个人物品/资产' },
+            { value: 'borrow-money', label: '向亲友借钱' },
+            { value: 'credit-card', label: '使用信用卡透支' },
+            { value: 'government-aid', label: '申请政府补助' },
+            { value: 'reduce-expenses', label: '大幅削减开支' },
+            { value: 'move-cheaper-place', label: '搬到更便宜的地方' },
+            { value: 'no-special-measures', label: '暂时不需要特别措施' }
+          ],
+          statistics: {
+            enabled: true,
+            chartType: 'bar',
+            showPercentage: true
+          },
+          metadata: {
+            sensitivityLevel: 'high',
+            privacyNote: '此信息仅用于统计分析，完全保密'
+          }
         }
       ]
     },
@@ -695,50 +982,213 @@ export const enhancedIntelligentQuestionnaire: UniversalQuestionnaire = {
       ]
     },
 
-    // 第10部分：提交方式选择（所有人）
+    // 第10部分：经济压力综合分析（条件显示：有经济压力的群体）
     {
-      id: 'submission-preference',
-      title: '提交方式',
-      description: '请选择您希望的提交方式，我们完全尊重您的隐私选择',
+      id: 'economic-pressure-analysis',
+      title: '经济压力分析',
+      description: '了解您的经济压力状况，为政策制定提供参考',
+      condition: {
+        dependsOn: 'family-support',
+        operator: 'in',
+        value: ['partially-dependent', 'mostly-dependent']
+      },
       metadata: {
-        estimatedTime: 30,
-        cognitiveLoad: 'low',
-        priority: 'medium'
+        estimatedTime: 90,
+        cognitiveLoad: 'medium',
+        targetAudience: 'economic-pressure-groups',
+        sensitivityLevel: 'high'
       },
       questions: [
         {
-          id: 'submission-type',
+          id: 'living-cost-pressure',
           type: 'radio',
-          title: '您希望如何提交这份问卷？',
-          description: '为了确保问卷数据的真实性和防止恶意提交，我们要求用户登录后提交问卷：\n• Google一键登录：使用Google账号快速登录\n• 自动登录：系统自动创建匿名账户，无需手动注册',
+          title: '您目前的生活成本压力主要来自？',
+          description: '请选择给您带来最大经济压力的方面',
           required: true,
           options: [
-            {
-              value: 'google-login',
-              label: 'Google一键登录',
-              description: '使用Google账号登录，快速安全，会获取您的邮箱地址用于身份验证'
-            },
-            {
-              value: 'auto-login',
-              label: '自动登录',
-              description: '系统自动创建匿名账户，通过简单验证后即可登录提交'
-            }
+            { value: 'housing', label: '住房费用（房租/房贷）' },
+            { value: 'daily-expenses', label: '日常生活开支' },
+            { value: 'debt-repayment', label: '债务还款' },
+            { value: 'family-support', label: '需要支持家庭' },
+            { value: 'education-cost', label: '教育/培训费用' },
+            { value: 'medical-cost', label: '医疗费用' },
+            { value: 'unemployment', label: '失业无收入' },
+            { value: 'low-income', label: '收入过低' }
           ],
           statistics: {
             enabled: true,
-            chartType: 'pie',
+            chartType: 'bar',
+            showPercentage: true
+          }
+        },
+        {
+          id: 'emergency-fund',
+          type: 'radio',
+          title: '如果失去收入来源，您的储蓄能维持多久？',
+          description: '请评估您的应急资金储备情况',
+          required: true,
+          options: [
+            { value: 'no-savings', label: '没有储蓄，立即面临困难' },
+            { value: 'less-1month', label: '不到1个月' },
+            { value: '1-3months', label: '1-3个月' },
+            { value: '3-6months', label: '3-6个月' },
+            { value: '6-12months', label: '6个月-1年' },
+            { value: 'over-1year', label: '1年以上' }
+          ],
+          statistics: {
+            enabled: true,
+            chartType: 'bar',
             showPercentage: true
           },
-          branchLogic: {
+          metadata: {
+            sensitivityLevel: 'high',
+            privacyNote: '此信息仅用于统计分析，完全保密'
+          }
+        },
+        {
+          id: 'side-income',
+          type: 'checkbox',
+          title: '除了主要收入来源，您还有以下哪些收入？（可多选）',
+          description: '了解多元化收入情况',
+          required: false,
+          options: [
+            { value: 'part-time-job', label: '兼职工作' },
+            { value: 'freelance', label: '自由职业/接单' },
+            { value: 'investment', label: '投资收益' },
+            { value: 'rental', label: '房租收入' },
+            { value: 'online-business', label: '网店/电商' },
+            { value: 'content-creation', label: '内容创作（自媒体等）' },
+            { value: 'tutoring', label: '家教/培训' },
+            { value: 'family-support', label: '家庭资助' },
+            { value: 'no-other-income', label: '没有其他收入' }
+          ],
+          statistics: {
             enabled: true,
-            affectedSections: [
-              'google-auth',
-              'auto-registration'
-            ]
+            chartType: 'bar',
+            showPercentage: true
           }
         }
       ]
-    }
+    },
+
+    // 第11部分：高经济压力应对策略（条件显示：高压力群体）
+    {
+      id: 'high-pressure-coping',
+      title: '经济压力应对策略',
+      description: '了解您在面对经济压力时的应对方式和需要的支持',
+      condition: {
+        dependsOn: 'economic-pressure-level',
+        operator: 'in',
+        value: ['high-pressure', 'severe-pressure']
+      },
+      metadata: {
+        estimatedTime: 90,
+        cognitiveLoad: 'medium',
+        targetAudience: 'high-pressure-groups',
+        sensitivityLevel: 'high'
+      },
+      questions: [
+        {
+          id: 'coping-strategies',
+          type: 'checkbox',
+          title: '面对经济压力，您采取了哪些应对措施？（可多选）',
+          description: '请选择您实际采取的措施',
+          required: true,
+          options: [
+            { value: 'reduce-expenses', label: '大幅削减日常开支' },
+            { value: 'increase-income', label: '寻找兼职或额外收入' },
+            { value: 'family-help', label: '寻求家庭经济支持' },
+            { value: 'friends-help', label: '向朋友借钱' },
+            { value: 'loan-more', label: '申请更多贷款' },
+            { value: 'sell-assets', label: '出售个人物品' },
+            { value: 'delay-payments', label: '延迟还款或分期' },
+            { value: 'move-cheaper', label: '搬到更便宜的地方' },
+            { value: 'skip-meals', label: '减少饮食开支' },
+            { value: 'mental-support', label: '寻求心理支持' },
+            { value: 'government-aid', label: '申请政府补助' },
+            { value: 'no-measures', label: '暂时没有采取特别措施' }
+          ],
+          statistics: {
+            enabled: true,
+            chartType: 'bar',
+            showPercentage: true
+          },
+          metadata: {
+            sensitivityLevel: 'high',
+            privacyNote: '此信息仅用于统计分析，完全保密'
+          }
+        },
+        {
+          id: 'employment-confidence-1year',
+          type: 'radio',
+          title: '您对未来1年的就业前景信心如何？',
+          description: '请根据您的实际感受选择',
+          required: true,
+          options: [
+            { value: 'very-confident', label: '非常有信心' },
+            { value: 'confident', label: '比较有信心' },
+            { value: 'neutral', label: '一般' },
+            { value: 'worried', label: '比较担心' },
+            { value: 'very-worried', label: '非常担心' }
+          ],
+          statistics: {
+            enabled: true,
+            chartType: 'bar',
+            showPercentage: true
+          }
+        },
+        {
+          id: 'employment-confidence-3years',
+          type: 'radio',
+          title: '您对未来3年的就业前景信心如何？',
+          description: '请根据您的实际感受选择',
+          required: true,
+          options: [
+            { value: 'very-confident', label: '非常有信心' },
+            { value: 'confident', label: '比较有信心' },
+            { value: 'neutral', label: '一般' },
+            { value: 'worried', label: '比较担心' },
+            { value: 'very-worried', label: '非常担心' }
+          ],
+          statistics: {
+            enabled: true,
+            chartType: 'bar',
+            showPercentage: true
+          }
+        },
+        {
+          id: 'confidence-factors',
+          type: 'checkbox',
+          title: '影响您就业信心的主要因素有哪些？（可多选）',
+          description: '请选择对您信心影响最大的因素',
+          required: true,
+          config: {
+            maxSelections: 5
+          },
+          options: [
+            { value: 'economic-environment', label: '整体经济环境' },
+            { value: 'industry-prospects', label: '所在行业前景' },
+            { value: 'personal-skills', label: '个人技能水平' },
+            { value: 'education-background', label: '教育背景' },
+            { value: 'work-experience', label: '工作经验' },
+            { value: 'age-factor', label: '年龄因素' },
+            { value: 'gender-factor', label: '性别因素' },
+            { value: 'location-factor', label: '地域因素' },
+            { value: 'family-support', label: '家庭支持' },
+            { value: 'social-network', label: '人脉关系' },
+            { value: 'policy-environment', label: '政策环境' },
+            { value: 'competition-intensity', label: '竞争激烈程度' }
+          ],
+          statistics: {
+            enabled: true,
+            chartType: 'bar',
+            showPercentage: true
+          }
+        }
+      ]
+    },
+
+
   ],
 
   // 升级版配置

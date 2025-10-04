@@ -87,11 +87,13 @@ body {
     transform: none;
   }
 
-  /* 移动端禁用动画，提升性能 */
-  * {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
+  /* 移动端动画优化 - 仅在低性能设备上禁用 */
+  @media (max-width: 480px) and (prefers-reduced-motion: reduce) {
+    * {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
   }
 
   /* 移动端按钮优化 */

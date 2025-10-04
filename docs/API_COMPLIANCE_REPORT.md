@@ -1,22 +1,25 @@
 # API规范性检查报告
 
-生成时间: 9/23/2025, 5:52:58 PM
+生成时间: 10/3/2025, 8:32:11 PM
 
 ## 总体评分
 
-**等级: F** (36.5分)
+**等级: F** (38.1分)
 
 ## 各项得分
 
-- **RESTful规范**: 75.5分
-- **命名一致性**: 37.1分
-- **冗余检查**: 23.0分
-- **安全性**: 47.1分
+- **RESTful规范**: 75.8分
+- **命名一致性**: 38.7分
+- **冗余检查**: 23.6分
+- **安全性**: 52.6分
 
-## RESTful规范违规 (324项)
+## RESTful规范违规 (370项)
 
 - **/api/admin/dashboard/stats**: 资源名称应使用复数形式: dashboard
   *建议: 将 dashboard 改为复数形式*
+
+- **/api/admin/debug/tables**: 资源名称应使用复数形式: debug
+  *建议: 将 debug 改为复数形式*
 
 - **/api/admin/users/:userId/status**: URL段应使用小写: :userId
   *建议: 将 :userId 改为小写*
@@ -225,6 +228,105 @@
 - **/api/reviewer/stats**: 资源名称应使用复数形式: reviewer
   *建议: 将 reviewer 改为复数形式*
 
+- **/api/reviewer/dashboard**: 资源名称应使用复数形式: reviewer
+  *建议: 将 reviewer 改为复数形式*
+
+- **/api/reviewer/dashboard**: 资源名称应使用复数形式: dashboard
+  *建议: 将 dashboard 改为复数形式*
+
+- **/api/simple-auth/login**: 资源名称应使用复数形式: simple-auth
+  *建议: 将 simple-auth 改为复数形式*
+
+- **/api/simple-auth/verify**: 资源名称应使用复数形式: simple-auth
+  *建议: 将 simple-auth 改为复数形式*
+
+- **/api/simple-auth/verify**: 资源名称应使用复数形式: verify
+  *建议: 将 verify 改为复数形式*
+
+- **/api/simple-auth/me**: 资源名称应使用复数形式: simple-auth
+  *建议: 将 simple-auth 改为复数形式*
+
+- **/api/simple-auth/me**: 资源名称应使用复数形式: me
+  *建议: 将 me 改为复数形式*
+
+- **/api/simple-admin/dashboard**: 资源名称应使用复数形式: simple-admin
+  *建议: 将 simple-admin 改为复数形式*
+
+- **/api/simple-admin/dashboard**: 资源名称应使用复数形式: dashboard
+  *建议: 将 dashboard 改为复数形式*
+
+- **/api/simple-admin/users**: 资源名称应使用复数形式: simple-admin
+  *建议: 将 simple-admin 改为复数形式*
+
+- **/api/simple-admin/analytics**: 资源名称应使用复数形式: simple-admin
+  *建议: 将 simple-admin 改为复数形式*
+
+- **/api/simple-admin/api/endpoints**: 资源名称应使用复数形式: simple-admin
+  *建议: 将 simple-admin 改为复数形式*
+
+- **/api/simple-reviewer/dashboard**: 资源名称应使用复数形式: simple-reviewer
+  *建议: 将 simple-reviewer 改为复数形式*
+
+- **/api/simple-reviewer/dashboard**: 资源名称应使用复数形式: dashboard
+  *建议: 将 dashboard 改为复数形式*
+
+- **/api/simple-reviewer/pending-reviews**: 资源名称应使用复数形式: simple-reviewer
+  *建议: 将 simple-reviewer 改为复数形式*
+
+- **/api/questionnaire/submit**: 资源名称应使用复数形式: questionnaire
+  *建议: 将 questionnaire 改为复数形式*
+
+- **/api/questionnaire/submit**: 资源名称应使用复数形式: submit
+  *建议: 将 submit 改为复数形式*
+
+- **/api/admin/dashboard/stats**: 资源名称应使用复数形式: dashboard
+  *建议: 将 dashboard 改为复数形式*
+
+- **/api/admin/users/export**: 资源名称应使用复数形式: export
+  *建议: 将 export 改为复数形式*
+
+- **/api/reviewer/content**: 资源名称应使用复数形式: reviewer
+  *建议: 将 reviewer 改为复数形式*
+
+- **/api/reviewer/content**: 资源名称应使用复数形式: content
+  *建议: 将 content 改为复数形式*
+
+- **/api/reviewer/audit/submit**: 资源名称应使用复数形式: reviewer
+  *建议: 将 reviewer 改为复数形式*
+
+- **/api/reviewer/audit/submit**: 资源名称应使用复数形式: audit
+  *建议: 将 audit 改为复数形式*
+
+- **/api/reviewer/audit/submit**: 资源名称应使用复数形式: submit
+  *建议: 将 submit 改为复数形式*
+
+- **/api/questionnaire**: 资源名称应使用复数形式: questionnaire
+  *建议: 将 questionnaire 改为复数形式*
+
+- **/api/questionnaire/:id**: 资源名称应使用复数形式: questionnaire
+  *建议: 将 questionnaire 改为复数形式*
+
+- **/api/universal-questionnaire/submit**: 资源名称应使用复数形式: universal-questionnaire
+  *建议: 将 universal-questionnaire 改为复数形式*
+
+- **/api/universal-questionnaire/submit**: 资源名称应使用复数形式: submit
+  *建议: 将 submit 改为复数形式*
+
+- **/api/universal-questionnaire/count**: 资源名称应使用复数形式: universal-questionnaire
+  *建议: 将 universal-questionnaire 改为复数形式*
+
+- **/api/universal-questionnaire/count**: 资源名称应使用复数形式: count
+  *建议: 将 count 改为复数形式*
+
+- **/api/analytics/distribution**: 资源名称应使用复数形式: distribution
+  *建议: 将 distribution 改为复数形式*
+
+- **/api/heart-voices/submit**: 资源名称应使用复数形式: submit
+  *建议: 将 submit 改为复数形式*
+
+- **/api/errors/report**: 资源名称应使用复数形式: report
+  *建议: 将 report 改为复数形式*
+
 - **/api/stories/featured**: 资源名称应使用复数形式: featured
   *建议: 将 featured 改为复数形式*
 
@@ -417,6 +519,30 @@
 - **/api/track**: 资源名称应使用复数形式: track
   *建议: 将 track 改为复数形式*
 
+- **/api/uuid**: 资源名称应使用复数形式: uuid
+  *建议: 将 uuid 改为复数形式*
+
+- **/api/user-creation**: 资源名称应使用复数形式: user-creation
+  *建议: 将 user-creation 改为复数形式*
+
+- **/api/questionnaire**: 资源名称应使用复数形式: questionnaire
+  *建议: 将 questionnaire 改为复数形式*
+
+- **/api/universal-questionnaire**: 资源名称应使用复数形式: universal-questionnaire
+  *建议: 将 universal-questionnaire 改为复数形式*
+
+- **/api/questionnaire-auth**: 资源名称应使用复数形式: questionnaire-auth
+  *建议: 将 questionnaire-auth 改为复数形式*
+
+- **/api/reviewer**: 资源名称应使用复数形式: reviewer
+  *建议: 将 reviewer 改为复数形式*
+
+- **/api/tiered-audit**: 资源名称应使用复数形式: tiered-audit
+  *建议: 将 tiered-audit 改为复数形式*
+
+- **/api/admin/database**: 资源名称应使用复数形式: database
+  *建议: 将 database 改为复数形式*
+
 - **/api/auth/google**: 资源名称应使用复数形式: google
   *建议: 将 google 改为复数形式*
 
@@ -447,6 +573,15 @@
 - **/api/user-content-management**: 资源名称应使用复数形式: user-content-management
   *建议: 将 user-content-management 改为复数形式*
 
+- **/api/simple-auth**: 资源名称应使用复数形式: simple-auth
+  *建议: 将 simple-auth 改为复数形式*
+
+- **/api/simple-reviewer**: 资源名称应使用复数形式: simple-reviewer
+  *建议: 将 simple-reviewer 改为复数形式*
+
+- **/api/simple-admin**: 资源名称应使用复数形式: simple-admin
+  *建议: 将 simple-admin 改为复数形式*
+
 - **/api/uuid**: 资源名称应使用复数形式: uuid
   *建议: 将 uuid 改为复数形式*
 
@@ -467,6 +602,9 @@
 
 - **/api/admin/data-generator**: 资源名称应使用复数形式: data-generator
   *建议: 将 data-generator 改为复数形式*
+
+- **/api/questionnaire-auth**: 资源名称应使用复数形式: questionnaire-auth
+  *建议: 将 questionnaire-auth 改为复数形式*
 
 - **/api/admin/database**: 资源名称应使用复数形式: database
   *建议: 将 database 改为复数形式*
@@ -994,11 +1132,12 @@
 
 ## 冗余和重复
 
-### 重复定义 (115项)
-- `/api/admin/dashboard/stats` - API路径重复定义3次
-- `/api/admin/questionnaires` - API路径重复定义3次
+### 重复定义 (120项)
+- `/api/admin/dashboard/stats` - API路径重复定义4次
+- `/api/admin/questionnaires` - API路径重复定义4次
 - `/api/admin/users` - API路径重复定义4次
 - `/api/admin/users/stats` - API路径重复定义3次
+- `/api/admin/users/export` - API路径重复定义2次
 - `/api/admin/reviewers` - API路径重复定义3次
 - `/api/admin/content/categories` - API路径重复定义6次
 - `/api/admin/content/tags` - API路径重复定义6次
@@ -1017,31 +1156,37 @@
 - `/api/admin/ip-access-control/rules` - API路径重复定义2次
 - `/api/admin/ip-access-control/rules/:ruleId` - API路径重复定义2次
 - `/api/questionnaire/` - API路径重复定义2次
-- `/api/questionnaire/:id` - API路径重复定义2次
+- `/api/questionnaire/:id` - API路径重复定义3次
 - `/api/reviewer/pending-reviews` - API路径重复定义3次
 - `/api/reviewer/submit-review` - API路径重复定义3次
 - `/api/reviewer/stats` - API路径重复定义3次
+- `/api/health` - API路径重复定义7次
+- `/api/stories` - API路径重复定义10次
+- `/api/questionnaire` - API路径重复定义4次
+- `/api/analytics/basic-stats` - API路径重复定义3次
+- `/api/analytics/distribution` - API路径重复定义3次
+- `/api/heart-voices` - API路径重复定义5次
+- `/api/errors/report` - API路径重复定义2次
 - `/api/stories/` - API路径重复定义2次
 - `/api/stories/featured` - API路径重复定义3次
 - `/api/stories/:id` - API路径重复定义2次
 - `/api/api-docs/swagger.json` - API路径重复定义2次
 - `/api/api-docs` - API路径重复定义2次
 - `/api/version` - API路径重复定义2次
-- `/api/health` - API路径重复定义5次
 - `/api/v1` - API路径重复定义2次
 - `/api/v2` - API路径重复定义2次
 - `/api/api` - API路径重复定义2次
-- `/api/auth` - API路径重复定义2次
-- `/api/uuid` - API路径重复定义2次
-- `/api/questionnaire` - API路径重复定义2次
-- `/api/universal-questionnaire` - API路径重复定义2次
-- `/api/analytics` - API路径重复定义2次
-- `/api/reviewer` - API路径重复定义2次
-- `/api/violations` - API路径重复定义2次
-- `/api/admin` - API路径重复定义2次
-- `/api/stories` - API路径重复定义6次
+- `/api/auth` - API路径重复定义3次
+- `/api/uuid` - API路径重复定义3次
+- `/api/universal-questionnaire` - API路径重复定义3次
+- `/api/analytics` - API路径重复定义3次
+- `/api/reviewer` - API路径重复定义3次
+- `/api/violations` - API路径重复定义3次
+- `/api/tiered-audit` - API路径重复定义2次
+- `/api/admin` - API路径重复定义3次
 - `/api/admin/data-generator` - API路径重复定义2次
-- `/api/participation-stats` - API路径重复定义2次
+- `/api/participation-stats` - API路径重复定义3次
+- `/api/questionnaire-auth` - API路径重复定义3次
 - `/api/user-content-management` - API路径重复定义2次
 - `/api/review` - API路径重复定义2次
 - `/api/security` - API路径重复定义2次
@@ -1053,6 +1198,7 @@
 - `/api/admin/intelligent-security` - API路径重复定义2次
 - `/api/images/auto-generate/stats` - API路径重复定义2次
 - `/api/images/auto-generate/batch-generate` - API路径重复定义2次
+- `/api/admin/database` - API路径重复定义2次
 - `/api/admin/questionnaires/<int:questionnaire_id>` - API路径重复定义2次
 - `/api/admin/audit-records` - API路径重复定义2次
 - `/api/admin/ai-sources` - API路径重复定义4次
@@ -1072,12 +1218,9 @@
 - `/api/audit/stats` - API路径重复定义2次
 - `/api/audit/history` - API路径重复定义2次
 - `/api/audit/test` - API路径重复定义2次
-- `/api/heart-voices` - API路径重复定义4次
 - `/api/heart-voices/<int:voice_id>` - API路径重复定义2次
 - `/api/heart-voices/user/<int:user_id>` - API路径重复定义2次
 - `/api/heart-voices/<int:voice_id>/like` - API路径重复定义2次
-- `/api/analytics/basic-stats` - API路径重复定义2次
-- `/api/analytics/distribution` - API路径重复定义2次
 - `/api/analytics/cross-analysis` - API路径重复定义2次
 - `/api/analytics/sync` - API路径重复定义2次
 - `/api/analytics/sync/status` - API路径重复定义2次
@@ -1111,7 +1254,7 @@
 - `/api/uuid/session/<session_id>` - API路径重复定义2次
 - `/api/uuid/users/statistics` - API路径重复定义2次
 
-### 相似API (140项)
+### 相似API (172项)
 - `/api/admin/users/stats` 与 `/api/admin/users/batch` 相似度: 81.8%
   *考虑合并或重新设计这些相似的API*
 
@@ -1340,6 +1483,15 @@
 - `/api/questionnaire/` 与 `/api/questionnaire` 相似度: 94.7%
   *考虑合并或重新设计这些相似的API*
 
+- `/api/questionnaire/` 与 `/api/questionnaire/:id` 相似度: 86.4%
+  *考虑合并或重新设计这些相似的API*
+
+- `/api/questionnaire/` 与 `/api/questionnaire` 相似度: 94.7%
+  *考虑合并或重新设计这些相似的API*
+
+- `/api/questionnaire/` 与 `/api/questionnaire` 相似度: 94.7%
+  *考虑合并或重新设计这些相似的API*
+
 - `/api/questionnaire/` 与 `/api/questionnaire` 相似度: 94.7%
   *考虑合并或重新设计这些相似的API*
 
@@ -1352,6 +1504,15 @@
 - `/api/questionnaire/` 与 `/api/questionnaire` 相似度: 94.7%
   *考虑合并或重新设计这些相似的API*
 
+- `/api/questionnaire/` 与 `/api/questionnaire/:id` 相似度: 86.4%
+  *考虑合并或重新设计这些相似的API*
+
+- `/api/questionnaire/` 与 `/api/questionnaire` 相似度: 94.7%
+  *考虑合并或重新设计这些相似的API*
+
+- `/api/questionnaire/` 与 `/api/questionnaire` 相似度: 94.7%
+  *考虑合并或重新设计这些相似的API*
+
 - `/api/questionnaire/` 与 `/api/questionnaire` 相似度: 94.7%
   *考虑合并或重新设计这些相似的API*
 
@@ -1367,10 +1528,73 @@
 - `/api/questionnaire/:id` 与 `/api/questionnaire` 相似度: 81.8%
   *考虑合并或重新设计这些相似的API*
 
+- `/api/questionnaire/:id` 与 `/api/questionnaire` 相似度: 81.8%
+  *考虑合并或重新设计这些相似的API*
+
+- `/api/questionnaire/:id` 与 `/api/questionnaire` 相似度: 81.8%
+  *考虑合并或重新设计这些相似的API*
+
+- `/api/questionnaire/:id` 与 `/api/questionnaire` 相似度: 81.8%
+  *考虑合并或重新设计这些相似的API*
+
+- `/api/questionnaire/:id` 与 `/api/questionnaire` 相似度: 81.8%
+  *考虑合并或重新设计这些相似的API*
+
+- `/api/reviewer/pending-reviews` 与 `/api/simple-reviewer/pending-reviews` 相似度: 80.6%
+  *考虑合并或重新设计这些相似的API*
+
+- `/api/simple-auth/me` 与 `/api/simple-auth` 相似度: 84.2%
+  *考虑合并或重新设计这些相似的API*
+
+- `/api/simple-reviewer/pending-reviews` 与 `/api/reviewer/pending-reviews` 相似度: 80.6%
+  *考虑合并或重新设计这些相似的API*
+
+- `/api/simple-reviewer/pending-reviews` 与 `/api/reviewer/pending-reviews` 相似度: 80.6%
+  *考虑合并或重新设计这些相似的API*
+
+- `/api/stories` 与 `/api/stories/` 相似度: 92.3%
+  *考虑合并或重新设计这些相似的API*
+
+- `/api/stories` 与 `/api/stories/` 相似度: 92.3%
+  *考虑合并或重新设计这些相似的API*
+
+- `/api/questionnaire` 与 `/api/questionnaire/:id` 相似度: 81.8%
+  *考虑合并或重新设计这些相似的API*
+
+- `/api/questionnaire/:id` 与 `/api/questionnaire` 相似度: 81.8%
+  *考虑合并或重新设计这些相似的API*
+
+- `/api/questionnaire/:id` 与 `/api/questionnaire` 相似度: 81.8%
+  *考虑合并或重新设计这些相似的API*
+
+- `/api/questionnaire/:id` 与 `/api/questionnaire` 相似度: 81.8%
+  *考虑合并或重新设计这些相似的API*
+
+- `/api/universal-questionnaire/submit` 与 `/api/universal-questionnaire/count` 相似度: 85.7%
+  *考虑合并或重新设计这些相似的API*
+
+- `/api/universal-questionnaire/count` 与 `/api/universal-questionnaire` 相似度: 82.4%
+  *考虑合并或重新设计这些相似的API*
+
+- `/api/universal-questionnaire/count` 与 `/api/universal-questionnaire` 相似度: 82.4%
+  *考虑合并或重新设计这些相似的API*
+
+- `/api/universal-questionnaire/count` 与 `/api/universal-questionnaire` 相似度: 82.4%
+  *考虑合并或重新设计这些相似的API*
+
 - `/api/stories/` 与 `/api/stories/:id` 相似度: 81.3%
   *考虑合并或重新设计这些相似的API*
 
 - `/api/stories/` 与 `/api/stories/:id` 相似度: 81.3%
+  *考虑合并或重新设计这些相似的API*
+
+- `/api/stories/` 与 `/api/stories` 相似度: 92.3%
+  *考虑合并或重新设计这些相似的API*
+
+- `/api/stories/` 与 `/api/stories` 相似度: 92.3%
+  *考虑合并或重新设计这些相似的API*
+
+- `/api/stories/` 与 `/api/stories` 相似度: 92.3%
   *考虑合并或重新设计这些相似的API*
 
 - `/api/stories/` 与 `/api/stories` 相似度: 92.3%
@@ -1395,6 +1619,15 @@
   *考虑合并或重新设计这些相似的API*
 
 - `/api/stories/` 与 `/api/stories/:id` 相似度: 81.3%
+  *考虑合并或重新设计这些相似的API*
+
+- `/api/stories/` 与 `/api/stories` 相似度: 92.3%
+  *考虑合并或重新设计这些相似的API*
+
+- `/api/stories/` 与 `/api/stories` 相似度: 92.3%
+  *考虑合并或重新设计这些相似的API*
+
+- `/api/stories/` 与 `/api/stories` 相似度: 92.3%
   *考虑合并或重新设计这些相似的API*
 
 - `/api/stories/` 与 `/api/stories` 相似度: 92.3%
@@ -1448,6 +1681,9 @@
 - `/api/review` 与 `/api/reviewer` 相似度: 84.6%
   *考虑合并或重新设计这些相似的API*
 
+- `/api/review` 与 `/api/reviewer` 相似度: 84.6%
+  *考虑合并或重新设计这些相似的API*
+
 - `/api/*` 与 `/api/` 相似度: 83.3%
   *考虑合并或重新设计这些相似的API*
 
@@ -1461,6 +1697,9 @@
   *考虑合并或重新设计这些相似的API*
 
 - `/api/v1/` 与 `/api/v2/` 相似度: 87.5%
+  *考虑合并或重新设计这些相似的API*
+
+- `/api/reviewer` 与 `/api/review` 相似度: 84.6%
   *考虑合并或重新设计这些相似的API*
 
 - `/api/review` 与 `/api/reviewer` 相似度: 84.6%
@@ -1532,7 +1771,7 @@
 - `/api/uuid/auth/semi-anonymous` 与 `/api/uuid/auth/anonymous` 相似度: 82.8%
   *考虑合并或重新设计这些相似的API*
 
-## 安全性问题 (175项)
+## 安全性问题 (181项)
 
 - **/api/admin/dashboard/stats**: 管理员API可能缺少认证检查
   *建议: 确保所有管理员API都有适当的认证和授权*
@@ -1541,6 +1780,9 @@
   *建议: 确保所有管理员API都有适当的认证和授权*
 
 - **/api/admin/users**: 管理员API可能缺少认证检查
+  *建议: 确保所有管理员API都有适当的认证和授权*
+
+- **/api/admin/debug/tables**: 管理员API可能缺少认证检查
   *建议: 确保所有管理员API都有适当的认证和授权*
 
 - **/api/admin/users/stats**: 管理员API可能缺少认证检查
@@ -1747,6 +1989,18 @@
 - **/api/questionnaire/:id**: 路径参数可能存在注入风险
   *建议: 确保对所有路径参数进行验证和清理*
 
+- **/api/admin/dashboard/stats**: 管理员API可能缺少认证检查
+  *建议: 确保所有管理员API都有适当的认证和授权*
+
+- **/api/admin/questionnaires**: 管理员API可能缺少认证检查
+  *建议: 确保所有管理员API都有适当的认证和授权*
+
+- **/api/admin/users/export**: 管理员API可能缺少认证检查
+  *建议: 确保所有管理员API都有适当的认证和授权*
+
+- **/api/questionnaire/:id**: 路径参数可能存在注入风险
+  *建议: 确保对所有路径参数进行验证和清理*
+
 - **/api/stories/test-tags/:storyId**: 路径参数可能存在注入风险
   *建议: 确保对所有路径参数进行验证和清理*
 
@@ -1787,6 +2041,9 @@
   *建议: 确保所有管理员API都有适当的认证和授权*
 
 - **/api/admin/database-test**: 管理员API可能缺少认证检查
+  *建议: 确保所有管理员API都有适当的认证和授权*
+
+- **/api/admin/database**: 管理员API可能缺少认证检查
   *建议: 确保所有管理员API都有适当的认证和授权*
 
 - **/api/admin/google-whitelist**: 管理员API可能缺少认证检查

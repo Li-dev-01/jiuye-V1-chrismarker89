@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>防刷验证测试</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .test-container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .test-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+        }
+        .test-title {
+            color: #1890ff;
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        .test-description {
+            color: #666;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+        .test-button {
+            background: #1890ff;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+        .test-button:hover {
+            background: #40a9ff;
+        }
+        .test-result {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        .success {
+            background: #f6ffed;
+            color: #52c41a;
+            border: 1px solid #b7eb8f;
+        }
+        .error {
+            background: #fff2f0;
+            color: #ff4d4f;
+            border: 1px solid #ffccc7;
+        }
+        .info {
+            background: #e6f7ff;
+            color: #1890ff;
+            border: 1px solid #91d5ff;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🛡️ 第二问卷防刷验证功能测试</h1>
+        
+        <div class="test-section">
+            <div class="test-title">1. 问卷页面访问测试</div>
+            <div class="test-description">
+                测试第二问卷页面是否能正常加载，章节是否正确显示
+            </div>
+            <button class="test-button" onclick="testQuestionnaireAccess()">访问问卷页面</button>
+            <div id="access-result"></div>
+        </div>
+
+        <div class="test-section">
+            <div class="test-title">2. 章节显示测试</div>
+            <div class="test-description">
+                验证问卷是否正确显示多个章节，而不是只显示"章节 1/1"
+            </div>
+            <button class="test-button" onclick="testSectionDisplay()">检查章节显示</button>
+            <div id="section-result"></div>
+        </div>
+
+        <div class="test-section">
+            <div class="test-title">3. 防刷验证组件测试</div>
+            <div class="test-description">
+                测试防刷验证弹窗是否能正常显示和工作
+            </div>
+            <button class="test-button" onclick="testAntiSpamComponent()">测试防刷验证</button>
+            <div id="antispam-result"></div>
+        </div>
+
+        <div class="test-section">
+            <div class="test-title">4. 完整流程测试</div>
+            <div class="test-description">
+                模拟完整的问卷填写和提交流程，验证防刷验证是否在正确的时机触发
+            </div>
+            <button class="test-button" onclick="testCompleteFlow()">开始完整测试</button>
+            <div id="flow-result"></div>
+        </div>
+
+        <div class="test-section">
+            <div class="test-title">5. API提交测试</div>
+            <div class="test-description">
+                直接测试后端API是否能正常接收和处理问卷提交
+            </div>
+            <button class="test-button" onclick="testAPISubmission()">测试API提交</button>
+            <div id="api-result"></div>
+        </div>
+    </div>
+
+    <script>
+        function showResult(elementId, message, type = 'info') {
+            const element = document.getElementById(elementId);
+            element.innerHTML = `<div class="test-result ${type}">${message}</div>`;
+        }
+
+        function testQuestionnaireAccess() {
+            showResult('access-result', '正在打开问卷页面...', 'info');
+            window.open('http://localhost:5175/questionnaire-v2/survey', '_blank');
+            setTimeout(() => {
+                showResult('access-result', '✅ 问卷页面已在新窗口打开，请检查是否正常加载', 'success');
+            }, 1000);
+        }
+
+        function testSectionDisplay() {
+            showResult('section-result', '请在问卷页面中检查章节显示是否正确...', 'info');
+            setTimeout(() => {
+                showResult('section-result', '📋 请手动验证：\n1. 问卷是否显示多个章节而不是"章节 1/1"\n2. 回答问题后是否能进入下一章节\n3. 分支逻辑是否正常工作', 'info');
+            }, 1000);
+        }
+
+        function testAntiSpamComponent() {
+            showResult('antispam-result', '防刷验证组件需要在问卷完成时触发...', 'info');
+            setTimeout(() => {
+                showResult('antispam-result', '🔢 请在问卷页面完成所有问题，点击"完成"按钮时应该会弹出数字验证', 'info');
+            }, 1000);
+        }
+
+        function testCompleteFlow() {
+            showResult('flow-result', '开始完整流程测试...', 'info');
+            const steps = [
+                '1. 打开问卷页面',
+                '2. 依次回答所有问题',
+                '3. 点击"完成"按钮',
+                '4. 验证防刷验证弹窗是否出现',
+                '5. 选择正确数字完成验证',
+                '6. 检查是否成功提交并跳转'
+            ];
+            
+            let stepIndex = 0;
+            const interval = setInterval(() => {
+                if (stepIndex < steps.length) {
+                    showResult('flow-result', `📝 ${steps[stepIndex]}`, 'info');
+                    stepIndex++;
+                } else {
+                    clearInterval(interval);
+                    showResult('flow-result', '✅ 完整流程测试步骤已列出，请按步骤手动验证', 'success');
+                }
+            }, 1500);
+        }
+
+        async function testAPISubmission() {
+            showResult('api-result', '正在测试API提交...', 'info');
+            
+            try {
+                const response = await fetch('http://localhost:53389/api/universal-questionnaire/submit', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        questionnaireId: 'employment-survey-2024',
+                        sectionResponses: [
+                            {
+                                sectionId: 'basic-demographics',
+                                questionResponses: [
+                                    { questionId: 'age-range', value: '23-25' },
+                                    { questionId: 'gender', value: 'male' }
+                                ]
+                            }
+                        ],
+                        metadata: {
+                            participantGroup: 'fresh_graduate',
+                            startedAt: new Date().toISOString(),
+                            responseTimeSeconds: 300,
+                            userAgent: 'Test Browser'
+                        }
+                    })
+                });
+
+                const result = await response.json();
+                
+                if (result.success) {
+                    showResult('api-result', `✅ API提交成功！响应ID: ${result.data.responseId}`, 'success');
+                } else {
+                    showResult('api-result', `❌ API提交失败: ${result.message}`, 'error');
+                }
+            } catch (error) {
+                showResult('api-result', `❌ API测试出错: ${error.message}`, 'error');
+            }
+        }
+
+        // 页面加载完成后的初始化
+        window.onload = function() {
+            console.log('🧪 防刷验证测试页面已加载');
+            showResult('access-result', '点击按钮开始测试', 'info');
+            showResult('section-result', '点击按钮开始测试', 'info');
+            showResult('antispam-result', '点击按钮开始测试', 'info');
+            showResult('flow-result', '点击按钮开始测试', 'info');
+            showResult('api-result', '点击按钮开始测试', 'info');
+        };
+    </script>
+</body>
+</html>

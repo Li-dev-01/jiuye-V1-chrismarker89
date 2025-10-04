@@ -20,6 +20,10 @@ import './styles/global.css';
 // 懒加载组件
 const HomePage = React.lazy(() => import('./pages/HomePage'));
 const QuestionnairePage = React.lazy(() => import('./pages/IntelligentQuestionnairePage'));
+const SecondQuestionnaireHomePage = React.lazy(() => import('./pages/SecondQuestionnaireHomePage'));
+const SecondQuestionnairePage = React.lazy(() => import('./pages/SecondQuestionnairePage'));
+const SecondQuestionnaireCompletePage = React.lazy(() => import('./pages/SecondQuestionnaireCompletePage'));
+const SecondQuestionnaireAnalyticsPage = React.lazy(() => import('./pages/SecondQuestionnaireAnalyticsPage'));
 const StoriesPage = React.lazy(() => import('./pages/Stories'));
 const StoriesSimple = React.lazy(() => import('./pages/StoriesSimple'));
 const StoriesTest1 = React.lazy(() => import('./pages/test/StoriesTest1'));
@@ -91,6 +95,7 @@ const IntelligentQuestionnairePage = React.lazy(() => import('./pages/Intelligen
 const GoogleOAuthTestPage = React.lazy(() => import('./pages/test/GoogleOAuthTestPage').then(module => ({ default: module.default })));
 const GoogleOAuthDebugPage = React.lazy(() => import('./pages/debug/GoogleOAuthDebugPage').then(module => ({ default: module.default })));
 const AuthTestPage = React.lazy(() => import('./pages/test/AuthTestPage').then(module => ({ default: module.AuthTestPage })));
+const QuestionnaireComboPage = React.lazy(() => import('./pages/QuestionnaireComboPage'));
 // const FloatingComponentTestPage = React.lazy(() => import('./pages/test/FloatingComponentTestPage').then(module => ({ default: module.FloatingComponentTestPage })));
 // const AdminRoutesTestPage = React.lazy(() => import('./pages/dev/AdminRoutesTestPage').then(module => ({ default: module.default })));
 // const ManagementAuthDebugPage = React.lazy(() => import('./pages/debug/ManagementAuthDebugPage').then(module => ({ default: module.default })));
@@ -317,12 +322,55 @@ function App() {
                     <Route path="/user/login-history" element={<UserRouteGuard><LoginHistoryPage /></UserRouteGuard>} />
                     <Route path="/user/two-factor" element={<UserRouteGuard><TwoFactorAuthPage /></UserRouteGuard>} />
 
-                    {/* 主要问卷路由 - 使用升级版智能问卷 */}
+                    {/* 独立问卷系统路由 */}
+
+                    {/* 问卷1系统（传统问卷） */}
                     <Route path="/questionnaire" element={
                       <PublicRouteGuard>
                         <QuestionnaireLayout>
                           <QuestionnairePage />
+                        </QuestionnaireLayout>
+                      </PublicRouteGuard>
+                    } />
 
+                    <Route path="/questionnaire-v1" element={
+                      <PublicRouteGuard>
+                        <QuestionnaireLayout>
+                          <QuestionnairePage />
+                        </QuestionnaireLayout>
+                      </PublicRouteGuard>
+                    } />
+
+                    {/* 问卷2系统（智能问卷） */}
+                    <Route path="/questionnaire-v2" element={
+                      <PublicRouteGuard>
+                        <SecondQuestionnaireHomePage />
+                      </PublicRouteGuard>
+                    } />
+
+                    <Route path="/questionnaire-v2/survey" element={
+                      <PublicRouteGuard>
+                        <SecondQuestionnairePage />
+                      </PublicRouteGuard>
+                    } />
+
+                    <Route path="/questionnaire-v2/complete" element={
+                      <PublicRouteGuard>
+                        <SecondQuestionnaireCompletePage />
+                      </PublicRouteGuard>
+                    } />
+
+                    <Route path="/questionnaire-v2/analytics" element={
+                      <PublicRouteGuard>
+                        <SecondQuestionnaireAnalyticsPage />
+                      </PublicRouteGuard>
+                    } />
+
+                    {/* 问卷组合生成器 */}
+                    <Route path="/questionnaire/combo-generator" element={
+                      <PublicRouteGuard>
+                        <QuestionnaireLayout>
+                          <QuestionnaireComboPage />
                         </QuestionnaireLayout>
                       </PublicRouteGuard>
                     } />

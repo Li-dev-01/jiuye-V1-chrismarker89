@@ -5,6 +5,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import type { UniversalUser, UserSession } from '../types/uuid-system';
+import { useUniversalAuthStore } from '../stores/universalAuthStore';
 
 interface SafeAuthState {
   currentUser: UniversalUser | null;
@@ -36,27 +37,24 @@ export const useSafeAuth = (): SafeAuthState & SafeAuthActions => {
     isStoreAvailable: false
   });
 
-  /**
-   * 安全地访问认证store
-   */
-  const safeGetAuthStore = useCallback(() => {
-    try {
-      // 动态导入以避免初始化时的错误
-      const { useUniversalAuthStore } = require('../stores/universalAuthStore');
-      return useUniversalAuthStore();
-    } catch (error) {
-      console.warn('useSafeAuth: Failed to access auth store:', error);
-      return null;
-    }
-  }, []);
+  // 直接在组件顶层调用 Hook，符合 React Hook 规则
+  let authStore = null;
+  let storeAvailable = false;
+
+  try {
+    authStore = useUniversalAuthStore();
+    storeAvailable = true;
+  } catch (error) {
+    console.warn('useSafeAuth: Failed to access auth store:', error);
+    storeAvailable = false;
+  }
 
   /**
    * 安全地获取认证状态
    */
   const safeGetAuthState = useCallback(() => {
     try {
-      const authStore = safeGetAuthStore();
-      if (!authStore) {
+      if (!storeAvailable || !authStore) {
         return {
           currentUser: null,
           currentSession: null,
@@ -86,7 +84,7 @@ export const useSafeAuth = (): SafeAuthState & SafeAuthActions => {
         isStoreAvailable: false
       };
     }
-  }, [safeGetAuthStore]);
+  }, [storeAvailable, authStore]);
 
   /**
    * 初始化认证状态
@@ -129,8 +127,7 @@ export const useSafeAuth = (): SafeAuthState & SafeAuthActions => {
     try {
       setState(prev => ({ ...prev, isLoading: true, error: null }));
       
-      const authStore = safeGetAuthStore();
-      if (!authStore) {
+      if (!storeAvailable || !authStore) {
         setState(prev => ({ 
           ...prev, 
           isLoading: false, 
@@ -170,7 +167,7 @@ export const useSafeAuth = (): SafeAuthState & SafeAuthActions => {
       }));
       return false;
     }
-  }, [safeGetAuthStore, safeGetAuthState]);
+  }, [storeAvailable, authStore, safeGetAuthState]);
 
   /**
    * 安全登出
@@ -179,8 +176,7 @@ export const useSafeAuth = (): SafeAuthState & SafeAuthActions => {
     try {
       setState(prev => ({ ...prev, isLoading: true, error: null }));
       
-      const authStore = safeGetAuthStore();
-      if (!authStore) {
+      if (!storeAvailable || !authStore) {
         // 即使store不可用，也清除本地状态
         setState({
           currentUser: null,
@@ -211,7 +207,7 @@ export const useSafeAuth = (): SafeAuthState & SafeAuthActions => {
       });
       return true; // 登出总是返回成功
     }
-  }, [safeGetAuthStore, safeGetAuthState]);
+  }, [storeAvailable, authStore, safeGetAuthState]);
 
   /**
    * 安全刷新用户信息
@@ -220,8 +216,7 @@ export const useSafeAuth = (): SafeAuthState & SafeAuthActions => {
     try {
       setState(prev => ({ ...prev, isLoading: true, error: null }));
       
-      const authStore = safeGetAuthStore();
-      if (!authStore) {
+      if (!storeAvailable || !authStore) {
         setState(prev => ({ 
           ...prev, 
           isLoading: false, 
@@ -245,7 +240,7 @@ export const useSafeAuth = (): SafeAuthState & SafeAuthActions => {
       }));
       return false;
     }
-  }, [safeGetAuthStore, safeGetAuthState]);
+  }, [storeAvailable, authStore, safeGetAuthState]);
 
   /**
    * 清除错误

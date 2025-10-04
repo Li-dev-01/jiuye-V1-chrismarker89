@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>问卷2可视化测试</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .section { margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 5px; }
+        .success { background-color: #d4edda; border-color: #c3e6cb; }
+        .error { background-color: #f8d7da; border-color: #f5c6cb; }
+        .info { background-color: #d1ecf1; border-color: #bee5eb; }
+        .warning { background-color: #fff3cd; border-color: #ffeaa7; }
+        button { padding: 10px 20px; margin: 5px; background: #007bff; color: white; border: none; border-radius: 3px; cursor: pointer; }
+        button:hover { background: #0056b3; }
+        .feature-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 15px; margin: 20px 0; }
+        .feature-card { padding: 15px; border: 1px solid #ddd; border-radius: 8px; background: #f8f9fa; }
+        .feature-title { font-weight: bold; color: #333; margin-bottom: 10px; }
+        .feature-desc { color: #666; font-size: 14px; }
+    </style>
+</head>
+<body>
+    <h1>🎯 问卷2可视化系统测试</h1>
+    
+    <div class="section info">
+        <h3>📋 测试目标</h3>
+        <p>验证问卷2的可视化系统是否正确实现了以下特色功能：</p>
+        <ul>
+            <li>✅ 经济压力分析（现代负债类型）</li>
+            <li>✅ 就业信心指数（6个月/1年）</li>
+            <li>✅ 现代负债分析（花呗、白条、微信分付）</li>
+            <li>✅ 专用数据服务和静态数据源</li>
+            <li>✅ 独立的可视化配置</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h3>🚀 快速访问</h3>
+        <button onclick="openVisualization()">打开问卷2可视化</button>
+        <button onclick="openQuestionnaire()">打开问卷2调查</button>
+        <button onclick="checkConsole()">检查控制台</button>
+    </div>
+
+    <div class="section">
+        <h3>🔍 问卷2可视化特色功能</h3>
+        <div class="feature-list">
+            <div class="feature-card">
+                <div class="feature-title">💰 经济压力分析</div>
+                <div class="feature-desc">
+                    • 现代负债类型分布<br>
+                    • 月还款负担评估<br>
+                    • 经济压力程度分析<br>
+                    • 压力等级可视化
+                </div>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-title">📈 就业信心指数</div>
+                <div class="feature-desc">
+                    • 6个月就业前景信心<br>
+                    • 1年就业前景信心<br>
+                    • 信心趋势分析<br>
+                    • 信心与压力相关性
+                </div>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-title">💳 现代负债分析</div>
+                <div class="feature-desc">
+                    • 支付宝花呗使用率<br>
+                    • 京东白条普及度<br>
+                    • 微信分付增长趋势<br>
+                    • 新型vs传统负债对比
+                </div>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-title">🎨 专业可视化</div>
+                <div class="feature-desc">
+                    • 柱状图：压力分布<br>
+                    • 饼图：负债占比<br>
+                    • 进度条：信心指数<br>
+                    • 标签卡片：负债类型
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h3>📊 预期数据展示</h3>
+        <div class="feature-list">
+            <div class="feature-card">
+                <div class="feature-title">经济压力指数</div>
+                <div class="feature-desc">
+                    <strong>67.8%</strong> 感受到中等以上经济压力<br>
+                    主要压力源：月还款负担过重 (57.9%)
+                </div>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-title">就业信心</div>
+                <div class="feature-desc">
+                    <strong>6个月信心：72%</strong><br>
+                    <strong>1年信心：58%</strong><br>
+                    短期乐观，长期谨慎
+                </div>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-title">现代负债普及率</div>
+                <div class="feature-desc">
+                    支付宝花呗：<strong>57.9%</strong><br>
+                    京东白条：<strong>39.2%</strong><br>
+                    微信分付：<strong>22.2%</strong>
+                </div>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-title">数据洞察</div>
+                <div class="feature-desc">
+                    • 现代负债工具使用率高<br>
+                    • 经济压力与就业信心负相关<br>
+                    • 新兴金融产品快速普及
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="section warning">
+        <h3>⚠️ 故障排除</h3>
+        <p><strong>如果页面无法加载，请检查：</strong></p>
+        <ol>
+            <li>前端开发服务器是否运行在 localhost:5173</li>
+            <li>浏览器控制台是否有JavaScript错误</li>
+            <li>网络请求是否正常（F12 -> Network标签）</li>
+            <li>React组件是否正确加载</li>
+        </ol>
+        
+        <p><strong>常见错误解决：</strong></p>
+        <ul>
+            <li>图标导入错误：检查 @ant-design/icons 导入</li>
+            <li>数据结构错误：检查 analytics 对象属性</li>
+            <li>路由错误：确认 /questionnaire-v2/analytics 路由配置</li>
+        </ul>
+    </div>
+
+    <div class="section success">
+        <h3>✅ 成功标志</h3>
+        <p>如果问卷2可视化系统正常工作，您应该看到：</p>
+        <ul>
+            <li>页面标题：<strong>"问卷2数据分析 - 经济压力与就业信心"</strong></li>
+            <li>三个特色标签：经济压力分析、就业信心指数、现代负债分析</li>
+            <li>核心指标卡片：总响应数、完成率、平均完成时间、经济压力指数</li>
+            <li>三个核心洞察卡片：经济压力指数、短期就业信心、现代负债普及率</li>
+            <li>两列分析：经济压力分析 + 就业信心指数</li>
+            <li>现代负债类型展示：花呗、白条、微信分付等</li>
+            <li>专业洞察文本：针对问卷2特色的分析</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h3>🔗 相关链接</h3>
+        <ul>
+            <li><a href="http://localhost:5173/questionnaire-v2/analytics" target="_blank">问卷2可视化页面</a></li>
+            <li><a href="http://localhost:5173/questionnaire-v2/survey" target="_blank">问卷2调查页面</a></li>
+            <li><a href="http://localhost:5173/questionnaire-v2" target="_blank">问卷2首页</a></li>
+            <li><a href="http://localhost:5173/analytics" target="_blank">问卷1可视化（对比）</a></li>
+        </ul>
+    </div>
+
+    <script>
+        function openVisualization() {
+            window.open('http://localhost:5173/questionnaire-v2/analytics', '_blank');
+        }
+
+        function openQuestionnaire() {
+            window.open('http://localhost:5173/questionnaire-v2/survey', '_blank');
+        }
+
+        function checkConsole() {
+            alert('请按 F12 打开开发者工具，查看 Console 标签页的错误信息。\n\n常见错误：\n1. 图标导入错误\n2. 数据结构不匹配\n3. 组件加载失败\n4. 网络请求错误');
+        }
+
+        // 页面加载时自动检查
+        window.onload = function() {
+            console.log('🎯 问卷2可视化测试页面已加载');
+            console.log('📊 预期功能：经济压力分析、就业信心指数、现代负债分析');
+            console.log('🔗 测试链接：http://localhost:5173/questionnaire-v2/analytics');
+        };
+    </script>
+</body>
+</html>

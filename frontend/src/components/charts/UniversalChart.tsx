@@ -59,7 +59,8 @@ const CustomXAxisTick = (props: any) => {
 };
 
 export interface ChartDataPoint {
-  name: string;
+  name?: string;
+  label?: string;
   value: number;
   percentage?: number;
   color?: string;
@@ -75,6 +76,9 @@ export interface UniversalChartProps {
   colors?: string[];
   showLegend?: boolean;
   showTooltip?: boolean;
+  // 新增：支持混合可视化系统的配置
+  hybridMode?: boolean;
+  insightText?: string;
 }
 
 const DEFAULT_COLORS = [
@@ -90,7 +94,9 @@ export const UniversalChart: React.FC<UniversalChartProps> = ({
   height = 300,
   colors = DEFAULT_COLORS,
   showLegend = true,
-  showTooltip = true
+  showTooltip = true,
+  hybridMode = false,
+  insightText
 }) => {
   // 移动端检测
   const { isMobile, isTablet } = useMobileDetection();
@@ -323,7 +329,7 @@ export const UniversalChart: React.FC<UniversalChartProps> = ({
   };
 
   return (
-    <div style={{ width: '100%', height: responsiveHeight }}>
+    <div style={{ width: '100%' }}>
       {title && (
         <div style={{
           textAlign: 'center',
@@ -334,9 +340,25 @@ export const UniversalChart: React.FC<UniversalChartProps> = ({
           {title}
         </div>
       )}
-      <ResponsiveContainer width="100%" height="100%">
-        {renderChart()}
-      </ResponsiveContainer>
+      <div style={{ height: responsiveHeight }}>
+        <ResponsiveContainer width="100%" height="100%">
+          {renderChart()}
+        </ResponsiveContainer>
+      </div>
+      {hybridMode && insightText && (
+        <div style={{
+          marginTop: '12px',
+          padding: '8px 12px',
+          background: '#f5f5f5',
+          borderRadius: '6px',
+          fontSize: isMobile ? '12px' : '13px',
+          color: '#666',
+          lineHeight: '1.4'
+        }}>
+          <span style={{ marginRight: '4px' }}>💡</span>
+          {insightText}
+        </div>
+      )}
     </div>
   );
 };

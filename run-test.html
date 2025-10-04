@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>运行问卷测试</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .button {
+            background: #1890ff;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px;
+        }
+        .button:hover {
+            background: #40a9ff;
+        }
+        .test-output {
+            background: #f6f6f6;
+            border: 1px solid #d9d9d9;
+            border-radius: 4px;
+            padding: 15px;
+            margin: 15px 0;
+            font-family: monospace;
+            white-space: pre-wrap;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .instructions {
+            background: #e6f7ff;
+            border: 1px solid #91d5ff;
+            border-radius: 4px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        .warning {
+            background: #fff7e6;
+            border: 1px solid #ffd591;
+            border-radius: 4px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 第二问卷防刷验证功能测试</h1>
+        
+        <div class="instructions">
+            <h3>📋 测试说明</h3>
+            <p>此页面将帮助您测试第二问卷的防刷验证功能。请按以下步骤操作：</p>
+            <ol>
+                <li>点击"打开问卷页面"按钮</li>
+                <li>点击"运行自动测试"检查基本功能</li>
+                <li>在问卷页面中手动完成问卷填写</li>
+                <li>观察防刷验证是否正常工作</li>
+            </ol>
+        </div>
+
+        <div class="warning">
+            <h3>⚠️ 注意事项</h3>
+            <p>确保以下服务正在运行：</p>
+            <ul>
+                <li>前端服务: http://localhost:5175</li>
+                <li>后端服务: http://localhost:53389</li>
+            </ul>
+        </div>
+
+        <div>
+            <button class="button" onclick="openQuestionnaire()">🔗 打开问卷页面</button>
+            <button class="button" onclick="runAutoTest()">🤖 运行自动测试</button>
+            <button class="button" onclick="testAPI()">🔌 测试API连接</button>
+            <button class="button" onclick="clearOutput()">🧹 清空输出</button>
+        </div>
+
+        <div id="output" class="test-output">点击按钮开始测试...</div>
+
+        <div class="instructions">
+            <h3>🔍 手动测试步骤</h3>
+            <ol>
+                <li><strong>章节显示测试</strong>：检查问卷是否显示多个章节，而不是"章节 1/1"</li>
+                <li><strong>问题回答测试</strong>：依次回答问卷中的问题，观察是否能正确进入下一章节</li>
+                <li><strong>分支逻辑测试</strong>：根据不同的身份选择，观察是否显示不同的问题组</li>
+                <li><strong>防刷验证测试</strong>：完成所有问题后，点击"完成"按钮，应该弹出数字验证窗口</li>
+                <li><strong>验证成功测试</strong>：选择正确的数字，验证是否成功提交并跳转到完成页面</li>
+            </ol>
+        </div>
+    </div>
+
+    <script>
+        const output = document.getElementById('output');
+        
+        function log(message) {
+            const timestamp = new Date().toLocaleTimeString();
+            output.textContent += `[${timestamp}] ${message}\n`;
+            output.scrollTop = output.scrollHeight;
+        }
+
+        function clearOutput() {
+            output.textContent = '';
+            log('输出已清空');
+        }
+
+        function openQuestionnaire() {
+            log('正在打开问卷页面...');
+            window.open('http://localhost:5175/questionnaire-v2/survey', '_blank');
+            log('✅ 问卷页面已在新窗口打开');
+        }
+
+        async function runAutoTest() {
+            log('🚀 开始运行自动测试...');
+            
+            try {
+                // 测试1: 检查前端服务
+                log('📡 测试前端服务连接...');
+                const frontendResponse = await fetch('http://localhost:5175/questionnaire-v2/survey');
+                if (frontendResponse.ok) {
+                    log('✅ 前端服务连接正常');
+                } else {
+                    log(`❌ 前端服务连接失败: ${frontendResponse.status}`);
+                }
+
+                // 测试2: 检查后端API
+                log('📡 测试后端API连接...');
+                await testAPI();
+
+                // 测试3: 检查页面内容
+                log('📄 检查问卷页面内容...');
+                const pageContent = await frontendResponse.text();
+                if (pageContent.includes('questionnaire') || pageContent.includes('问卷')) {
+                    log('✅ 问卷页面内容正常');
+                } else {
+                    log('❌ 问卷页面内容异常');
+                }
+
+                log('🏁 自动测试完成！请继续手动测试。');
+                
+            } catch (error) {
+                log(`❌ 自动测试出错: ${error.message}`);
+            }
+        }
+
+        async function testAPI() {
+            try {
+                log('🔌 测试API提交功能...');
+                
+                const response = await fetch('http://localhost:53389/api/universal-questionnaire/submit', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        questionnaireId: 'employment-survey-2024',
+                        sectionResponses: [{
+                            sectionId: 'basic-demographics',
+                            questionResponses: [
+                                { questionId: 'age-range', value: '23-25' },
+                                { questionId: 'gender', value: 'male' }
+                            ]
+                        }],
+                        metadata: {
+                            participantGroup: 'test',
+                            startedAt: new Date().toISOString(),
+                            responseTimeSeconds: 1,
+                            userAgent: 'Test Browser'
+                        }
+                    })
+                });
+
+                const result = await response.json();
+                
+                if (response.ok && result.success) {
+                    log(`✅ API测试成功: ${result.message}`);
+                    log(`📝 响应ID: ${result.data.responseId}`);
+                } else {
+                    log(`❌ API测试失败: ${result.message || response.statusText}`);
+                }
+                
+            } catch (error) {
+                log(`❌ API测试出错: ${error.message}`);
+                log('💡 请确保后端服务正在运行 (http://localhost:53389)');
+            }
+        }
+
+        // 页面加载时的初始化
+        window.onload = function() {
+            log('🎯 测试页面已加载');
+            log('📋 请按照说明进行测试');
+            log('');
+        };
+    </script>
+</body>
+</html>

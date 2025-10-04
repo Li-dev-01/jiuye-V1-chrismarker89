@@ -31,6 +31,8 @@ import { intelligentSecurity } from './routes/intelligent-security';
 import userContentManagement from './routes/user-content-management';
 import { createVisualizationRoutes } from './routes/visualization';
 import { createUniversalQuestionnaireRoutes } from './routes/universal-questionnaire';
+import { createQuestionnaireV1Routes } from './routes/questionnaire-v1';
+import { createQuestionnaireV2Routes } from './routes/questionnaire-v2';
 import { createDatabaseFixRoutes } from './routes/database-fix';
 import { createUnifiedUserCreationRoutes } from './routes/unified-user-creation';
 // import { CronHandler, type CronEvent } from './handlers/cronHandler';
@@ -39,6 +41,7 @@ import turnstileTestRoutes from './routes/test/turnstile';
 import simpleTestRoutes from './routes/test/simple';
 import favorites from './routes/favorites';
 import userReports from './routes/userReports';
+import systemHealthRoutes from './routes/system-health-simple';
 
 // 创建Hono应用
 const app = new Hono<{ Bindings: Env }>();
@@ -103,7 +106,6 @@ app.use('*', async (c, next) => {
  *               message: "API服务运行正常"
  */
 // 健康检查路由
-app.route('/health', health);
 
 // 测试新的健康检查端点
 app.get('/health-test', async (c) => {
@@ -175,22 +177,55 @@ app.get('/health-test', async (c) => {
 // });
 
 // 创建API路由实例
+console.log('🔧 Creating API route instance...');
 const api = new Hono<{ Bindings: Env }>();
+console.log('✅ API route instance created');
 
 // 认证路由
-api.route('/auth', createAuthRoutes());
+console.log('🔧 About to register auth routes...');
+try {
+  api.route('/auth', createAuthRoutes());
+  console.log('✅ Auth routes registered');
+} catch (error) {
+  console.error('❌ Failed to register auth routes:', error);
+}
 
 // UUID用户管理路由
-api.route('/uuid', createUUIDRoutes());
+console.log('🔧 About to register UUID routes...');
+try {
+  api.route('/uuid', createUUIDRoutes());
+  console.log('✅ UUID routes registered');
+} catch (error) {
+  console.error('❌ Failed to register UUID routes:', error);
+}
 
-// 统一用户创建路由
-api.route('/user-creation', createUnifiedUserCreationRoutes());
+// 统一用户创建路由 - 暂时注释掉
+// console.log('🔧 About to register user creation routes...');
+// try {
+//   api.route('/user-creation', createUnifiedUserCreationRoutes());
+//   console.log('✅ User creation routes registered');
+// } catch (error) {
+//   console.error('❌ Failed to register user creation routes:', error);
+// }
 
-// 问卷路由
-api.route('/questionnaire', createQuestionnaireRoutes());
+// 独立问卷系统路由注册
+console.log('🔧 Registering independent questionnaire systems...');
 
-// 通用问卷路由
-api.route('/universal-questionnaire', createUniversalQuestionnaireRoutes());
+try {
+  // 问卷1系统（传统问卷）
+  console.log('🔧 Registering questionnaire V1 routes...');
+  api.route('/questionnaire-v1', createQuestionnaireV1Routes());
+  console.log('✅ Questionnaire V1 routes registered successfully');
+
+  // 问卷2系统（智能问卷）
+  console.log('🔧 Registering questionnaire V2 routes...');
+  api.route('/questionnaire-v2', createQuestionnaireV2Routes());
+  console.log('✅ Questionnaire V2 routes registered successfully');
+
+} catch (error) {
+  console.error('❌ Failed to register independent questionnaire routes:', error);
+  console.error('❌ Error details:', error.stack);
+}
 
 // 问卷用户认证路由（独立系统）
 try {
@@ -233,6 +268,81 @@ api.route('/admin/database', createDatabaseMonitorRoutes());
 
 // 健康检查路由（也在API前缀下提供）
 api.route('/health', health);
+
+// 系统健康检查路由（详细监控）
+api.get('/system-health/test', async (c) => {
+  return c.json({
+    success: true,
+    message: '系统健康检查路由正常工作',
+    timestamp: new Date().toISOString()
+  });
+});
+
+// 数据库健康检查
+api.get('/system-health/database', async (c) => {
+  try {
+    const result = await c.env.DB.prepare('SELECT 1 as test').first();
+    return c.json({
+      success: true,
+      data: {
+        component: 'database',
+        status: 'healthy',
+        message: '数据库连接正常',
+        timestamp: new Date().toISOString(),
+        details: { connectionTest: result }
+      }
+    });
+  } catch (error) {
+    return c.json({
+      success: false,
+      data: {
+        component: 'database',
+        status: 'critical',
+        message: `数据库连接失败: ${error.message}`,
+        timestamp: new Date().toISOString()
+      }
+    }, 500);
+  }
+});
+
+// 数据一致性检查
+api.get('/system-health/consistency', async (c) => {
+  try {
+    const tableInfo = await c.env.DB.prepare('PRAGMA table_info(universal_questionnaire_responses)').all();
+    const userIdField = tableInfo.results.find((field: any) => field.name === 'user_id');
+
+    const stats = await c.env.DB.prepare(`
+      SELECT
+        COUNT(*) as total_responses,
+        COUNT(user_id) as responses_with_user_id
+      FROM universal_questionnaire_responses
+    `).first();
+
+    return c.json({
+      success: true,
+      data: {
+        component: 'data_consistency',
+        status: userIdField?.type === 'TEXT' ? 'healthy' : 'warning',
+        message: userIdField?.type === 'TEXT' ? '数据类型一致性正常' : 'user_id字段类型需要修复',
+        timestamp: new Date().toISOString(),
+        details: {
+          userIdFieldType: userIdField?.type,
+          statistics: stats
+        }
+      }
+    });
+  } catch (error) {
+    return c.json({
+      success: false,
+      data: {
+        component: 'data_consistency',
+        status: 'critical',
+        message: `数据一致性检查失败: ${error.message}`,
+        timestamp: new Date().toISOString()
+      }
+    }, 500);
+  }
+});
 
 // 测试路由
 api.route('/test/simple', simpleTestRoutes);
@@ -316,22 +426,18 @@ app.onError((err, c) => {
   });
 
   // 故事路由
-  api.route('/stories', createStoriesRoutes());
 
   // 审核路由
   api.route('/review', createReviewRoutes());
 
   // 分析路由 - 使用新的TypeScript版本
-  api.route('/analytics', analyticsRoutes);
 
   // 可视化路由 - 基于真实问卷数据的可视化
   api.route('/analytics/visualization', createVisualizationRoutes());
 
   // 审核员路由 - 新的TypeScript版本
-  api.route('/reviewer', reviewerRoutes);
 
   // 管理员路由
-  api.route('/admin', createAdminRoutes());
 
   // 数据生成器路由（管理员专用）
   api.route('/admin/data-generator', dataGenerator);
@@ -339,25 +445,20 @@ app.onError((err, c) => {
   // AI源管理和超级管理员路由已移除
 
   // 页面参与统计路由
-  api.route('/participation-stats', createParticipationStatsRoutes());
 
   // 问卷用户认证路由（独立系统）
   try {
     console.log('🔧 Registering questionnaire auth routes...');
     const questionnaireAuthRoutes = createQuestionnaireAuthRoutes();
     console.log('🔧 Questionnaire auth routes created:', questionnaireAuthRoutes);
-    api.route('/questionnaire-auth', questionnaireAuthRoutes);
     console.log('✅ Questionnaire auth routes registered successfully');
   } catch (error) {
     console.error('❌ Failed to register questionnaire auth routes:', error);
     console.error('❌ Error details:', error.stack);
   }
 
-  // 数据库监测管理路由
-  api.route('/admin/database', createDatabaseMonitorRoutes());
 
   // 违规内容管理路由
-  api.route('/violations', violationsRoutes);
 
   // 分级审核路由
   api.route('/audit', createTieredAuditRoutes());
@@ -368,8 +469,6 @@ app.onError((err, c) => {
   // PNG管理路由
   api.route('/png-management', pngManagementRoutes);
 
-  // 健康检查路由（也在API前缀下提供）
-  api.route('/health', health);
 
   // 错误报告路由
   api.post('/errors/report', async (c) => {
@@ -460,7 +559,6 @@ app.onError((err, c) => {
 
 
   // 临时PNG管理API
-  api.get('/images/auto-generate/stats', async (c) => {
     return c.json({
       success: true,
       data: {
@@ -481,7 +579,6 @@ app.onError((err, c) => {
     });
   });
 
-  api.post('/images/auto-generate/batch-generate', async (c) => {
     const body = await c.req.json();
     return c.json({
       success: true,
@@ -549,9 +646,6 @@ app.onError((err, c) => {
       return c.json({ success: false, message: 'Internal server error' }, 500);
     }
   });
-
-  return api;
-}
 
 // 认证路由现在从单独文件导入
 

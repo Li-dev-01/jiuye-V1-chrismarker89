@@ -120,7 +120,12 @@ export const QUESTIONNAIRE_ROUTE_PERMISSIONS: Record<string, QuestionnairePermis
   '/my-content': ['view_own_submissions'],
   '/profile': ['view_own_submissions'],
   '/download': ['download_reports'],
-  '/export': ['export_own_data']
+  '/export': ['export_own_data'],
+  // 问卷2路由 - 公开访问，不需要权限
+  '/questionnaire-v2': [],
+  '/questionnaire-v2/survey': [],
+  '/questionnaire-v2/analytics': [],
+  '/questionnaire-v2/complete': []
 };
 
 // 会话配置

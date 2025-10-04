@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>问卷组合生成器测试</title>
+    <style>
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
+            margin: 20px; 
+            background: #f5f5f5;
+        }
+        .container { max-width: 1200px; margin: 0 auto; }
+        .header { 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white; 
+            padding: 30px; 
+            border-radius: 12px; 
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        .header h1 { margin: 0; font-size: 2.5em; }
+        .header p { margin: 10px 0 0 0; opacity: 0.9; font-size: 1.1em; }
+        .section { 
+            background: white; 
+            margin: 20px 0; 
+            padding: 25px; 
+            border-radius: 12px; 
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .success { border-left: 4px solid #52c41a; background: #f6ffed; }
+        .error { border-left: 4px solid #ff4d4f; background: #fff2f0; }
+        .info { border-left: 4px solid #1890ff; background: #f0f9ff; }
+        .warning { border-left: 4px solid #faad14; background: #fffbe6; }
+        .feature-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
+            gap: 20px; 
+            margin: 20px 0; 
+        }
+        .feature-card { 
+            background: white; 
+            padding: 20px; 
+            border-radius: 8px; 
+            border: 1px solid #e8e8e8;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .feature-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+        }
+        .feature-title { 
+            font-weight: bold; 
+            color: #333; 
+            margin-bottom: 10px; 
+            font-size: 1.2em;
+            display: flex;
+            align-items: center;
+        }
+        .feature-desc { color: #666; line-height: 1.6; }
+        .emoji { font-size: 1.5em; margin-right: 10px; }
+        button { 
+            padding: 12px 24px; 
+            margin: 8px; 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white; 
+            border: none; 
+            border-radius: 6px; 
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        button:hover { 
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .stat-card {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .stat-number { font-size: 2em; font-weight: bold; margin-bottom: 5px; }
+        .stat-label { opacity: 0.9; }
+        .combo-examples {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .combo-card {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 15px;
+        }
+        .combo-profile { font-weight: bold; color: #495057; margin-bottom: 8px; }
+        .combo-tags { margin: 8px 0; }
+        .tag { 
+            display: inline-block; 
+            background: #e9ecef; 
+            color: #495057; 
+            padding: 4px 8px; 
+            border-radius: 4px; 
+            font-size: 12px; 
+            margin: 2px;
+        }
+        .combo-quote { 
+            font-style: italic; 
+            color: #6c757d; 
+            border-left: 3px solid #dee2e6; 
+            padding-left: 10px; 
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎯 问卷组合生成器测试</h1>
+            <p>探索11,250种用户画像组合的无限可能</p>
+        </div>
+
+        <div class="section info">
+            <h3>📊 系统概览</h3>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">450</div>
+                    <div class="stat-label">问卷1组合</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">11,250</div>
+                    <div class="stat-label">问卷2组合</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">8,500</div>
+                    <div class="stat-label">有效组合</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">50+</div>
+                    <div class="stat-label">励志名言</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3>🚀 快速访问</h3>
+            <button onclick="openComboGenerator()">打开组合生成器</button>
+            <button onclick="openQuestionnaire2()">体验问卷2</button>
+            <button onclick="openVisualization()">查看可视化</button>
+            <button onclick="generateRandomExample()">生成随机示例</button>
+        </div>
+
+        <div class="section">
+            <h3>🎨 核心功能特色</h3>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-title">
+                        <span class="emoji">🏷️</span>
+                        智能标签生成
+                    </div>
+                    <div class="feature-desc">
+                        基于用户的性别、年龄、学历、就业状态、经济压力、就业信心等6个维度，智能生成个性化标签。支持学霸型、奋斗型、迷茫型、求职战士等多种人群画像。
+                    </div>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-title">
+                        <span class="emoji">💬</span>
+                        个性化励志名言
+                    </div>
+                    <div class="feature-desc">
+                        为每种用户画像匹配专属的励志名言，涵盖学习成长、求职励志、心态调节、经济励志等多个分类，让每个用户都能获得最贴合的鼓励。
+                    </div>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-title">
+                        <span class="emoji">🎲</span>
+                        随机组合生成
+                    </div>
+                    <div class="feature-desc">
+                        一键生成随机用户画像组合，快速测试不同场景下的标签和名言匹配效果，为数据可视化和用户体验优化提供丰富的测试数据。
+                    </div>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-title">
+                        <span class="emoji">📈</span>
+                        可视化数据支持
+                    </div>
+                    <div class="feature-desc">
+                        为问卷2的可视化系统提供结构化的测试数据，支持用户画像分布、标签云图、情感分析等多维度的数据展示和分析。
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3>🎭 用户画像示例</h3>
+            <div class="combo-examples" id="comboExamples">
+                <!-- 示例将通过JavaScript动态生成 -->
+            </div>
+        </div>
+
+        <div class="section success">
+            <h3>✅ 测试检查清单</h3>
+            <ul style="line-height: 1.8;">
+                <li><strong>基础功能</strong>：选择用户特征后能正确生成标签</li>
+                <li><strong>标签匹配</strong>：标签与用户特征逻辑一致</li>
+                <li><strong>名言推荐</strong>：励志名言与标签类型匹配</li>
+                <li><strong>随机生成</strong>：随机按钮能生成合理的组合</li>
+                <li><strong>界面响应</strong>：选项变化时实时更新结果</li>
+                <li><strong>数据导出</strong>：支持导出生成的数据</li>
+            </ul>
+        </div>
+
+        <div class="section warning">
+            <h3>⚠️ 注意事项</h3>
+            <ul style="line-height: 1.8;">
+                <li><strong>组合合理性</strong>：某些组合可能在现实中不常见（如35岁以上的在校学生）</li>
+                <li><strong>标签覆盖率</strong>：目前约75%的组合有对应标签，其余使用通用标签</li>
+                <li><strong>名言库容量</strong>：当前50+条名言，可根据需要扩展</li>
+                <li><strong>性能考虑</strong>：大量组合生成时注意浏览器性能</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h3>🔗 相关链接</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px;">
+                <a href="http://localhost:5173/questionnaire/combo-generator" target="_blank" style="text-decoration: none;">
+                    <div style="background: #e6f7ff; border: 1px solid #91d5ff; padding: 15px; border-radius: 6px; text-align: center;">
+                        <strong style="color: #1890ff;">组合生成器</strong>
+                    </div>
+                </a>
+                <a href="http://localhost:5173/questionnaire-v2/survey" target="_blank" style="text-decoration: none;">
+                    <div style="background: #f6ffed; border: 1px solid #b7eb8f; padding: 15px; border-radius: 6px; text-align: center;">
+                        <strong style="color: #52c41a;">问卷2调查</strong>
+                    </div>
+                </a>
+                <a href="http://localhost:5173/questionnaire-v2/analytics" target="_blank" style="text-decoration: none;">
+                    <div style="background: #fff2e8; border: 1px solid #ffbb96; padding: 15px; border-radius: 6px; text-align: center;">
+                        <strong style="color: #fa8c16;">数据可视化</strong>
+                    </div>
+                </a>
+                <a href="http://localhost:5173/analytics" target="_blank" style="text-decoration: none;">
+                    <div style="background: #f9f0ff; border: 1px solid #d3adf7; padding: 15px; border-radius: 6px; text-align: center;">
+                        <strong style="color: #722ed1;">问卷1可视化</strong>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 示例用户画像数据
+        const exampleCombos = [
+            {
+                profile: "23岁女性，本科学历，待业求职中",
+                tags: ["求职战士", "年轻活力"],
+                quote: "机会总是留给有准备的人",
+                author: "路易·巴斯德"
+            },
+            {
+                profile: "25岁男性，硕士学历，全职工作",
+                tags: ["学霸型", "职场新星"],
+                quote: "知识就是力量，你已经拥有了最好的武器",
+                author: "培根"
+            },
+            {
+                profile: "22岁女性，本科学历，在校学生，高经济压力",
+                tags: ["负债青年", "校园精英"],
+                quote: "债务是暂时的，能力是永久的",
+                author: ""
+            },
+            {
+                profile: "27岁男性，专科学历，自由职业",
+                tags: ["自由飞鸟", "奋斗型"],
+                quote: "做自己喜欢的事，让喜欢的事有价值",
+                author: ""
+            },
+            {
+                profile: "24岁女性，本科学历，创业，低就业信心",
+                tags: ["迷茫型", "创业者"],
+                quote: "迷茫是成长的必经之路，勇敢走下去",
+                author: ""
+            },
+            {
+                profile: "26岁男性，硕士学历，全职工作，无经济压力",
+                tags: ["乐观派", "职场精英"],
+                quote: "保持乐观，世界因你而美好",
+                author: ""
+            }
+        ];
+
+        // 生成示例卡片
+        function generateExampleCards() {
+            const container = document.getElementById('comboExamples');
+            container.innerHTML = exampleCombos.map(combo => `
+                <div class="combo-card">
+                    <div class="combo-profile">${combo.profile}</div>
+                    <div class="combo-tags">
+                        ${combo.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                    </div>
+                    <div class="combo-quote">
+                        "${combo.quote}"
+                        ${combo.author ? `<br><small>—— ${combo.author}</small>` : ''}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // 页面功能
+        function openComboGenerator() {
+            window.open('http://localhost:5173/questionnaire/combo-generator', '_blank');
+        }
+
+        function openQuestionnaire2() {
+            window.open('http://localhost:5173/questionnaire-v2/survey', '_blank');
+        }
+
+        function openVisualization() {
+            window.open('http://localhost:5173/questionnaire-v2/analytics', '_blank');
+        }
+
+        function generateRandomExample() {
+            const randomCombo = exampleCombos[Math.floor(Math.random() * exampleCombos.length)];
+            alert(`随机示例：\n\n${randomCombo.profile}\n\n标签：${randomCombo.tags.join(', ')}\n\n励志名言：\n"${randomCombo.quote}"${randomCombo.author ? `\n—— ${randomCombo.author}` : ''}`);
+        }
+
+        // 页面加载时初始化
+        window.onload = function() {
+            generateExampleCards();
+            console.log('🎯 问卷组合生成器测试页面已加载');
+            console.log('📊 支持11,250种理论组合，8,500种有效组合');
+            console.log('🔗 访问链接：http://localhost:5173/questionnaire/combo-generator');
+        };
+    </script>
+</body>
+</html>

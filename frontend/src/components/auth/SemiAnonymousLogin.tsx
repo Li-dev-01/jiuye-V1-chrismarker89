@@ -51,7 +51,9 @@ export const SemiAnonymousLogin: React.FC<SemiAnonymousLoginProps> = ({
   // 实时验证A值
   const handleAValueChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value.replace(/\D/g, '').slice(0, 11);
-    form.setFieldValue('identityA', value);
+    if (form) {
+      form.setFieldValue('identityA', value);
+    }
 
     if (value && !validateAValue(value)) {
       setValidationErrors(prev =>
@@ -72,7 +74,9 @@ export const SemiAnonymousLogin: React.FC<SemiAnonymousLoginProps> = ({
     }
 
     value = value.slice(0, 6);
-    form.setFieldValue('identityB', value);
+    if (form) {
+      form.setFieldValue('identityB', value);
+    }
 
     if (value && !validateBValue(value)) {
       setValidationErrors(prev =>
@@ -103,7 +107,9 @@ export const SemiAnonymousLogin: React.FC<SemiAnonymousLoginProps> = ({
           localStorage.setItem('remember_semi_anonymous', 'true');
         }
         
-        form.resetFields();
+        if (form) {
+          form.resetFields();
+        }
         setValidationErrors([]);
         onSuccess?.();
         onClose();
@@ -115,14 +121,18 @@ export const SemiAnonymousLogin: React.FC<SemiAnonymousLoginProps> = ({
 
   // 清除表单
   const handleClear = () => {
-    form.resetFields();
+    if (form) {
+      form.resetFields();
+    }
     setValidationErrors([]);
     clearError();
   };
 
   // 关闭模态框
   const handleClose = () => {
-    form.resetFields();
+    if (form) {
+      form.resetFields();
+    }
     setValidationErrors([]);
     clearError();
     onClose();
@@ -130,6 +140,7 @@ export const SemiAnonymousLogin: React.FC<SemiAnonymousLoginProps> = ({
 
   // 检查表单是否可提交
   const isFormValid = () => {
+    if (!form) return false;
     const values = form.getFieldsValue();
     return validateAValue(values.identityA || '') &&
            validateBValue(values.identityB || '') &&
@@ -266,6 +277,7 @@ export const SemiAnonymousLogin: React.FC<SemiAnonymousLoginProps> = ({
 
                     {/* 登录表单 */}
                     <Form
+                      key="manual-login-form"
                       form={form}
                       layout="vertical"
                       onFinish={handleSubmit}
@@ -279,7 +291,7 @@ export const SemiAnonymousLogin: React.FC<SemiAnonymousLoginProps> = ({
                             <span>身份标识A</span>
                             <Text type="danger">*</Text>
                             <Text type="secondary" style={{ fontSize: '12px' }}>
-                              ({form.getFieldValue('identityA')?.length || 0}/11)
+                              ({form?.getFieldValue('identityA')?.length || 0}/11)
                             </Text>
                           </Space>
                         }
@@ -316,7 +328,7 @@ export const SemiAnonymousLogin: React.FC<SemiAnonymousLoginProps> = ({
                             <span>身份标识B</span>
                             <Text type="danger">*</Text>
                             <Text type="secondary" style={{ fontSize: '12px' }}>
-                              ({form.getFieldValue('identityB')?.length || 0}/6)
+                              ({form?.getFieldValue('identityB')?.length || 0}/6)
                             </Text>
                           </Space>
                         }
