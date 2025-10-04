@@ -11,6 +11,22 @@ vars = { ENVIRONMENT = "production" }
 # 预发布环境配置
 vars = { ENVIRONMENT = "staging" }
 
+[env.test]
+# 测试环境配置 - 问卷2集成测试
+name = "college-employment-survey-frontend-test"
+vars = {
+  ENVIRONMENT = "test",
+  VITE_APP_ENV = "test",
+  VITE_APP_TITLE = "大学生就业问卷调查平台 (测试版)",
+  VITE_APP_VERSION = "2.0.0-test",
+  VITE_ENABLE_ANALYTICS = "true",
+  VITE_ENABLE_ERROR_BOUNDARY = "true",
+  VITE_ENABLE_PERFORMANCE_MONITORING = "true",
+  VITE_API_BASE_URL = "https://employment-survey-api-test.chrismarker89.workers.dev/api",
+  VITE_GOOGLE_CLIENT_ID = "23546164414-3t3g8n9hvnv4ekjok90co2sm3sfb6mt8.apps.googleusercontent.com",
+  VITE_GOOGLE_REDIRECT_URI = "https://college-employment-survey-frontend-test.pages.dev/auth/google/callback"
+}
+
 [build]
 # 构建配置
 command = "npm run build"
