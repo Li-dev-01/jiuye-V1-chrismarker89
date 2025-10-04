@@ -6,7 +6,7 @@
 import { Hono } from 'hono';
 // import { authMiddleware } from '../middleware/auth';
 // import { createDatabaseService } from '../db';
-import { secondQuestionnaire2024 } from '../data/secondQuestionnaire2024';
+import { secondQuestionnaire2025V2 } from '../data/secondQuestionnaire2025-v2';
 // import type { Env } from '../types/env';
 
 const secondQuestionnaireRoutes = new Hono();
@@ -34,11 +34,11 @@ const secondQuestionnaireRoutes = new Hono();
  */
 secondQuestionnaireRoutes.get('/definition', async (c) => {
   try {
-    console.log('获取第二问卷定义');
-    
+    console.log('获取第二问卷定义 (2025-v2)');
+
     return c.json({
       success: true,
-      data: secondQuestionnaire2024,
+      data: secondQuestionnaire2025V2,
       message: '获取第二问卷定义成功'
     });
   } catch (error) {

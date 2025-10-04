@@ -28,30 +28,19 @@ export const ConversationalQuestionRenderer: React.FC<ConversationalQuestionRend
   questionNumber,
   totalQuestions,
   sectionTitle,
-  isConversationalMode = true
+  isConversationalMode = false // 默认关闭对话模式，优化体验
 }) => {
-  const [showOptions, setShowOptions] = useState(false);
-  const [typingComplete, setTypingComplete] = useState(false);
+  const [showOptions, setShowOptions] = useState(true); // 默认显示选项
+  const [typingComplete, setTypingComplete] = useState(true); // 默认完成打字
   const [showUserResponse, setShowUserResponse] = useState(false);
-  
+
   // 重置状态当问题改变时
   useEffect(() => {
-    setShowOptions(false);
-    setTypingComplete(false);
+    setShowOptions(true); // 立即显示选项
+    setTypingComplete(true); // 立即完成打字
     setShowUserResponse(false);
-    
-    if (isConversationalMode) {
-      // 打字机效果延迟
-      const timer = setTimeout(() => {
-        setTypingComplete(true);
-        setTimeout(() => setShowOptions(true), 500);
-      }, 1200);
-      
-      return () => clearTimeout(timer);
-    } else {
-      setTypingComplete(true);
-      setShowOptions(true);
-    }
+
+    // 移除打字机效果延迟，提升体验
   }, [question.id, isConversationalMode]);
   
   // 当用户选择答案时显示用户回答气泡
@@ -69,166 +58,93 @@ export const ConversationalQuestionRenderer: React.FC<ConversationalQuestionRend
   };
   
   return (
-    <div className="space-y-3">
-      {/* 系统消息气泡 */}
+    <div className="space-y-4 max-w-4xl mx-auto">
+      {/* 优化的问题卡片 - 移除深色背景，使用浅色系 */}
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        className="flex items-start space-x-3"
+        transition={{ duration: 0.3 }}
+        className="w-full"
       >
-        {/* 小头像 */}
-        <div className="flex-shrink-0">
-          <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-blue-600 rounded-full flex items-center justify-center">
-            <span className="text-white text-xs font-bold">AI</span>
-          </div>
-        </div>
-        
-        {/* 优化的问题展示区 */}
-        <div className="flex-1 max-w-full">
-          <div className="bg-white rounded-lg border border-gray-200 shadow-sm">
-            <div className="p-4 space-y-3">
-              {/* 问题元信息 */}
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-2">
-                  <div className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center">
-                    <span className="text-white text-xs font-bold">AI</span>
-                  </div>
-                  <span className="text-blue-600 text-sm font-medium">
-                    {sectionTitle}
-                  </span>
-                </div>
-                <span className="text-gray-500 text-sm">
-                  {questionNumber} / {totalQuestions}
-                </span>
+        {/* 问题展示区 - 浅色背景 */}
+        <div className="bg-white rounded-2xl border border-blue-100 shadow-md p-6">
+          {/* 问题元信息 */}
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center space-x-2">
+              <div className="w-7 h-7 bg-gradient-to-r from-blue-400 to-blue-500 rounded-full flex items-center justify-center shadow-sm">
+                <span className="text-white text-xs font-bold">Q</span>
               </div>
-
-              {/* 问题标题 - 优化显示 */}
-              <div className="bg-blue-50 rounded-lg p-4 border-l-4 border-blue-500">
-                {isConversationalMode ? (
-                  <TypewriterText
-                    text={question.title}
-                    speed={60}
-                    onComplete={() => setTypingComplete(true)}
-                    className="text-gray-800 text-base font-medium leading-relaxed"
-                  />
-                ) : (
-                  <div className="text-gray-800 text-base font-medium leading-relaxed">
-                    {question.title}
-                  </div>
-                )}
-              </div>
-              
-              {/* 问题描述 */}
-              {question.description && typingComplete && (
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.5 }}
-                  className="text-gray-600 text-sm leading-relaxed mt-2 pl-4 border-l-2 border-gray-200"
-                >
-                  {question.description}
-                </motion.div>
-              )}
+              <span className="text-blue-600 text-sm font-medium">
+                {sectionTitle}
+              </span>
             </div>
+            <span className="text-gray-500 text-sm font-medium">
+              {questionNumber} / {totalQuestions}
+            </span>
+          </div>
+
+          {/* 问题标题 - 移除打字机效果，直接显示 */}
+          <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-5 border-l-4 border-blue-400">
+            <div className="text-gray-800 text-lg font-medium leading-relaxed">
+              {question.title}
+            </div>
+          </div>
+
+          {/* 问题描述 */}
+          {question.description && (
+            <div className="text-gray-600 text-sm leading-relaxed mt-3 pl-4 border-l-2 border-blue-200">
+              {question.description}
+            </div>
+          )}
+
+          {/* 选项区域 - 直接在卡片内显示 */}
+          <div className="mt-5 space-y-2">
+            {question.type === 'radio' && (
+              <TagSelector
+                options={question.options}
+                value={value}
+                onChange={handleOptionSelect}
+                mode="single"
+                size="medium"
+                animated={false}
+                conversationalStyle={false}
+              />
+            )}
+
+            {question.type === 'checkbox' && (
+              <TagSelector
+                options={question.options}
+                value={value || []}
+                onChange={handleOptionSelect}
+                mode="multiple"
+                size="medium"
+                animated={false}
+                conversationalStyle={false}
+                maxSelections={question.config?.maxSelections}
+              />
+            )}
           </div>
         </div>
       </motion.div>
-      
-      {/* 紧凑选项区域 */}
-      {showOptions && (
+
+      {/* 已选择提示 - 简化显示 */}
+      {value && (
         <motion.div
-          initial={{ opacity: 0, y: 10 }}
+          initial={{ opacity: 0, y: 5 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.3 }}
-          className="ml-8 sm:ml-11 space-y-2"
+          transition={{ duration: 0.2 }}
+          className="mt-3 p-3 bg-green-50 border border-green-200 rounded-lg"
         >
-          {question.type === 'radio' && (
-            <TagSelector
-              options={question.options}
-              value={value}
-              onChange={handleOptionSelect}
-              mode="single"
-              size="medium"
-              animated={true}
-              conversationalStyle={true}
-            />
-          )}
-
-          {question.type === 'checkbox' && (
-            <TagSelector
-              options={question.options}
-              value={value || []}
-              onChange={handleOptionSelect}
-              mode="multiple"
-              size="medium"
-              animated={true}
-              conversationalStyle={true}
-              maxSelections={question.config?.maxSelections}
-            />
-          )}
-
-          {/* 其他问题类型可以在这里扩展 */}
+          <div className="flex items-center space-x-2">
+            <div className="w-5 h-5 bg-green-500 rounded-full flex items-center justify-center">
+              <span className="text-white text-xs">✓</span>
+            </div>
+            <Text className="text-green-700 text-sm font-medium">
+              已选择: {formatUserResponse(value, question.options)}
+            </Text>
+          </div>
         </motion.div>
       )}
-      
-      {/* 用户回答气泡 */}
-      <AnimatePresence>
-        {showUserResponse && value && (
-          <motion.div
-            initial={{ opacity: 0, x: 20, scale: 0.9 }}
-            animate={{ opacity: 1, x: 0, scale: 1 }}
-            exit={{ opacity: 0, x: 20, scale: 0.9 }}
-            transition={{ duration: 0.4 }}
-            className="flex justify-end"
-          >
-            <div className="flex items-start space-x-3 max-w-2xl">
-              {/* 用户回答气泡 */}
-              <Card className="bg-gray-100 border-0 shadow-md">
-                <div className="text-gray-800">
-                  <Text className="text-sm font-medium">
-                    {formatUserResponse(value, question.options)}
-                  </Text>
-                </div>
-              </Card>
-              
-              {/* 用户头像 */}
-              <div className="flex-shrink-0">
-                <div className="w-10 h-10 bg-gradient-to-r from-gray-400 to-gray-500 rounded-full flex items-center justify-center shadow-lg">
-                  <span className="text-white text-sm font-bold">我</span>
-                </div>
-              </div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-      
-      {/* 确认反馈 */}
-      <AnimatePresence>
-        {showUserResponse && value && (
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 10 }}
-            transition={{ delay: 0.3, duration: 0.3 }}
-            className="flex items-start space-x-3"
-          >
-            {/* AI头像 */}
-            <div className="flex-shrink-0">
-              <div className="w-8 h-8 bg-gradient-to-r from-green-500 to-green-600 rounded-full flex items-center justify-center shadow-md">
-                <span className="text-white text-xs">✓</span>
-              </div>
-            </div>
-            
-            {/* 确认消息 */}
-            <div className="bg-green-50 border border-green-200 rounded-lg px-3 py-2">
-              <Text className="text-green-700 text-sm">
-                收到您的回答，正在准备下一个问题...
-              </Text>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </div>
   );
 };

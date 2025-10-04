@@ -2,7 +2,7 @@
 
 .layout {
   min-height: 100vh;
-  background: #ffffff;
+  background: transparent; /* 改为透明，允许子页面自定义背景 */
 }
 
 /* 头部导航 */
@@ -133,8 +133,8 @@
 
 /* 内容区域 */
 .content {
-  padding: 8px 24px;
-  background: #ffffff;
+  padding: 0; /* 移除内边距，由子页面自行控制 */
+  background: transparent; /* 改为透明，允许子页面自定义背景 */
   /* 移除固定高度限制，允许内容自然滚动 */
   overflow-y: auto; /* 确保可以垂直滚动 */
 }
@@ -342,41 +342,42 @@
   }
 }
 
-/* 深色模式支持 */
+/* 深色模式支持 - 已禁用，强制使用浅色主题 */
+/*
 @media (prefers-color-scheme: dark) {
   .layout {
     background: #1f1f1f;
   }
-  
+
   .header {
     background: #1f1f1f !important;
     border-bottom-color: #333 !important;
   }
-  
+
   .logo {
     color: #40a9ff;
   }
-  
+
   .menu :global(.ant-menu-item) {
     color: #ccc;
   }
-  
+
   .menu :global(.ant-menu-item:hover) {
     background: rgba(64, 169, 255, 0.1);
     color: #40a9ff;
   }
-  
+
   .menu :global(.ant-menu-item-selected) {
     background: rgba(64, 169, 255, 0.2);
     color: #40a9ff;
   }
-  
+
   .userButton {
     background: #2a2a2a !important;
     border-color: #444 !important;
     color: #ccc !important;
   }
-  
+
   .content {
     background: #1f1f1f;
     color: #ccc;
@@ -400,3 +401,4 @@
     background-color: rgba(64, 169, 255, 0.1) !important;
   }
 }
+*/

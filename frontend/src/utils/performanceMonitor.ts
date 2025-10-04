@@ -158,6 +158,11 @@ class PerformanceMonitor {
   }
 
   public reportMetrics(): void {
+    // 只在开发模式下偶尔显示性能指标
+    if (!import.meta.env.DEV || Math.random() > 0.1) {
+      return;
+    }
+
     const metrics = this.getMetrics();
     const resources = this.getResourceTimings();
     const memory = this.getMemoryUsage();

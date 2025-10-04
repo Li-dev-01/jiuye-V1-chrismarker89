@@ -5,6 +5,8 @@
 
 import { API_CONFIG } from '../config/apiConfig';
 import { getQuestionnaire2VisualizationConfig, QUESTIONNAIRE2_VISUALIZATION_DIMENSIONS } from '../config/questionnaire2VisualizationMapping';
+import { getCurrentDataSource, useMockData } from '../config/dataSourceConfig';
+import { questionnaire2MockVisualizationData } from './questionnaire2MockData';
 
 export interface Questionnaire2ChartData {
   questionId: string;
@@ -48,15 +50,21 @@ export interface Questionnaire2VisualizationSummary {
 
 class Questionnaire2VisualizationService {
   private baseUrl = API_CONFIG.BASE_URL;
-  private universalQuestionnaireUrl = `${this.baseUrl}/api/universal-questionnaire`;
+  private questionnaire2Url = `${this.baseUrl}/api/questionnaire-v2`;
 
   /**
    * 获取问卷2的完整可视化数据摘要
    */
   async getVisualizationSummary(): Promise<Questionnaire2VisualizationSummary> {
     try {
-      // 使用问卷2的API端点
-      const response = await fetch(`${this.universalQuestionnaireUrl}/statistics/questionnaire-v2-2024?include_test_data=true`);
+      // 检查数据源配置
+      if (useMockData()) {
+        console.log('📊 使用模拟数据 - 问卷2可视化');
+        return this.getStaticVisualizationData();
+      }
+
+      // 使用问卷2的专用API端点
+      const response = await fetch(`${this.questionnaire2Url}/analytics/questionnaire-v2-2024?include_test_data=true`);
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -313,38 +321,9 @@ class Questionnaire2VisualizationService {
    * 获取静态可视化数据（后备数据）
    */
   private getStaticVisualizationData(): Questionnaire2VisualizationSummary {
-    // 返回基于问卷2配置的静态数据
-    const config = getQuestionnaire2VisualizationConfig();
-    
-    return {
-      questionnaireId: 'questionnaire-v2-2024',
-      title: '问卷2可视化分析',
-      totalResponses: 0,
-      completionRate: 0,
-      lastUpdated: new Date().toISOString(),
-      economicPressureInsights: this.generateEconomicPressureInsights({}),
-      employmentConfidenceInsights: this.generateEmploymentConfidenceInsights({}),
-      modernDebtAnalysis: this.generateModernDebtAnalysis({}),
-      dimensions: config.dimensions.map(dimension => ({
-        dimensionId: dimension.id,
-        dimensionTitle: dimension.title,
-        description: dimension.description,
-        icon: dimension.icon,
-        totalResponses: 0,
-        completionRate: 0,
-        charts: dimension.questions.map(question => ({
-          questionId: question.questionId,
-          questionTitle: question.questionTitle,
-          chartType: question.chartType,
-          data: [],
-          totalResponses: 0,
-          lastUpdated: new Date().toISOString(),
-          economicInsight: this.getEconomicInsight(question.questionId),
-          confidenceInsight: this.getConfidenceInsight(question.questionId)
-        })),
-        uniqueFeatures: this.getUniqueFeatures(dimension.id)
-      }))
-    };
+    console.log('📊 使用问卷2模拟数据');
+    // 使用专门的模拟数据
+    return questionnaire2MockVisualizationData;
   }
 }
 

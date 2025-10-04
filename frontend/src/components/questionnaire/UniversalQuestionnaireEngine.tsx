@@ -411,36 +411,7 @@ export const UniversalQuestionnaireEngine: React.FC<UniversalQuestionnaireEngine
 
   return (
     <div className={`${styles.container} ${className}`}>
-      {/* 问卷头部 */}
-      <div className={styles.header}>
-        <Title level={2} className={styles.title}>
-          {questionnaire.title}
-        </Title>
-        {questionnaire.description && (
-          <Text className={styles.description}>
-            {questionnaire.description}
-          </Text>
-        )}
-        
-        {/* 进度条 */}
-        <div className={styles.progressSection}>
-          <div className={styles.progressInfo}>
-            <Text strong>
-              第 {currentSectionIndex + 1} 部分，共 {shouldSkipSubmissionTypeSection ? totalSections - 1 : totalSections} 部分
-            </Text>
-            <Text type="secondary">
-              整体完成度: {Math.round(completionPercentage)}%
-            </Text>
-          </div>
-          <Progress
-            percent={shouldSkipSubmissionTypeSection && currentSectionIndex === totalSections - 1 ? 100 : progress}
-            strokeColor="#1890ff"
-            className={styles.progress}
-          />
-        </div>
-      </div>
-
-      {/* 当前节内容 */}
+      {/* 当前节内容 - 直接展示题目 */}
       <Card className={styles.sectionCard}>
         <div className={styles.sectionHeader}>
           <Title level={3} className={styles.sectionTitle}>
@@ -496,7 +467,7 @@ export const UniversalQuestionnaireEngine: React.FC<UniversalQuestionnaireEngine
             >
               上一步
             </Button>
-            
+
             {isLastSection ? (
               <Button
                 type="primary"
@@ -519,17 +490,28 @@ export const UniversalQuestionnaireEngine: React.FC<UniversalQuestionnaireEngine
             )}
           </Space>
         </div>
+
+        {/* 进度信息 - 移到底部 */}
+        <div className={styles.progressSection}>
+          <div className={styles.progressInfo}>
+            <Text type="secondary" className={styles.progressText}>
+              章节 {currentSectionIndex + 1} / {shouldSkipSubmissionTypeSection ? totalSections - 1 : totalSections}
+            </Text>
+            <Text type="secondary" className={styles.progressText}>
+              预计剩余: {Math.max(0, Math.round((100 - completionPercentage) / 10))} 分钟
+            </Text>
+          </div>
+          <Progress
+            percent={shouldSkipSubmissionTypeSection && currentSectionIndex === totalSections - 1 ? 100 : Math.round(completionPercentage)}
+            strokeColor="#1890ff"
+            showInfo={true}
+            format={(percent) => `${percent}%`}
+            className={styles.progress}
+          />
+        </div>
       </Card>
 
-      {/* 完成度提示 */}
-      {completionPercentage > 0 && completionPercentage < 100 && (
-        <Alert
-          message={`已完成 ${Math.round(completionPercentage)}% 的问题`}
-          type="info"
-          showIcon
-          className={styles.completionAlert}
-        />
-      )}
+      {/* 完成度提示 - 移除，信息已整合到进度条 */}
 
       {/* 移除注册提示弹窗 */}
 

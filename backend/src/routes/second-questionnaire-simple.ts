@@ -4,7 +4,7 @@
  */
 
 import { Hono } from 'hono';
-// import { secondQuestionnaire2024 } from '../data/secondQuestionnaire2024';
+// import { secondQuestionnaire2025V2 } from '../data/secondQuestionnaire2025-v2';
 
 const secondQuestionnaireRoutes = new Hono();
 

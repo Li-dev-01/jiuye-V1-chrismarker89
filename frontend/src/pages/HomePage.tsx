@@ -26,7 +26,7 @@ const HomePage: React.FC = () => {
       icon: <FileTextOutlined />,
     title: '结构化问卷',
     description: '六大分类页面，涵盖个人基本信息、就业情况、工作经历等方面',
-    path: '/questionnaire',
+    path: '/questionnaire-v2/survey',
     buttonText: '开始填写'
     },
     {

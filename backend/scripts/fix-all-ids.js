@@ -12,7 +12,7 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const targetFile = path.join(__dirname, '../src/data/secondQuestionnaire2024.ts');
+const targetFile = path.join(__dirname, '../src/data/secondQuestionnaire2025-v2.ts');
 
 // 转换为camelCase
 function toCamelCase(str) {

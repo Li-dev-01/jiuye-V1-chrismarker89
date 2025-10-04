@@ -44,9 +44,9 @@ import {
   SyncOutlined
 } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
-import { SecondQuestionnaireHeader } from '../components/layout/SecondQuestionnaireHeader';
 import { hybridVisualizationService } from '../services/hybridVisualizationService';
 import { exportService, type ExportOptions, type ShareOptions } from '../services/exportService';
+import { useMockData, getCurrentDataSource } from '../config/dataSourceConfig';
 import { UniversalChart } from '../components/charts/UniversalChart';
 import type {
   HybridVisualizationData,
@@ -90,6 +90,13 @@ const SecondQuestionnaireAnalyticsPage: React.FC = () => {
   const loadHybridData = async () => {
     try {
       setState(prev => ({ ...prev, loading: true, error: null }));
+
+      // 调试信息
+      console.log('🔍 开始加载混合数据...');
+      console.log('📊 数据源配置:', {
+        useMockData: useMockData(),
+        getCurrentDataSource: getCurrentDataSource()
+      });
 
       const response = await hybridVisualizationService.getHybridVisualizationData();
 
@@ -576,11 +583,9 @@ const SecondQuestionnaireAnalyticsPage: React.FC = () => {
   }
 
   return (
-    <Layout style={{ minHeight: '100vh', background: '#f5f5f5' }}>
-      <SecondQuestionnaireHeader />
-      <Content style={{ padding: '24px' }}>
-        {/* 页面头部 */}
-        {renderHeader()}
+    <div style={{ minHeight: '100vh', background: '#f5f5f5', padding: '24px' }}>
+      {/* 页面头部 */}
+      {renderHeader()}
 
         {/* Tab式可视化内容 */}
         <Card>
@@ -694,8 +699,7 @@ const SecondQuestionnaireAnalyticsPage: React.FC = () => {
             ))}
           </Tabs>
         </Card>
-      </Content>
-    </Layout>
+    </div>
   );
 };
 

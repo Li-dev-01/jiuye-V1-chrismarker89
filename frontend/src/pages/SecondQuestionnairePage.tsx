@@ -11,8 +11,8 @@ import { secondQuestionnaireService } from '../services/secondQuestionnaireServi
 import type { SecondQuestionnaireDefinition, SecondQuestionnaireResponse } from '../services/secondQuestionnaireService';
 import { ConversationalQuestionRenderer } from '../components/questionnaire/ConversationalQuestionRenderer';
 import { ProgressPredictor } from '../components/questionnaire/ProgressPredictor';
-import { SecondQuestionnaireHeader } from '../components/layout/SecondQuestionnaireHeader';
 import UniversalAntiSpamVerification from '../components/common/UniversalAntiSpamVerification';
+import { SecondQuestionnaireHeader } from '../components/layout/SecondQuestionnaireHeader';
 import { useSafeAuth } from '../hooks/useSafeAuth';
 import '../styles/SecondQuestionnaire.css';
 
@@ -397,51 +397,11 @@ export const SecondQuestionnairePage: React.FC = () => {
   });
   
   return (
-    <Layout style={{ minHeight: '100vh' }}>
-      <SecondQuestionnaireHeader />
-      <Content style={{ padding: 0 }}>
-        <div className="second-questionnaire-container">
-          <div className="second-questionnaire-content">
-
-            {/* 紧凑进度指示器 */}
-            <div className="second-questionnaire-progress">
-          <div className="flex justify-between items-center mb-3">
-            <div className="flex-1">
-              <div className="flex items-center space-x-3">
-                <Text className="text-lg font-semibold text-gray-800">
-                  {currentSection?.title === '基本信息' ? '问卷调查' : currentSection?.title}
-                </Text>
-                <Text className="text-sm text-gray-500">
-                  第 {currentQuestionIndex + 1} 题 / 共 {currentSection?.questions.length || 0} 题
-                </Text>
-              </div>
-            </div>
-            <div className="text-right">
-              <Text className="text-lg font-bold text-blue-600">
-                {completionProgress}%
-              </Text>
-            </div>
-          </div>
-
-          <Progress
-            percent={completionProgress}
-            strokeColor={{
-              '0%': '#3b82f6',
-              '100%': '#10b981',
-            }}
-            showInfo={false}
-            size="small"
-            className="mb-2"
-          />
-
-          <div className="flex justify-between items-center text-xs text-gray-400">
-            <span>章节 {currentSectionIndex + 1} / {visibleSections.length}</span>
-            <span>预计剩余: {Math.max(0, 10 - Math.round(completionProgress / 10))} 分钟</span>
-          </div>
-        </div>
-        
-            {/* 问题展示区域 */}
-            <AnimatePresence mode="wait">
+    <div style={{ minHeight: '100vh' }}>
+      <div className="second-questionnaire-container">
+        <div className="second-questionnaire-content">
+          {/* 问题展示区域 - 提到最上方 */}
+          <AnimatePresence mode="wait">
               {currentQuestion && (
                 <motion.div
                   key={`${currentSectionIndex}-${currentQuestionIndex}`}
@@ -462,10 +422,10 @@ export const SecondQuestionnairePage: React.FC = () => {
                   />
                 </motion.div>
               )}
-            </AnimatePresence>
-        
-            {/* 紧凑导航按钮 - 多选题始终显示，单选题在回答后隐藏 */}
-            <div className="second-questionnaire-navigation">
+          </AnimatePresence>
+
+          {/* 紧凑导航按钮 - 多选题始终显示，单选题在回答后隐藏 */}
+          <div className="second-questionnaire-navigation">
           <div className="flex justify-between items-center">
             <Button
               onClick={moveToPreviousQuestion}
@@ -502,25 +462,60 @@ export const SecondQuestionnairePage: React.FC = () => {
               <div className="px-4 py-2 text-transparent">占位</div>
             )}
           </div>
-        </div>
-        
-            {/* 错误提示 */}
-            {error && (
-              <div className="second-questionnaire-error">
-                <Alert
-                  message="操作失败"
-                  description={error}
-                  type="error"
-                  showIcon
-                  closable
-                  onClose={() => setError(null)}
-                />
-              </div>
-            )}
           </div>
-        </div>
-      </Content>
 
+          {/* 紧凑进度指示器 - 移到底部 */}
+          <div className="second-questionnaire-progress">
+          <div className="flex justify-between items-center mb-3">
+            <div className="flex-1">
+              <div className="flex items-center space-x-3">
+                <Text className="text-lg font-semibold text-gray-800">
+                  {currentSection?.title === '基本信息' ? '问卷调查' : currentSection?.title}
+                </Text>
+                <Text className="text-sm text-gray-500">
+                  第 {currentQuestionIndex + 1} 题 / 共 {currentSection?.questions.length || 0} 题
+                </Text>
+              </div>
+            </div>
+            <div className="text-right">
+              <Text className="text-lg font-bold text-blue-600">
+                {completionProgress}%
+              </Text>
+            </div>
+          </div>
+
+          <Progress
+            percent={completionProgress}
+            strokeColor={{
+              '0%': '#3b82f6',
+              '100%': '#10b981',
+            }}
+            showInfo={false}
+            size="small"
+            className="mb-2"
+          />
+
+          <div className="flex justify-between items-center text-xs text-gray-400">
+            <span>章节 {currentSectionIndex + 1} / {visibleSections.length}</span>
+            <span>预计剩余: {Math.max(0, 10 - Math.round(completionProgress / 10))} 分钟</span>
+          </div>
+          </div>
+
+          {/* 错误提示 */}
+          {error && (
+            <div className="second-questionnaire-error">
+              <Alert
+                message="操作失败"
+                description={error}
+                type="error"
+                showIcon
+                closable
+                onClose={() => setError(null)}
+              />
+            </div>
+          )}
+        </div>
+      </div>
       {/* 防刷验证弹窗 */}
       <UniversalAntiSpamVerification
         visible={showAntiSpamVerification}
@@ -531,7 +526,7 @@ export const SecondQuestionnairePage: React.FC = () => {
         description="为了防止恶意提交，请选择正确的数字"
         autoSubmit={true}
       />
-    </Layout>
+    </div>
   );
 };
 

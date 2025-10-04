@@ -1,17 +1,90 @@
 /**
- * 第二问卷定义 - 完全独立的问卷系统
+ * 第二问卷定义 - 2025年第2版正式问卷
  * 基于差异化群体分析的深度就业调研问卷
  * 与第一问卷完全独立，仅共用用户认证系统
+ *
+ * @version 2025-v2
+ * @created 2025-01-04
  */
 
 import type { UniversalQuestionnaire } from '../types/universal-questionnaire';
 
-export const secondQuestionnaire2024: UniversalQuestionnaire = {
-  id: 'employmentSurvey2024',
+export const secondQuestionnaire2025V2: UniversalQuestionnaire = {
+  id: 'employmentSurvey2025V2',
   title: '2025年智能就业调查（第二版）',
   description: '基于差异化群体分析的深度就业调研问卷，采用H5对话式交互体验',
   
   sections: [
+    // 第0部分：基础信息（所有人必答）
+    {
+      id: 'basicInformation',
+      title: '基本信息',
+      description: '请提供一些基本信息，帮助我们更好地了解您的情况',
+      metadata: {
+        estimatedTime: 60,
+        cognitiveLoad: 'low',
+        priority: 'critical'
+      },
+      questions: [
+        {
+          id: 'gender',
+          type: 'radio',
+          title: '您的性别是？',
+          description: '用于分析不同性别的就业状况差异',
+          required: true,
+          options: [
+            { value: 'male', label: '男' },
+            { value: 'female', label: '女' },
+            { value: 'prefer-not-say', label: '不愿透露' }
+          ],
+          statistics: {
+            enabled: true,
+            chartType: 'pie',
+            showPercentage: true
+          }
+        },
+        {
+          id: 'ageRange',
+          type: 'radio',
+          title: '您的年龄段是？',
+          description: '用于了解不同年龄群体的就业特点',
+          required: true,
+          options: [
+            { value: 'under-20', label: '20岁以下' },
+            { value: '20-22', label: '20-22岁' },
+            { value: '23-25', label: '23-25岁' },
+            { value: '26-28', label: '26-28岁' },
+            { value: '29-35', label: '29-35岁' },
+            { value: 'over-35', label: '35岁以上' }
+          ],
+          statistics: {
+            enabled: true,
+            chartType: 'bar',
+            showPercentage: true
+          }
+        },
+        {
+          id: 'educationLevel',
+          type: 'radio',
+          title: '您的最高学历是？',
+          description: '用于分析不同教育背景的就业情况',
+          required: true,
+          options: [
+            { value: 'high-school', label: '高中/中专及以下' },
+            { value: 'junior-college', label: '大专' },
+            { value: 'bachelor', label: '本科' },
+            { value: 'master', label: '硕士研究生' },
+            { value: 'phd', label: '博士研究生' }
+          ],
+          statistics: {
+            enabled: true,
+            chartType: 'pie',
+            showPercentage: true
+          }
+        }
+      ]
+    },
+
     // 第1部分：群体识别（关键分支点）
     {
       id: 'participantClassification',
@@ -59,27 +132,6 @@ export const secondQuestionnaire2024: UniversalQuestionnaire = {
               'juniorProfessionalDetails',
               'seniorProfessionalDetails'
             ]
-          }
-        }
-      ]
-    },
-        {
-          id: 'educationLevel',
-          type: 'radio',
-          title: '您的最高学历是？',
-          description: '用于分析不同教育背景的就业情况',
-          required: true,
-          options: [
-            { value: 'high-school', label: '高中/中专及以下' },
-            { value: 'junior-college', label: '大专' },
-            { value: 'bachelor', label: '本科' },
-            { value: 'master', label: '硕士研究生' },
-            { value: 'phd', label: '博士研究生' }
-          ],
-          statistics: {
-            enabled: true,
-            chartType: 'pie',
-            showPercentage: true
           }
         },
         {

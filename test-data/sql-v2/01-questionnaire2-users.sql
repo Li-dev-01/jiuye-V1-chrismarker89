@@ -2,10 +2,10 @@
 DELETE FROM questionnaire_v2_answers WHERE is_test_data = 1;
 DELETE FROM questionnaire_v2_analytics WHERE is_test_data = 1;
 DELETE FROM questionnaire_v2_responses WHERE is_test_data = 1;
-DELETE FROM users WHERE email LIKE "q2_test_%" AND is_test_data = 1;
+DELETE FROM users WHERE email LIKE "q2_test_%";
 
--- 插入问卷2测试用户
-INSERT INTO users (id, email, phone, created_at, is_test_data) VALUES
+-- 插入问卷2测试用户 (适配现有users表结构)
+INSERT INTO users (id, username, email, password_hash, role, created_at, updated_at) VALUES
 ('q2_user_05df7ef283e855bd', 'q2_test_0000@test.example.com', '13831906220', '2025-08-08T01:25:17.520Z', 1),
 ('q2_user_e6b27887dc3d93c9', 'q2_test_0001@test.example.com', '13874570381', '2025-07-21T21:36:41.133Z', 1),
 ('q2_user_02afb624df0b1fa0', 'q2_test_0002@test.example.com', '13865757113', '2025-08-10T19:36:23.598Z', 1),

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>数据源配置测试</title>
+</head>
+<body>
+    <h1>数据源配置测试</h1>
+    <div id="results"></div>
+    
+    <script type="module">
+        // 模拟配置
+        const DATA_SOURCE_CONFIG = {
+            CURRENT_SOURCE: 'mock',
+            FORCE_MOCK_IN_DEV: true,
+        };
+
+        // 模拟环境检查
+        const isDev = true; // 模拟开发环境
+
+        function getCurrentDataSource() {
+            // 开发模式下强制使用模拟数据
+            if (isDev && DATA_SOURCE_CONFIG.FORCE_MOCK_IN_DEV) {
+                return 'mock';
+            }
+            
+            return DATA_SOURCE_CONFIG.CURRENT_SOURCE;
+        }
+
+        function useMockData() {
+            return getCurrentDataSource() === 'mock';
+        }
+
+        // 测试结果
+        const results = document.getElementById('results');
+        results.innerHTML = `
+            <p><strong>开发环境:</strong> ${isDev}</p>
+            <p><strong>FORCE_MOCK_IN_DEV:</strong> ${DATA_SOURCE_CONFIG.FORCE_MOCK_IN_DEV}</p>
+            <p><strong>CURRENT_SOURCE:</strong> ${DATA_SOURCE_CONFIG.CURRENT_SOURCE}</p>
+            <p><strong>getCurrentDataSource():</strong> ${getCurrentDataSource()}</p>
+            <p><strong>useMockData():</strong> ${useMockData()}</p>
+        `;
+
+        console.log('📊 数据源配置测试结果:');
+        console.log('- 开发环境:', isDev);
+        console.log('- FORCE_MOCK_IN_DEV:', DATA_SOURCE_CONFIG.FORCE_MOCK_IN_DEV);
+        console.log('- CURRENT_SOURCE:', DATA_SOURCE_CONFIG.CURRENT_SOURCE);
+        console.log('- getCurrentDataSource():', getCurrentDataSource());
+        console.log('- useMockData():', useMockData());
+    </script>
+</body>
+</html>

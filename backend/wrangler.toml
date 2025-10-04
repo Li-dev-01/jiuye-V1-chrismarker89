@@ -48,13 +48,12 @@ crons = [
 # 测试环境配置 - 问卷2集成测试
 [env.test]
 name = "employment-survey-api-test"
-vars = {
-  ENVIRONMENT = "test",
-  JWT_SECRET = "test-jwt-secret-key-for-questionnaire2",
-  CORS_ORIGIN = "*",
-  R2_BUCKET_NAME = "employment-survey-storage-test",
-  GOOGLE_CLIENT_SECRET = "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"
-}
+[env.test.vars]
+ENVIRONMENT = "test"
+JWT_SECRET = "test-jwt-secret-key-for-questionnaire2"
+CORS_ORIGIN = "*"
+R2_BUCKET_NAME = "employment-survey-storage-test"
+GOOGLE_CLIENT_SECRET = "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"
 
 # 测试环境使用相同的数据库，但会添加问卷2专用表
 [[env.test.d1_databases]]
@@ -62,9 +61,10 @@ binding = "DB"
 database_name = "college-employment-survey"
 database_id = "25eee5bd-9aee-439a-8723-c73bf5f4f3d9"
 
-[[env.test.r2_buckets]]
-binding = "R2_BUCKET"
-bucket_name = "employment-survey-storage-test"
+# R2存储桶暂时禁用，避免部署错误
+# [[env.test.r2_buckets]]
+# binding = "R2_BUCKET"
+# bucket_name = "employment-survey-storage-test"
 
 [env.test.ai]
 binding = "AI"

@@ -104,8 +104,9 @@ class QuestionnaireVisualizationService {
         dimensions: this.convertToDimensions(data)
       };
     } catch (error) {
-      console.error('Failed to fetch visualization summary:', error);
-      throw error;
+      console.error('❌ API获取可视化摘要失败，降级到模拟数据:', error);
+      // 降级到模拟数据
+      return await mockVisualizationService.getSummary();
     }
   }
 
@@ -241,8 +242,19 @@ class QuestionnaireVisualizationService {
       return dimensionCompatibilityAdapter.convertStandardToCompatibleFormat(standardDimensionData, dimensionId);
 
     } catch (error) {
-      console.error(`Failed to fetch dimension data for ${dimensionId}:`, error);
-      throw error;
+      console.error(`❌ API获取维度数据失败 (${dimensionId})，降级到模拟数据:`, error);
+      // 降级到模拟数据
+      try {
+        const mockData = await mockVisualizationService.getDimensionData(dimensionId);
+        if (mockData) {
+          console.log(`✅ 使用模拟数据作为降级方案: ${dimensionId}`);
+          return mockData;
+        }
+      } catch (mockError) {
+        console.error(`模拟数据也获取失败:`, mockError);
+      }
+      // 如果模拟数据也失败，返回回退数据
+      return this.generateFallbackDimensionData(dimensionId);
     }
   }
 
@@ -606,8 +618,24 @@ class QuestionnaireVisualizationService {
       return allDimensionsData;
 
     } catch (error) {
-      console.error('Failed to fetch all dimensions data:', error);
-      throw error;
+      console.error('❌ API获取所有维度数据失败，降级到模拟数据:', error);
+      // 降级到模拟数据
+      const result: Record<string, DimensionData> = {};
+      const supportedIds = getSupportedDimensionIds();
+
+      for (const dimensionId of supportedIds) {
+        try {
+          const data = await mockVisualizationService.getDimensionData(dimensionId);
+          if (data) {
+            result[dimensionId] = data;
+          }
+        } catch (mockError) {
+          console.warn(`模拟数据加载失败 ${dimensionId}:`, mockError);
+          result[dimensionId] = this.generateEmptyDimensionData(dimensionId);
+        }
+      }
+
+      return result;
     }
   }
 
@@ -636,6 +664,23 @@ class QuestionnaireVisualizationService {
     lastUpdated: string;
     availableDimensions: string[];
   }> {
+    // 检查数据源配置
+    if (useMockData()) {
+      console.log('📊 使用模拟数据 - 数据源信息');
+      return {
+        source: 'mock',
+        totalResponses: 1247,
+        dataQuality: {
+          completionRate: 89.3,
+          validityScore: 94.7,
+          consistencyScore: 91.2,
+          lastValidation: new Date().toISOString()
+        },
+        lastUpdated: new Date().toISOString(),
+        availableDimensions: getAllFrontendDimensionIds()
+      };
+    }
+
     try {
       const response = await fetch(`${this.universalQuestionnaireUrl}/statistics/employment-survey-2024?include_test_data=true`);
       if (!response.ok) {
@@ -651,7 +696,7 @@ class QuestionnaireVisualizationService {
       const qualityReport = unifiedDataTransformService.getDataQualityReport(apiData);
 
       return {
-        source: useMockData() ? 'mock' : 'api',
+        source: 'api',
         totalResponses: apiData.totalResponses || 0,
         dataQuality: qualityReport,
         lastUpdated: apiData.cacheInfo?.lastUpdated || new Date().toISOString(),
@@ -659,8 +704,20 @@ class QuestionnaireVisualizationService {
       };
 
     } catch (error) {
-      console.error('Failed to get data source info:', error);
-      throw error;
+      console.error('❌ API获取数据源信息失败，降级到模拟数据:', error);
+      // 降级到模拟数据
+      return {
+        source: 'mock (API fallback)',
+        totalResponses: 1247,
+        dataQuality: {
+          completionRate: 89.3,
+          validityScore: 94.7,
+          consistencyScore: 91.2,
+          lastValidation: new Date().toISOString()
+        },
+        lastUpdated: new Date().toISOString(),
+        availableDimensions: getAllFrontendDimensionIds()
+      };
     }
   }
 

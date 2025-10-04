@@ -11,7 +11,6 @@ import {
 } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { SecondQuestionnaireHeader } from '../components/layout/SecondQuestionnaireHeader';
 import '../styles/SecondQuestionnaire.css';
 
 const { Content, Footer } = Layout;
@@ -45,8 +44,7 @@ export const SecondQuestionnaireHomePage: React.FC = () => {
   ];
 
   return (
-    <Layout style={{ minHeight: '100vh' }}>
-      <SecondQuestionnaireHeader />
+    <div style={{ minHeight: '100vh' }}>
       
       <Content style={{ padding: '0' }}>
         {/* Hero Section */}
@@ -289,12 +287,7 @@ export const SecondQuestionnaireHomePage: React.FC = () => {
         </motion.div>
       </Content>
       
-      <Footer style={{ textAlign: 'center', backgroundColor: '#f8f9fa' }}>
-        <Text type="secondary">
-          2025大学生就业问卷调查平台 - 第二版 | 基于差异化群体的智能分析系统
-        </Text>
-      </Footer>
-    </Layout>
+    </div>
   );
 };
 

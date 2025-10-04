@@ -37,6 +37,8 @@ const StorySubmitPage = React.lazy(() => import('./pages/StorySubmitPage'));
 
 // 测试页面
 const TurnstileTestPage = React.lazy(() => import('./pages/TurnstileTestPage'));
+const DataSourceTestPage = React.lazy(() => import('./pages/DataSourceTestPage'));
+const SimpleAnalyticsTestPage = React.lazy(() => import('./pages/SimpleAnalyticsTestPage'));
 
 // 用户内容管理页面
 const MyContentPage = React.lazy(() => import('./pages/user/MyContent'));
@@ -117,8 +119,8 @@ function App() {
     // 清理过期缓存
     cacheManager.cleanup();
 
-    // 在开发环境中显示性能信息
-    if (process.env.NODE_ENV === 'development') {
+    // 在开发环境中显示性能信息（减少频率）
+    if (import.meta.env.DEV && Math.random() < 0.2) {
       console.log('Performance Monitor initialized');
       console.log('Cache Manager initialized');
     }
@@ -150,18 +152,12 @@ function App() {
                     } />
 
 
-                    {/* 可视化导航页面 */}
-                    <Route path="/analytics/nav" element={
-                      <PublicRouteGuard>
-                        <QuestionnaireLayout>
-                          <AnalyticsNavigationPage />
+                    {/* ========================================= */}
+                    {/* 数据可视化路由 - 正式项目                  */}
+                    {/* ========================================= */}
 
-                        </QuestionnaireLayout>
-                      </PublicRouteGuard>
-                    } />
-
-                    {/* 主要可视化页面 - 使用优化的新版本 */}
-                    <Route path="/analytics" element={
+                    {/* 数据可视化V1（问卷1的6维度分析） */}
+                    <Route path="/analytics/v1" element={
                       <PublicRouteGuard>
                         <QuestionnaireLayout>
                           <NewQuestionnaireVisualizationPage />
@@ -169,28 +165,21 @@ function App() {
                       </PublicRouteGuard>
                     } />
 
-                    {/* 新的问卷可视化页面 - 主要入口 */}
-                    <Route path="/analytics/visualization" element={
+                    {/* 数据可视化V2（问卷2的混合分析） */}
+                    <Route path="/analytics/v2" element={
                       <PublicRouteGuard>
                         <QuestionnaireLayout>
-                          <NewQuestionnaireVisualizationPage />
+                          <SecondQuestionnaireAnalyticsPage />
                         </QuestionnaireLayout>
                       </PublicRouteGuard>
                     } />
 
+                    {/* 默认可视化页面 - 重定向到V2 */}
+                    <Route path="/analytics" element={<Navigate to="/analytics/v2" replace />} />
 
-
-
-
-                    {/* 原有的可视化页面 - 保留作为备份 */}
-                    {/* <Route path="/analytics/original" element={
-                      <PublicRouteGuard>
-                        <QuestionnaireLayout>
-                          <AnalyticsPage />
-
-                        </QuestionnaireLayout>
-                      </PublicRouteGuard>
-                    } /> */}
+                    {/* 兼容性重定向 - 旧路由 */}
+                    <Route path="/analytics/visualization" element={<Navigate to="/analytics/v1" replace />} />
+                    <Route path="/analytics/nav" element={<Navigate to="/analytics/v2" replace />} />
 
 
                     <Route path="/stories" element={
@@ -294,6 +283,20 @@ function App() {
                         </QuestionnaireLayout>
                       </PublicRouteGuard>
                     } />
+                    <Route path="/test/datasource" element={
+                      <PublicRouteGuard>
+                        <QuestionnaireLayout>
+                          <DataSourceTestPage />
+                        </QuestionnaireLayout>
+                      </PublicRouteGuard>
+                    } />
+                    <Route path="/test/analytics" element={
+                      <PublicRouteGuard>
+                        <QuestionnaireLayout>
+                          <SimpleAnalyticsTestPage />
+                        </QuestionnaireLayout>
+                      </PublicRouteGuard>
+                    } />
 
                     {/* 其他测试路由已移动到归档目录 */}
                     {/* <Route path="/test/state" element={<PublicRouteGuard><StateTest /></PublicRouteGuard>} /> */}
@@ -322,49 +325,43 @@ function App() {
                     <Route path="/user/login-history" element={<UserRouteGuard><LoginHistoryPage /></UserRouteGuard>} />
                     <Route path="/user/two-factor" element={<UserRouteGuard><TwoFactorAuthPage /></UserRouteGuard>} />
 
-                    {/* 独立问卷系统路由 */}
+                    {/* ========================================= */}
+                    {/* 问卷系统路由 - 正式项目                    */}
+                    {/* ========================================= */}
 
-                    {/* 问卷1系统（传统问卷） */}
+                    {/* 问卷V2（主要问卷系统） */}
                     <Route path="/questionnaire" element={
                       <PublicRouteGuard>
                         <QuestionnaireLayout>
-                          <QuestionnairePage />
+                          <SecondQuestionnaireHomePage />
                         </QuestionnaireLayout>
                       </PublicRouteGuard>
                     } />
 
-                    <Route path="/questionnaire-v1" element={
+                    <Route path="/questionnaire/survey" element={
                       <PublicRouteGuard>
                         <QuestionnaireLayout>
-                          <QuestionnairePage />
+                          <SecondQuestionnairePage />
                         </QuestionnaireLayout>
                       </PublicRouteGuard>
                     } />
 
-                    {/* 问卷2系统（智能问卷） */}
-                    <Route path="/questionnaire-v2" element={
+                    <Route path="/questionnaire/complete" element={
                       <PublicRouteGuard>
-                        <SecondQuestionnaireHomePage />
+                        <QuestionnaireLayout>
+                          <SecondQuestionnaireCompletePage />
+                        </QuestionnaireLayout>
                       </PublicRouteGuard>
                     } />
 
-                    <Route path="/questionnaire-v2/survey" element={
-                      <PublicRouteGuard>
-                        <SecondQuestionnairePage />
-                      </PublicRouteGuard>
-                    } />
-
-                    <Route path="/questionnaire-v2/complete" element={
-                      <PublicRouteGuard>
-                        <SecondQuestionnaireCompletePage />
-                      </PublicRouteGuard>
-                    } />
-
-                    <Route path="/questionnaire-v2/analytics" element={
-                      <PublicRouteGuard>
-                        <SecondQuestionnaireAnalyticsPage />
-                      </PublicRouteGuard>
-                    } />
+                    {/* ========================================= */}
+                    {/* 兼容性重定向 - 旧的测试路由                */}
+                    {/* ========================================= */}
+                    <Route path="/questionnaire-v2" element={<Navigate to="/questionnaire" replace />} />
+                    <Route path="/questionnaire-v2/survey" element={<Navigate to="/questionnaire/survey" replace />} />
+                    <Route path="/questionnaire-v2/complete" element={<Navigate to="/questionnaire/complete" replace />} />
+                    <Route path="/questionnaire-v2/analytics" element={<Navigate to="/analytics/v2" replace />} />
+                    <Route path="/questionnaire-v1" element={<Navigate to="/questionnaire/survey" replace />} />
 
                     {/* 问卷组合生成器 */}
                     <Route path="/questionnaire/combo-generator" element={

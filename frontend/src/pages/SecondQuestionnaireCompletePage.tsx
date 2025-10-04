@@ -15,7 +15,6 @@ import {
   ShareAltOutlined,
   DownloadOutlined
 } from '@ant-design/icons';
-import { SecondQuestionnaireHeader } from '../components/layout/SecondQuestionnaireHeader';
 
 const { Title, Text, Paragraph } = Typography;
 const { Content } = Layout;
@@ -128,11 +127,8 @@ export const SecondQuestionnaireCompletePage: React.FC = () => {
   const completionRating = getCompletionRating(completionData.completionTime, completionData.interactionCount);
   
   return (
-    <Layout style={{ minHeight: '100vh' }}>
-      <SecondQuestionnaireHeader />
-      <Content>
-        <div className="min-h-screen bg-gradient-to-br from-green-50 via-blue-50 to-purple-50">
-          <div className="max-w-4xl mx-auto px-4 py-8">
+    <div className="min-h-screen bg-gradient-to-br from-green-50 via-blue-50 to-purple-50">
+      <div className="max-w-4xl mx-auto px-4 py-8">
         {/* 成功标题 */}
         <motion.div
           initial={{ opacity: 0, y: -30 }}
@@ -367,10 +363,8 @@ export const SecondQuestionnaireCompletePage: React.FC = () => {
             </div>
           </Card>
         </motion.div>
-          </div>
-        </div>
-      </Content>
-    </Layout>
+      </div>
+    </div>
   );
 };
 

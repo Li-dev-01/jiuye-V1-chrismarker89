@@ -6,6 +6,7 @@ import { corsMiddleware } from './middleware/cors';
 import { versionMiddleware } from './middleware/version';
 import { createAuthRoutes } from './routes/auth';
 import { createQuestionnaireRoutes } from './routes/questionnaire';
+import { createQuestionnaireV2Routes } from './routes/questionnaire-v2';
 import { createUniversalQuestionnaireRoutes } from './routes/universal-questionnaire';
 import { createUUIDRoutes } from './routes/uuid';
 import { createSuperAdminRoutes } from './routes/super-admin';
@@ -223,6 +224,9 @@ function createApiRoutes() {
 
   // 问卷路由
   api.route('/questionnaire', createQuestionnaireRoutes());
+
+  // 问卷2独立路由
+  api.route('/questionnaire-v2', createQuestionnaireV2Routes());
 
   // 通用问卷路由
   api.route('/universal-questionnaire', createUniversalQuestionnaireRoutes());

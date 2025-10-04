@@ -416,26 +416,36 @@ class GlobalStateManager {
 
   private getCurrentUser(): UniversalUser | null {
     try {
-      console.log('🔍 检查当前用户状态...');
+      // 减少日志频率，只在开发模式下偶尔显示详细日志
+      if (import.meta.env.DEV && Math.random() < 0.1) {
+        console.log('🔍 检查当前用户状态...');
+      }
 
       // 首先尝试从UUID系统获取用户
       let userData = localStorage.getItem(this.STORAGE_KEYS.CURRENT_USER);
       if (userData) {
-        console.log('✅ 从UUID系统获取到用户数据');
+        if (import.meta.env.DEV && Math.random() < 0.1) {
+          console.log('✅ 从UUID系统获取到用户数据');
+        }
         return JSON.parse(userData);
       }
 
       // 如果UUID系统没有用户，尝试从问卷认证系统获取
       userData = localStorage.getItem('questionnaire_current_user');
       if (userData) {
-        console.log('✅ 从问卷认证系统获取到用户数据');
-        const questionnaireUser = JSON.parse(userData);
-        console.log('📋 原始问卷用户数据:', questionnaireUser);
+        if (import.meta.env.DEV && Math.random() < 0.1) {
+          console.log('✅ 从问卷认证系统获取到用户数据');
+          const questionnaireUser = JSON.parse(userData);
+          console.log('📋 原始问卷用户数据:', questionnaireUser);
+        }
         // 转换问卷用户格式为通用用户格式
-        return this.convertQuestionnaireUserToUniversalUser(questionnaireUser);
+        return this.convertQuestionnaireUserToUniversalUser(JSON.parse(userData));
       }
 
-      console.log('❌ 未找到任何用户数据');
+      // 减少日志频率
+      if (import.meta.env.DEV && Math.random() < 0.05) {
+        console.log('❌ 未找到任何用户数据');
+      }
       return null;
     } catch (error) {
       console.error('❌ 获取当前用户失败:', error);

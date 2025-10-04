@@ -11,10 +11,10 @@ export const DATA_SOURCE_CONFIG = {
   // 当前数据源类型
   // 'mock' - 使用模拟数据（开发和演示阶段）
   // 'api' - 使用真实API数据（生产阶段）
-  CURRENT_SOURCE: 'api' as DataSourceType,
+  CURRENT_SOURCE: 'api' as DataSourceType,  // ✅ 已切换到真实API
 
-  // 开发模式下强制使用模拟数据 - 已禁用，切换到真实数据
-  FORCE_MOCK_IN_DEV: false,
+  // 开发模式下强制使用模拟数据 - 已禁用，使用真实API
+  FORCE_MOCK_IN_DEV: false,  // ✅ 已禁用，允许开发环境使用真实API
   
   // 数据源切换提示
   SHOW_DATA_SOURCE_INDICATOR: true,

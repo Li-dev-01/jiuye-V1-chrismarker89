@@ -18,9 +18,11 @@ export const GlobalHeader: React.FC = () => {
   const getSelectedKey = () => {
     const path = location.pathname;
     if (path === '/') return 'home';
+    if (path.startsWith('/questionnaire-v2/analytics')) return 'analysis-v2';
     if (path.startsWith('/questionnaire-v2')) return 'survey-v2';
     if (path.startsWith('/questionnaire')) return 'survey';
-    if (path.startsWith('/analytics')) return 'analysis';
+    if (path === '/analytics/nav') return 'analysis-nav';
+    if (path.startsWith('/analytics')) return 'analysis-v1';
     if (path.startsWith('/results')) return 'results';
     if (path.startsWith('/stories')) return 'story';
     if (path.startsWith('/favorites')) return 'favorites';
@@ -65,7 +67,21 @@ export const GlobalHeader: React.FC = () => {
     },
     {
       key: 'analysis',
-      label: <Link to="/analytics" style={{ color: 'inherit', textDecoration: 'none' }}>数据可视化</Link>
+      label: '数据可视化',
+      children: [
+        {
+          key: 'analysis-v1',
+          label: <Link to="/analytics" style={{ color: 'inherit', textDecoration: 'none' }}>问卷1可视化</Link>
+        },
+        {
+          key: 'analysis-v2',
+          label: <Link to="/questionnaire-v2/analytics" style={{ color: 'inherit', textDecoration: 'none' }}>问卷2可视化</Link>
+        },
+        {
+          key: 'analysis-nav',
+          label: <Link to="/analytics/nav" style={{ color: 'inherit', textDecoration: 'none' }}>可视化导航</Link>
+        }
+      ]
     },
     {
       key: 'results',

@@ -1,9 +1,10 @@
-/* 第二问卷专用样式 */
+/* 第二问卷专用样式 - 优化版 */
 
 /* 确保动画在所有设备上都能正常工作 */
 .second-questionnaire-container {
   min-height: 100vh;
-  background: linear-gradient(135deg, #f0f4ff 0%, #e6f0ff 50%, #f0e6ff 100%);
+  /* 优化背景色：使用温暖的浅色系，避免深色压抑感 */
+  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 50%, #dbeafe 100%);
 }
 
 .second-questionnaire-container * {
@@ -17,12 +18,12 @@
   align-items: center;
   justify-content: center;
   min-height: 100vh;
-  background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%);
+  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
 }
 
 /* 错误状态加载页面 */
 .second-questionnaire-loading.error {
-  background: linear-gradient(135deg, #fef2f2 0%, #fce7f3 100%);
+  background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
 }
 
 .second-questionnaire-loading .ant-card {
@@ -42,23 +43,28 @@
   background-color: #667eea;
 }
 
-/* 问卷内容区域 */
+/* 问卷内容区域 - 桌面固定宽度 */
 .second-questionnaire-content {
-  max-width: 800px;
+  max-width: 900px; /* 增加宽度，更舒适 */
   margin: 0 auto;
-  padding: 24px 16px;
+  padding: 32px 24px;
 }
 
-
+/* 桌面环境固定最小高度 */
+@media (min-width: 768px) {
+  .second-questionnaire-content {
+    min-height: 600px; /* 固定最小高度，避免动态调整 */
+  }
+}
 
 /* 进度指示器 */
 .second-questionnaire-progress {
   background: white;
-  border-radius: 12px;
-  padding: 20px;
+  border-radius: 16px;
+  padding: 24px;
   margin-bottom: 24px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-  border: 1px solid #e2e8f0;
+  box-shadow: 0 2px 12px rgba(59, 130, 246, 0.08);
+  border: 1px solid #dbeafe;
 }
 
 .second-questionnaire-progress .ant-progress-line {
@@ -67,63 +73,65 @@
 
 .second-questionnaire-progress .ant-progress-bg {
   border-radius: 8px;
+  background: linear-gradient(90deg, #3b82f6 0%, #2563eb 100%);
 }
 
-/* 问题卡片 */
+/* 问题卡片 - 移除悬停效果，保持稳定 */
 .second-questionnaire-question {
   background: white;
-  border-radius: 12px;
-  padding: 24px;
+  border-radius: 16px;
+  padding: 0; /* 内边距由 ConversationalQuestionRenderer 控制 */
   margin-bottom: 24px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  border: 1px solid #e2e8f0;
-  transition: all 0.3s ease;
+  box-shadow: 0 4px 16px rgba(59, 130, 246, 0.1);
+  border: 1px solid #dbeafe;
+  transition: none; /* 移除过渡效果 */
 }
 
+/* 移除悬停效果，保持视觉稳定 */
 .second-questionnaire-question:hover {
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(59, 130, 246, 0.1);
+  transform: none;
 }
 
 /* 导航按钮 */
 .second-questionnaire-navigation {
   background: white;
-  border-radius: 12px;
-  padding: 16px 20px;
+  border-radius: 16px;
+  padding: 20px 24px;
   margin-top: 24px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-  border: 1px solid #e2e8f0;
+  box-shadow: 0 2px 12px rgba(59, 130, 246, 0.08);
+  border: 1px solid #dbeafe;
 }
 
 .second-questionnaire-navigation .ant-btn {
-  height: 40px;
-  border-radius: 8px;
+  height: 44px;
+  border-radius: 10px;
   font-weight: 500;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
 }
 
 .second-questionnaire-navigation .ant-btn-primary {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
   border: none;
-  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
 }
 
 .second-questionnaire-navigation .ant-btn-primary:hover {
-  background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
   transform: translateY(-1px);
 }
 
 .second-questionnaire-navigation .ant-btn-default {
   background: white;
-  border-color: #d1d5db;
-  color: #374151;
+  border-color: #cbd5e1;
+  color: #475569;
 }
 
 .second-questionnaire-navigation .ant-btn-default:hover {
-  border-color: #9ca3af;
-  color: #1f2937;
-  background: #f9fafb;
+  border-color: #94a3b8;
+  color: #1e293b;
+  background: #f8fafc;
 }
 
 /* 错误提示 */
@@ -236,12 +244,13 @@
   }
 }
 
-/* 暗色主题支持 */
+/* 暗色主题支持 - 已禁用，强制使用浅色主题 */
+/*
 @media (prefers-color-scheme: dark) {
   .second-questionnaire-container {
     background: linear-gradient(135deg, #1a202c 0%, #2d3748 50%, #4a5568 100%);
   }
-  
+
   .second-questionnaire-question,
   .second-questionnaire-progress,
   .second-questionnaire-navigation {
@@ -249,6 +258,5 @@
     border-color: #4a5568;
     color: #e2e8f0;
   }
-  
-
 }
+*/

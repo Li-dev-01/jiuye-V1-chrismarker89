@@ -50,25 +50,23 @@ export const QuestionnaireLayout: React.FC<QuestionnaireLayoutProps> = ({ childr
     {
       key: '/questionnaire',
       icon: <FileTextOutlined />,
-      label: <Link to="/questionnaire">问卷1</Link>
+      label: <Link to="/questionnaire/survey">问卷</Link>
     },
     {
-      key: '/questionnaire-v2',
-      icon: <ExperimentOutlined />,
-      label: <Link to="/questionnaire-v2">问卷2</Link>
-    },
-    {
-      key: '/analytics',
+      key: '/analytics/v1',
       icon: <BarChartOutlined />,
-      label: <Link to="/analytics">数据分析</Link>
+      label: <Link to="/analytics/v1">数据可视化V1</Link>
+    },
+    {
+      key: '/analytics/v2',
+      icon: <ExperimentOutlined />,
+      label: <Link to="/analytics/v2">数据可视化V2</Link>
     },
     {
       key: '/stories',
       icon: <BookOutlined />,
       label: <Link to="/stories">故事墙</Link>
     },
-
-
   ];
 
   // 用户菜单
@@ -108,7 +106,9 @@ export const QuestionnaireLayout: React.FC<QuestionnaireLayoutProps> = ({ childr
   const getSelectedKey = () => {
     const path = location.pathname;
     if (path.startsWith('/questionnaire')) return '/questionnaire';
-    if (path.startsWith('/analytics')) return '/analytics';
+    if (path.startsWith('/analytics/v1')) return '/analytics/v1';
+    if (path.startsWith('/analytics/v2')) return '/analytics/v2';
+    if (path.startsWith('/analytics')) return '/analytics/v2'; // 默认选中V2
     if (path.startsWith('/stories')) return '/stories';
 
     return '/';
