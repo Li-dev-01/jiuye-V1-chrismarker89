@@ -31,18 +31,10 @@ gateway_id = "chris-ai-01"
 [[analytics_engine_datasets]]
 binding = "ANALYTICS"
 
-# 定时任务配置 - 多级同步服务
+# 定时任务配置 - 问卷2数据同步
 [triggers]
 crons = [
-  "*/5 * * * *",    # 每5分钟：实时统计同步 (analytics_to_realtime)
-  "*/10 * * * *",   # 每10分钟：聚合统计同步 (realtime_to_aggregated)
-  "*/15 * * * *",   # 每15分钟：仪表板缓存同步 (aggregated_to_dashboard, dashboard_to_visualization)
-  "*/30 * * * *",   # 每30分钟：导出数据同步 (analytics_to_export)
-  "0 * * * *",      # 每小时：社会洞察数据同步 (analytics_to_social)
-  "0 */6 * * *",    # 每6小时：自动缓存优化分析
-  "0 8 * * *",      # 每天上午8点：数据一致性检查
-  "0 2 * * *",      # 每天凌晨2点：数据质量监控和清理
-  "0 0 * * SUN"     # 每周日凌晨：性能基准更新
+  "*/30 * * * *"    # 每30分钟：问卷2数据同步到静态表
 ]
 
 # 测试环境配置 - 问卷2集成测试

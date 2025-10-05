@@ -10,6 +10,7 @@ import { createDatabaseService } from '../db';
 import { authMiddleware, optionalAuthMiddleware } from '../middleware/auth';
 import { questionnaireV2ConfigManager } from '../data/questionnaire2/config';
 import { Questionnaire2StatsCalculator } from '../services/questionnaire2StatsCalculator';
+import { Questionnaire2SyncHandler } from '../handlers/questionnaire2SyncHandler';
 
 // 辅助计算函数
 function calculateEconomicPressureStats(responses: any[]) {
@@ -1108,6 +1109,39 @@ export function createQuestionnaireV2Routes() {
       });
     } catch (error: any) {
       console.error('❌ 直接同步静态表失败:', error);
+      return c.json({
+        success: false,
+        error: error.message
+      }, 500);
+    }
+  });
+
+  // 手动触发完整同步（用于测试定时任务）
+  questionnaireV2.post('/sync-full', async (c) => {
+    try {
+      const env = c.env as Env;
+
+      if (!env.DB) {
+        return c.json({
+          success: false,
+          error: 'Database not configured'
+        }, 500);
+      }
+
+      console.log('🔄 手动触发完整同步...');
+      const handler = new Questionnaire2SyncHandler(env.DB);
+      const result = await handler.executeFullSync();
+
+      return c.json({
+        success: result.success,
+        message: '完整同步完成',
+        syncedTables: result.syncedTables,
+        totalRecords: result.totalRecords,
+        errors: result.errors,
+        timestamp: Date.now()
+      });
+    } catch (error: any) {
+      console.error('❌ 完整同步失败:', error);
       return c.json({
         success: false,
         error: error.message

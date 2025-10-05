@@ -36,6 +36,7 @@ import { createQuestionnaireV2Routes } from './routes/questionnaire-v2';
 import { createDatabaseFixRoutes } from './routes/database-fix';
 import { createUnifiedUserCreationRoutes } from './routes/unified-user-creation';
 // import { CronHandler, type CronEvent } from './handlers/cronHandler';
+import { handleScheduledSync, type CronEvent, type Questionnaire2SyncEnv } from './handlers/questionnaire2SyncHandler';
 import pngManagementRoutes from './routes/png-management-simple';
 import turnstileTestRoutes from './routes/test/turnstile';
 import simpleTestRoutes from './routes/test/simple';
@@ -695,9 +696,16 @@ appWithEnv.route('/', app);
 export default {
   fetch: app.fetch,
 
-  // 定时任务处理器 - 暂时禁用
-  // async scheduled(event: CronEvent, env: Env, ctx: ExecutionContext): Promise<void> {
-  //   console.log('🕐 Cloudflare Workers 定时任务触发:', event.cron);
-  //   // 暂时禁用定时任务功能
-  // }
+  // 定时任务处理器 - 问卷2数据同步
+  async scheduled(event: CronEvent, env: Env, ctx: ExecutionContext): Promise<void> {
+    console.log('🕐 Cloudflare Workers 定时任务触发:', event.cron);
+
+    try {
+      // 执行问卷2数据同步
+      await handleScheduledSync(event, env as unknown as Questionnaire2SyncEnv);
+      console.log('✅ 定时任务执行成功');
+    } catch (error) {
+      console.error('❌ 定时任务执行失败:', error);
+    }
+  }
 };

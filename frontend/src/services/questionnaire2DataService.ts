@@ -94,16 +94,15 @@ class Questionnaire2DataService {
       return statistics;
     } catch (error: any) {
       console.error('❌ 数据加载失败:', error);
-      
+
       // 如果有缓存，返回缓存
       if (this.cache) {
         console.log('⚠️ 使用过期缓存数据');
         return this.cache;
       }
 
-      // 返回模拟数据
-      console.log('⚠️ 使用模拟数据');
-      return this.getMockStatistics();
+      // 线上环境禁用模拟数据，直接抛出错误
+      throw new Error('无法加载问卷2统计数据，请检查API连接');
     }
   }
 
@@ -208,7 +207,8 @@ class Questionnaire2DataService {
   }
 
   /**
-   * 获取模拟统计数据（用于开发和错误回退）
+   * 获取模拟统计数据（仅用于本地开发，线上环境已禁用）
+   * @deprecated 线上环境禁用模拟数据
    */
   private getMockStatistics(): Questionnaire2Statistics {
     return {
