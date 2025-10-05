@@ -513,26 +513,6 @@ export const questionnaire2Definition: UniversalQuestionnaire = {
             chartType: 'bar',
             showPercentage: true
           }
-        },
-        {
-          id: 'discrimination-case-open-v2',
-          type: 'textarea',
-          title: '如果您愿意，可以简要描述一次印象深刻的歧视经历（可选）',
-          description: '您的分享将帮助我们更好地了解就业市场的真实状况，完全匿名',
-          required: false,
-          condition: {
-            dependsOn: 'experienced-discrimination-types-v2',
-            operator: 'not_in',
-            value: ['none']
-          },
-          config: {
-            maxLength: 500,
-            rows: 4,
-            placeholder: '例如：在某次面试中，面试官直接询问婚育计划，并表示公司不希望招聘近期有生育计划的女性...'
-          },
-          statistics: {
-            enabled: false
-          }
         }
       ]
     },
@@ -549,36 +529,6 @@ export const questionnaire2Definition: UniversalQuestionnaire = {
         targetAudience: 'all-groups'
       },
       questions: [
-        {
-          id: 'personal-advantages-v2',
-          type: 'textarea',
-          title: '您认为自己在就业市场上的主要优势是什么？',
-          description: '可以是技能、经验、性格、资源等任何方面',
-          required: false,
-          config: {
-            maxLength: 300,
-            rows: 3,
-            placeholder: '例如：专业技能扎实、有相关项目经验、沟通能力强、学习能力快...'
-          },
-          statistics: {
-            enabled: false
-          }
-        },
-        {
-          id: 'employment-concerns-v2',
-          type: 'textarea',
-          title: '您当前在就业方面最主要的忧虑是什么？',
-          description: '请分享您最担心的问题',
-          required: false,
-          config: {
-            maxLength: 300,
-            rows: 3,
-            placeholder: '例如：担心年龄偏大找不到合适工作、担心行业不景气、担心薪资达不到预期...'
-          },
-          statistics: {
-            enabled: false
-          }
-        },
         {
           id: 'support-needed-types-v2',
           type: 'checkbox',
@@ -601,21 +551,6 @@ export const questionnaire2Definition: UniversalQuestionnaire = {
             enabled: true,
             chartType: 'bar',
             showPercentage: true
-          }
-        },
-        {
-          id: 'support-needed-open-v2',
-          type: 'textarea',
-          title: '您还希望得到哪些具体的支持或建议？（可选）',
-          description: '请自由分享您的想法',
-          required: false,
-          config: {
-            maxLength: 300,
-            rows: 3,
-            placeholder: '例如：希望有更多针对35+人群的职业转型培训、希望平台能标注企业的真实评价...'
-          },
-          statistics: {
-            enabled: false
           }
         }
       ]
