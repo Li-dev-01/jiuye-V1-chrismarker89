@@ -24,6 +24,7 @@ const SecondQuestionnaireHomePage = React.lazy(() => import('./pages/SecondQuest
 const SecondQuestionnairePage = React.lazy(() => import('./pages/SecondQuestionnairePage'));
 const SecondQuestionnaireCompletePage = React.lazy(() => import('./pages/SecondQuestionnaireCompletePage'));
 const SecondQuestionnaireAnalyticsPage = React.lazy(() => import('./pages/SecondQuestionnaireAnalyticsPage'));
+const Questionnaire2SevenDimensionPage = React.lazy(() => import('./pages/Questionnaire2SevenDimensionPage'));
 const StoriesPage = React.lazy(() => import('./pages/Stories'));
 const StoriesSimple = React.lazy(() => import('./pages/StoriesSimple'));
 const StoriesTest1 = React.lazy(() => import('./pages/test/StoriesTest1'));
@@ -170,6 +171,15 @@ function App() {
                       <PublicRouteGuard>
                         <QuestionnaireLayout>
                           <SecondQuestionnaireAnalyticsPage />
+                        </QuestionnaireLayout>
+                      </PublicRouteGuard>
+                    } />
+
+                    {/* 数据可视化V3（问卷2的7维度分析） */}
+                    <Route path="/analytics/v3" element={
+                      <PublicRouteGuard>
+                        <QuestionnaireLayout>
+                          <Questionnaire2SevenDimensionPage />
                         </QuestionnaireLayout>
                       </PublicRouteGuard>
                     } />
