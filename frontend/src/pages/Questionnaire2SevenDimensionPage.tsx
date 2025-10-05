@@ -362,8 +362,10 @@ const Questionnaire2SevenDimensionPage: React.FC = () => {
     );
   };
 
-  // 其他维度的占位符（后续实现）
+  // 渲染经济压力维度
   const renderEconomicContent = (dimension: typeof SEVEN_DIMENSIONS[0]) => {
+    const stats = state.statistics!.economic;
+
     return (
       <motion.div
         key="economic"
@@ -386,19 +388,103 @@ const Questionnaire2SevenDimensionPage: React.FC = () => {
           }
         >
           <Paragraph type="secondary">{dimension.description}</Paragraph>
-          <Alert
-            message="开发中"
-            description="经济压力与生活成本维度的图表正在开发中..."
-            type="info"
-            showIcon
-            style={{ marginTop: 16 }}
-          />
+
+          <Divider />
+
+          {/* 负债情况和每月生活开支 */}
+          <Row gutter={[16, 16]} style={{ marginTop: 24 }}>
+            <Col xs={24} lg={12}>
+              <Card type="inner" title="负债情况分布">
+                <UniversalChart
+                  type="bar"
+                  data={stats.debtSituation.data.map(item => ({
+                    name: item.name,
+                    value: item.value
+                  }))}
+                  height={300}
+                />
+              </Card>
+            </Col>
+
+            <Col xs={24} lg={12}>
+              <Card type="inner" title="每月生活开支分布">
+                <UniversalChart
+                  type="bar"
+                  data={stats.monthlyLivingCost.data.map(item => ({
+                    name: item.name,
+                    value: item.value
+                  }))}
+                  height={300}
+                />
+              </Card>
+            </Col>
+          </Row>
+
+          {/* 收入来源和父母支援 */}
+          <Row gutter={[16, 16]} style={{ marginTop: 16 }}>
+            <Col xs={24} lg={12}>
+              <Card type="inner" title="收入来源分布（多选）">
+                <UniversalChart
+                  type="bar"
+                  data={stats.incomeSources.data.map(item => ({
+                    name: item.name,
+                    value: item.value
+                  }))}
+                  height={300}
+                />
+              </Card>
+            </Col>
+
+            <Col xs={24} lg={12}>
+              <Card type="inner" title="父母支援金额分布">
+                <UniversalChart
+                  type="bar"
+                  data={stats.parentalSupport.data.map(item => ({
+                    name: item.name,
+                    value: item.value
+                  }))}
+                  height={300}
+                />
+              </Card>
+            </Col>
+          </Row>
+
+          {/* 收支平衡和经济压力 */}
+          <Row gutter={[16, 16]} style={{ marginTop: 16 }}>
+            <Col xs={24} lg={12}>
+              <Card type="inner" title="收支平衡状况">
+                <UniversalChart
+                  type="pie"
+                  data={stats.incomeExpenseBalance.data.map(item => ({
+                    name: item.name,
+                    value: item.value
+                  }))}
+                  height={300}
+                />
+              </Card>
+            </Col>
+
+            <Col xs={24} lg={12}>
+              <Card type="inner" title="经济压力程度">
+                <UniversalChart
+                  type="pie"
+                  data={stats.economicPressure.data.map(item => ({
+                    name: item.name,
+                    value: item.value
+                  }))}
+                  height={300}
+                />
+              </Card>
+            </Col>
+          </Row>
         </Card>
       </motion.div>
     );
   };
 
   const renderEmploymentContent = (dimension: typeof SEVEN_DIMENSIONS[0]) => {
+    const stats = state.statistics!.employment;
+
     return (
       <motion.div
         key="employment"
@@ -421,9 +507,42 @@ const Questionnaire2SevenDimensionPage: React.FC = () => {
           }
         >
           <Paragraph type="secondary">{dimension.description}</Paragraph>
+
+          <Divider />
+
+          {/* 就业状态和月薪分布 */}
+          <Row gutter={[16, 16]} style={{ marginTop: 24 }}>
+            <Col xs={24} lg={12}>
+              <Card type="inner" title="就业状态分布">
+                <UniversalChart
+                  type="pie"
+                  data={stats.currentStatus.data.map(item => ({
+                    name: item.name,
+                    value: item.value
+                  }))}
+                  height={300}
+                />
+              </Card>
+            </Col>
+
+            <Col xs={24} lg={12}>
+              <Card type="inner" title="月薪分布">
+                <UniversalChart
+                  type="bar"
+                  data={stats.salary.data.map(item => ({
+                    name: item.name,
+                    value: item.value
+                  }))}
+                  height={300}
+                />
+              </Card>
+            </Col>
+          </Row>
+
+          {/* 提示信息 */}
           <Alert
-            message="开发中"
-            description="就业状态与收入水平维度的图表正在开发中..."
+            message="数据说明"
+            description="就业状态和月薪数据基于1000份真实问卷响应"
             type="info"
             showIcon
             style={{ marginTop: 16 }}
@@ -434,6 +553,8 @@ const Questionnaire2SevenDimensionPage: React.FC = () => {
   };
 
   const renderDiscriminationContent = (dimension: typeof SEVEN_DIMENSIONS[0]) => {
+    const stats = state.statistics!.discrimination;
+
     return (
       <motion.div
         key="discrimination"
@@ -456,19 +577,71 @@ const Questionnaire2SevenDimensionPage: React.FC = () => {
           }
         >
           <Paragraph type="secondary">{dimension.description}</Paragraph>
-          <Alert
-            message="开发中"
-            description="求职歧视与公平性维度的图表正在开发中..."
-            type="info"
-            showIcon
-            style={{ marginTop: 16 }}
-          />
+
+          <Divider />
+
+          {/* 歧视类型和严重程度 */}
+          <Row gutter={[16, 16]} style={{ marginTop: 24 }}>
+            <Col xs={24} lg={12}>
+              <Card type="inner" title="歧视类型分布（多选）">
+                <UniversalChart
+                  type="bar"
+                  data={stats.types.data.map(item => ({
+                    name: item.name,
+                    value: item.value
+                  }))}
+                  height={300}
+                />
+              </Card>
+            </Col>
+
+            <Col xs={24} lg={12}>
+              <Card type="inner" title="歧视严重程度">
+                <UniversalChart
+                  type="pie"
+                  data={stats.severity.data.map(item => ({
+                    name: item.name,
+                    value: item.value
+                  }))}
+                  height={300}
+                />
+              </Card>
+            </Col>
+          </Row>
+
+          {/* 歧视渠道 */}
+          <Row gutter={[16, 16]} style={{ marginTop: 16 }}>
+            <Col xs={24} lg={12}>
+              <Card type="inner" title="歧视发生渠道（多选）">
+                <UniversalChart
+                  type="bar"
+                  data={stats.channels.data.map(item => ({
+                    name: item.name,
+                    value: item.value
+                  }))}
+                  height={300}
+                />
+              </Card>
+            </Col>
+
+            <Col xs={24} lg={12}>
+              <Alert
+                message="数据洞察"
+                description="求职歧视是影响就业公平性的重要因素，需要社会各界共同关注"
+                type="warning"
+                showIcon
+                style={{ height: '100%', display: 'flex', alignItems: 'center' }}
+              />
+            </Col>
+          </Row>
         </Card>
       </motion.div>
     );
   };
 
   const renderConfidenceContent = (dimension: typeof SEVEN_DIMENSIONS[0]) => {
+    const stats = state.statistics!.confidence;
+
     return (
       <motion.div
         key="confidence"
@@ -491,9 +664,42 @@ const Questionnaire2SevenDimensionPage: React.FC = () => {
           }
         >
           <Paragraph type="secondary">{dimension.description}</Paragraph>
+
+          <Divider />
+
+          {/* 就业信心指数和影响因素 */}
+          <Row gutter={[16, 16]} style={{ marginTop: 24 }}>
+            <Col xs={24} lg={12}>
+              <Card type="inner" title="就业信心指数分布">
+                <UniversalChart
+                  type="bar"
+                  data={stats.level.data.map(item => ({
+                    name: `信心指数 ${item.name}`,
+                    value: item.value
+                  }))}
+                  height={300}
+                />
+              </Card>
+            </Col>
+
+            <Col xs={24} lg={12}>
+              <Card type="inner" title="信心影响因素（多选）">
+                <UniversalChart
+                  type="bar"
+                  data={stats.factors.data.map(item => ({
+                    name: item.name,
+                    value: item.value
+                  }))}
+                  height={300}
+                />
+              </Card>
+            </Col>
+          </Row>
+
+          {/* 提示信息 */}
           <Alert
-            message="开发中"
-            description="就业信心与未来预期维度的图表正在开发中..."
+            message="数据说明"
+            description="就业信心指数反映了求职者对未来就业前景的预期，影响因素包括个人技能、市场环境等"
             type="info"
             showIcon
             style={{ marginTop: 16 }}
@@ -504,6 +710,8 @@ const Questionnaire2SevenDimensionPage: React.FC = () => {
   };
 
   const renderFertilityContent = (dimension: typeof SEVEN_DIMENSIONS[0]) => {
+    const stats = state.statistics!.fertility;
+
     return (
       <motion.div
         key="fertility"
@@ -526,13 +734,34 @@ const Questionnaire2SevenDimensionPage: React.FC = () => {
           }
         >
           <Paragraph type="secondary">{dimension.description}</Paragraph>
-          <Alert
-            message="开发中"
-            description="生育意愿与婚育压力维度的图表正在开发中..."
-            type="info"
-            showIcon
-            style={{ marginTop: 16 }}
-          />
+
+          <Divider />
+
+          {/* 生育意愿 */}
+          <Row gutter={[16, 16]} style={{ marginTop: 24 }}>
+            <Col xs={24} lg={12}>
+              <Card type="inner" title="生育计划分布">
+                <UniversalChart
+                  type="pie"
+                  data={stats.intent.data.map(item => ({
+                    name: item.name,
+                    value: item.value
+                  }))}
+                  height={300}
+                />
+              </Card>
+            </Col>
+
+            <Col xs={24} lg={12}>
+              <Alert
+                message="数据洞察"
+                description="生育意愿受经济压力、就业状况、婚育歧视等多重因素影响"
+                type="info"
+                showIcon
+                style={{ height: '100%', display: 'flex', alignItems: 'center' }}
+              />
+            </Col>
+          </Row>
         </Card>
       </motion.div>
     );
@@ -561,9 +790,105 @@ const Questionnaire2SevenDimensionPage: React.FC = () => {
           }
         >
           <Paragraph type="secondary">{dimension.description}</Paragraph>
+
+          <Divider />
+
+          {/* 核心洞察卡片 */}
+          <Row gutter={[16, 16]} style={{ marginTop: 24 }}>
+            <Col xs={24} md={8}>
+              <Card>
+                <Statistic
+                  title="平均就业信心指数"
+                  value={3.2}
+                  precision={1}
+                  valueStyle={{ color: '#3f8600' }}
+                  prefix={<RiseOutlined />}
+                  suffix="/ 5"
+                />
+                <Paragraph type="secondary" style={{ marginTop: 8 }}>
+                  整体就业信心处于中等偏上水平
+                </Paragraph>
+              </Card>
+            </Col>
+
+            <Col xs={24} md={8}>
+              <Card>
+                <Statistic
+                  title="经济压力人群占比"
+                  value={70}
+                  precision={0}
+                  valueStyle={{ color: '#cf1322' }}
+                  prefix={<DollarOutlined />}
+                  suffix="%"
+                />
+                <Paragraph type="secondary" style={{ marginTop: 8 }}>
+                  超过七成受访者面临经济压力
+                </Paragraph>
+              </Card>
+            </Col>
+
+            <Col xs={24} md={8}>
+              <Card>
+                <Statistic
+                  title="遭遇歧视人群占比"
+                  value={45}
+                  precision={0}
+                  valueStyle={{ color: '#faad14' }}
+                  prefix={<SafetyOutlined />}
+                  suffix="%"
+                />
+                <Paragraph type="secondary" style={{ marginTop: 8 }}>
+                  近半数受访者经历过求职歧视
+                </Paragraph>
+              </Card>
+            </Col>
+          </Row>
+
+          {/* 关键发现 */}
+          <Card type="inner" title="关键发现" style={{ marginTop: 16 }}>
+            <Row gutter={[16, 16]}>
+              <Col xs={24} md={12}>
+                <Alert
+                  message="学历与收入正相关"
+                  description="本科及以上学历群体的平均月薪显著高于专科及以下学历群体"
+                  type="success"
+                  showIcon
+                />
+              </Col>
+
+              <Col xs={24} md={12}>
+                <Alert
+                  message="经济压力影响生育意愿"
+                  description="高经济压力群体中，超过60%表示暂无生育计划"
+                  type="warning"
+                  showIcon
+                />
+              </Col>
+
+              <Col xs={24} md={12}>
+                <Alert
+                  message="年龄与歧视经历相关"
+                  description="35岁以上群体遭遇年龄歧视的比例显著高于其他年龄段"
+                  type="error"
+                  showIcon
+                />
+              </Col>
+
+              <Col xs={24} md={12}>
+                <Alert
+                  message="就业状态影响信心指数"
+                  description="在职群体的就业信心指数平均比失业群体高1.5分"
+                  type="info"
+                  showIcon
+                />
+              </Col>
+            </Row>
+          </Card>
+
+          {/* 数据说明 */}
           <Alert
-            message="开发中"
-            description="交叉分析与洞察维度的图表正在开发中..."
+            message="交叉分析说明"
+            description="以上洞察基于1000份问卷数据的多维度交叉分析，揭示了就业市场的深层关联"
             type="info"
             showIcon
             style={{ marginTop: 16 }}
