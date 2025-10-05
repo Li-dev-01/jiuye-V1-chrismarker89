@@ -801,5 +801,289 @@ export function createQuestionnaireV2Routes() {
     }
   });
 
+  /**
+   * 数据库迁移：创建宽表
+   * POST /api/universal-questionnaire/questionnaires/questionnaire-v2-2024/migrate/create-wide-table
+   */
+  questionnaireV2.post('/migrate/create-wide-table', async (c) => {
+    try {
+      const db = createDatabaseService(c.env.DB);
+
+      console.log('🔄 开始创建问卷2宽表...');
+
+      // 执行SQL脚本
+      const createWideTableSQL = `
+        CREATE TABLE IF NOT EXISTS questionnaire2_wide_table (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          response_id VARCHAR(50) UNIQUE NOT NULL,
+          questionnaire_id VARCHAR(50) NOT NULL,
+          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+          start_time TIMESTAMP,
+          end_time TIMESTAMP,
+          total_time_spent INTEGER,
+          completion_path TEXT,
+          branching_decisions TEXT,
+          gender_v2 VARCHAR(20),
+          age_range_v2 VARCHAR(20),
+          education_level_v2 VARCHAR(50),
+          marital_status_v2 VARCHAR(20),
+          has_children_v2 VARCHAR(10),
+          fertility_intent_v2 VARCHAR(50),
+          current_city_tier_v2 VARCHAR(20),
+          hukou_type_v2 VARCHAR(20),
+          years_experience_v2 VARCHAR(20),
+          current_status_question_v2 VARCHAR(50),
+          debt_situation_v2 TEXT,
+          monthly_debt_burden_v2 VARCHAR(20),
+          economic_pressure_level_v2 VARCHAR(20),
+          monthly_living_cost_v2 VARCHAR(20),
+          income_sources_v2 TEXT,
+          parental_support_amount_v2 VARCHAR(20),
+          income_expense_balance_v2 VARCHAR(50),
+          current_salary_v2 VARCHAR(20),
+          salary_debt_ratio_v2 VARCHAR(20),
+          experienced_discrimination_types_v2 TEXT,
+          discrimination_severity_v2 VARCHAR(20),
+          discrimination_channels_v2 TEXT,
+          support_needed_types_v2 TEXT,
+          employment_confidence_v2 VARCHAR(10),
+          confidence_factors_v2 TEXT,
+          future_plans_v2 TEXT,
+          job_search_motivation_v2 VARCHAR(50),
+          job_search_duration_v2 VARCHAR(20),
+          job_search_difficulties_v2 TEXT,
+          job_search_channels_v2 TEXT,
+          expected_salary_v2 VARCHAR(20),
+          age_discrimination_severity_v2 VARCHAR(20),
+          age_discrimination_impact_v2 TEXT,
+          marriage_discrimination_types_v2 TEXT,
+          marriage_discrimination_impact_v2 VARCHAR(50),
+          career_planning_status_v2 VARCHAR(50),
+          internship_experience_v2 VARCHAR(20),
+          employment_preparation_v2 TEXT
+        );
+      `;
+
+      await db.run(createWideTableSQL);
+
+      // 创建索引
+      await db.run('CREATE INDEX IF NOT EXISTS idx_q2_wide_questionnaire_id ON questionnaire2_wide_table(questionnaire_id)');
+      await db.run('CREATE INDEX IF NOT EXISTS idx_q2_wide_gender ON questionnaire2_wide_table(gender_v2)');
+      await db.run('CREATE INDEX IF NOT EXISTS idx_q2_wide_age ON questionnaire2_wide_table(age_range_v2)');
+      await db.run('CREATE INDEX IF NOT EXISTS idx_q2_wide_education ON questionnaire2_wide_table(education_level_v2)');
+      await db.run('CREATE INDEX IF NOT EXISTS idx_q2_wide_status ON questionnaire2_wide_table(current_status_question_v2)');
+      await db.run('CREATE INDEX IF NOT EXISTS idx_q2_wide_city ON questionnaire2_wide_table(current_city_tier_v2)');
+      await db.run('CREATE INDEX IF NOT EXISTS idx_q2_wide_created ON questionnaire2_wide_table(created_at)');
+
+      console.log('✅ 问卷2宽表创建成功');
+
+      return c.json({
+        success: true,
+        message: '问卷2宽表创建成功'
+      });
+    } catch (error: any) {
+      console.error('❌ 创建宽表失败:', error);
+      return c.json({
+        success: false,
+        error: error.message
+      }, 500);
+    }
+  });
+
+  /**
+   * 数据库迁移：创建静态分析表
+   * POST /api/universal-questionnaire/questionnaires/questionnaire-v2-2024/migrate/create-static-tables
+   */
+  questionnaireV2.post('/migrate/create-static-tables', async (c) => {
+    try {
+      const db = createDatabaseService(c.env.DB);
+
+      console.log('🔄 开始创建问卷2静态分析表...');
+
+      // 表1: 基础维度统计表
+      await db.run(`
+        CREATE TABLE IF NOT EXISTS q2_basic_stats (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          dimension VARCHAR(50) NOT NULL,
+          value VARCHAR(100) NOT NULL,
+          count INTEGER NOT NULL DEFAULT 0,
+          percentage DECIMAL(5,2),
+          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+          updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+      `);
+      await db.run('CREATE INDEX IF NOT EXISTS idx_q2_basic_stats_dimension ON q2_basic_stats(dimension)');
+
+      // 表2: 经济压力分析表
+      await db.run(`
+        CREATE TABLE IF NOT EXISTS q2_economic_analysis (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          age_range VARCHAR(20),
+          employment_status VARCHAR(50),
+          avg_living_cost DECIMAL(10,2),
+          avg_debt_burden DECIMAL(10,2),
+          parental_support_rate DECIMAL(5,2),
+          high_pressure_rate DECIMAL(5,2),
+          income_deficit_rate DECIMAL(5,2),
+          count INTEGER NOT NULL DEFAULT 0,
+          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+          updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+      `);
+
+      // 表3: 就业状态分析表
+      await db.run(`
+        CREATE TABLE IF NOT EXISTS q2_employment_analysis (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          age_range VARCHAR(20),
+          education_level VARCHAR(50),
+          city_tier VARCHAR(20),
+          employment_status VARCHAR(50),
+          avg_salary DECIMAL(10,2),
+          unemployment_rate DECIMAL(5,2),
+          avg_job_search_months DECIMAL(5,2),
+          salary_debt_ratio_high_rate DECIMAL(5,2),
+          count INTEGER NOT NULL DEFAULT 0,
+          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+          updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+      `);
+
+      // 表4: 歧视分析表
+      await db.run(`
+        CREATE TABLE IF NOT EXISTS q2_discrimination_analysis (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          discrimination_type VARCHAR(50),
+          gender VARCHAR(20),
+          age_range VARCHAR(20),
+          severity VARCHAR(20),
+          channel VARCHAR(50),
+          count INTEGER NOT NULL DEFAULT 0,
+          percentage DECIMAL(5,2),
+          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+          updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+      `);
+
+      // 表5: 就业信心分析表
+      await db.run(`
+        CREATE TABLE IF NOT EXISTS q2_confidence_analysis (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          age_range VARCHAR(20),
+          employment_status VARCHAR(50),
+          economic_pressure VARCHAR(20),
+          avg_confidence_index DECIMAL(5,2),
+          low_confidence_rate DECIMAL(5,2),
+          high_confidence_rate DECIMAL(5,2),
+          top_confidence_factor VARCHAR(100),
+          count INTEGER NOT NULL DEFAULT 0,
+          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+          updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+      `);
+
+      // 表6: 生育意愿分析表
+      await db.run(`
+        CREATE TABLE IF NOT EXISTS q2_fertility_analysis (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          age_range VARCHAR(20),
+          marital_status VARCHAR(20),
+          economic_pressure VARCHAR(20),
+          fertility_intent VARCHAR(50),
+          has_children VARCHAR(10),
+          no_fertility_rate DECIMAL(5,2),
+          marriage_discrimination_rate DECIMAL(5,2),
+          count INTEGER NOT NULL DEFAULT 0,
+          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+          updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+      `);
+
+      // 表7: 交叉分析表
+      await db.run(`
+        CREATE TABLE IF NOT EXISTS q2_cross_analysis (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          dimension1 VARCHAR(50) NOT NULL,
+          value1 VARCHAR(100) NOT NULL,
+          dimension2 VARCHAR(50) NOT NULL,
+          value2 VARCHAR(100) NOT NULL,
+          dimension3 VARCHAR(50),
+          value3 VARCHAR(100),
+          metric_name VARCHAR(50) NOT NULL,
+          metric_value DECIMAL(10,2),
+          count INTEGER NOT NULL DEFAULT 0,
+          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+          updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+      `);
+
+      // 同步日志表
+      await db.run(`
+        CREATE TABLE IF NOT EXISTS q2_sync_log (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          table_name VARCHAR(50) NOT NULL,
+          sync_type VARCHAR(20) NOT NULL,
+          records_processed INTEGER,
+          records_inserted INTEGER,
+          records_updated INTEGER,
+          status VARCHAR(20) NOT NULL,
+          error_message TEXT,
+          started_at TIMESTAMP,
+          completed_at TIMESTAMP,
+          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+      `);
+
+      console.log('✅ 问卷2静态分析表创建成功');
+
+      return c.json({
+        success: true,
+        message: '问卷2静态分析表创建成功（7个表）'
+      });
+    } catch (error: any) {
+      console.error('❌ 创建静态表失败:', error);
+      return c.json({
+        success: false,
+        error: error.message
+      }, 500);
+    }
+  });
+
+  /**
+   * 同步静态表数据
+   * POST /api/universal-questionnaire/questionnaires/questionnaire-v2-2024/sync-static-tables
+   */
+  questionnaireV2.post('/sync-static-tables', async (c) => {
+    try {
+      const db = createDatabaseService(c.env.DB);
+      const { Questionnaire2StaticTableSyncService } = await import('../services/questionnaire2StaticTableSyncService');
+      const syncService = new Questionnaire2StaticTableSyncService(db);
+
+      console.log('🔄 开始同步问卷2静态表...');
+
+      const result = await syncService.syncAllTables();
+
+      if (result.success) {
+        return c.json({
+          success: true,
+          message: '静态表同步成功',
+          data: result.results
+        });
+      } else {
+        return c.json({
+          success: false,
+          error: result.error,
+          data: result.results
+        }, 500);
+      }
+    } catch (error: any) {
+      console.error('❌ 同步静态表失败:', error);
+      return c.json({
+        success: false,
+        error: error.message
+      }, 500);
+    }
+  });
+
   return questionnaireV2;
 }
