@@ -6,6 +6,9 @@ import { resolve } from 'path'
 export default defineConfig({
   plugins: [react()],
 
+  // 公共目录配置 - 用于存放_redirects等静态文件
+  publicDir: 'public',
+
   // 构建优化
   build: {
     // 启用代码分割
