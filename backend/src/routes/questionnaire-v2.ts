@@ -1085,5 +1085,35 @@ export function createQuestionnaireV2Routes() {
     }
   });
 
+  /**
+   * 直接同步静态表（不依赖宽表）
+   * POST /api/questionnaire-v2/sync-static-tables-direct
+   */
+  questionnaireV2.post('/sync-static-tables-direct', async (c) => {
+    try {
+      const db = createDatabaseService(c.env.DB);
+
+      // 动态导入同步服务
+      const { Questionnaire2DirectSyncService } = await import('../services/questionnaire2DirectSyncService');
+      const syncService = new Questionnaire2DirectSyncService(db);
+
+      console.log('🔄 开始直接同步静态表...');
+      const result = await syncService.syncAllTables();
+
+      return c.json({
+        success: result.success,
+        message: '静态表同步完成',
+        results: result.results,
+        timestamp: Date.now()
+      });
+    } catch (error: any) {
+      console.error('❌ 直接同步静态表失败:', error);
+      return c.json({
+        success: false,
+        error: error.message
+      }, 500);
+    }
+  });
+
   return questionnaireV2;
 }
