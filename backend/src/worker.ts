@@ -437,6 +437,10 @@ export async function scheduled(event: ScheduledEvent, env: Env, ctx: ExecutionC
 
     console.log('⏰ 执行数据同步监控任务');
     await handleSyncMonitoringTask(env);
+  } else if (event.cron === '*/30 * * * *') {
+    // 每30分钟执行问卷2统计表同步
+    console.log('📊 执行问卷2统计表同步任务');
+    await handleQuestionnaire2Sync(env);
   } else if (event.cron === '0 8 * * *') {
     // 每天上午8点执行数据一致性检查
     console.log('🔍 执行数据一致性检查任务');
@@ -447,6 +451,28 @@ export async function scheduled(event: ScheduledEvent, env: Env, ctx: ExecutionC
     await handleDataQualityMonitoring(event, env, ctx);
   } else {
     console.log('未知的定时任务:', event.cron);
+  }
+}
+
+/**
+ * 问卷2统计表同步任务
+ */
+async function handleQuestionnaire2Sync(env: Env) {
+  try {
+    console.log('🔄 开始同步问卷2统计表...');
+    const db = createDatabaseService(env.DB);
+    const { Questionnaire2FullSyncService } = await import('./services/questionnaire2FullSyncService');
+    const syncService = new Questionnaire2FullSyncService(db);
+
+    const result = await syncService.syncAllTables();
+
+    if (result.success) {
+      console.log('✅ 问卷2统计表同步成功:', result.results);
+    } else {
+      console.error('❌ 问卷2统计表同步失败:', result.error);
+    }
+  } catch (error) {
+    console.error('❌ 问卷2统计表同步异常:', error);
   }
 }
 

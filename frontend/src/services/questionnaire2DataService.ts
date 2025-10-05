@@ -4,6 +4,7 @@
  */
 
 import { API_CONFIG } from '../config/apiConfig';
+import { translateLabels } from '../config/labelMappings';
 
 // 数据统计接口
 export interface DimensionStatistics {
@@ -74,24 +75,35 @@ class Questionnaire2DataService {
 
       // 调用API获取原始数据
       const response = await fetch(
-        `${this.baseUrl}/api/universal-questionnaire/questionnaires/questionnaire-v2-2024/statistics`
+        `${this.baseUrl}/api/universal-questionnaire/statistics/questionnaire-v2-2024`
       );
 
       if (!response.ok) {
         throw new Error(`HTTP ${response.status}: ${response.statusText}`);
       }
 
-      const data = await response.json();
-      console.log('✅ API数据加载成功:', data);
+      const result = await response.json();
+      console.log('✅ API数据加载成功:', result);
 
-      // 处理数据并生成统计
-      const statistics = this.processRawData(data);
+      // 后端已经返回处理好的统计数据，直接使用
+      if (!result.success || !result.data) {
+        throw new Error('API返回数据格式错误');
+      }
+
+      const statistics = result.data as Questionnaire2Statistics;
+      console.log('📊 原始月薪数据:', statistics.employment?.salary);
+      console.log('📊 原始城市层级数据:', statistics.demographics?.cityTier);
+
+      // 应用中文标签翻译
+      const translatedStatistics = this.applyLabelTranslations(statistics);
+      console.log('🔄 翻译后月薪数据:', translatedStatistics.employment?.salary);
+      console.log('🔄 翻译后城市层级数据:', translatedStatistics.demographics?.cityTier);
 
       // 更新缓存
-      this.cache = statistics;
+      this.cache = translatedStatistics;
       this.cacheTime = Date.now();
 
-      return statistics;
+      return translatedStatistics;
     } catch (error: any) {
       console.error('❌ 数据加载失败:', error);
 
@@ -103,6 +115,117 @@ class Questionnaire2DataService {
 
       // 线上环境禁用模拟数据，直接抛出错误
       throw new Error('无法加载问卷2统计数据，请检查API连接');
+    }
+  }
+
+  /**
+   * 应用中文标签翻译
+   */
+  private applyLabelTranslations(statistics: Questionnaire2Statistics): Questionnaire2Statistics {
+    try {
+      return {
+        ...statistics,
+        demographics: {
+          gender: {
+            ...statistics.demographics.gender,
+            data: translateLabels('gender', statistics.demographics.gender.data || [])
+          },
+          ageRange: {
+            ...statistics.demographics.ageRange,
+            data: translateLabels('ageRange', statistics.demographics.ageRange.data || [])
+          },
+          educationLevel: {
+            ...statistics.demographics.educationLevel,
+            data: translateLabels('educationLevel', statistics.demographics.educationLevel.data || [])
+          },
+          maritalStatus: {
+            ...statistics.demographics.maritalStatus,
+            data: translateLabels('maritalStatus', statistics.demographics.maritalStatus.data || [])
+          },
+          cityTier: {
+            ...statistics.demographics.cityTier,
+            data: translateLabels('cityTier', statistics.demographics.cityTier.data || [])
+          },
+          hukouType: {
+            ...statistics.demographics.hukouType,
+            data: translateLabels('hukouType', statistics.demographics.hukouType.data || [])
+          },
+          employmentStatus: {
+            ...statistics.demographics.employmentStatus,
+            data: translateLabels('employmentStatus', statistics.demographics.employmentStatus.data || [])
+          }
+        },
+        economic: {
+          debtSituation: {
+            ...statistics.economic.debtSituation,
+            data: translateLabels('debtSituation', statistics.economic.debtSituation.data || [])
+          },
+          monthlyLivingCost: {
+            ...statistics.economic.monthlyLivingCost,
+            data: translateLabels('monthlyLivingCost', statistics.economic.monthlyLivingCost.data || [])
+          },
+          incomeSources: {
+            ...statistics.economic.incomeSources,
+            data: translateLabels('incomeSources', statistics.economic.incomeSources.data || [])
+          },
+          parentalSupport: {
+            ...statistics.economic.parentalSupport,
+            data: translateLabels('parentalSupport', statistics.economic.parentalSupport.data || [])
+          },
+          incomeExpenseBalance: {
+            ...statistics.economic.incomeExpenseBalance,
+            data: translateLabels('incomeExpenseBalance', statistics.economic.incomeExpenseBalance.data || [])
+          },
+          economicPressure: {
+            ...statistics.economic.economicPressure,
+            data: translateLabels('economicPressure', statistics.economic.economicPressure.data || [])
+          }
+        },
+        employment: {
+          currentStatus: {
+            ...statistics.employment.currentStatus,
+            data: translateLabels('employmentStatus', statistics.employment.currentStatus.data || [])
+          },
+          salary: {
+            ...statistics.employment.salary,
+            data: translateLabels('salary', statistics.employment.salary.data || [])
+          }
+        },
+        discrimination: {
+          types: {
+            ...statistics.discrimination.types,
+            data: translateLabels('discriminationTypes', statistics.discrimination.types.data || [])
+          },
+          severity: {
+            ...statistics.discrimination.severity,
+            data: translateLabels('discriminationSeverity', statistics.discrimination.severity.data || [])
+          },
+          channels: {
+            ...statistics.discrimination.channels,
+            data: translateLabels('discriminationChannels', statistics.discrimination.channels.data || [])
+          }
+        },
+        confidence: {
+          level: {
+            ...statistics.confidence.level,
+            data: translateLabels('employmentConfidence', statistics.confidence.level.data || [])
+          },
+          factors: {
+            ...statistics.confidence.factors,
+            data: translateLabels('confidenceFactors', statistics.confidence.factors.data || [])
+          }
+        },
+        fertility: {
+          intent: {
+            ...statistics.fertility.intent,
+            data: translateLabels('fertilityIntent', statistics.fertility.intent.data || [])
+          }
+        }
+      };
+    } catch (error) {
+      console.error('❌ 标签翻译失败:', error);
+      // 如果翻译失败，返回原始数据
+      return statistics;
     }
   }
 
@@ -189,7 +312,7 @@ class Questionnaire2DataService {
       },
       employment: {
         currentStatus: convertToStats('current-status-question-v2', '当前状态'),
-        salary: convertToStats('current-salary-v2', '月薪')
+        salary: convertToStats('monthly-salary-v2', '月薪')
       },
       discrimination: {
         types: convertToStats('experienced-discrimination-types-v2', '歧视类型'),
@@ -201,7 +324,7 @@ class Questionnaire2DataService {
         factors: convertToStats('confidence-factors-v2', '信心影响因素')
       },
       fertility: {
-        intent: convertToStats('fertility-intent-v2', '生育意愿')
+        intent: convertToStats('fertility-plan-v2', '生育意愿')
       }
     };
   }

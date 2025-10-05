@@ -46,6 +46,219 @@ interface UniversalQuestionnaireSubmission {
   };
 }
 
+/**
+ * 处理问卷2响应数据，生成完整的7维度统计
+ */
+function processQuestionnaire2Responses(responses: any[]): any {
+  const totalResponses = responses.length;
+
+  // 初始化统计计数器
+  const stats: any = {
+    demographics: {
+      gender: {},
+      ageRange: {},
+      educationLevel: {},
+      maritalStatus: {},
+      cityTier: {},
+      hukouType: {},
+      employmentStatus: {}
+    },
+    economic: {
+      debtSituation: {},
+      monthlyLivingCost: {},
+      incomeSources: {},
+      parentalSupport: {},
+      incomeExpenseBalance: {},
+      economicPressure: {}
+    },
+    employment: {
+      currentStatus: {},
+      salary: {}
+    },
+    discrimination: {
+      types: {},
+      severity: {},
+      channels: {}
+    },
+    confidence: {
+      level: {},
+      factors: {}
+    },
+    fertility: {
+      intent: {}
+    }
+  };
+
+  // 遍历所有响应数据
+  let parsedCount = 0;
+  let skippedCount = 0;
+
+  for (const response of responses) {
+    try {
+      const data = typeof response.response_data === 'string'
+        ? JSON.parse(response.response_data)
+        : response.response_data;
+
+      if (!data.sectionResponses) {
+        skippedCount++;
+        continue;
+      }
+
+      // 提取所有问题响应（兼容 questionResponses 和 responses 两种格式）
+      const answers: Record<string, any> = {};
+      for (const section of data.sectionResponses) {
+        const responses = section.questionResponses || section.responses;
+        if (!responses) continue;
+        for (const qr of responses) {
+          answers[qr.questionId] = qr.value;
+        }
+      }
+
+      // 调试：打印第一条数据的所有问题ID
+      if (parsedCount === 0) {
+        console.log('📋 第一条数据的问题ID列表:', Object.keys(answers));
+        console.log('📋 城市层级值:', answers['current-city-tier-v2']);
+        console.log('📋 薪资值:', answers['current-salary-v2']);
+      }
+
+      parsedCount++;
+
+      // 统计人口结构维度
+      countValue(stats.demographics.gender, answers['gender-v2']);
+      countValue(stats.demographics.ageRange, answers['age-range-v2']);
+      countValue(stats.demographics.educationLevel, answers['education-level-v2']);
+      countValue(stats.demographics.maritalStatus, answers['marital-status-v2']);
+      countValue(stats.demographics.cityTier, answers['current-city-tier-v2']);  // 修复：使用正确的问题ID
+      countValue(stats.demographics.hukouType, answers['hukou-type-v2']);
+      countValue(stats.demographics.employmentStatus, answers['current-status-question-v2']);
+
+      // 统计经济维度
+      if (Array.isArray(answers['debt-situation-v2'])) {
+        for (const debt of answers['debt-situation-v2']) {
+          countValue(stats.economic.debtSituation, debt);
+        }
+      }
+      countValue(stats.economic.monthlyLivingCost, answers['monthly-living-cost-v2']);
+
+      // 收入来源（多选）
+      if (Array.isArray(answers['income-sources-v2'])) {
+        for (const source of answers['income-sources-v2']) {
+          countValue(stats.economic.incomeSources, source);
+        }
+      }
+
+      // 父母支援金额
+      countValue(stats.economic.parentalSupport, answers['parental-support-amount-v2']);
+
+      // 收支平衡
+      countValue(stats.economic.incomeExpenseBalance, answers['income-expense-balance-v2']);
+
+      countValue(stats.economic.economicPressure, answers['economic-pressure-level-v2']);
+
+      // 统计就业维度
+      countValue(stats.employment.currentStatus, answers['current-status-question-v2']);
+      countValue(stats.employment.salary, answers['monthly-salary-v2']);  // 修复：使用正确的问题ID
+
+      // 统计歧视维度
+      if (Array.isArray(answers['experienced-discrimination-types-v2'])) {
+        for (const type of answers['experienced-discrimination-types-v2']) {
+          countValue(stats.discrimination.types, type);
+        }
+      }
+      countValue(stats.discrimination.severity, answers['discrimination-severity-v2']);
+      if (Array.isArray(answers['discrimination-channels-v2'])) {
+        for (const channel of answers['discrimination-channels-v2']) {
+          countValue(stats.discrimination.channels, channel);
+        }
+      }
+
+      // 统计信心维度
+      countValue(stats.confidence.level, answers['employment-confidence-v2']);
+      if (Array.isArray(answers['confidence-factors-v2'])) {
+        for (const factor of answers['confidence-factors-v2']) {
+          countValue(stats.confidence.factors, factor);
+        }
+      }
+
+      // 统计生育意愿
+      countValue(stats.fertility.intent, answers['fertility-plan-v2']);
+
+      // 统计生育维度
+      countValue(stats.fertility.intent, answers['fertility-plan-v2']);
+
+    } catch (error) {
+      console.error('解析响应数据失败:', error);
+      skippedCount++;
+    }
+  }
+
+  console.log(`📊 数据解析完成: 总数=${totalResponses}, 成功=${parsedCount}, 跳过=${skippedCount}`);
+
+  // 转换为前端期望的格式
+  return {
+    totalResponses,
+    lastUpdated: new Date().toISOString(),
+    demographics: {
+      gender: formatDimension('gender', stats.demographics.gender, totalResponses),
+      ageRange: formatDimension('ageRange', stats.demographics.ageRange, totalResponses),
+      educationLevel: formatDimension('educationLevel', stats.demographics.educationLevel, totalResponses),
+      maritalStatus: formatDimension('maritalStatus', stats.demographics.maritalStatus, totalResponses),
+      cityTier: formatDimension('cityTier', stats.demographics.cityTier, totalResponses),
+      hukouType: formatDimension('hukouType', stats.demographics.hukouType, totalResponses),
+      employmentStatus: formatDimension('employmentStatus', stats.demographics.employmentStatus, totalResponses)
+    },
+    economic: {
+      debtSituation: formatDimension('debtSituation', stats.economic.debtSituation, totalResponses),
+      monthlyLivingCost: formatDimension('monthlyLivingCost', stats.economic.monthlyLivingCost, totalResponses),
+      incomeSources: formatDimension('incomeSources', stats.economic.incomeSources, totalResponses),
+      parentalSupport: formatDimension('parentalSupport', stats.economic.parentalSupport, totalResponses),
+      incomeExpenseBalance: formatDimension('incomeExpenseBalance', stats.economic.incomeExpenseBalance, totalResponses),
+      economicPressure: formatDimension('economicPressure', stats.economic.economicPressure, totalResponses)
+    },
+    employment: {
+      currentStatus: formatDimension('currentStatus', stats.employment.currentStatus, totalResponses),
+      salary: formatDimension('salary', stats.employment.salary, totalResponses)
+    },
+    discrimination: {
+      types: formatDimension('types', stats.discrimination.types, totalResponses),
+      severity: formatDimension('severity', stats.discrimination.severity, totalResponses),
+      channels: formatDimension('channels', stats.discrimination.channels, totalResponses)
+    },
+    confidence: {
+      level: formatDimension('level', stats.confidence.level, totalResponses),
+      factors: formatDimension('factors', stats.confidence.factors, totalResponses)
+    },
+    fertility: {
+      intent: formatDimension('intent', stats.fertility.intent, totalResponses)
+    }
+  };
+}
+
+/**
+ * 辅助函数：统计值出现次数
+ */
+function countValue(counter: Record<string, number>, value: any) {
+  if (value === undefined || value === null || value === '') return;
+  const key = String(value);
+  counter[key] = (counter[key] || 0) + 1;
+}
+
+/**
+ * 辅助函数：格式化维度数据
+ */
+function formatDimension(dimension: string, data: Record<string, number>, total: number) {
+  const items = Object.entries(data).map(([name, value]) => ({
+    name,
+    value,
+    percentage: total > 0 ? Math.round((value / total) * 1000) / 10 : 0
+  }));
+
+  return {
+    dimension,
+    data: items.sort((a, b) => b.value - a.value)
+  };
+}
+
 export function createUniversalQuestionnaireRoutes() {
   const universalQuestionnaire = new Hono<{ Bindings: Env; Variables: AuthContext }>();
 
@@ -292,13 +505,93 @@ export function createUniversalQuestionnaireRoutes() {
 
       console.log('Insert result:', result);
 
+      // ==================== 用户画像系统集成 ====================
+      let userProfileData = null;
+
+      try {
+        // 导入服务
+        const { QuestionnaireTagGenerator } = await import('../services/questionnaireTagGenerator');
+        const { EmotionAnalyzer } = await import('../services/emotionAnalyzer');
+        const { MotivationalQuoteService } = await import('../services/motivationalQuoteService');
+
+        // 1. 将问卷答案转换为扁平化格式
+        const flatAnswers: Record<string, any> = {};
+        for (const section of sectionResponses) {
+          for (const question of section.questionResponses) {
+            flatAnswers[question.questionId] = question.answer;
+          }
+        }
+
+        console.log('📊 开始生成用户画像标签...');
+
+        // 2. 生成标签
+        const tags = QuestionnaireTagGenerator.generateTags(questionnaireId, flatAnswers);
+        console.log(`✅ 生成了 ${tags.length} 个标签:`, tags.map(t => t.tagName).join(', '));
+
+        // 3. 更新标签统计
+        await QuestionnaireTagGenerator.updateTagStatistics(db.db, questionnaireId, tags);
+        console.log('✅ 标签统计已更新');
+
+        // 4. 分析情绪
+        const emotionAnalysis = EmotionAnalyzer.analyzeEmotion(flatAnswers);
+        console.log(`😊 情绪分析结果: ${emotionAnalysis.emotionType} (置信度: ${emotionAnalysis.confidence.toFixed(2)})`);
+        console.log(`   正面分数: ${emotionAnalysis.scores.positive}, 负面分数: ${emotionAnalysis.scores.negative}`);
+
+        // 5. 更新情绪统计
+        await EmotionAnalyzer.updateEmotionStatistics(db.db, questionnaireId, emotionAnalysis.emotionType);
+        console.log('✅ 情绪统计已更新');
+
+        // 6. 如果需要鼓励，选择励志名言
+        let motivationalQuote = null;
+        if (emotionAnalysis.needsEncouragement) {
+          console.log('💪 检测到需要鼓励，正在选择励志名言...');
+          motivationalQuote = await MotivationalQuoteService.selectQuote(
+            db.db,
+            tags,
+            emotionAnalysis.emotionType
+          );
+
+          if (motivationalQuote) {
+            console.log(`✨ 选择了励志名言: "${motivationalQuote.quote_text}"`);
+          }
+        }
+
+        // 7. 构建返回数据
+        userProfileData = {
+          tags: tags.slice(0, 5).map(t => ({
+            key: t.tagKey,
+            name: t.tagName,
+            category: t.category
+          })),
+          emotion: {
+            type: emotionAnalysis.emotionType,
+            confidence: emotionAnalysis.confidence,
+            needsEncouragement: emotionAnalysis.needsEncouragement,
+            reasons: emotionAnalysis.reasons
+          },
+          motivationalQuote: motivationalQuote ? {
+            text: motivationalQuote.quote_text,
+            author: motivationalQuote.author,
+            category: motivationalQuote.category
+          } : null
+        };
+
+        console.log('✅ 用户画像数据生成完成');
+
+      } catch (profileError) {
+        console.error('❌ 用户画像生成失败（不影响问卷提交）:', profileError);
+        // 不影响问卷提交，继续返回成功
+      }
+
       return c.json({
         success: true,
         message: '问卷提交成功',
         data: {
           responseId: result.meta.last_row_id,
           questionnaireId: questionnaireId,
-          submittedAt: questionnaireData.submitted_at
+          submittedAt: questionnaireData.submitted_at,
+          // 用户画像数据（如果生成成功）
+          userProfile: userProfileData
         }
       });
 
@@ -393,42 +686,14 @@ export function createUniversalQuestionnaireRoutes() {
       const db = createDatabaseService(c.env as Env);
       tracker?.incrementQueryCount();
 
-      // 优先从可视化缓存获取数据 (多级专用表优化)
-      console.log('🚀 使用多级专用表查询统计数据');
-      const visualizationCache = await db.queryFirst<{ chart_data: string, last_updated: string }>(`
-        SELECT chart_data, last_updated
-        FROM enhanced_visualization_cache
-        WHERE cache_key = 'analytics_charts' AND expires_at > datetime('now')
-      `);
-
-      if (visualizationCache) {
-        console.log('📊 使用可视化缓存数据');
-        tracker?.setCacheHit(true);
-        tracker?.setDataSource('multi_tier_cache');
-
-        const cachedData = JSON.parse(visualizationCache.chart_data);
-        if (cachedData.charts) {
-          return c.json({
-            success: true,
-            data: {
-              ...cachedData.charts,
-              cacheInfo: {
-                message: '数据来源：多级专用表缓存',
-                lastUpdated: visualizationCache.updated_at,
-                dataSource: 'multi_tier_cache'
-              }
-            }
-          });
-        }
-      }
-
       // 简化的问卷2统计实现 - 直接从响应数据计算统计
+      // 跳过缓存查询，避免数据库schema问题
       console.log('📈 使用简化统计查询 - 问卷2专用');
       tracker?.incrementQueryCount();
 
       // 直接从universal_questionnaire_responses表获取问卷2数据
       const responses = await db.query(`
-        SELECT section_responses, created_at
+        SELECT response_data, created_at
         FROM universal_questionnaire_responses
         WHERE questionnaire_id = ?
         ORDER BY created_at DESC
@@ -439,43 +704,12 @@ export function createUniversalQuestionnaireRoutes() {
         tracker?.setCacheHit(false);
         tracker?.setDataSource('questionnaire_responses');
 
-        // 解析问卷2的响应数据并计算统计
-        const statistics = {
-          economicPressure: {
-            totalResponses: responses.length,
-            averageScore: 6.8,
-            distribution: [
-              { range: '1-3分', count: Math.floor(responses.length * 0.15), percentage: 15.0 },
-              { range: '4-6分', count: Math.floor(responses.length * 0.43), percentage: 43.0 },
-              { range: '7-10分', count: Math.floor(responses.length * 0.42), percentage: 42.0 }
-            ]
-          },
-          employmentConfidence: {
-            sixMonthOutlook: {
-              positive: 45.2,
-              neutral: 32.1,
-              negative: 22.7
-            },
-            oneYearOutlook: {
-              positive: 52.8,
-              neutral: 28.9,
-              negative: 18.3
-            }
-          },
-          modernDebt: {
-            hasDebt: 73.1,
-            types: [
-              { name: '支付宝花呗', percentage: 68.5 },
-              { name: '京东白条', percentage: 42.3 },
-              { name: '微信分付', percentage: 35.9 },
-              { name: '信用卡', percentage: 51.2 }
-            ]
-          }
-        };
+        // 解析问卷2的响应数据并计算完整的7维度统计
+        const statistics = processQuestionnaire2Responses(responses);
 
         return c.json({
           success: true,
-          data: { charts: statistics },
+          data: statistics,
           cached: false,
           lastUpdated: new Date().toISOString(),
           source: 'questionnaire_responses'

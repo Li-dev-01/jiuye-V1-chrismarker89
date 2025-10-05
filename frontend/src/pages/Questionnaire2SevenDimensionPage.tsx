@@ -7,40 +7,37 @@
 import React, { useState, useEffect } from 'react';
 import {
   Card,
-  Typography,
   Tabs,
   Row,
   Col,
-  Statistic,
   Alert,
   Spin,
   Button,
   Space,
   Tag,
   Divider,
-  Tooltip,
-  Progress
+  Typography,
+  Statistic
 } from 'antd';
+
+const { Paragraph } = Typography;
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   BarChartOutlined,
   PieChartOutlined,
   UserOutlined,
   DollarOutlined,
-  LineChartOutlined,
   TeamOutlined,
   HeartOutlined,
   SafetyOutlined,
   RiseOutlined,
   ReloadOutlined,
-  DownloadOutlined,
   InfoCircleOutlined
 } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import { UniversalChart } from '../components/charts/UniversalChart';
 import questionnaire2DataService, { type Questionnaire2Statistics } from '../services/questionnaire2DataService';
 
-const { Title, Text, Paragraph } = Typography;
 const { TabPane } = Tabs;
 
 // 7个维度配置
@@ -86,13 +83,6 @@ const SEVEN_DIMENSIONS = [
     icon: <HeartOutlined />,
     color: '#eb2f96',
     description: '生育计划、婚育歧视分析'
-  },
-  {
-    key: 'cross',
-    title: '交叉分析与洞察',
-    icon: <BarChartOutlined />,
-    color: '#13c2c2',
-    description: '多维度交叉分析，发现深层关联'
   }
 ];
 
@@ -145,74 +135,6 @@ const Questionnaire2SevenDimensionPage: React.FC = () => {
     }
   };
 
-  // 渲染概述卡片
-  const renderOverview = () => {
-    const totalResponses = state.statistics?.totalResponses || 0;
-
-    return (
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-      >
-        <Card className="overview-card" style={{ marginBottom: 24 }}>
-          <Row gutter={[16, 16]}>
-            <Col xs={24} sm={12} md={6}>
-              <Statistic
-                title="总参与人数"
-                value={totalResponses}
-                prefix={<UserOutlined />}
-                valueStyle={{ color: '#1890ff' }}
-              />
-            </Col>
-            <Col xs={24} sm={12} md={6}>
-              <Statistic
-                title="数据维度"
-                value={7}
-                suffix="个"
-                prefix={<BarChartOutlined />}
-                valueStyle={{ color: '#52c41a' }}
-              />
-            </Col>
-            <Col xs={24} sm={12} md={6}>
-              <Statistic
-                title="问题总数"
-                value={40}
-                suffix="题"
-                prefix={<PieChartOutlined />}
-                valueStyle={{ color: '#faad14' }}
-              />
-            </Col>
-            <Col xs={24} sm={12} md={6}>
-              <Statistic
-                title="数据完整度"
-                value={100}
-                suffix="%"
-                prefix={<LineChartOutlined />}
-                valueStyle={{ color: '#722ed1' }}
-              />
-            </Col>
-          </Row>
-
-          <Divider />
-
-          <Space wrap>
-            {SEVEN_DIMENSIONS.map(dim => (
-              <Tag
-                key={dim.key}
-                color={dim.color}
-                icon={dim.icon}
-                style={{ padding: '4px 12px', fontSize: '14px' }}
-              >
-                {dim.title}
-              </Tag>
-            ))}
-          </Space>
-        </Card>
-      </motion.div>
-    );
-  };
-
   // 渲染维度内容
   const renderDimensionContent = (dimensionKey: string) => {
     const dimension = SEVEN_DIMENSIONS.find(d => d.key === dimensionKey);
@@ -233,8 +155,6 @@ const Questionnaire2SevenDimensionPage: React.FC = () => {
         return renderConfidenceContent(dimension);
       case 'fertility':
         return renderFertilityContent(dimension);
-      case 'cross':
-        return renderCrossAnalysisContent(dimension);
       default:
         return null;
     }
@@ -275,10 +195,7 @@ const Questionnaire2SevenDimensionPage: React.FC = () => {
               <Card type="inner" title="性别分布">
                 <UniversalChart
                   type="pie"
-                  data={stats.gender.data.map(item => ({
-                    name: item.name === 'male' ? '男' : item.name === 'female' ? '女' : '其他',
-                    value: item.value
-                  }))}
+                  data={stats.gender.data}
                   height={300}
                 />
               </Card>
@@ -289,10 +206,7 @@ const Questionnaire2SevenDimensionPage: React.FC = () => {
               <Card type="inner" title="年龄分布">
                 <UniversalChart
                   type="bar"
-                  data={stats.ageRange.data.map(item => ({
-                    name: item.name,
-                    value: item.value
-                  }))}
+                  data={stats.ageRange.data}
                   height={300}
                 />
               </Card>
@@ -305,10 +219,7 @@ const Questionnaire2SevenDimensionPage: React.FC = () => {
               <Card type="inner" title="学历分布">
                 <UniversalChart
                   type="pie"
-                  data={stats.educationLevel.data.map(item => ({
-                    name: item.name,
-                    value: item.value
-                  }))}
+                  data={stats.educationLevel.data}
                   height={300}
                 />
               </Card>
@@ -319,10 +230,7 @@ const Questionnaire2SevenDimensionPage: React.FC = () => {
               <Card type="inner" title="婚姻状况分布">
                 <UniversalChart
                   type="pie"
-                  data={stats.maritalStatus.data.map(item => ({
-                    name: item.name === 'single' ? '单身' : item.name === 'married' ? '已婚' : '离异',
-                    value: item.value
-                  }))}
+                  data={stats.maritalStatus.data}
                   height={300}
                 />
               </Card>
@@ -335,10 +243,7 @@ const Questionnaire2SevenDimensionPage: React.FC = () => {
               <Card type="inner" title="城市层级分布">
                 <UniversalChart
                   type="bar"
-                  data={stats.cityTier.data.map(item => ({
-                    name: item.name,
-                    value: item.value
-                  }))}
+                  data={stats.cityTier.data}
                   height={300}
                 />
               </Card>
@@ -348,10 +253,7 @@ const Questionnaire2SevenDimensionPage: React.FC = () => {
               <Card type="inner" title="户籍类型分布">
                 <UniversalChart
                   type="pie"
-                  data={stats.hukouType.data.map(item => ({
-                    name: item.name === 'urban' ? '城镇' : '农村',
-                    value: item.value
-                  }))}
+                  data={stats.hukouType.data}
                   height={300}
                 />
               </Card>
@@ -397,10 +299,7 @@ const Questionnaire2SevenDimensionPage: React.FC = () => {
               <Card type="inner" title="负债情况分布">
                 <UniversalChart
                   type="bar"
-                  data={stats.debtSituation.data.map(item => ({
-                    name: item.name,
-                    value: item.value
-                  }))}
+                  data={stats.debtSituation.data}
                   height={300}
                 />
               </Card>
@@ -410,10 +309,7 @@ const Questionnaire2SevenDimensionPage: React.FC = () => {
               <Card type="inner" title="每月生活开支分布">
                 <UniversalChart
                   type="bar"
-                  data={stats.monthlyLivingCost.data.map(item => ({
-                    name: item.name,
-                    value: item.value
-                  }))}
+                  data={stats.monthlyLivingCost.data}
                   height={300}
                 />
               </Card>
@@ -426,10 +322,7 @@ const Questionnaire2SevenDimensionPage: React.FC = () => {
               <Card type="inner" title="收入来源分布（多选）">
                 <UniversalChart
                   type="bar"
-                  data={stats.incomeSources.data.map(item => ({
-                    name: item.name,
-                    value: item.value
-                  }))}
+                  data={stats.incomeSources.data}
                   height={300}
                 />
               </Card>
@@ -439,10 +332,7 @@ const Questionnaire2SevenDimensionPage: React.FC = () => {
               <Card type="inner" title="父母支援金额分布">
                 <UniversalChart
                   type="bar"
-                  data={stats.parentalSupport.data.map(item => ({
-                    name: item.name,
-                    value: item.value
-                  }))}
+                  data={stats.parentalSupport.data}
                   height={300}
                 />
               </Card>
@@ -455,10 +345,7 @@ const Questionnaire2SevenDimensionPage: React.FC = () => {
               <Card type="inner" title="收支平衡状况">
                 <UniversalChart
                   type="pie"
-                  data={stats.incomeExpenseBalance.data.map(item => ({
-                    name: item.name,
-                    value: item.value
-                  }))}
+                  data={stats.incomeExpenseBalance.data}
                   height={300}
                 />
               </Card>
@@ -468,10 +355,7 @@ const Questionnaire2SevenDimensionPage: React.FC = () => {
               <Card type="inner" title="经济压力程度">
                 <UniversalChart
                   type="pie"
-                  data={stats.economicPressure.data.map(item => ({
-                    name: item.name,
-                    value: item.value
-                  }))}
+                  data={stats.economicPressure.data}
                   height={300}
                 />
               </Card>
@@ -516,10 +400,7 @@ const Questionnaire2SevenDimensionPage: React.FC = () => {
               <Card type="inner" title="就业状态分布">
                 <UniversalChart
                   type="pie"
-                  data={stats.currentStatus.data.map(item => ({
-                    name: item.name,
-                    value: item.value
-                  }))}
+                  data={stats.currentStatus.data}
                   height={300}
                 />
               </Card>
@@ -529,10 +410,7 @@ const Questionnaire2SevenDimensionPage: React.FC = () => {
               <Card type="inner" title="月薪分布">
                 <UniversalChart
                   type="bar"
-                  data={stats.salary.data.map(item => ({
-                    name: item.name,
-                    value: item.value
-                  }))}
+                  data={stats.salary.data}
                   height={300}
                 />
               </Card>
@@ -586,10 +464,7 @@ const Questionnaire2SevenDimensionPage: React.FC = () => {
               <Card type="inner" title="歧视类型分布（多选）">
                 <UniversalChart
                   type="bar"
-                  data={stats.types.data.map(item => ({
-                    name: item.name,
-                    value: item.value
-                  }))}
+                  data={stats.types.data}
                   height={300}
                 />
               </Card>
@@ -599,10 +474,7 @@ const Questionnaire2SevenDimensionPage: React.FC = () => {
               <Card type="inner" title="歧视严重程度">
                 <UniversalChart
                   type="pie"
-                  data={stats.severity.data.map(item => ({
-                    name: item.name,
-                    value: item.value
-                  }))}
+                  data={stats.severity.data}
                   height={300}
                 />
               </Card>
@@ -615,10 +487,7 @@ const Questionnaire2SevenDimensionPage: React.FC = () => {
               <Card type="inner" title="歧视发生渠道（多选）">
                 <UniversalChart
                   type="bar"
-                  data={stats.channels.data.map(item => ({
-                    name: item.name,
-                    value: item.value
-                  }))}
+                  data={stats.channels.data}
                   height={300}
                 />
               </Card>
@@ -673,10 +542,7 @@ const Questionnaire2SevenDimensionPage: React.FC = () => {
               <Card type="inner" title="就业信心指数分布">
                 <UniversalChart
                   type="bar"
-                  data={stats.level.data.map(item => ({
-                    name: `信心指数 ${item.name}`,
-                    value: item.value
-                  }))}
+                  data={stats.level.data}
                   height={300}
                 />
               </Card>
@@ -686,10 +552,7 @@ const Questionnaire2SevenDimensionPage: React.FC = () => {
               <Card type="inner" title="信心影响因素（多选）">
                 <UniversalChart
                   type="bar"
-                  data={stats.factors.data.map(item => ({
-                    name: item.name,
-                    value: item.value
-                  }))}
+                  data={stats.factors.data}
                   height={300}
                 />
               </Card>
@@ -743,10 +606,7 @@ const Questionnaire2SevenDimensionPage: React.FC = () => {
               <Card type="inner" title="生育计划分布">
                 <UniversalChart
                   type="pie"
-                  data={stats.intent.data.map(item => ({
-                    name: item.name,
-                    value: item.value
-                  }))}
+                  data={stats.intent.data}
                   height={300}
                 />
               </Card>
@@ -762,137 +622,6 @@ const Questionnaire2SevenDimensionPage: React.FC = () => {
               />
             </Col>
           </Row>
-        </Card>
-      </motion.div>
-    );
-  };
-
-  const renderCrossAnalysisContent = (dimension: typeof SEVEN_DIMENSIONS[0]) => {
-    return (
-      <motion.div
-        key="cross"
-        initial={{ opacity: 0, x: 20 }}
-        animate={{ opacity: 1, x: 0 }}
-        exit={{ opacity: 0, x: -20 }}
-        transition={{ duration: 0.3 }}
-      >
-        <Card
-          title={
-            <Space>
-              {dimension.icon}
-              <span>{dimension.title}</span>
-            </Space>
-          }
-          extra={
-            <Tag color={dimension.color}>
-              {state.statistics!.totalResponses} 份数据
-            </Tag>
-          }
-        >
-          <Paragraph type="secondary">{dimension.description}</Paragraph>
-
-          <Divider />
-
-          {/* 核心洞察卡片 */}
-          <Row gutter={[16, 16]} style={{ marginTop: 24 }}>
-            <Col xs={24} md={8}>
-              <Card>
-                <Statistic
-                  title="平均就业信心指数"
-                  value={3.2}
-                  precision={1}
-                  valueStyle={{ color: '#3f8600' }}
-                  prefix={<RiseOutlined />}
-                  suffix="/ 5"
-                />
-                <Paragraph type="secondary" style={{ marginTop: 8 }}>
-                  整体就业信心处于中等偏上水平
-                </Paragraph>
-              </Card>
-            </Col>
-
-            <Col xs={24} md={8}>
-              <Card>
-                <Statistic
-                  title="经济压力人群占比"
-                  value={70}
-                  precision={0}
-                  valueStyle={{ color: '#cf1322' }}
-                  prefix={<DollarOutlined />}
-                  suffix="%"
-                />
-                <Paragraph type="secondary" style={{ marginTop: 8 }}>
-                  超过七成受访者面临经济压力
-                </Paragraph>
-              </Card>
-            </Col>
-
-            <Col xs={24} md={8}>
-              <Card>
-                <Statistic
-                  title="遭遇歧视人群占比"
-                  value={45}
-                  precision={0}
-                  valueStyle={{ color: '#faad14' }}
-                  prefix={<SafetyOutlined />}
-                  suffix="%"
-                />
-                <Paragraph type="secondary" style={{ marginTop: 8 }}>
-                  近半数受访者经历过求职歧视
-                </Paragraph>
-              </Card>
-            </Col>
-          </Row>
-
-          {/* 关键发现 */}
-          <Card type="inner" title="关键发现" style={{ marginTop: 16 }}>
-            <Row gutter={[16, 16]}>
-              <Col xs={24} md={12}>
-                <Alert
-                  message="学历与收入正相关"
-                  description="本科及以上学历群体的平均月薪显著高于专科及以下学历群体"
-                  type="success"
-                  showIcon
-                />
-              </Col>
-
-              <Col xs={24} md={12}>
-                <Alert
-                  message="经济压力影响生育意愿"
-                  description="高经济压力群体中，超过60%表示暂无生育计划"
-                  type="warning"
-                  showIcon
-                />
-              </Col>
-
-              <Col xs={24} md={12}>
-                <Alert
-                  message="年龄与歧视经历相关"
-                  description="35岁以上群体遭遇年龄歧视的比例显著高于其他年龄段"
-                  type="error"
-                  showIcon
-                />
-              </Col>
-
-              <Col xs={24} md={12}>
-                <Alert
-                  message="就业状态影响信心指数"
-                  description="在职群体的就业信心指数平均比失业群体高1.5分"
-                  type="info"
-                  showIcon
-                />
-              </Col>
-            </Row>
-          </Card>
-
-          {/* 数据说明 */}
-          <Alert
-            message="交叉分析说明"
-            description="以上洞察基于1000份问卷数据的多维度交叉分析，揭示了就业市场的深层关联"
-            type="info"
-            showIcon
-            style={{ marginTop: 16 }}
-          />
         </Card>
       </motion.div>
     );
@@ -927,24 +656,7 @@ const Questionnaire2SevenDimensionPage: React.FC = () => {
   }
 
   return (
-    <div style={{ padding: '24px', maxWidth: '1400px', margin: '0 auto' }}>
-      {/* 页面标题 */}
-      <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-      >
-        <Title level={2}>
-          <BarChartOutlined /> 问卷2数据可视化 - 七维度分析
-        </Title>
-        <Paragraph type="secondary">
-          基于1000条真实测试数据的多维度社会洞察分析系统
-        </Paragraph>
-      </motion.div>
-
-      {/* 概述卡片 */}
-      {renderOverview()}
-
+    <div style={{ padding: '16px', maxWidth: '1400px', margin: '0 auto' }}>
       {/* 7个Tab维度 */}
       <Card>
         <Tabs
@@ -976,9 +688,6 @@ const Questionnaire2SevenDimensionPage: React.FC = () => {
         <Space>
           <Button icon={<ReloadOutlined />} onClick={loadData}>
             刷新数据
-          </Button>
-          <Button icon={<DownloadOutlined />}>
-            导出报告
           </Button>
           <Button icon={<InfoCircleOutlined />} onClick={() => navigate('/second-questionnaire')}>
             返回问卷

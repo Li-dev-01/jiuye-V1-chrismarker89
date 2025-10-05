@@ -1,0 +1,44 @@
+{
+  "sectionResponses": [
+    {
+      "sectionId": "second-questionnaire-responses",
+      "questionResponses": [
+        {"questionId": "gender-v2", "value": "male"},
+        {"questionId": "age-range-v2", "value": "under-20"},
+        {"questionId": "education-level-v2", "value": "high-school"},
+        {"questionId": "marital-status-v2", "value": "single"},
+        {"questionId": "has-children-v2", "value": "no"},
+        {"questionId": "fertility-intent-v2", "value": "uncertain"},
+        {"questionId": "current-city-tier-v2", "value": "rural"},
+        {"questionId": "hukou-type-v2", "value": "rural"},
+        {"questionId": "years-experience-v2", "value": "none"},
+        {"questionId": "current-status-question-v2", "value": "unemployed"},
+        {"questionId": "debt-situation-v2", "value": ["alipay-huabei", "jd-baitiao", "wechat-pay-later", "consumer-loan"]},
+        {"questionId": "monthly-debt-burden-v2", "value": "500-1000"},
+        {"questionId": "economic-pressure-level-v2", "value": "severe-pressure"},
+        {"questionId": "monthly-living-cost-v2", "value": "below-1000"},
+        {"questionId": "income-sources-v2", "value": ["no-income", "parents-support"]},
+        {"questionId": "parental-support-amount-v2", "value": "below-500"},
+        {"questionId": "income-expense-balance-v2", "value": "no-income"},
+        {"questionId": "experienced-discrimination-types-v2", "value": ["work-experience", "major", "appearance"]},
+        {"questionId": "discrimination-severity-v2", "value": "very-severe"},
+        {"questionId": "discrimination-channels-v2", "value": ["onsite-interview", "background-check"]},
+        {"questionId": "support-needed-types-v2", "value": ["skill-training", "networking"]},
+        {"questionId": "employment-confidence-6months-v2", "value": "worried"},
+        {"questionId": "employment-confidence-1year-v2", "value": "worried"},
+        {"questionId": "job-seeking-duration-v2", "value": "3-6months"},
+        {"questionId": "applications-per-week-v2", "value": "less-5"},
+        {"questionId": "interview-conversion-v2", "value": "5-10"},
+        {"questionId": "channels-used-v2", "value": ["liepin", "campus", "referral"]},
+        {"questionId": "offer-received-v2", "value": "none"}
+      ]
+    }
+  ],
+  "metadata": {
+    "participantGroup": "freshGraduate",
+    "startedAt": "2025-10-05T13:53:14.867Z",
+    "responseTimeSeconds": 160,
+    "submittedAt": "2025-10-05T13:55:54.958Z"
+  }
+}
+

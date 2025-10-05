@@ -1,0 +1,110 @@
+/**
+ * 励志名言弹窗样式
+ */
+
+.motivational-quote-modal .ant-modal-content {
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.motivational-quote-modal .ant-modal-body {
+  padding: 40px 32px;
+}
+
+.motivational-quote-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.quote-icon {
+  animation: heartbeat 1.5s ease-in-out infinite;
+}
+
+@keyframes heartbeat {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+.quote-box {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 12px;
+  padding: 32px 24px;
+  margin: 24px 0;
+  width: 100%;
+  box-shadow: 0 8px 24px rgba(102, 126, 234, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.quote-box::before {
+  content: '"';
+  position: absolute;
+  top: -20px;
+  left: 10px;
+  font-size: 120px;
+  color: rgba(255, 255, 255, 0.1);
+  font-family: Georgia, serif;
+  line-height: 1;
+}
+
+.quote-text {
+  color: white !important;
+  font-size: 18px !important;
+  line-height: 1.8 !important;
+  text-align: center;
+  margin: 0 !important;
+  font-weight: 500;
+  position: relative;
+  z-index: 1;
+}
+
+.quote-author {
+  display: block;
+  color: rgba(255, 255, 255, 0.9) !important;
+  font-size: 14px !important;
+  text-align: right;
+  margin-top: 16px;
+  font-style: italic;
+}
+
+.motivational-quote-modal .ant-btn-primary {
+  height: 44px;
+  border-radius: 22px;
+  font-size: 16px;
+  font-weight: 500;
+  min-width: 120px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+  transition: all 0.3s ease;
+}
+
+.motivational-quote-modal .ant-btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(102, 126, 234, 0.5);
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .motivational-quote-modal .ant-modal-body {
+    padding: 24px 16px;
+  }
+
+  .quote-box {
+    padding: 24px 16px;
+  }
+
+  .quote-text {
+    font-size: 16px !important;
+  }
+
+  .quote-icon {
+    font-size: 36px !important;
+  }
+}
+

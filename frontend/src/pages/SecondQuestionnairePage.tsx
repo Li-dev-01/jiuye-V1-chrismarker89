@@ -14,6 +14,8 @@ import { ProgressPredictor } from '../components/questionnaire/ProgressPredictor
 import UniversalAntiSpamVerification from '../components/common/UniversalAntiSpamVerification';
 import { SecondQuestionnaireHeader } from '../components/layout/SecondQuestionnaireHeader';
 import { useSafeAuth } from '../hooks/useSafeAuth';
+import MotivationalQuoteModal from '../components/MotivationalQuoteModal';
+import type { UserProfileData } from '../components/MotivationalQuoteModal';
 import '../styles/SecondQuestionnaire.css';
 
 const { Title, Text } = Typography;
@@ -50,6 +52,10 @@ export const SecondQuestionnairePage: React.FC = () => {
 
   // 防刷验证状态
   const [showAntiSpamVerification, setShowAntiSpamVerification] = useState(false);
+
+  // 用户画像数据和励志名言弹窗状态
+  const [userProfileData, setUserProfileData] = useState<UserProfileData | null>(null);
+  const [showMotivationalQuote, setShowMotivationalQuote] = useState(false);
   
   // 初始化问卷定义（不需要登录检查）
   useEffect(() => {
@@ -290,7 +296,21 @@ export const SecondQuestionnairePage: React.FC = () => {
 
       console.log('第二问卷提交成功:', result);
 
-      // 跳转到故事墙页面
+      // 检查是否有用户画像数据
+      if (result.userProfile) {
+        console.log('📊 收到用户画像数据:', result.userProfile);
+        setUserProfileData(result.userProfile);
+
+        // 如果需要鼓励，显示励志名言弹窗
+        if (result.userProfile.emotion?.needsEncouragement && result.userProfile.motivationalQuote) {
+          console.log('💪 显示励志名言弹窗');
+          setShowMotivationalQuote(true);
+          // 不立即跳转，等用户关闭弹窗后再跳转
+          return;
+        }
+      }
+
+      // 如果不需要显示励志名言，直接跳转到故事墙页面
       navigate('/stories', {
         state: {
           responseId: result.responseId,
@@ -313,6 +333,22 @@ export const SecondQuestionnairePage: React.FC = () => {
   const handleAntiSpamCancel = () => {
     console.log('❌ 用户取消防刷验证');
     setShowAntiSpamVerification(false);
+  };
+
+  // 励志名言弹窗关闭处理
+  const handleMotivationalQuoteClose = () => {
+    console.log('✅ 用户关闭励志名言弹窗，跳转到故事墙');
+    setShowMotivationalQuote(false);
+
+    // 跳转到故事墙页面
+    navigate('/stories', {
+      state: {
+        participantGroup: participantGroup,
+        completionTime: Math.round((Date.now() - interactionMetrics.startTime) / 1000),
+        interactionCount: interactionMetrics.interactionCount,
+        fromQuestionnaire: 'second-questionnaire'
+      }
+    });
   };
   
   // 加载状态
@@ -525,6 +561,13 @@ export const SecondQuestionnairePage: React.FC = () => {
         title="问卷提交验证"
         description="为了防止恶意提交，请选择正确的数字"
         autoSubmit={true}
+      />
+
+      {/* 励志名言弹窗 */}
+      <MotivationalQuoteModal
+        visible={showMotivationalQuote}
+        userProfile={userProfileData}
+        onClose={handleMotivationalQuoteClose}
       />
     </div>
   );

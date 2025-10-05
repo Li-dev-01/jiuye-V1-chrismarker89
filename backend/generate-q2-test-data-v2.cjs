@@ -46,7 +46,11 @@ function generateSingleResponse(index, role) {
   const currentStatus = role === 'student' ? 'student' :
                         role === 'unemployed_35plus' ? 'unemployed' :
                         randomChoice(['employed', 'unemployed', 'freelance']);
-  
+
+  // 就业状态相关（仅employed状态）
+  const monthlySalary = currentStatus === 'employed' ?
+    randomChoice(['below-3000', '3000-5000', '5000-8000', '8000-12000', '12000-20000', 'over-20000']) : null;
+
   // 经济压力
   const debtSituation = randomMultiChoice(['student-loan', 'mortgage', 'car-loan', 'consumer-loan', 'credit-card', 'none'], 1, 3);
   const monthlyDebtBurden = debtSituation.includes('none') ? 'no-debt' : randomChoice(['below-1000', '1000-3000', '3000-5000', '5000-10000', 'over-10000']);
@@ -56,17 +60,23 @@ function generateSingleResponse(index, role) {
   const parentalSupportAmount = incomeSources.includes('parents-support') ? randomChoice(['below-500', '500-1000', '1000-2000', '2000-3000', '3000-5000', 'over-5000']) : null;
   const incomeExpenseBalance = randomChoice(['surplus-large', 'surplus-small', 'balanced', 'deficit-small', 'deficit-large', 'dependent']);
   const economicPressure = role === 'high_debt' ? randomChoice(['high-pressure', 'severe-pressure']) :
-                           randomChoice(['no-pressure', 'low-pressure', 'moderate-pressure', 'high-pressure']);
+                           randomChoice(['no-pressure', 'low-pressure', 'mild-pressure', 'moderate-pressure', 'high-pressure']);
   
   // 就业信心
   const employmentConfidence = randomChoice(['1', '2', '3', '4', '5']);
   const confidenceFactors = randomMultiChoice(['market-outlook', 'personal-skills', 'education-background', 'work-experience', 'network', 'age', 'gender'], 1, 4);
   
   // 歧视经历
-  const discriminationTypes = randomMultiChoice(['age', 'gender', 'education', 'appearance', 'region', 'marital-status', 'none'], 0, 3);
+  const discriminationTypes = randomMultiChoice(['age', 'gender', 'education', 'appearance', 'region', 'marital-status', 'political-status', 'none'], 0, 3);
   const discriminationSeverity = discriminationTypes.length > 0 && !discriminationTypes.includes('none') ? randomChoice(['mild', 'moderate', 'severe']) : null;
-  const discriminationChannels = discriminationTypes.length > 0 && !discriminationTypes.includes('none') ? randomMultiChoice(['job-posting', 'interview', 'offer-stage', 'workplace'], 1, 2) : null;
-  
+  const discriminationChannels = discriminationTypes.length > 0 && !discriminationTypes.includes('none') ? randomMultiChoice(['job-posting', 'resume-screening', 'interview', 'onsite-interview', 'offer-stage', 'workplace'], 1, 2) : null;
+
+  // 生育意愿（仅适用于育龄人群）
+  const fertilityPlan = (gender === 'female' && ['23-25', '26-28', '29-35'].includes(ageRange)) ||
+                        (gender === 'male' && ['26-28', '29-35'].includes(ageRange))
+    ? randomChoice(['no-plan', 'considering', 'plan-1', 'plan-2', 'plan-3-or-more'])
+    : null;
+
   // 构建sectionResponses（符合问卷2定义）
   const sectionResponses = [
     {
@@ -85,7 +95,8 @@ function generateSingleResponse(index, role) {
     {
       sectionId: 'current-status-v2',
       responses: [
-        { questionId: 'current-status-question-v2', value: currentStatus }
+        { questionId: 'current-status-question-v2', value: currentStatus },
+        ...(monthlySalary ? [{ questionId: 'monthly-salary-v2', value: monthlySalary }] : [])
       ]
     },
     {
@@ -114,7 +125,13 @@ function generateSingleResponse(index, role) {
         ...(discriminationSeverity ? [{ questionId: 'discrimination-severity-v2', value: discriminationSeverity }] : []),
         ...(discriminationChannels ? [{ questionId: 'discrimination-channels-v2', value: discriminationChannels }] : [])
       ]
-    }
+    },
+    ...(fertilityPlan ? [{
+      sectionId: 'fertility-intention-v2',
+      responses: [
+        { questionId: 'fertility-plan-v2', value: fertilityPlan }
+      ]
+    }] : [])
   ];
   
   // 元数据
@@ -213,17 +230,17 @@ function main() {
   const data = generateAllTestData();
   console.log(`\n✅ 生成 ${data.length} 条数据\n`);
   
-  const sqlStatements = generateInsertSQL(data, 50);
+  const sqlStatements = generateInsertSQL(data, 25);
   console.log(`📝 生成 ${sqlStatements.length} 个SQL批次\n`);
-  
+
   // 创建输出目录
   const outputDir = path.join(__dirname, 'generated-data-v2');
   if (!fs.existsSync(outputDir)) {
     fs.mkdirSync(outputDir, { recursive: true });
   }
-  
-  // 保存SQL文件（每个文件10个批次，即500条记录）
-  const maxBatchesPerFile = 10;
+
+  // 保存SQL文件（每个文件5个批次，即125条记录）
+  const maxBatchesPerFile = 5;
   for (let i = 0; i < sqlStatements.length; i += maxBatchesPerFile) {
     const fileBatches = sqlStatements.slice(i, i + maxBatchesPerFile);
     const fileIndex = Math.floor(i / maxBatchesPerFile) + 1;

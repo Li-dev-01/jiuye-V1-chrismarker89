@@ -43,24 +43,14 @@ export const QuestionnaireLayout: React.FC<QuestionnaireLayoutProps> = ({ childr
   // 问卷项目导航菜单
   const menuItems = [
     {
-      key: '/',
-      icon: <HomeOutlined />,
-      label: <Link to="/">首页</Link>
-    },
-    {
       key: '/questionnaire',
       icon: <FileTextOutlined />,
       label: <Link to="/questionnaire/survey">问卷</Link>
     },
     {
-      key: '/analytics/v1',
+      key: '/analytics/v3',
       icon: <BarChartOutlined />,
-      label: <Link to="/analytics/v1">数据可视化V1</Link>
-    },
-    {
-      key: '/analytics/v2',
-      icon: <ExperimentOutlined />,
-      label: <Link to="/analytics/v2">数据可视化V2</Link>
+      label: <Link to="/analytics/v3">数据可视化</Link>
     },
     {
       key: '/stories',

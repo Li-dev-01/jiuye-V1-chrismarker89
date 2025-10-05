@@ -144,13 +144,8 @@ function App() {
                 <main id="main-content">
                   <Routes>
                     {/* 公开路由 - 无需权限，使用问卷布局 */}
-                    <Route path="/" element={
-                      <PublicRouteGuard>
-                        <QuestionnaireLayout>
-                          <HomePage />
-                        </QuestionnaireLayout>
-                      </PublicRouteGuard>
-                    } />
+                    {/* 首页重定向到问卷页 */}
+                    <Route path="/" element={<Navigate to="/questionnaire/survey" replace />} />
 
 
                     {/* ========================================= */}

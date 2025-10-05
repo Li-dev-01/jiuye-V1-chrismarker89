@@ -22,6 +22,24 @@ npx wrangler d1 execute college-employment-survey --remote --file=import_q2_test
 
 # 导入第2部分（500条）
 npx wrangler d1 execute college-employment-survey --remote --file=import_q2_test_data_part2.sql
+
+# 导入第3部分（500条）
+npx wrangler d1 execute college-employment-survey --remote --file=import_q2_test_data_part3.sql
+
+# 导入第4部分（500条）
+npx wrangler d1 execute college-employment-survey --remote --file=import_q2_test_data_part4.sql
+
+# 导入第5部分（500条）
+npx wrangler d1 execute college-employment-survey --remote --file=import_q2_test_data_part5.sql
+
+# 导入第6部分（500条）
+npx wrangler d1 execute college-employment-survey --remote --file=import_q2_test_data_part6.sql
+
+# 导入第7部分（500条）
+npx wrangler d1 execute college-employment-survey --remote --file=import_q2_test_data_part7.sql
+
+# 导入第8部分（500条）
+npx wrangler d1 execute college-employment-survey --remote --file=import_q2_test_data_part8.sql
 ```
 
 ## 验证导入

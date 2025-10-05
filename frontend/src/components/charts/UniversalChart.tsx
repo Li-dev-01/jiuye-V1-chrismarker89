@@ -121,12 +121,15 @@ export const UniversalChart: React.FC<UniversalChartProps> = ({
   }
 
   if (!data || data.length === 0) {
+    console.log('📊 UniversalChart 收到空数据:', { type, title, data });
     return (
       <div style={{ height: responsiveHeight, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <Empty description="暂无数据" />
       </div>
     );
   }
+
+  console.log(`📊 UniversalChart 渲染 ${type} 图表:`, { title, dataLength: data.length, firstItem: data[0] });
 
   // 为数据添加颜色和智能双语标签
   const dataWithColors = data.map((item, index) => {
@@ -195,7 +198,13 @@ export const UniversalChart: React.FC<UniversalChartProps> = ({
               cy="50%"
               outerRadius={pieOuterRadius}
               dataKey="value"
-              label={isMobile ? false : ({ name, payload }) => `${name}: ${payload?.percentage?.toFixed(1)}%`}
+              label={isMobile ? false : ({ name, payload }) => {
+                const percentage = payload?.percentage;
+                if (percentage !== undefined && percentage !== null) {
+                  return `${name}: ${percentage.toFixed(1)}%`;
+                }
+                return name;
+              }}
             >
               {dataWithColors.map((entry, index) => (
                 <Cell key={`cell-${index}`} fill={entry.color} />

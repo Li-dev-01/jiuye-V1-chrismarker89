@@ -1149,5 +1149,43 @@ export function createQuestionnaireV2Routes() {
     }
   });
 
+  /**
+   * 新的完整同步API（使用新服务）
+   * POST /api/questionnaire-v2/sync-all-stats
+   */
+  questionnaireV2.post('/sync-all-stats', async (c) => {
+    try {
+      const env = c.env as Env;
+
+      if (!env.DB) {
+        return c.json({
+          success: false,
+          error: 'Database not configured'
+        }, 500);
+      }
+
+      const db = createDatabaseService(env);
+      const { Questionnaire2FullSyncService } = await import('../services/questionnaire2FullSyncService');
+      const syncService = new Questionnaire2FullSyncService(db);
+
+      console.log('🔄 开始完整同步所有统计表...');
+      const result = await syncService.syncAllTables();
+
+      return c.json({
+        success: result.success,
+        message: '统计表同步完成',
+        results: result.results,
+        error: result.error,
+        timestamp: Date.now()
+      });
+    } catch (error: any) {
+      console.error('❌ 统计表同步失败:', error);
+      return c.json({
+        success: false,
+        error: error.message
+      }, 500);
+    }
+  });
+
   return questionnaireV2;
 }
