@@ -120,6 +120,11 @@ export const questionnaire2Definition: UniversalQuestionnaire = {
           title: '您是否有子女？',
           description: '用于了解育儿状况对就业的影响',
           required: true,
+          condition: {
+            dependsOn: 'marital-status-v2',
+            operator: 'in',
+            value: ['married', 'divorced', 'widowed']
+          },
           options: [
             { value: 'yes', label: '是' },
             { value: 'no', label: '否' },
@@ -149,7 +154,8 @@ export const questionnaire2Definition: UniversalQuestionnaire = {
           options: [
             { value: 'yes-soon', label: '是，近期（1-2年内）' },
             { value: 'yes-later', label: '是，但较远期（3年以上）' },
-            { value: 'no', label: '否' },
+            { value: 'no', label: '否，暂无生育计划' },
+            { value: 'no-already', label: '已有子女，不打算再生' },
             { value: 'uncertain', label: '不确定' },
             { value: 'prefer-not', label: '不愿透露' }
           ],
