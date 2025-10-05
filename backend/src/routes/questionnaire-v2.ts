@@ -540,6 +540,153 @@ export function createQuestionnaireV2Routes() {
 
   /**
    * @swagger
+   * /api/questionnaire-v2/analytics/{questionnaireId}/cross-slice:
+   *   get:
+   *     summary: 获取问卷2交叉切片分析数据
+   *     tags: [Questionnaire V2 Analytics]
+   *     parameters:
+   *       - in: path
+   *         name: questionnaireId
+   *         required: true
+   *         schema:
+   *           type: string
+   *       - in: query
+   *         name: dimensions
+   *         schema:
+   *           type: string
+   *         description: 维度列表，逗号分隔，如 gender_v2,age_range_v2
+   *       - in: query
+   *         name: metric
+   *         schema:
+   *           type: string
+   *         description: 指标字段，如 current_status_question_v2
+   *     responses:
+   *       200:
+   *         description: 交叉切片数据获取成功
+   */
+  questionnaireV2.get('/analytics/:questionnaireId/cross-slice', async (c) => {
+    try {
+      const questionnaireId = c.req.param('questionnaireId');
+      const dimensionsParam = c.req.query('dimensions') || 'gender_v2';
+      const metricField = c.req.query('metric');
+      const db = createDatabaseService(c.env as Env);
+
+      console.log('Cross-slice analysis:', { questionnaireId, dimensionsParam, metricField });
+
+      // 导入服务
+      const { questionnaire2WideTableService } = await import('../services/questionnaire2WideTableService');
+      const { questionnaire2DerivedTableService } = await import('../services/questionnaire2DerivedTableService');
+
+      // 获取所有响应数据
+      const responses = await db.query(
+        `SELECT * FROM questionnaire_v2_responses WHERE questionnaire_id = ? AND status = 'completed'`,
+        [questionnaireId]
+      );
+
+      // 转换为宽表格式
+      const wideTableRows = questionnaire2WideTableService.convertBatch(responses as any);
+
+      // 解析维度参数
+      const dimensions = dimensionsParam.split(',').map(d => d.trim()) as any[];
+
+      // 执行交叉切片分析
+      const crossSliceStats = questionnaire2DerivedTableService.calculateMultiDimensionSlice(
+        wideTableRows,
+        dimensions,
+        metricField as any
+      );
+
+      return c.json({
+        success: true,
+        data: crossSliceStats,
+        message: '交叉切片分析完成'
+      });
+
+    } catch (error) {
+      console.error('Cross-slice analysis failed:', error);
+      return c.json({
+        success: false,
+        error: 'Internal Server Error',
+        message: '交叉切片分析失败'
+      }, 500);
+    }
+  });
+
+  /**
+   * @swagger
+   * /api/questionnaire-v2/analytics/{questionnaireId}/dimension-stats:
+   *   get:
+   *     summary: 获取问卷2单维度统计数据
+   *     tags: [Questionnaire V2 Analytics]
+   *     parameters:
+   *       - in: path
+   *         name: questionnaireId
+   *         required: true
+   *         schema:
+   *           type: string
+   *       - in: query
+   *         name: dimension
+   *         required: true
+   *         schema:
+   *           type: string
+   *         description: 维度字段名，如 gender_v2, age_range_v2
+   *     responses:
+   *       200:
+   *         description: 维度统计数据获取成功
+   */
+  questionnaireV2.get('/analytics/:questionnaireId/dimension-stats', async (c) => {
+    try {
+      const questionnaireId = c.req.param('questionnaireId');
+      const dimension = c.req.query('dimension');
+      const db = createDatabaseService(c.env as Env);
+
+      if (!dimension) {
+        return c.json({
+          success: false,
+          error: 'Bad Request',
+          message: '缺少 dimension 参数'
+        }, 400);
+      }
+
+      console.log('Dimension stats:', { questionnaireId, dimension });
+
+      // 导入服务
+      const { questionnaire2WideTableService } = await import('../services/questionnaire2WideTableService');
+      const { questionnaire2DerivedTableService } = await import('../services/questionnaire2DerivedTableService');
+
+      // 获取所有响应数据
+      const responses = await db.query(
+        `SELECT * FROM questionnaire_v2_responses WHERE questionnaire_id = ? AND status = 'completed'`,
+        [questionnaireId]
+      );
+
+      // 转换为宽表格式
+      const wideTableRows = questionnaire2WideTableService.convertBatch(responses as any);
+
+      // 计算维度统计
+      const dimensionStats = questionnaire2DerivedTableService.calculateDimensionStats(
+        wideTableRows,
+        dimension as any
+      );
+
+      return c.json({
+        success: true,
+        data: dimensionStats,
+        message: '维度统计完成'
+      });
+
+    } catch (error) {
+      console.error('Dimension stats failed:', error);
+      return c.json({
+        success: false,
+        error: 'Internal Server Error',
+        message: '维度统计失败'
+      }, 500);
+    }
+  });
+
+  /**
+   * @swagger
    * /api/questionnaire-v2/test-data:
    *   get:
    *     summary: 测试问卷2数据

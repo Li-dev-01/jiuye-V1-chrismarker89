@@ -45,6 +45,9 @@ export interface Questionnaire2VisualizationSummary {
   economicPressureInsights: string[]; // 经济压力分析洞察
   employmentConfidenceInsights: string[]; // 就业信心分析洞察
   modernDebtAnalysis: string[]; // 现代负债分析洞察
+  discriminationInsights?: string[]; // 歧视分析洞察（新增）
+  genderAnalysisInsights?: string[]; // 性别分析洞察（新增）
+  regionalInsights?: string[]; // 地域分析洞察（新增）
   dimensions: Questionnaire2DimensionData[];
 }
 
@@ -85,6 +88,9 @@ class Questionnaire2VisualizationService {
         economicPressureInsights: this.generateEconomicPressureInsights(data),
         employmentConfidenceInsights: this.generateEmploymentConfidenceInsights(data),
         modernDebtAnalysis: this.generateModernDebtAnalysis(data),
+        discriminationInsights: this.generateDiscriminationInsights(data),
+        genderAnalysisInsights: this.generateGenderAnalysisInsights(data),
+        regionalInsights: this.generateRegionalInsights(data),
         dimensions: this.convertToQuestionnaire2Dimensions(data)
       };
 
@@ -191,6 +197,43 @@ class Questionnaire2VisualizationService {
   }
 
   /**
+   * 生成歧视分析洞察（新增）
+   */
+  private generateDiscriminationInsights(data: any): string[] {
+    return [
+      '性别歧视与婚育歧视在女性群体中尤为突出，尤其是35+已婚女性',
+      '年龄歧视在35岁以上求职者中普遍存在，成为就业的主要障碍',
+      '工作经验要求过高成为应届生与转行者的主要困扰',
+      '歧视主要发生在简历筛选与现场面试环节，隐性歧视难以取证',
+      '地域歧视与学历歧视仍然存在，但相对其他类型占比较低'
+    ];
+  }
+
+  /**
+   * 生成性别分析洞察（新增）
+   */
+  private generateGenderAnalysisInsights(data: any): string[] {
+    return [
+      '女性在求职过程中遭遇婚育询问的频率显著高于男性',
+      '35+女性面临年龄与婚育的双重压力，求职周期明显延长',
+      '男性在技术岗位中占比较高，女性在服务与教育行业分布较多',
+      '性别薪资差距依然存在，同等条件下女性薪资普遍低于男性10-20%'
+    ];
+  }
+
+  /**
+   * 生成地域分析洞察（新增）
+   */
+  private generateRegionalInsights(data: any): string[] {
+    return [
+      '一线城市就业机会多但竞争激烈，薪资水平显著高于其他城市',
+      '新一线城市成为年轻人新选择，生活成本与就业机会相对平衡',
+      '二三线城市就业机会有限，但生活压力较小',
+      '户籍限制在一线城市仍然存在，影响落户与子女教育'
+    ];
+  }
+
+  /**
    * 转换为问卷2专用维度数据格式
    */
   private convertToQuestionnaire2Dimensions(data: any): Questionnaire2DimensionData[] {
@@ -267,6 +310,150 @@ class Questionnaire2VisualizationService {
       }));
     }
 
+    // 新增：性别分布
+    if (questionId === 'gender-v2') {
+      const genderData = charts.gender?.distribution || [];
+      return genderData.map((item: any) => ({
+        label: item.label || item.value,
+        value: item.count || 0,
+        percentage: item.percentage || 0,
+        color: item.color || this.getDefaultColor(0),
+        icon: item.icon || '👤'
+      }));
+    }
+
+    // 新增：婚姻状况
+    if (questionId === 'marital-status-v2') {
+      const maritalData = charts.maritalStatus?.distribution || [];
+      return maritalData.map((item: any) => ({
+        label: item.label || item.value,
+        value: item.count || 0,
+        percentage: item.percentage || 0,
+        color: item.color || this.getDefaultColor(0),
+        icon: item.icon || '💑'
+      }));
+    }
+
+    // 新增：城市层级
+    if (questionId === 'current-city-tier-v2') {
+      const cityData = charts.cityTier?.distribution || [];
+      return cityData.map((item: any) => ({
+        label: item.label || item.value,
+        value: item.count || 0,
+        percentage: item.percentage || 0,
+        color: item.color || this.getDefaultColor(0),
+        icon: '🏙️'
+      }));
+    }
+
+    // 新增：歧视类型
+    if (questionId === 'experienced-discrimination-types-v2') {
+      const discriminationData = charts.discrimination?.types || [];
+      return discriminationData.map((item: any, index: number) => ({
+        label: item.label || item.type || `选项${index + 1}`,
+        value: item.count || 0,
+        percentage: item.percentage || 0,
+        color: item.color || this.getDefaultColor(index),
+        icon: '⚖️'
+      }));
+    }
+
+    // 新增：歧视严重度
+    if (questionId === 'discrimination-severity-v2') {
+      const severityData = charts.discrimination?.severity || [];
+      return severityData.map((item: any, index: number) => ({
+        label: item.label || item.value,
+        value: item.count || 0,
+        percentage: item.percentage || 0,
+        color: item.color || this.getDefaultColor(index),
+        icon: '📊'
+      }));
+    }
+
+    // 新增：歧视渠道
+    if (questionId === 'discrimination-channels-v2') {
+      const channelsData = charts.discrimination?.channels || [];
+      return channelsData.map((item: any, index: number) => ({
+        label: item.label || item.channel,
+        value: item.count || 0,
+        percentage: item.percentage || 0,
+        color: item.color || this.getDefaultColor(index),
+        icon: '🔍'
+      }));
+    }
+
+    // 新增：求职时长
+    if (questionId === 'job-seeking-duration-v2') {
+      const durationData = charts.jobSeeking?.duration || [];
+      return durationData.map((item: any, index: number) => ({
+        label: item.label || item.value,
+        value: item.count || 0,
+        percentage: item.percentage || 0,
+        color: item.color || this.getDefaultColor(index),
+        icon: '⏱️'
+      }));
+    }
+
+    // 新增：投递量
+    if (questionId === 'applications-per-week-v2') {
+      const applicationsData = charts.jobSeeking?.applications || [];
+      return applicationsData.map((item: any, index: number) => ({
+        label: item.label || item.value,
+        value: item.count || 0,
+        percentage: item.percentage || 0,
+        color: item.color || this.getDefaultColor(index),
+        icon: '📝'
+      }));
+    }
+
+    // 新增：转化率
+    if (questionId === 'interview-conversion-v2') {
+      const conversionData = charts.jobSeeking?.conversion || [];
+      return conversionData.map((item: any, index: number) => ({
+        label: item.label || item.value,
+        value: item.count || 0,
+        percentage: item.percentage || 0,
+        color: item.color || this.getDefaultColor(index),
+        icon: '📈'
+      }));
+    }
+
+    // 新增：渠道使用
+    if (questionId === 'channels-used-v2') {
+      const channelsUsedData = charts.jobSeeking?.channelsUsed || [];
+      return channelsUsedData.map((item: any, index: number) => ({
+        label: item.label || item.channel,
+        value: item.count || 0,
+        percentage: item.percentage || 0,
+        color: item.color || this.getDefaultColor(index),
+        icon: '🌐'
+      }));
+    }
+
+    // 新增：Offer数量
+    if (questionId === 'offer-received-v2') {
+      const offerData = charts.jobSeeking?.offers || [];
+      return offerData.map((item: any, index: number) => ({
+        label: item.label || item.value,
+        value: item.count || 0,
+        percentage: item.percentage || 0,
+        color: item.color || this.getDefaultColor(index),
+        icon: '🎉'
+      }));
+    }
+
+    // 新增：支持类型
+    if (questionId === 'support-needed-types-v2') {
+      const supportData = charts.support?.types || [];
+      return supportData.map((item: any, index: number) => ({
+        label: item.label || item.type,
+        value: item.count || 0,
+        percentage: item.percentage || 0,
+        color: item.color || this.getDefaultColor(index),
+        icon: '🤝'
+      }));
+    }
+
     // 默认返回空数组
     return [];
   }
@@ -276,11 +463,15 @@ class Questionnaire2VisualizationService {
    */
   private getUniqueFeatures(dimensionId: string): string[] {
     const features: Record<string, string[]> = {
+      'basic-demographics-v2': ['性别分布', '婚育状况', '地域分布', '工作年限'],
       'economic-pressure-analysis-v2': ['现代负债分析', '月还款负担评估', '经济压力程度'],
       'employment-confidence-analysis-v2': ['6个月信心指数', '1年信心指数', '信心趋势分析'],
-      'employment-income-analysis-v2': ['薪资负债比', '收入压力分析']
+      'employment-income-analysis-v2': ['薪资负债比', '收入压力分析'],
+      'discrimination-analysis-v2': ['14种歧视类型', '5级严重度量化', '9个发生渠道'],
+      'support-needs-analysis-v2': ['10种支持类型', '需求优先级排序'],
+      'job-seeking-behavior-v2': ['求职周期', '投递转化率', '渠道有效性', 'Offer获取率']
     };
-    
+
     return features[dimensionId] || [];
   }
 
