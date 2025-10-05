@@ -3,6 +3,8 @@
  * 根据问卷答案自动生成用户画像标签
  */
 
+import { QUESTIONNAIRE_V2_FIELD_IDS as FIELDS } from '../config/questionnaireFieldMappings';
+
 export interface TagRule {
   tagKey: string;
   tagName: string;
@@ -20,35 +22,43 @@ export interface GeneratedTag {
 
 /**
  * 问卷V2标签规则定义
+ * 使用 FIELDS 常量确保字段ID一致性
  */
 export const QUESTIONNAIRE_V2_TAG_RULES: TagRule[] = [
   // ==================== 年龄段标签 ====================
   {
+    tagKey: 'age-under-20',
+    tagName: '20岁以下',
+    category: '年龄段',
+    condition: (a) => a[FIELDS.ageRange] === 'under-20',
+    weight: 1.0
+  },
+  {
     tagKey: 'age-18-22',
     tagName: '18-22岁',
     category: '年龄段',
-    condition: (a) => a['age-range-v2'] === '18-22',
+    condition: (a) => a[FIELDS.ageRange] === '18-22',
     weight: 1.0
   },
   {
     tagKey: 'age-23-25',
     tagName: '23-25岁',
     category: '年龄段',
-    condition: (a) => a['age-range-v2'] === '23-25',
+    condition: (a) => a[FIELDS.ageRange] === '23-25',
     weight: 1.0
   },
   {
     tagKey: 'age-26-30',
     tagName: '26-30岁',
     category: '年龄段',
-    condition: (a) => a['age-range-v2'] === '26-30',
+    condition: (a) => a[FIELDS.ageRange] === '26-30',
     weight: 1.0
   },
   {
     tagKey: 'age-30-plus',
     tagName: '30岁以上',
     category: '年龄段',
-    condition: (a) => a['age-range-v2'] === '30+',
+    condition: (a) => a[FIELDS.ageRange] === '30+',
     weight: 1.0
   },
 
@@ -57,44 +67,51 @@ export const QUESTIONNAIRE_V2_TAG_RULES: TagRule[] = [
     tagKey: 'gender-male',
     tagName: '男性',
     category: '性别',
-    condition: (a) => a['gender-v2'] === 'male',
+    condition: (a) => a[FIELDS.gender] === 'male',
     weight: 0.8
   },
   {
     tagKey: 'gender-female',
     tagName: '女性',
     category: '性别',
-    condition: (a) => a['gender-v2'] === 'female',
+    condition: (a) => a[FIELDS.gender] === 'female',
     weight: 0.8
   },
 
   // ==================== 学历标签 ====================
   {
-    tagKey: 'education-bachelor',
-    tagName: '本科学历',
+    tagKey: 'education-high-school',
+    tagName: '高中学历',
     category: '学历',
-    condition: (a) => a['education-level-v2'] === 'bachelor',
-    weight: 1.0
-  },
-  {
-    tagKey: 'education-master',
-    tagName: '硕士学历',
-    category: '学历',
-    condition: (a) => a['education-level-v2'] === 'master',
-    weight: 1.0
-  },
-  {
-    tagKey: 'education-phd',
-    tagName: '博士学历',
-    category: '学历',
-    condition: (a) => a['education-level-v2'] === 'phd',
+    condition: (a) => a[FIELDS.educationLevel] === 'high-school',
     weight: 1.0
   },
   {
     tagKey: 'education-college',
     tagName: '专科学历',
     category: '学历',
-    condition: (a) => a['education-level-v2'] === 'college',
+    condition: (a) => a[FIELDS.educationLevel] === 'college',
+    weight: 1.0
+  },
+  {
+    tagKey: 'education-bachelor',
+    tagName: '本科学历',
+    category: '学历',
+    condition: (a) => a[FIELDS.educationLevel] === 'bachelor',
+    weight: 1.0
+  },
+  {
+    tagKey: 'education-master',
+    tagName: '硕士学历',
+    category: '学历',
+    condition: (a) => a[FIELDS.educationLevel] === 'master',
+    weight: 1.0
+  },
+  {
+    tagKey: 'education-phd',
+    tagName: '博士学历',
+    category: '学历',
+    condition: (a) => a[FIELDS.educationLevel] === 'phd',
     weight: 1.0
   },
 
@@ -103,21 +120,21 @@ export const QUESTIONNAIRE_V2_TAG_RULES: TagRule[] = [
     tagKey: 'employed',
     tagName: '已就业',
     category: '就业状态',
-    condition: (a) => a['employment-status-v2'] === 'employed',
+    condition: (a) => a[FIELDS.currentStatus] === 'employed',
     weight: 1.0
   },
   {
     tagKey: 'job-seeking',
     tagName: '求职中',
     category: '就业状态',
-    condition: (a) => a['employment-status-v2'] === 'unemployed',
+    condition: (a) => a[FIELDS.currentStatus] === 'unemployed',
     weight: 1.0
   },
   {
     tagKey: 'student',
     tagName: '在校学生',
     category: '就业状态',
-    condition: (a) => a['employment-status-v2'] === 'student',
+    condition: (a) => a[FIELDS.currentStatus] === 'student',
     weight: 1.0
   },
 
@@ -126,21 +143,21 @@ export const QUESTIONNAIRE_V2_TAG_RULES: TagRule[] = [
     tagKey: 'tier1-city',
     tagName: '一线城市',
     category: '城市层级',
-    condition: (a) => a['current-city-tier-v2'] === 'tier1',
+    condition: (a) => a[FIELDS.currentCityTier] === 'tier1',
     weight: 0.9
   },
   {
     tagKey: 'tier2-city',
     tagName: '二线城市',
     category: '城市层级',
-    condition: (a) => a['current-city-tier-v2'] === 'tier2',
+    condition: (a) => a[FIELDS.currentCityTier] === 'tier2',
     weight: 0.9
   },
   {
     tagKey: 'tier3-city',
-    tagName: '三线城市',
+    tagName: '三线及以下',
     category: '城市层级',
-    condition: (a) => a['current-city-tier-v2'] === 'tier3',
+    condition: (a) => a[FIELDS.currentCityTier] === 'tier3' || a[FIELDS.currentCityTier] === 'tier4' || a[FIELDS.currentCityTier] === 'rural',
     weight: 0.9
   },
 
@@ -150,27 +167,27 @@ export const QUESTIONNAIRE_V2_TAG_RULES: TagRule[] = [
     tagName: '高经济压力',
     category: '经济状况',
     condition: (a) => {
-      const pressure = a['economic-pressure-v2'];
-      return pressure === 'very-high' || pressure === 'high';
+      const pressure = a[FIELDS.economicPressureLevel];
+      return pressure === 'high-pressure' || pressure === 'severe-pressure';
     },
-    weight: 0.9
+    weight: 1.1
   },
   {
     tagKey: 'low-economic-pressure',
     tagName: '低经济压力',
     category: '经济状况',
     condition: (a) => {
-      const pressure = a['economic-pressure-v2'];
-      return pressure === 'low' || pressure === 'very-low';
+      const pressure = a[FIELDS.economicPressureLevel];
+      return pressure === 'low-pressure' || pressure === 'no-pressure';
     },
-    weight: 0.7
+    weight: 0.9
   },
   {
     tagKey: 'has-debt',
     tagName: '有负债',
     category: '经济状况',
-    condition: (a) => a['has-debt-v2'] === 'yes',
-    weight: 0.8
+    condition: (a) => Array.isArray(a[FIELDS.debtSituation]) && a[FIELDS.debtSituation].length > 0 && !a[FIELDS.debtSituation].includes('no-debt'),
+    weight: 1.0
   },
 
   // ==================== 月薪水平标签 ====================
@@ -178,14 +195,14 @@ export const QUESTIONNAIRE_V2_TAG_RULES: TagRule[] = [
     tagKey: 'salary-low',
     tagName: '月薪3000以下',
     category: '收入水平',
-    condition: (a) => a['monthly-salary-v2'] === 'below-3000',
+    condition: (a) => a[FIELDS.currentSalary] === 'below-3000',
     weight: 0.8
   },
   {
     tagKey: 'salary-medium',
     tagName: '月薪5000-8000',
     category: '收入水平',
-    condition: (a) => a['monthly-salary-v2'] === '5000-8000',
+    condition: (a) => a[FIELDS.currentSalary] === '5000-8000',
     weight: 0.8
   },
   {
@@ -193,7 +210,7 @@ export const QUESTIONNAIRE_V2_TAG_RULES: TagRule[] = [
     tagName: '月薪12000以上',
     category: '收入水平',
     condition: (a) => {
-      const salary = a['monthly-salary-v2'];
+      const salary = a[FIELDS.currentSalary];
       return salary === '12000-20000' || salary === 'above-20000';
     },
     weight: 0.8
@@ -205,7 +222,7 @@ export const QUESTIONNAIRE_V2_TAG_RULES: TagRule[] = [
     tagName: '就业信心强',
     category: '心态',
     condition: (a) => {
-      const confidence = a['employment-confidence-v2'];
+      const confidence = a[FIELDS.employmentConfidence6Months];
       return confidence === 'very-confident' || confidence === 'confident';
     },
     weight: 0.9
@@ -215,10 +232,10 @@ export const QUESTIONNAIRE_V2_TAG_RULES: TagRule[] = [
     tagName: '就业焦虑',
     category: '心态',
     condition: (a) => {
-      const confidence = a['employment-confidence-v2'];
-      return confidence === 'not-confident' || confidence === 'very-anxious';
+      const confidence = a[FIELDS.employmentConfidence6Months];
+      return confidence === 'worried' || confidence === 'not-confident' || confidence === 'very-anxious';
     },
-    weight: 0.9
+    weight: 1.1
   },
 
   // ==================== 生育意愿标签 ====================
@@ -226,14 +243,14 @@ export const QUESTIONNAIRE_V2_TAG_RULES: TagRule[] = [
     tagKey: 'willing-to-have-children',
     tagName: '有生育意愿',
     category: '生育态度',
-    condition: (a) => a['fertility-intention-v2'] === 'yes',
+    condition: (a) => a[FIELDS.fertilityIntent] === 'yes',
     weight: 0.7
   },
   {
     tagKey: 'no-children-plan',
     tagName: '不打算生育',
     category: '生育态度',
-    condition: (a) => a['fertility-intention-v2'] === 'no',
+    condition: (a) => a[FIELDS.fertilityIntent] === 'no',
     weight: 0.7
   },
 
@@ -242,14 +259,14 @@ export const QUESTIONNAIRE_V2_TAG_RULES: TagRule[] = [
     tagKey: 'married',
     tagName: '已婚',
     category: '婚姻状态',
-    condition: (a) => a['marital-status-v2'] === 'married',
+    condition: (a) => a[FIELDS.maritalStatus] === 'married',
     weight: 0.7
   },
   {
     tagKey: 'single',
     tagName: '单身',
     category: '婚姻状态',
-    condition: (a) => a['marital-status-v2'] === 'single',
+    condition: (a) => a[FIELDS.maritalStatus] === 'single',
     weight: 0.7
   },
 
@@ -259,9 +276,9 @@ export const QUESTIONNAIRE_V2_TAG_RULES: TagRule[] = [
     tagName: '应届求职者',
     category: '组合画像',
     condition: (a) => {
-      return (a['age-range-v2'] === '18-22' || a['age-range-v2'] === '23-25') && 
-             a['employment-status-v2'] === 'unemployed' &&
-             (a['education-level-v2'] === 'bachelor' || a['education-level-v2'] === 'master');
+      return (a[FIELDS.ageRange] === '18-22' || a[FIELDS.ageRange] === '23-25' || a[FIELDS.ageRange] === 'under-20') &&
+             a[FIELDS.currentStatus] === 'unemployed' &&
+             (a[FIELDS.educationLevel] === 'bachelor' || a[FIELDS.educationLevel] === 'master' || a[FIELDS.educationLevel] === 'high-school');
     },
     weight: 1.2
   },
@@ -270,10 +287,10 @@ export const QUESTIONNAIRE_V2_TAG_RULES: TagRule[] = [
     tagName: '压力青年',
     category: '组合画像',
     condition: (a) => {
-      const age = a['age-range-v2'];
-      const pressure = a['economic-pressure-v2'];
-      return (age === '23-25' || age === '26-30') && 
-             (pressure === 'high' || pressure === 'very-high');
+      const age = a[FIELDS.ageRange];
+      const pressure = a[FIELDS.economicPressureLevel];
+      return (age === '23-25' || age === '26-30' || age === 'under-20') &&
+             (pressure === 'high-pressure' || pressure === 'severe-pressure');
     },
     weight: 1.1
   },
@@ -282,9 +299,9 @@ export const QUESTIONNAIRE_V2_TAG_RULES: TagRule[] = [
     tagName: '负债青年',
     category: '组合画像',
     condition: (a) => {
-      const age = a['age-range-v2'];
-      return (age === '18-22' || age === '23-25' || age === '26-30') && 
-             a['has-debt-v2'] === 'yes';
+      const age = a[FIELDS.ageRange];
+      const hasDebt = Array.isArray(a[FIELDS.debtSituation]) && a[FIELDS.debtSituation].length > 0 && !a[FIELDS.debtSituation].includes('no-debt');
+      return (age === '18-22' || age === '23-25' || age === '26-30' || age === 'under-20') && hasDebt;
     },
     weight: 1.1
   },
@@ -293,8 +310,8 @@ export const QUESTIONNAIRE_V2_TAG_RULES: TagRule[] = [
     tagName: '高学历精英',
     category: '组合画像',
     condition: (a) => {
-      return (a['education-level-v2'] === 'master' || a['education-level-v2'] === 'phd') &&
-             (a['employment-confidence-v2'] === 'very-confident' || a['employment-confidence-v2'] === 'confident');
+      return (a[FIELDS.educationLevel] === 'master' || a[FIELDS.educationLevel] === 'phd') &&
+             (a[FIELDS.employmentConfidence6Months] === 'very-confident' || a[FIELDS.employmentConfidence6Months] === 'confident');
     },
     weight: 1.2
   },
@@ -303,8 +320,8 @@ export const QUESTIONNAIRE_V2_TAG_RULES: TagRule[] = [
     tagName: '迷茫毕业生',
     category: '组合画像',
     condition: (a) => {
-      return a['employment-status-v2'] === 'unemployed' &&
-             (a['employment-confidence-v2'] === 'not-confident' || a['employment-confidence-v2'] === 'very-anxious');
+      return a[FIELDS.currentStatus] === 'unemployed' &&
+             (a[FIELDS.employmentConfidence6Months] === 'worried' || a[FIELDS.employmentConfidence6Months] === 'not-confident' || a[FIELDS.employmentConfidence6Months] === 'very-anxious');
     },
     weight: 1.1
   }

@@ -3,6 +3,8 @@
  * 根据问卷答案分析用户情绪倾向
  */
 
+import { QUESTIONNAIRE_V2_FIELD_IDS as FIELDS } from '../config/questionnaireFieldMappings';
+
 export interface EmotionAnalysisResult {
   emotionType: 'positive' | 'neutral' | 'negative';
   confidence: number;
@@ -18,7 +20,7 @@ export interface EmotionAnalysisResult {
  * 情绪分析器类
  */
 export class EmotionAnalyzer {
-  
+
   /**
    * 分析问卷答案的情绪倾向
    */
@@ -26,15 +28,18 @@ export class EmotionAnalyzer {
     let positiveScore = 0;
     let negativeScore = 0;
     const reasons: string[] = [];
-    
+
     // ==================== 1. 就业信心分析 ====================
-    const employmentConfidence = answers['employment-confidence-v2'];
+    const employmentConfidence = answers[FIELDS.employmentConfidence6Months];
     if (employmentConfidence === 'very-confident') {
       positiveScore += 3;
     } else if (employmentConfidence === 'confident') {
       positiveScore += 2;
     } else if (employmentConfidence === 'neutral') {
       // 中性，不加分
+    } else if (employmentConfidence === 'worried') {
+      negativeScore += 2;
+      reasons.push('就业信心不足');
     } else if (employmentConfidence === 'not-confident') {
       negativeScore += 2;
       reasons.push('就业信心不足');
@@ -42,25 +47,25 @@ export class EmotionAnalyzer {
       negativeScore += 3;
       reasons.push('就业焦虑较严重');
     }
-    
+
     // ==================== 2. 经济压力分析 ====================
-    const pressure = answers['economic-pressure-v2'];
-    if (pressure === 'very-high') {
+    const pressure = answers[FIELDS.economicPressureLevel];
+    if (pressure === 'severe-pressure') {
       negativeScore += 3;
       reasons.push('经济压力非常大');
-    } else if (pressure === 'high') {
+    } else if (pressure === 'high-pressure') {
       negativeScore += 2;
       reasons.push('经济压力较大');
-    } else if (pressure === 'medium') {
+    } else if (pressure === 'moderate-pressure') {
       // 中性
-    } else if (pressure === 'low') {
+    } else if (pressure === 'low-pressure') {
       positiveScore += 1;
-    } else if (pressure === 'very-low') {
+    } else if (pressure === 'no-pressure') {
       positiveScore += 2;
     }
-    
+
     // ==================== 3. 就业状态分析 ====================
-    const employmentStatus = answers['employment-status-v2'];
+    const employmentStatus = answers[FIELDS.currentStatus];
     if (employmentStatus === 'employed') {
       positiveScore += 2;
     } else if (employmentStatus === 'unemployed') {
@@ -69,16 +74,17 @@ export class EmotionAnalyzer {
     } else if (employmentStatus === 'student') {
       // 学生状态，中性
     }
-    
+
     // ==================== 4. 负债情况分析 ====================
-    const hasDebt = answers['has-debt-v2'];
-    if (hasDebt === 'yes') {
+    const debtSituation = answers[FIELDS.debtSituation];
+    const hasDebt = Array.isArray(debtSituation) && debtSituation.length > 0 && !debtSituation.includes('no-debt');
+    if (hasDebt) {
       negativeScore += 1;
       reasons.push('有经济负债');
     }
-    
+
     // ==================== 5. 月薪水平分析 ====================
-    const salary = answers['monthly-salary-v2'];
+    const salary = answers[FIELDS.currentSalary];
     if (salary === 'below-3000') {
       negativeScore += 1;
       reasons.push('收入水平较低');
@@ -87,35 +93,34 @@ export class EmotionAnalyzer {
     } else if (salary === '12000-20000') {
       positiveScore += 1;
     }
-    
-    // ==================== 6. 生活满意度分析（如果有）====================
-    const satisfaction = answers['life-satisfaction-v2'];
-    if (satisfaction === 'very-satisfied') {
-      positiveScore += 3;
-    } else if (satisfaction === 'satisfied') {
-      positiveScore += 2;
-    } else if (satisfaction === 'neutral') {
-      // 中性
-    } else if (satisfaction === 'dissatisfied') {
+
+    // ==================== 6. 收支平衡分析 ====================
+    const incomeExpenseBalance = answers[FIELDS.incomeExpenseBalance];
+    if (incomeExpenseBalance === 'deficit-high') {
       negativeScore += 2;
-      reasons.push('生活满意度较低');
-    } else if (satisfaction === 'very-dissatisfied') {
-      negativeScore += 3;
-      reasons.push('生活满意度很低');
-    }
-    
-    // ==================== 7. 工作压力分析（如果有）====================
-    const workPressure = answers['work-pressure-v2'];
-    if (workPressure === 'very-high' || workPressure === 'high') {
+      reasons.push('收支严重失衡');
+    } else if (incomeExpenseBalance === 'deficit-low') {
       negativeScore += 1;
-      reasons.push('工作压力较大');
+      reasons.push('收支略有赤字');
+    } else if (incomeExpenseBalance === 'no-income') {
+      negativeScore += 1;
+      reasons.push('暂无收入');
     }
-    
-    // ==================== 8. 求职歧视经历分析（如果有）====================
-    const discrimination = answers['discrimination-experience-v2'];
-    if (discrimination === 'yes' || discrimination === 'frequently') {
+
+    // ==================== 7. 求职歧视经历分析 ====================
+    const discriminationTypes = answers[FIELDS.experiencedDiscriminationTypes];
+    if (Array.isArray(discriminationTypes) && discriminationTypes.length > 0) {
       negativeScore += 2;
       reasons.push('遭遇过求职歧视');
+    }
+
+    // ==================== 8. 歧视严重程度分析 ====================
+    const discriminationSeverity = answers[FIELDS.discriminationSeverity];
+    if (discriminationSeverity === 'very-severe') {
+      negativeScore += 2;
+      reasons.push('歧视经历严重');
+    } else if (discriminationSeverity === 'severe') {
+      negativeScore += 1;
     }
     
     // ==================== 计算情绪类型 ====================
