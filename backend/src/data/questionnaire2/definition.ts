@@ -356,6 +356,97 @@ export const questionnaire2Definition: UniversalQuestionnaire = {
             enabled: true,
             affectedSections: ['high-pressure-coping-v2']
           }
+        },
+        {
+          id: 'monthly-living-cost-v2',
+          type: 'radio',
+          title: '您每月的生活开支总额大约是？',
+          description: '包括房租、餐费、交通、日用品等所有日常开支（不含还贷）',
+          required: true,
+          options: [
+            { value: 'below-1000', label: '1000元以下' },
+            { value: '1000-2000', label: '1000-2000元' },
+            { value: '2000-3000', label: '2000-3000元' },
+            { value: '3000-5000', label: '3000-5000元' },
+            { value: '5000-8000', label: '5000-8000元' },
+            { value: '8000-12000', label: '8000-12000元' },
+            { value: 'above-12000', label: '12000元以上' }
+          ],
+          statistics: {
+            enabled: true,
+            chartType: 'bar',
+            showPercentage: true
+          }
+        },
+        {
+          id: 'income-sources-v2',
+          type: 'checkbox',
+          title: '您当前的主要收入来源有哪些？（可多选）',
+          description: '请选择所有适用的选项',
+          required: true,
+          options: [
+            { value: 'salary', label: '工资/薪酬' },
+            { value: 'freelance', label: '兼职/自由职业收入' },
+            { value: 'investment', label: '投资理财收益' },
+            { value: 'scholarship', label: '奖学金/助学金' },
+            { value: 'parents-support', label: '父母/家人支援' },
+            { value: 'savings', label: '使用存款/积蓄' },
+            { value: 'loan', label: '借贷（花呗、信用卡等）' },
+            { value: 'government-aid', label: '政府补助/失业金' },
+            { value: 'other', label: '其他收入' },
+            { value: 'no-income', label: '目前无收入' }
+          ],
+          statistics: {
+            enabled: true,
+            chartType: 'bar',
+            showPercentage: true
+          }
+        },
+        {
+          id: 'parental-support-amount-v2',
+          type: 'radio',
+          title: '父母/家人每月为您提供的经济支援大约是？',
+          description: '包括生活费、房租补贴等所有形式的资金支持',
+          required: true,
+          condition: {
+            dependsOn: 'income-sources-v2',
+            operator: 'contains',
+            value: 'parents-support'
+          },
+          options: [
+            { value: 'below-500', label: '500元以下' },
+            { value: '500-1000', label: '500-1000元' },
+            { value: '1000-2000', label: '1000-2000元' },
+            { value: '2000-3000', label: '2000-3000元' },
+            { value: '3000-5000', label: '3000-5000元' },
+            { value: 'above-5000', label: '5000元以上' },
+            { value: 'irregular', label: '不固定，偶尔支援' }
+          ],
+          statistics: {
+            enabled: true,
+            chartType: 'pie',
+            showPercentage: true
+          }
+        },
+        {
+          id: 'income-expense-balance-v2',
+          type: 'radio',
+          title: '您当前的收支状况是？',
+          description: '请根据您的真实情况选择',
+          required: true,
+          options: [
+            { value: 'surplus-high', label: '收入远大于支出，能存下较多钱' },
+            { value: 'surplus-low', label: '收入略大于支出，能存一点钱' },
+            { value: 'balanced', label: '收支基本平衡，月光' },
+            { value: 'deficit-low', label: '收入略小于支出，偶尔需要借贷' },
+            { value: 'deficit-high', label: '收入远小于支出，经常需要借贷' },
+            { value: 'no-income', label: '目前无收入，完全依赖他人' }
+          ],
+          statistics: {
+            enabled: true,
+            chartType: 'bar',
+            showPercentage: true
+          }
         }
       ]
     },
@@ -1006,12 +1097,12 @@ export const questionnaire2Definition: UniversalQuestionnaire = {
 
   metadata: {
     id: 'questionnaire-v2-2024',
-    version: '2.1.0',
+    version: '2.2.0',
     createdAt: Date.now(),
     updatedAt: Date.now(),
     author: '问卷2系统',
     category: '智能经济压力与就业歧视分析',
-    tags: ['智能', '经济压力', '就业信心', '就业歧视', '性别', '婚育', '年龄', '地域', '分支逻辑', 'V2'],
+    tags: ['智能', '经济压力', '生活成本', '就业信心', '就业歧视', '性别', '婚育', '年龄', '地域', '分支逻辑', 'V2'],
     estimatedTime: 12,
     targetAudience: '所有18+群体',
     language: 'zh-CN',
