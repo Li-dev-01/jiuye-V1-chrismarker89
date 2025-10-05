@@ -518,9 +518,12 @@ export function createUniversalQuestionnaireRoutes() {
         const flatAnswers: Record<string, any> = {};
         for (const section of sectionResponses) {
           for (const question of section.questionResponses) {
-            flatAnswers[question.questionId] = question.answer;
+            // 兼容 answer 和 value 两种字段名
+            flatAnswers[question.questionId] = question.value || question.answer;
           }
         }
+
+        console.log('📊 扁平化答案数据:', JSON.stringify(flatAnswers, null, 2));
 
         console.log('📊 开始生成用户画像标签...');
 
