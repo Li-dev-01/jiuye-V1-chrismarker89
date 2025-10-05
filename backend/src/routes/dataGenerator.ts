@@ -10,6 +10,7 @@ import { authMiddleware } from '../middleware/auth';
 import { createTestDatabaseService, type TestStoryData, type TestQuestionnaireData, type TestUserData } from '../services/testDatabaseService';
 import { EnhancedQuestionnaireDataGenerator } from '../utils/enhancedQuestionnaireDataGenerator';
 import { getAvailableQuestionnaireIds } from '../config/questionnaireDefinitions';
+import { generateCompleteTestDataset, convertToDBFormat, generateRoleBasedTestData } from '../scripts/generateQuestionnaire2TestData';
 import type { Env } from '../types/api';
 
 const dataGenerator = new Hono<{ Bindings: Env }>();
@@ -2012,6 +2013,194 @@ dataGenerator.post('/init-content-tables', async (c) => {
     return c.json({
       success: false,
       message: `初始化失败: ${error.message}`
+    }, 500);
+  }
+});
+
+/**
+ * 生成问卷2测试数据（完整数据集）
+ * POST /api/data-generator/questionnaire2/generate-complete
+ */
+dataGenerator.post('/questionnaire2/generate-complete', async (c) => {
+  try {
+    console.log('🚀 开始生成问卷2完整测试数据集...');
+
+    const { data, summary } = generateCompleteTestDataset();
+
+    console.log('✅ 生成完成:', summary);
+
+    return c.json({
+      success: true,
+      message: `成功生成 ${summary.total} 条问卷2测试数据`,
+      data: {
+        summary,
+        sampleData: data.slice(0, 3), // 返回前3条作为示例
+        totalCount: data.length
+      }
+    });
+  } catch (error: any) {
+    console.error('❌ 生成问卷2测试数据失败:', error);
+    return c.json({
+      success: false,
+      message: `生成失败: ${error.message}`
+    }, 500);
+  }
+});
+
+/**
+ * 生成并导入问卷2测试数据到数据库
+ * POST /api/data-generator/questionnaire2/generate-and-import
+ */
+dataGenerator.post('/questionnaire2/generate-and-import', async (c) => {
+  try {
+    const db = createDatabaseService(c.env.DB);
+
+    console.log('🚀 开始生成并导入问卷2测试数据...');
+
+    // 生成数据
+    const { data, summary } = generateCompleteTestDataset();
+    console.log('✅ 数据生成完成:', summary);
+
+    // 转换为数据库格式
+    const dbData = convertToDBFormat(data);
+    console.log(`📝 准备插入 ${dbData.length} 条记录...`);
+
+    // 批量插入数据库
+    let insertedCount = 0;
+    const batchSize = 50; // 每批50条
+
+    for (let i = 0; i < dbData.length; i += batchSize) {
+      const batch = dbData.slice(i, i + batchSize);
+
+      for (const row of batch) {
+        try {
+          await db.run(
+            `INSERT INTO universal_questionnaire_responses (
+              questionnaire_id,
+              section_responses,
+              metadata,
+              submitted_at,
+              completion_time,
+              user_agent,
+              version,
+              submission_type,
+              user_id,
+              is_completed,
+              ip_address
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+            [
+              row.questionnaire_id,
+              row.section_responses,
+              row.metadata,
+              row.submitted_at,
+              row.completion_time,
+              row.user_agent,
+              row.version,
+              row.submission_type,
+              row.user_id,
+              row.is_completed,
+              row.ip_address
+            ]
+          );
+          insertedCount++;
+        } catch (insertError: any) {
+          console.error(`插入失败 (${insertedCount + 1}/${dbData.length}):`, insertError.message);
+        }
+      }
+
+      console.log(`进度: ${Math.min(i + batchSize, dbData.length)}/${dbData.length}`);
+    }
+
+    console.log(`✅ 导入完成: ${insertedCount}/${dbData.length} 条记录`);
+
+    return c.json({
+      success: true,
+      message: `成功导入 ${insertedCount} 条问卷2测试数据`,
+      data: {
+        summary,
+        insertedCount,
+        totalGenerated: dbData.length,
+        successRate: `${((insertedCount / dbData.length) * 100).toFixed(2)}%`
+      }
+    });
+  } catch (error: any) {
+    console.error('❌ 生成并导入问卷2测试数据失败:', error);
+    return c.json({
+      success: false,
+      message: `操作失败: ${error.message}`
+    }, 500);
+  }
+});
+
+/**
+ * 生成指定角色的问卷2测试数据
+ * POST /api/data-generator/questionnaire2/generate-role
+ * Body: { role: string, count: number }
+ */
+dataGenerator.post('/questionnaire2/generate-role', async (c) => {
+  try {
+    const { role, count } = await c.req.json();
+
+    if (!role || !count) {
+      return c.json({
+        success: false,
+        message: '缺少必需参数: role 和 count'
+      }, 400);
+    }
+
+    console.log(`🚀 生成角色 "${role}" 的测试数据，数量: ${count}`);
+
+    const data = generateRoleBasedTestData(role, count);
+
+    return c.json({
+      success: true,
+      message: `成功生成 ${data.length} 条角色 "${role}" 的测试数据`,
+      data: {
+        role,
+        count: data.length,
+        sampleData: data.slice(0, 2)
+      }
+    });
+  } catch (error: any) {
+    console.error('❌ 生成角色测试数据失败:', error);
+    return c.json({
+      success: false,
+      message: `生成失败: ${error.message}`
+    }, 500);
+  }
+});
+
+/**
+ * 清理问卷2测试数据
+ * DELETE /api/data-generator/questionnaire2/clean-test-data
+ */
+dataGenerator.delete('/questionnaire2/clean-test-data', async (c) => {
+  try {
+    const db = createDatabaseService(c.env.DB);
+
+    console.log('🧹 开始清理问卷2测试数据...');
+
+    // 删除所有带有测试标记的数据
+    const result = await db.run(
+      `DELETE FROM universal_questionnaire_responses
+       WHERE questionnaire_id = 'questionnaire-v2-2024'
+       AND json_extract(metadata, '$.isTestData') = true`
+    );
+
+    console.log(`✅ 清理完成，删除 ${result.changes || 0} 条测试数据`);
+
+    return c.json({
+      success: true,
+      message: `成功清理 ${result.changes || 0} 条问卷2测试数据`,
+      data: {
+        deletedCount: result.changes || 0
+      }
+    });
+  } catch (error: any) {
+    console.error('❌ 清理测试数据失败:', error);
+    return c.json({
+      success: false,
+      message: `清理失败: ${error.message}`
     }, 500);
   }
 });
