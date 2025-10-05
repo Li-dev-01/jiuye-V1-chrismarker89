@@ -100,6 +100,7 @@ export function generateRoleBasedTestData(
 
 /**
  * 生成完整的测试数据集（包含所有角色）
+ * 更新：生成1000条测试数据以覆盖40+字段的多维度分析
  */
 export function generateCompleteTestDataset(): {
   data: GeneratedQuestionnaireData[];
@@ -108,14 +109,14 @@ export function generateCompleteTestDataset(): {
   const allData: GeneratedQuestionnaireData[] = [];
   const summary: Record<string, number> = {};
 
-  // 每个角色生成的数量
+  // 每个角色生成的数量（总计1000条）
   const roleCounts = {
-    student: 50,                    // 学生：50条
-    fresh_graduate: 40,             // 应届毕业生：40条
-    young_professional: 60,         // 在职青年：60条
-    unemployed_35plus: 30,          // 35+失业：30条
-    female_childbearing_age: 40,    // 女性育龄：40条
-    high_debt: 30                   // 高负债：30条
+    student: 200,                   // 学生：200条（20%）
+    fresh_graduate: 180,            // 应届毕业生：180条（18%）
+    young_professional: 250,        // 在职青年：250条（25%）
+    unemployed_35plus: 120,         // 35+失业：120条（12%）
+    female_childbearing_age: 150,   // 女性育龄：150条（15%）
+    high_debt: 100                  // 高负债：100条（10%）
   };
 
   for (const [role, count] of Object.entries(roleCounts)) {
