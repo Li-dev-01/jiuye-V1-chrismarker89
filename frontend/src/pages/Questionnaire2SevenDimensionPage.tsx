@@ -38,6 +38,7 @@ import {
 } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import { UniversalChart } from '../components/charts/UniversalChart';
+import questionnaire2DataService, { type Questionnaire2Statistics } from '../services/questionnaire2DataService';
 
 const { Title, Text, Paragraph } = Typography;
 const { TabPane } = Tabs;
@@ -100,8 +101,7 @@ interface PageState {
   loading: boolean;
   error: string | null;
   activeTab: string;
-  rawData: any[];
-  statistics: Record<string, any>;
+  statistics: Questionnaire2Statistics | null;
 }
 
 const Questionnaire2SevenDimensionPage: React.FC = () => {
@@ -111,8 +111,7 @@ const Questionnaire2SevenDimensionPage: React.FC = () => {
     loading: true,
     error: null,
     activeTab: 'demographics',
-    rawData: [],
-    statistics: {}
+    statistics: null
   });
 
   // 加载数据
@@ -126,26 +125,15 @@ const Questionnaire2SevenDimensionPage: React.FC = () => {
 
       console.log('🔍 开始加载问卷2数据...');
 
-      // 从原始数据表读取（直接模式）
-      const response = await fetch(
-        'https://employment-survey-api-prod.chrismarker89.workers.dev/api/universal-questionnaire/questionnaires/questionnaire-v2-2024/statistics'
-      );
+      // 使用数据服务加载统计数据
+      const statistics = await questionnaire2DataService.getStatistics();
 
-      if (!response.ok) {
-        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-      }
-
-      const data = await response.json();
-      console.log('✅ 数据加载成功:', data);
-
-      // 解析原始数据并生成统计
-      const stats = processRawData(data);
+      console.log('✅ 数据加载成功:', statistics);
 
       setState(prev => ({
         ...prev,
         loading: false,
-        rawData: data.responses || [],
-        statistics: stats
+        statistics
       }));
     } catch (error: any) {
       console.error('❌ 数据加载失败:', error);
@@ -157,90 +145,108 @@ const Questionnaire2SevenDimensionPage: React.FC = () => {
     }
   };
 
-  // 处理原始数据生成统计
-  const processRawData = (data: any): Record<string, any> => {
-    const stats: Record<string, any> = {};
-
-    // 这里先返回基础统计，后续扩展
-    stats.totalResponses = data.totalResponses || 0;
-    stats.lastUpdated = data.lastUpdated || new Date().toISOString();
-
-    return stats;
-  };
-
   // 渲染概述卡片
-  const renderOverview = () => (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-    >
-      <Card className="overview-card" style={{ marginBottom: 24 }}>
-        <Row gutter={[16, 16]}>
-          <Col xs={24} sm={12} md={6}>
-            <Statistic
-              title="总参与人数"
-              value={state.statistics.totalResponses || 0}
-              prefix={<UserOutlined />}
-              valueStyle={{ color: '#1890ff' }}
-            />
-          </Col>
-          <Col xs={24} sm={12} md={6}>
-            <Statistic
-              title="数据维度"
-              value={7}
-              suffix="个"
-              prefix={<BarChartOutlined />}
-              valueStyle={{ color: '#52c41a' }}
-            />
-          </Col>
-          <Col xs={24} sm={12} md={6}>
-            <Statistic
-              title="问题总数"
-              value={40}
-              suffix="题"
-              prefix={<PieChartOutlined />}
-              valueStyle={{ color: '#faad14' }}
-            />
-          </Col>
-          <Col xs={24} sm={12} md={6}>
-            <Statistic
-              title="数据完整度"
-              value={100}
-              suffix="%"
-              prefix={<LineChartOutlined />}
-              valueStyle={{ color: '#722ed1' }}
-            />
-          </Col>
-        </Row>
+  const renderOverview = () => {
+    const totalResponses = state.statistics?.totalResponses || 0;
 
-        <Divider />
+    return (
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
+        <Card className="overview-card" style={{ marginBottom: 24 }}>
+          <Row gutter={[16, 16]}>
+            <Col xs={24} sm={12} md={6}>
+              <Statistic
+                title="总参与人数"
+                value={totalResponses}
+                prefix={<UserOutlined />}
+                valueStyle={{ color: '#1890ff' }}
+              />
+            </Col>
+            <Col xs={24} sm={12} md={6}>
+              <Statistic
+                title="数据维度"
+                value={7}
+                suffix="个"
+                prefix={<BarChartOutlined />}
+                valueStyle={{ color: '#52c41a' }}
+              />
+            </Col>
+            <Col xs={24} sm={12} md={6}>
+              <Statistic
+                title="问题总数"
+                value={40}
+                suffix="题"
+                prefix={<PieChartOutlined />}
+                valueStyle={{ color: '#faad14' }}
+              />
+            </Col>
+            <Col xs={24} sm={12} md={6}>
+              <Statistic
+                title="数据完整度"
+                value={100}
+                suffix="%"
+                prefix={<LineChartOutlined />}
+                valueStyle={{ color: '#722ed1' }}
+              />
+            </Col>
+          </Row>
 
-        <Space wrap>
-          {SEVEN_DIMENSIONS.map(dim => (
-            <Tag
-              key={dim.key}
-              color={dim.color}
-              icon={dim.icon}
-              style={{ padding: '4px 12px', fontSize: '14px' }}
-            >
-              {dim.title}
-            </Tag>
-          ))}
-        </Space>
-      </Card>
-    </motion.div>
-  );
+          <Divider />
+
+          <Space wrap>
+            {SEVEN_DIMENSIONS.map(dim => (
+              <Tag
+                key={dim.key}
+                color={dim.color}
+                icon={dim.icon}
+                style={{ padding: '4px 12px', fontSize: '14px' }}
+              >
+                {dim.title}
+              </Tag>
+            ))}
+          </Space>
+        </Card>
+      </motion.div>
+    );
+  };
 
   // 渲染维度内容
   const renderDimensionContent = (dimensionKey: string) => {
     const dimension = SEVEN_DIMENSIONS.find(d => d.key === dimensionKey);
-    
-    if (!dimension) return null;
+
+    if (!dimension || !state.statistics) return null;
+
+    // 根据不同维度渲染不同内容
+    switch (dimensionKey) {
+      case 'demographics':
+        return renderDemographicsContent(dimension);
+      case 'economic':
+        return renderEconomicContent(dimension);
+      case 'employment':
+        return renderEmploymentContent(dimension);
+      case 'discrimination':
+        return renderDiscriminationContent(dimension);
+      case 'confidence':
+        return renderConfidenceContent(dimension);
+      case 'fertility':
+        return renderFertilityContent(dimension);
+      case 'cross':
+        return renderCrossAnalysisContent(dimension);
+      default:
+        return null;
+    }
+  };
+
+  // 渲染人口结构维度
+  const renderDemographicsContent = (dimension: typeof SEVEN_DIMENSIONS[0]) => {
+    const stats = state.statistics!.demographics;
 
     return (
       <motion.div
-        key={dimensionKey}
+        key="demographics"
         initial={{ opacity: 0, x: 20 }}
         animate={{ opacity: 1, x: 0 }}
         exit={{ opacity: 0, x: -20 }}
@@ -255,21 +261,313 @@ const Questionnaire2SevenDimensionPage: React.FC = () => {
           }
           extra={
             <Tag color={dimension.color}>
-              {state.statistics.totalResponses || 0} 份数据
+              {state.statistics!.totalResponses} 份数据
             </Tag>
           }
         >
           <Paragraph type="secondary">{dimension.description}</Paragraph>
 
+          <Divider />
+
+          {/* 性别分布 */}
+          <Row gutter={[16, 16]} style={{ marginTop: 24 }}>
+            <Col xs={24} lg={12}>
+              <Card type="inner" title="性别分布">
+                <UniversalChart
+                  type="pie"
+                  data={stats.gender.data.map(item => ({
+                    name: item.name === 'male' ? '男' : item.name === 'female' ? '女' : '其他',
+                    value: item.value
+                  }))}
+                  height={300}
+                />
+              </Card>
+            </Col>
+
+            {/* 年龄分布 */}
+            <Col xs={24} lg={12}>
+              <Card type="inner" title="年龄分布">
+                <UniversalChart
+                  type="bar"
+                  data={stats.ageRange.data.map(item => ({
+                    name: item.name,
+                    value: item.value
+                  }))}
+                  height={300}
+                />
+              </Card>
+            </Col>
+          </Row>
+
+          {/* 学历分布 */}
+          <Row gutter={[16, 16]} style={{ marginTop: 16 }}>
+            <Col xs={24} lg={12}>
+              <Card type="inner" title="学历分布">
+                <UniversalChart
+                  type="pie"
+                  data={stats.educationLevel.data.map(item => ({
+                    name: item.name,
+                    value: item.value
+                  }))}
+                  height={300}
+                />
+              </Card>
+            </Col>
+
+            {/* 婚姻状况分布 */}
+            <Col xs={24} lg={12}>
+              <Card type="inner" title="婚姻状况分布">
+                <UniversalChart
+                  type="pie"
+                  data={stats.maritalStatus.data.map(item => ({
+                    name: item.name === 'single' ? '单身' : item.name === 'married' ? '已婚' : '离异',
+                    value: item.value
+                  }))}
+                  height={300}
+                />
+              </Card>
+            </Col>
+          </Row>
+
+          {/* 城市层级和户籍类型 */}
+          <Row gutter={[16, 16]} style={{ marginTop: 16 }}>
+            <Col xs={24} lg={12}>
+              <Card type="inner" title="城市层级分布">
+                <UniversalChart
+                  type="bar"
+                  data={stats.cityTier.data.map(item => ({
+                    name: item.name,
+                    value: item.value
+                  }))}
+                  height={300}
+                />
+              </Card>
+            </Col>
+
+            <Col xs={24} lg={12}>
+              <Card type="inner" title="户籍类型分布">
+                <UniversalChart
+                  type="pie"
+                  data={stats.hukouType.data.map(item => ({
+                    name: item.name === 'urban' ? '城镇' : '农村',
+                    value: item.value
+                  }))}
+                  height={300}
+                />
+              </Card>
+            </Col>
+          </Row>
+        </Card>
+      </motion.div>
+    );
+  };
+
+  // 其他维度的占位符（后续实现）
+  const renderEconomicContent = (dimension: typeof SEVEN_DIMENSIONS[0]) => {
+    return (
+      <motion.div
+        key="economic"
+        initial={{ opacity: 0, x: 20 }}
+        animate={{ opacity: 1, x: 0 }}
+        exit={{ opacity: 0, x: -20 }}
+        transition={{ duration: 0.3 }}
+      >
+        <Card
+          title={
+            <Space>
+              {dimension.icon}
+              <span>{dimension.title}</span>
+            </Space>
+          }
+          extra={
+            <Tag color={dimension.color}>
+              {state.statistics!.totalResponses} 份数据
+            </Tag>
+          }
+        >
+          <Paragraph type="secondary">{dimension.description}</Paragraph>
           <Alert
-            message="数据加载中"
-            description="正在从1000条测试数据中提取统计信息..."
+            message="开发中"
+            description="经济压力与生活成本维度的图表正在开发中..."
             type="info"
             showIcon
             style={{ marginTop: 16 }}
           />
+        </Card>
+      </motion.div>
+    );
+  };
 
-          {/* 这里后续添加具体的图表 */}
+  const renderEmploymentContent = (dimension: typeof SEVEN_DIMENSIONS[0]) => {
+    return (
+      <motion.div
+        key="employment"
+        initial={{ opacity: 0, x: 20 }}
+        animate={{ opacity: 1, x: 0 }}
+        exit={{ opacity: 0, x: -20 }}
+        transition={{ duration: 0.3 }}
+      >
+        <Card
+          title={
+            <Space>
+              {dimension.icon}
+              <span>{dimension.title}</span>
+            </Space>
+          }
+          extra={
+            <Tag color={dimension.color}>
+              {state.statistics!.totalResponses} 份数据
+            </Tag>
+          }
+        >
+          <Paragraph type="secondary">{dimension.description}</Paragraph>
+          <Alert
+            message="开发中"
+            description="就业状态与收入水平维度的图表正在开发中..."
+            type="info"
+            showIcon
+            style={{ marginTop: 16 }}
+          />
+        </Card>
+      </motion.div>
+    );
+  };
+
+  const renderDiscriminationContent = (dimension: typeof SEVEN_DIMENSIONS[0]) => {
+    return (
+      <motion.div
+        key="discrimination"
+        initial={{ opacity: 0, x: 20 }}
+        animate={{ opacity: 1, x: 0 }}
+        exit={{ opacity: 0, x: -20 }}
+        transition={{ duration: 0.3 }}
+      >
+        <Card
+          title={
+            <Space>
+              {dimension.icon}
+              <span>{dimension.title}</span>
+            </Space>
+          }
+          extra={
+            <Tag color={dimension.color}>
+              {state.statistics!.totalResponses} 份数据
+            </Tag>
+          }
+        >
+          <Paragraph type="secondary">{dimension.description}</Paragraph>
+          <Alert
+            message="开发中"
+            description="求职歧视与公平性维度的图表正在开发中..."
+            type="info"
+            showIcon
+            style={{ marginTop: 16 }}
+          />
+        </Card>
+      </motion.div>
+    );
+  };
+
+  const renderConfidenceContent = (dimension: typeof SEVEN_DIMENSIONS[0]) => {
+    return (
+      <motion.div
+        key="confidence"
+        initial={{ opacity: 0, x: 20 }}
+        animate={{ opacity: 1, x: 0 }}
+        exit={{ opacity: 0, x: -20 }}
+        transition={{ duration: 0.3 }}
+      >
+        <Card
+          title={
+            <Space>
+              {dimension.icon}
+              <span>{dimension.title}</span>
+            </Space>
+          }
+          extra={
+            <Tag color={dimension.color}>
+              {state.statistics!.totalResponses} 份数据
+            </Tag>
+          }
+        >
+          <Paragraph type="secondary">{dimension.description}</Paragraph>
+          <Alert
+            message="开发中"
+            description="就业信心与未来预期维度的图表正在开发中..."
+            type="info"
+            showIcon
+            style={{ marginTop: 16 }}
+          />
+        </Card>
+      </motion.div>
+    );
+  };
+
+  const renderFertilityContent = (dimension: typeof SEVEN_DIMENSIONS[0]) => {
+    return (
+      <motion.div
+        key="fertility"
+        initial={{ opacity: 0, x: 20 }}
+        animate={{ opacity: 1, x: 0 }}
+        exit={{ opacity: 0, x: -20 }}
+        transition={{ duration: 0.3 }}
+      >
+        <Card
+          title={
+            <Space>
+              {dimension.icon}
+              <span>{dimension.title}</span>
+            </Space>
+          }
+          extra={
+            <Tag color={dimension.color}>
+              {state.statistics!.totalResponses} 份数据
+            </Tag>
+          }
+        >
+          <Paragraph type="secondary">{dimension.description}</Paragraph>
+          <Alert
+            message="开发中"
+            description="生育意愿与婚育压力维度的图表正在开发中..."
+            type="info"
+            showIcon
+            style={{ marginTop: 16 }}
+          />
+        </Card>
+      </motion.div>
+    );
+  };
+
+  const renderCrossAnalysisContent = (dimension: typeof SEVEN_DIMENSIONS[0]) => {
+    return (
+      <motion.div
+        key="cross"
+        initial={{ opacity: 0, x: 20 }}
+        animate={{ opacity: 1, x: 0 }}
+        exit={{ opacity: 0, x: -20 }}
+        transition={{ duration: 0.3 }}
+      >
+        <Card
+          title={
+            <Space>
+              {dimension.icon}
+              <span>{dimension.title}</span>
+            </Space>
+          }
+          extra={
+            <Tag color={dimension.color}>
+              {state.statistics!.totalResponses} 份数据
+            </Tag>
+          }
+        >
+          <Paragraph type="secondary">{dimension.description}</Paragraph>
+          <Alert
+            message="开发中"
+            description="交叉分析与洞察维度的图表正在开发中..."
+            type="info"
+            showIcon
+            style={{ marginTop: 16 }}
+          />
         </Card>
       </motion.div>
     );
