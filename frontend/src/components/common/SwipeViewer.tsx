@@ -4,7 +4,7 @@
  */
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { Button, Progress, Space } from 'antd';
+import { Button, Progress, Space, Spin } from 'antd';
 import {
   CloseOutlined,
   LeftOutlined,
@@ -15,7 +15,8 @@ import {
   DislikeFilled,
   DownloadOutlined,
   FlagOutlined,
-  StarOutlined
+  StarOutlined,
+  LoadingOutlined
 } from '@ant-design/icons';
 // 通用内容项接口
 interface ContentItem {
@@ -79,6 +80,7 @@ export const SwipeViewer: React.FC<SwipeViewerProps> = ({
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
   // 最小滑动距离
@@ -86,6 +88,9 @@ export const SwipeViewer: React.FC<SwipeViewerProps> = ({
 
   // 当前项目
   const currentItem = items[currentIndex];
+
+  // 预加载阈值：当浏览到80%位置时触发预加载
+  const PRELOAD_THRESHOLD = 0.8;
 
   // 键盘导航
   const handleKeyDown = useCallback((event: KeyboardEvent) => {
@@ -137,10 +142,14 @@ export const SwipeViewer: React.FC<SwipeViewerProps> = ({
   const handleNext = useCallback(() => {
     if (isTransitioning) return;
 
-    if (currentIndex >= items.length - 1) {
-      if (hasMore && onLoadMore) {
-        onLoadMore();
-      }
+    // 如果已经到达最后一个，且没有更多内容，则不执行任何操作
+    if (currentIndex >= items.length - 1 && !hasMore) {
+      return;
+    }
+
+    // 如果已经到达最后一个，但还有更多内容，等待加载
+    if (currentIndex >= items.length - 1 && hasMore) {
+      // 不执行翻页，等待预加载完成
       return;
     }
 
@@ -149,7 +158,28 @@ export const SwipeViewer: React.FC<SwipeViewerProps> = ({
     setTimeout(() => {
       setIsTransitioning(false);
     }, 300);
-  }, [isTransitioning, currentIndex, items.length, hasMore, onLoadMore, onIndexChange]);
+  }, [isTransitioning, currentIndex, items.length, hasMore, onIndexChange]);
+
+  // 预加载逻辑：当浏览到80%位置时自动加载下一批
+  useEffect(() => {
+    if (!visible || !hasMore || !onLoadMore || isLoadingMore) return;
+
+    const progress = items.length > 0 ? (currentIndex + 1) / items.length : 0;
+
+    // 当浏览进度达到80%时，触发预加载
+    if (progress >= PRELOAD_THRESHOLD) {
+      console.log(`📊 预加载触发: 当前进度 ${(progress * 100).toFixed(1)}% (${currentIndex + 1}/${items.length})`);
+      setIsLoadingMore(true);
+
+      // 调用加载更多
+      onLoadMore();
+
+      // 设置一个超时，防止重复触发
+      setTimeout(() => {
+        setIsLoadingMore(false);
+      }, 2000);
+    }
+  }, [currentIndex, items.length, visible, hasMore, onLoadMore, isLoadingMore, PRELOAD_THRESHOLD]);
 
   // 绑定键盘事件
   useEffect(() => {
@@ -302,13 +332,23 @@ export const SwipeViewer: React.FC<SwipeViewerProps> = ({
           {(currentIndex < items.length - 1 || hasMore) && (
             <Button
               type="text"
-              icon={<RightOutlined />}
+              icon={isLoadingMore ? <LoadingOutlined /> : <RightOutlined />}
               onClick={handleNext}
               className={`${styles.navButton} ${styles.nextButton}`}
-              disabled={isTransitioning}
+              disabled={isTransitioning || (currentIndex >= items.length - 1 && hasMore)}
             />
           )}
         </div>
+
+        {/* 加载提示 */}
+        {isLoadingMore && (
+          <div className={styles.loadingOverlay}>
+            <Spin
+              indicator={<LoadingOutlined style={{ fontSize: 32, color: '#1890ff' }} spin />}
+              tip="正在加载更多内容..."
+            />
+          </div>
+        )}
 
         {/* 底部操作栏 */}
         <div className={styles.bottomBar}>

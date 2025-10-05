@@ -362,3 +362,24 @@
   color: rgba(255, 255, 255, 0.7);
   margin: 0;
 }
+
+/* 加载遮罩层 */
+.loadingOverlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 100;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(8px);
+  border-radius: 16px;
+  padding: 32px 48px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.loadingOverlay :global(.ant-spin-text) {
+  color: white !important;
+  font-size: 14px;
+  margin-top: 12px;
+}

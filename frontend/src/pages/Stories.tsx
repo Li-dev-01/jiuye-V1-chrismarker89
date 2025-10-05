@@ -574,13 +574,27 @@ const Stories: React.FC = () => {
 
   // 在滑动浏览器中加载更多故事
   const handleLoadMoreInSwipe = async () => {
-    if (swipeLoading || swipeStories.length >= total) return;
+    const currentTotal = tabTotal[activeTab] || 0;
+
+    console.log('📊 加载更多故事:', {
+      swipeLoading,
+      currentLength: swipeStories.length,
+      total: currentTotal,
+      hasMore: swipeStories.length < currentTotal
+    });
+
+    if (swipeLoading || swipeStories.length >= currentTotal) {
+      console.log('⏸️ 跳过加载：', swipeLoading ? '正在加载中' : '已加载全部');
+      return;
+    }
 
     setSwipeLoading(true);
     try {
       const nextPage = swipeCurrentPage + 1;
       // 将标签ID数组转换为逗号分隔的字符串
       const tagsParam = selectedTags.length > 0 ? selectedTags.join(',') : undefined;
+
+      console.log('🔄 请求第', nextPage, '页数据...');
 
       const result = await storyService.getStories({
         page: nextPage,
@@ -593,11 +607,14 @@ const Stories: React.FC = () => {
       });
 
       if (result.success && result.data) {
+        console.log('✅ 加载成功:', result.data.stories.length, '条新故事');
         setSwipeStories(prev => [...prev, ...result.data.stories]);
         setSwipeCurrentPage(nextPage);
+      } else {
+        console.error('❌ 加载失败:', result.error);
       }
     } catch (error) {
-      console.error('Load more stories in swipe error:', error);
+      console.error('❌ Load more stories in swipe error:', error);
     } finally {
       setSwipeLoading(false);
     }
