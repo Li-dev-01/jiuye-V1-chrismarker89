@@ -32,7 +32,17 @@ export const useAdminAuthStore = create<AdminAuthState>((set, get) => ({
 
   setAuthState: (state) => {
     console.log('[ADMIN_AUTH] 🔄 Setting auth state directly:', state);
+
+    // 🔧 关键修复：保存到 localStorage
+    if (state.token) {
+      localStorage.setItem(STORAGE_KEYS.ADMIN_TOKEN, state.token);
+    }
+    if (state.user) {
+      localStorage.setItem(STORAGE_KEYS.ADMIN_USER_INFO, JSON.stringify(state.user));
+    }
+
     set(state);
+    console.log('[ADMIN_AUTH] ✅ Auth state saved to localStorage');
   },
 
   login: async (credentials: LoginCredentials, userType: 'admin') => {

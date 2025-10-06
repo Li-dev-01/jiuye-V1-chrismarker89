@@ -3,8 +3,10 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { ConfigProvider, App as AntdApp } from 'antd';
 import zhCN from 'antd/locale/zh_CN';
 import UnifiedLoginPage from './pages/UnifiedLoginPage';
+import TwoFactorVerification from './pages/TwoFactorVerification';
 import GoogleOAuthCallback from './pages/GoogleOAuthCallback';
 import SuperAdminAccountManagement from './pages/SuperAdminAccountManagement';
+import SuperAdminAuditLogs from './pages/SuperAdminAuditLogs';
 import EmailRoleAccountManagement from './pages/EmailRoleAccountManagement';
 import DashboardLayout from './components/layout/DashboardLayout';
 import AdminDashboard from './pages/AdminDashboard';
@@ -16,6 +18,7 @@ import AdminAnalytics from './pages/AdminAnalytics';
 import AdminAIModeration from './pages/AdminAIModeration';
 import AdminSettings from './pages/AdminSettings';
 import AdminTagManagement from './pages/AdminTagManagement';
+import AdminUserProfileManagement from './pages/AdminUserProfileManagement';
 import AdminReputationManagement from './pages/AdminReputationManagement';
 import AdminStoryManagement from './pages/AdminStoryManagement';
 import AdminCloudflareMonitoring from './pages/AdminCloudflareMonitoring';
@@ -28,6 +31,7 @@ import ReviewHistory from './pages/ReviewHistory';
 import EnhancedReviewerDashboard from './pages/EnhancedReviewerDashboard';
 import EnhancedPendingReviews from './pages/EnhancedPendingReviews';
 import PermissionTestPage from './pages/PermissionTestPage';
+import SuperAdminDiagnostics from './pages/SuperAdminDiagnostics';
 import ProtectedRoute from './components/auth/ProtectedRoute';
 import { ReviewerOnlyGuard, AdminOnlyGuard, SuperAdminOnlyGuard, RegularAdminOnlyGuard } from './components/auth/RoleGuard';
 import './App.css';
@@ -41,6 +45,9 @@ function App() {
             {/* 统一登录页面 - 唯一登录入口 */}
             <Route path="/unified-login" element={<UnifiedLoginPage />} />
 
+            {/* 2FA 验证页面 */}
+            <Route path="/verify-2fa" element={<TwoFactorVerification />} />
+
             {/* 旧的登录路由 - 重定向到统一登录页 */}
             <Route path="/login" element={<Navigate to="/unified-login" replace />} />
             <Route path="/admin/login" element={<Navigate to="/unified-login" replace />} />
@@ -48,6 +55,9 @@ function App() {
 
             {/* Google OAuth 回调 */}
             <Route path="/auth/google/callback" element={<GoogleOAuthCallback />} />
+
+            {/* 🔍 诊断页面 - 不需要权限检查，用于调试权限问题 */}
+            <Route path="/diagnostics" element={<SuperAdminDiagnostics />} />
 
             {/* 审核员路由 - 严格限制只有审核员可以访问 */}
             <Route path="/" element={
@@ -82,6 +92,7 @@ function App() {
               <Route path="analytics" element={<AdminAnalytics />} />
               <Route path="ai-moderation" element={<AdminAIModeration />} />
               <Route path="tag-management" element={<AdminTagManagement />} />
+              <Route path="user-profile-management" element={<AdminUserProfileManagement />} />
               <Route path="reputation-management" element={<AdminReputationManagement />} />
               <Route path="story-management" element={<AdminStoryManagement />} />
               <Route path="settings" element={<AdminSettings />} />
@@ -134,6 +145,11 @@ function App() {
                   <SuperAdminSecuritySwitches />
                 </SuperAdminOnlyGuard>
               } />
+              <Route path="audit-logs" element={
+                <SuperAdminOnlyGuard>
+                  <SuperAdminAuditLogs />
+                </SuperAdminOnlyGuard>
+              } />
 
               {/* 📧 邮箱与角色账号管理（新） */}
               <Route path="email-role-accounts" element={
@@ -144,9 +160,16 @@ function App() {
 
               {/* 🧪 权限测试页面 - 所有管理员都可访问 */}
               <Route path="permission-test" element={<PermissionTestPage />} />
+
+              {/* 🔄 旧路径重定向 - 兼容性处理 */}
+              <Route path="super" element={<Navigate to="/admin/super-admin-panel" replace />} />
             </Route>
 
-            <Route path="*" element={<Navigate to="/dashboard" replace />} />
+            {/* 404 fallback - 不自动重定向，让用户看到404页面 */}
+            <Route path="*" element={<div style={{ padding: '50px', textAlign: 'center' }}>
+              <h1>404 - 页面不存在</h1>
+              <p>请从菜单选择正确的页面</p>
+            </div>} />
           </Routes>
         </Router>
       </AntdApp>

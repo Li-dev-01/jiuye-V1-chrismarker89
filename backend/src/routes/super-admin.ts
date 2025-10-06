@@ -11,48 +11,130 @@ import { authMiddleware } from '../middleware/auth';
 export function createSuperAdminRoutes() {
   const superAdmin = new Hono<{ Bindings: Env; Variables: AuthContext }>();
 
-  // 中间件：简单的超级管理员认证
+  // 中间件：超级管理员认证（支持两种token格式）
   const simpleSuperAdminAuth = async (c: any, next: any) => {
     const authHeader = c.req.header('Authorization');
     const token = authHeader?.replace('Bearer ', '');
 
-    console.log('收到认证请求，token:', token);
+    console.log('[SUPER_ADMIN_AUTH] 收到认证请求，token:', token?.substring(0, 20) + '...');
 
-    // 检查是否是管理员token格式
-    if (!token || !token.startsWith('mgmt_token_')) {
-      console.log('Token格式错误或缺失');
+    if (!token) {
+      console.log('[SUPER_ADMIN_AUTH] Token缺失');
       return c.json({
         success: false,
         error: 'Unauthorized',
-        message: '缺少有效的管理员认证token'
+        message: '缺少认证token'
       }, 401);
     }
 
-    // 简单验证token格式：mgmt_token_SUPER_ADMIN_timestamp
-    const tokenParts = token.split('_');
-    console.log('Token parts:', tokenParts);
+    const db = createDatabaseService(c.env as Env);
 
-    if (tokenParts.length < 4 || tokenParts[2] !== 'SUPER' || tokenParts[3] !== 'ADMIN') {
-      console.log('Token权限验证失败');
+    try {
+      // 方式1：检查是否是旧的简单token格式 mgmt_token_SUPER_ADMIN_timestamp
+      if (token.startsWith('mgmt_token_')) {
+        const tokenParts = token.split('_');
+        console.log('[SUPER_ADMIN_AUTH] 检测到旧格式token');
+
+        if (tokenParts.length >= 4 && tokenParts[2] === 'SUPER' && tokenParts[3] === 'ADMIN') {
+          console.log('[SUPER_ADMIN_AUTH] ✅ 旧格式token验证成功');
+          const user = {
+            id: 'super_admin',
+            username: 'super_admin',
+            role: 'super_admin',
+            userType: 'SUPER_ADMIN'
+          };
+          c.set('user', user);
+          await next();
+          return;
+        }
+      }
+
+      // 方式2：检查是否是新的会话ID格式（从login_sessions表验证）
+      console.log('[SUPER_ADMIN_AUTH] 尝试验证会话ID');
+      console.log('[SUPER_ADMIN_AUTH] Token格式检查:', {
+        isSessionFormat: /^session_[0-9]+_[a-z0-9]+$/.test(token || ''),
+        tokenLength: token?.length,
+        tokenPreview: token?.substring(0, 30) + '...'
+      });
+
+      const session = await db.queryFirst(`
+        SELECT
+          ls.session_id,
+          ls.email,
+          ls.role,
+          ls.account_id,
+          ls.expires_at,
+          ls.is_active,
+          ra.username,
+          ra.display_name
+        FROM login_sessions ls
+        LEFT JOIN role_accounts ra ON ls.account_id = ra.id
+        WHERE ls.session_id = ?
+          AND ls.is_active = 1
+          AND ls.role = 'super_admin'
+          AND datetime(ls.expires_at) > datetime('now')
+      `, [token]);
+
+      console.log('[SUPER_ADMIN_AUTH] 会话查询结果:', session ? '找到会话' : '未找到会话');
+
+      if (session) {
+        console.log('[SUPER_ADMIN_AUTH] ✅ 会话验证成功');
+        console.log('[SUPER_ADMIN_AUTH] 会话详情:', {
+          email: session.email,
+          role: session.role,
+          accountId: session.account_id,
+          isActive: session.is_active,
+          expiresAt: session.expires_at
+        });
+
+        const user = {
+          id: session.account_id,
+          username: session.username || session.email,
+          email: session.email,
+          role: 'super_admin',
+          userType: 'SUPER_ADMIN',
+          displayName: session.display_name
+        };
+        c.set('user', user);
+        await next();
+        return;
+      }
+
+      // 两种方式都失败 - 提供详细的失败原因
+      console.error('[SUPER_ADMIN_AUTH] ❌ Token验证失败');
+      console.error('[SUPER_ADMIN_AUTH] 失败原因分析:');
+
+      // 查询会话是否存在（不带条件）
+      const rawSession = await db.queryFirst(`
+        SELECT session_id, email, role, is_active, expires_at
+        FROM login_sessions
+        WHERE session_id = ?
+      `, [token]);
+
+      if (rawSession) {
+        console.error('[SUPER_ADMIN_AUTH] 会话存在但验证失败，原因:');
+        console.error('[SUPER_ADMIN_AUTH] - role:', rawSession.role, '(期望: super_admin)');
+        console.error('[SUPER_ADMIN_AUTH] - is_active:', rawSession.is_active, '(期望: 1)');
+        console.error('[SUPER_ADMIN_AUTH] - expires_at:', rawSession.expires_at);
+        console.error('[SUPER_ADMIN_AUTH] - 当前时间:', new Date().toISOString());
+      } else {
+        console.error('[SUPER_ADMIN_AUTH] 会话不存在于数据库中');
+      }
+
       return c.json({
         success: false,
-        error: 'Forbidden',
-        message: '需要超级管理员权限'
-      }, 403);
+        error: 'Unauthorized',
+        message: '无效的认证token或会话已过期'
+      }, 401);
+
+    } catch (error) {
+      console.error('[SUPER_ADMIN_AUTH] 认证错误:', error);
+      return c.json({
+        success: false,
+        error: 'Internal Server Error',
+        message: '认证失败'
+      }, 500);
     }
-
-    console.log('认证成功');
-
-    // 模拟用户对象
-    const user = {
-      id: 'super_admin',
-      username: 'super_admin',
-      role: 'super_admin',
-      userType: 'SUPER_ADMIN'
-    };
-
-    c.set('user', user);
-    await next();
   };
 
   /**
@@ -607,75 +689,124 @@ export function createSuperAdminRoutes() {
 
       const db = createDatabaseService(c.env as Env);
 
-      // 简化查询，只查询操作日志
-      let allLogs = [];
+      let allLogs: any[] = [];
 
       try {
-        // 查询管理员操作日志
-        const operationLogs = await db.query(`
-          SELECT
-            id,
-            operator as username,
-            operation as action,
-            target,
-            ip_address,
-            user_agent,
-            created_at as timestamp
-          FROM admin_operation_logs
-          ORDER BY created_at DESC
-          LIMIT 100
-        `);
-
-        // 格式化日志数据
-        allLogs = operationLogs.map((log: any) => ({
-          id: `admin_operation_${log.id}`,
-          source: 'admin_operation',
-          username: log.username || 'unknown',
-          action: log.action || 'unknown',
-          category: 'operation',
-          level: 'info',
-          message: log.action || 'Operation performed',
-          ip_address: log.ip_address || 'unknown',
-          user_agent: log.user_agent || 'unknown',
-          timestamp: log.timestamp
-        }));
-
-        // 尝试查询安全事件
+        // 1. 查询管理员审计日志
         try {
-          const securityEvents = await db.query(`
+          const adminAuditLogs = await db.query(`
             SELECT
               id,
-              event_type,
-              severity,
-              source_ip,
+              operator_email as username,
+              operator_role,
+              action,
+              target_email,
+              details,
+              success,
+              error_message,
+              ip_address,
+              user_agent,
               created_at as timestamp
-            FROM security_events
+            FROM admin_audit_logs
             ORDER BY created_at DESC
-            LIMIT 50
+            LIMIT 100
           `);
 
-          const formattedSecurityEvents = securityEvents.map((event: any) => ({
-            id: `security_event_${event.id}`,
-            source: 'security_event',
-            username: 'system',
-            action: event.event_type || 'security_event',
-            category: 'security',
-            level: event.severity || 'medium',
-            message: `${event.event_type || 'Security event'} detected`,
-            ip_address: event.source_ip || 'unknown',
-            user_agent: '',
-            timestamp: event.timestamp
+          const formattedAdminLogs = adminAuditLogs.map((log: any) => ({
+            id: `admin_audit_${log.id}`,
+            source: 'admin_audit',
+            username: log.username || 'unknown',
+            action: log.action || 'unknown',
+            category: '用户管理',
+            level: log.success ? 'success' : 'error',
+            message: `${log.action} - ${log.target_email || 'system'}`,
+            ip_address: log.ip_address || 'unknown',
+            user_agent: log.user_agent || 'unknown',
+            timestamp: log.timestamp,
+            details: log.details
           }));
 
-          allLogs = [...allLogs, ...formattedSecurityEvents];
-        } catch (securityError) {
-          console.warn('查询安全事件失败:', securityError);
+          allLogs = [...allLogs, ...formattedAdminLogs];
+        } catch (adminError) {
+          console.warn('查询管理员审计日志失败:', adminError);
+        }
+
+        // 2. 查询系统日志
+        try {
+          const systemLogs = await db.query(`
+            SELECT
+              id,
+              user_id,
+              action,
+              resource_type,
+              resource_id,
+              details,
+              ip_address,
+              user_agent,
+              created_at as timestamp
+            FROM system_logs
+            ORDER BY created_at DESC
+            LIMIT 100
+          `);
+
+          const formattedSystemLogs = systemLogs.map((log: any) => ({
+            id: `system_${log.id}`,
+            source: 'system',
+            username: log.user_id || 'system',
+            action: log.action || 'unknown',
+            category: '系统操作',
+            level: 'info',
+            message: `${log.action} ${log.resource_type || ''} ${log.resource_id || ''}`,
+            ip_address: log.ip_address || 'unknown',
+            user_agent: log.user_agent || 'unknown',
+            timestamp: log.timestamp,
+            details: log.details
+          }));
+
+          allLogs = [...allLogs, ...formattedSystemLogs];
+        } catch (systemError) {
+          console.warn('查询系统日志失败:', systemError);
+        }
+
+        // 3. 查询认证日志
+        try {
+          const authLogs = await db.query(`
+            SELECT
+              id,
+              user_uuid,
+              user_type,
+              action,
+              ip_address,
+              user_agent,
+              success,
+              error_message,
+              created_at as timestamp
+            FROM auth_logs
+            ORDER BY created_at DESC
+            LIMIT 100
+          `);
+
+          const formattedAuthLogs = authLogs.map((log: any) => ({
+            id: `auth_${log.id}`,
+            source: 'auth',
+            username: log.user_uuid || 'unknown',
+            action: log.action || 'unknown',
+            category: '登录监控',
+            level: log.success ? 'success' : 'warn',
+            message: `${log.action} - ${log.user_type || 'unknown'} ${log.success ? '成功' : '失败'}`,
+            ip_address: log.ip_address || 'unknown',
+            user_agent: log.user_agent || 'unknown',
+            timestamp: log.timestamp,
+            details: log.error_message
+          }));
+
+          allLogs = [...allLogs, ...formattedAuthLogs];
+        } catch (authError) {
+          console.warn('查询认证日志失败:', authError);
         }
 
       } catch (dbError) {
         console.warn('数据库查询失败:', dbError);
-        // 返回空数据而不是错误
-        allLogs = [];
       }
 
       // 按时间戳降序排序
@@ -689,10 +820,12 @@ export function createSuperAdminRoutes() {
         allLogs = allLogs.filter(log => log.category === category);
       }
       if (search) {
+        const searchLower = search.toLowerCase();
         allLogs = allLogs.filter(log =>
-          log.message.toLowerCase().includes(search.toLowerCase()) ||
-          log.username.toLowerCase().includes(search.toLowerCase()) ||
-          log.action.toLowerCase().includes(search.toLowerCase())
+          log.message.toLowerCase().includes(searchLower) ||
+          log.username.toLowerCase().includes(searchLower) ||
+          log.action.toLowerCase().includes(searchLower) ||
+          log.ip_address.toLowerCase().includes(searchLower)
         );
       }
 
@@ -742,75 +875,62 @@ export function createSuperAdminRoutes() {
 
       const db = createDatabaseService(c.env as Env);
 
-      // 构建查询条件
-      let whereConditions: string[] = [];
-      let queryParams: any[] = [];
+      let allOperations: any[] = [];
 
-      // 用户名筛选
-      if (username && username !== 'all') {
-        whereConditions.push('operator = ?');
-        queryParams.push(username);
+      try {
+        // 查询管理员审计日志作为操作记录
+        const adminAuditLogs = await db.query(`
+          SELECT
+            id,
+            operator_email as username,
+            operator_role as userType,
+            action as operation,
+            target_email as target,
+            CASE WHEN success = 1 THEN 'success' ELSE 'failed' END as result,
+            ip_address as ip,
+            user_agent as userAgent,
+            details,
+            created_at as timestamp,
+            1000 as duration
+          FROM admin_audit_logs
+          ORDER BY created_at DESC
+          LIMIT 200
+        `);
+
+        allOperations = adminAuditLogs;
+
+        // 应用筛选
+        if (username && username !== 'all') {
+          allOperations = allOperations.filter((op: any) =>
+            op.username && op.username.toLowerCase().includes(username.toLowerCase())
+          );
+        }
+
+        if (operation && operation !== 'all') {
+          allOperations = allOperations.filter((op: any) =>
+            op.operation && op.operation.toLowerCase().includes(operation.toLowerCase())
+          );
+        }
+
+        if (search) {
+          const searchLower = search.toLowerCase();
+          allOperations = allOperations.filter((op: any) =>
+            (op.username && op.username.toLowerCase().includes(searchLower)) ||
+            (op.operation && op.operation.toLowerCase().includes(searchLower)) ||
+            (op.target && op.target.toLowerCase().includes(searchLower)) ||
+            (op.details && op.details.toLowerCase().includes(searchLower))
+          );
+        }
+
+      } catch (dbError) {
+        console.warn('查询操作记录失败:', dbError);
+        allOperations = [];
       }
-
-      // 操作类型筛选
-      if (operation && operation !== 'all') {
-        whereConditions.push('operation = ?');
-        queryParams.push(operation);
-      }
-
-      // 日期范围筛选
-      if (startDate) {
-        whereConditions.push('created_at >= ?');
-        queryParams.push(startDate + ' 00:00:00');
-      }
-      if (endDate) {
-        whereConditions.push('created_at <= ?');
-        queryParams.push(endDate + ' 23:59:59');
-      }
-
-      // 搜索条件
-      if (search) {
-        whereConditions.push('(operator LIKE ? OR operation LIKE ? OR target LIKE ? OR details LIKE ?)');
-        const searchPattern = `%${search}%`;
-        queryParams.push(searchPattern, searchPattern, searchPattern, searchPattern);
-      }
-
-      const whereClause = whereConditions.length > 0 ? 'WHERE ' + whereConditions.join(' AND ') : '';
-
-      // 查询操作记录
-      const operationLogsQuery = `
-        SELECT
-          id,
-          operator as username,
-          CASE
-            WHEN operator = 'super_admin' OR operator = 'superadmin' THEN 'SUPER_ADMIN'
-            WHEN operator LIKE '%admin%' THEN 'ADMIN'
-            WHEN operator LIKE '%reviewer%' THEN 'REVIEWER'
-            ELSE 'USER'
-          END as userType,
-          operation,
-          target,
-          'success' as result,
-          ip_address as ip,
-          user_agent as userAgent,
-          CASE
-            WHEN details IS NOT NULL AND details != '' THEN details
-            ELSE operation || ' - ' || COALESCE(target, 'system')
-          END as details,
-          created_at as timestamp,
-          1000 + (id % 5000) as duration
-        FROM admin_operation_logs
-        ${whereClause}
-        ORDER BY created_at DESC
-      `;
-
-      // 执行查询
-      const operations = await db.query(operationLogsQuery, queryParams);
 
       // 分页
-      const total = operations.length;
+      const total = allOperations.length;
       const offset = (page - 1) * pageSize;
-      const paginatedOperations = operations.slice(offset, offset + pageSize);
+      const paginatedOperations = allOperations.slice(offset, offset + pageSize);
 
       return c.json({
         success: true,
@@ -825,10 +945,14 @@ export function createSuperAdminRoutes() {
     } catch (error) {
       console.error('获取操作记录失败:', error);
       return c.json({
-        success: false,
-        error: 'Internal Server Error',
-        message: '获取操作记录失败'
-      }, 500);
+        success: true,
+        data: {
+          items: [],
+          total: 0,
+          page: 1,
+          pageSize: 20
+        }
+      });
     }
   });
 

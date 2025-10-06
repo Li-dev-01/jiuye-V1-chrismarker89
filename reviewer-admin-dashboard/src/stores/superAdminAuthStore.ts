@@ -13,17 +13,41 @@ interface SuperAdminAuthState {
   token: string | null;
   isAuthenticated: boolean;
   isLoading: boolean;
-  login: (credentials: LoginCredentials, userType: 'super_admin') => Promise<void>;
+  login: (credentials: LoginCredentials, userType: 'super_admin') => Promise<any>;
   logout: () => void;
   checkAuth: () => Promise<boolean>;
   setLoading: (loading: boolean) => void;
   setAuthState: (state: { user: User; token: string; isAuthenticated: boolean; isLoading: boolean }) => void;
 }
 
-export const useSuperAdminAuthStore = create<SuperAdminAuthState>((set, get) => ({
-  user: null,
-  token: localStorage.getItem(STORAGE_KEYS.SUPER_ADMIN_TOKEN),
-  isAuthenticated: false,
+export const useSuperAdminAuthStore = create<SuperAdminAuthState>((set, get) => {
+  // 初始化时从 LocalStorage 恢复用户信息
+  const storedToken = localStorage.getItem(STORAGE_KEYS.SUPER_ADMIN_TOKEN);
+  const storedUserInfo = localStorage.getItem(STORAGE_KEYS.SUPER_ADMIN_USER_INFO);
+
+  let initialUser: User | null = null;
+  let initialIsAuthenticated = false;
+
+  if (storedToken && storedUserInfo) {
+    try {
+      initialUser = JSON.parse(storedUserInfo);
+      initialIsAuthenticated = true;
+      console.log('[SUPER_ADMIN_AUTH] 🔄 Restored from localStorage:', {
+        username: initialUser?.username,
+        role: initialUser?.role,
+        hasToken: !!storedToken
+      });
+    } catch (error) {
+      console.error('[SUPER_ADMIN_AUTH] ❌ Failed to parse stored user info:', error);
+      localStorage.removeItem(STORAGE_KEYS.SUPER_ADMIN_TOKEN);
+      localStorage.removeItem(STORAGE_KEYS.SUPER_ADMIN_USER_INFO);
+    }
+  }
+
+  return {
+  user: initialUser,
+  token: storedToken,
+  isAuthenticated: initialIsAuthenticated,
   isLoading: false,
 
   setLoading: (loading: boolean) => {
@@ -32,13 +56,23 @@ export const useSuperAdminAuthStore = create<SuperAdminAuthState>((set, get) => 
 
   setAuthState: (state) => {
     console.log('[SUPER_ADMIN_AUTH] 🔄 Setting auth state directly:', state);
+
+    // 🔧 关键修复：保存到 localStorage
+    if (state.token) {
+      localStorage.setItem(STORAGE_KEYS.SUPER_ADMIN_TOKEN, state.token);
+    }
+    if (state.user) {
+      localStorage.setItem(STORAGE_KEYS.SUPER_ADMIN_USER_INFO, JSON.stringify(state.user));
+    }
+
     set(state);
+    console.log('[SUPER_ADMIN_AUTH] ✅ Auth state saved to localStorage');
   },
 
   login: async (credentials: LoginCredentials, userType: 'super_admin') => {
     console.log(`[SUPER_ADMIN_AUTH] 🚀 LOGIN START: username=${credentials.username}, userType=${userType}`);
     set({ isLoading: true });
-    
+
     try {
       console.log(`[SUPER_ADMIN_AUTH] 📡 Sending super admin login request...`);
 
@@ -90,7 +124,7 @@ export const useSuperAdminAuthStore = create<SuperAdminAuthState>((set, get) => 
         isAuthenticated: currentState.isAuthenticated,
         user: currentState.user?.username,
         role: currentState.user?.role,
-        userType: currentState.user?.userType,
+        userType: (currentState.user as any)?.userType,
         hasToken: !!currentState.token
       });
 
@@ -186,4 +220,4 @@ export const useSuperAdminAuthStore = create<SuperAdminAuthState>((set, get) => 
       return false;
     }
   }
-}));
+}});

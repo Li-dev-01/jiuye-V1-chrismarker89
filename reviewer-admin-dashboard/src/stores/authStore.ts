@@ -27,7 +27,17 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 
   setAuthState: (state) => {
     console.log('[AUTH_STORE] 🔄 Setting auth state directly:', state);
+
+    // 🔧 关键修复：保存到 localStorage
+    if (state.token) {
+      localStorage.setItem(STORAGE_KEYS.REVIEWER_TOKEN, state.token);
+    }
+    if (state.user) {
+      localStorage.setItem(STORAGE_KEYS.REVIEWER_USER_INFO, JSON.stringify(state.user));
+    }
+
     set(state);
+    console.log('[AUTH_STORE] ✅ Auth state saved to localStorage');
   },
 
   login: async (credentials: LoginCredentials, userType: 'reviewer' | 'admin' | 'super_admin' = 'reviewer') => {

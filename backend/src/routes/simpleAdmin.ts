@@ -155,9 +155,9 @@ simpleAdmin.get('/users', async (c) => {
     const db = c.env.DB;
 
     const page = parseInt(c.req.query('page') || '1');
-    const limit = parseInt(c.req.query('limit') || '50');
+    const limit = parseInt(c.req.query('limit') || c.req.query('pageSize') || '50');
     const search = c.req.query('search') || '';
-    const role = c.req.query('role') || '';
+    const role = c.req.query('role') || c.req.query('userType') || '';
     const status = c.req.query('status') || '';
     const university = c.req.query('university') || '';
     const graduationYear = c.req.query('graduationYear') ? parseInt(c.req.query('graduationYear')!) : null;
@@ -2723,6 +2723,384 @@ simpleAdmin.get('/api/documentation', async (c) => {
       error: 'Internal Server Error',
       message: '获取API文档失败',
       details: error instanceof Error ? error.message : 'Unknown error'
+    }, 500);
+  }
+});
+
+// 用户画像管理端点 (临时集成到simple-admin中)
+simpleAdmin.get('/user-profile/tag-statistics', async (c) => {
+  try {
+    const questionnaireId = c.req.query('questionnaire_id');
+    const category = c.req.query('category');
+    const limit = parseInt(c.req.query('limit') || '50');
+
+    if (!questionnaireId) {
+      return c.json({
+        success: false,
+        error: 'Validation Error',
+        message: '问卷ID不能为空'
+      }, 400);
+    }
+
+    const db = c.env.DB;
+
+    // 获取所有响应数据
+    const responses = await db.prepare(`
+      SELECT response_data
+      FROM universal_questionnaire_responses
+      WHERE questionnaire_id = ?
+    `).bind(questionnaireId).all();
+
+    if (!responses.results || responses.results.length === 0) {
+      return c.json({
+        success: true,
+        data: [],
+        message: '暂无数据'
+      });
+    }
+
+    // 解析JSON并统计标签
+    const tagCounts: Record<string, number> = {};
+    const totalResponses = responses.results.length;
+
+    for (const row of responses.results) {
+      try {
+        const data = typeof row.response_data === 'string'
+          ? JSON.parse(row.response_data)
+          : row.response_data;
+
+        // 从response_data中提取tag_name
+        const tagName = data?.tag_name || data?.tagName;
+        const tagCategory = data?.tag_category || data?.tagCategory;
+
+        // 如果指定了category，只统计匹配的
+        if (category && tagCategory !== category) {
+          continue;
+        }
+
+        if (tagName && tagName.trim() !== '') {
+          tagCounts[tagName] = (tagCounts[tagName] || 0) + 1;
+        }
+      } catch (e) {
+        console.error('解析response_data失败:', e);
+      }
+    }
+
+    // 转换为数组并排序
+    const tagStats = Object.entries(tagCounts)
+      .map(([tag_name, count]) => ({
+        tag_name,
+        count,
+        percentage: parseFloat(((count / totalResponses) * 100).toFixed(2))
+      }))
+      .sort((a, b) => b.count - a.count)
+      .slice(0, limit);
+
+    return c.json({
+      success: true,
+      data: tagStats,
+      message: '获取标签统计成功'
+    });
+  } catch (error: any) {
+    console.error('获取标签统计失败:', error);
+    return c.json({
+      success: false,
+      error: 'Internal Server Error',
+      message: '获取标签统计失败: ' + error.message
+    }, 500);
+  }
+});
+
+simpleAdmin.get('/user-profile/emotion-statistics', async (c) => {
+  try {
+    const questionnaireId = c.req.query('questionnaire_id');
+
+    if (!questionnaireId) {
+      return c.json({
+        success: false,
+        error: 'Validation Error',
+        message: '问卷ID不能为空'
+      }, 400);
+    }
+
+    const db = c.env.DB;
+
+    // 获取所有响应数据
+    const responses = await db.prepare(`
+      SELECT response_data
+      FROM universal_questionnaire_responses
+      WHERE questionnaire_id = ?
+    `).bind(questionnaireId).all();
+
+    if (!responses.results || responses.results.length === 0) {
+      return c.json({
+        success: true,
+        data: [],
+        message: '暂无数据'
+      });
+    }
+
+    // 解析JSON并统计情绪
+    const emotionCounts: Record<string, number> = {};
+    const totalResponses = responses.results.length;
+
+    for (const row of responses.results) {
+      try {
+        const data = typeof row.response_data === 'string'
+          ? JSON.parse(row.response_data)
+          : row.response_data;
+
+        // 从response_data中提取emotion_type
+        const emotionType = data?.emotion_type || data?.emotionType;
+
+        if (emotionType && emotionType.trim() !== '') {
+          emotionCounts[emotionType] = (emotionCounts[emotionType] || 0) + 1;
+        }
+      } catch (e) {
+        console.error('解析response_data失败:', e);
+      }
+    }
+
+    // 转换为数组并排序
+    const emotionStats = Object.entries(emotionCounts)
+      .map(([emotion_type, count]) => ({
+        emotion_type,
+        count,
+        percentage: parseFloat(((count / totalResponses) * 100).toFixed(2))
+      }))
+      .sort((a, b) => b.count - a.count);
+
+    return c.json({
+      success: true,
+      data: emotionStats,
+      message: '获取情绪统计成功'
+    });
+  } catch (error: any) {
+    console.error('获取情绪统计失败:', error);
+    return c.json({
+      success: false,
+      error: 'Internal Server Error',
+      message: '获取情绪统计失败: ' + error.message
+    }, 500);
+  }
+});
+
+// 人工审核队列端点 (临时集成到simple-admin中)
+simpleAdmin.get('/manual-review-queue', async (c) => {
+  try {
+    const page = parseInt(c.req.query('page') || '1');
+    const limit = parseInt(c.req.query('limit') || '20');
+    const offset = (page - 1) * limit;
+
+    const db = c.env.DB;
+
+    // 获取人工审核队列
+    const queue = await db.prepare(`
+      SELECT
+        mrq.id, mrq.pending_story_id, mrq.priority, mrq.status,
+        mrq.assigned_to, mrq.created_at, mrq.assigned_at,
+        ps.user_id, ps.content, ps.ai_audit_result,
+        SUBSTR(ps.content, 1, 200) as content_preview
+      FROM manual_review_queue mrq
+      JOIN pending_stories ps ON mrq.pending_story_id = ps.id
+      WHERE mrq.status IN ('waiting', 'assigned', 'reviewing')
+      ORDER BY mrq.priority ASC, mrq.created_at ASC
+      LIMIT ? OFFSET ?
+    `).bind(limit, offset).all();
+
+    // 获取总数
+    const total = await db.prepare(`
+      SELECT COUNT(*) as count
+      FROM manual_review_queue
+      WHERE status IN ('waiting', 'assigned', 'reviewing')
+    `).first();
+
+    return c.json({
+      success: true,
+      data: {
+        queue: queue.results || [],
+        pagination: {
+          page,
+          limit,
+          total: total?.count || 0,
+          totalPages: Math.ceil((total?.count || 0) / limit)
+        }
+      },
+      message: '获取人工审核队列成功'
+    });
+  } catch (error: any) {
+    console.error('获取人工审核队列失败:', error);
+    return c.json({
+      success: false,
+      error: 'Internal Server Error',
+      message: '获取人工审核队列失败'
+    }, 500);
+  }
+});
+
+// ==================== 信誉管理 - 举报系统API ====================
+
+// 获取恶意用户列表
+simpleAdmin.get('/reports/admin/malicious-users', async (c) => {
+  try {
+    const db = c.env.DB;
+
+    // 获取信誉较差的用户
+    const maliciousUsers = await db.prepare(`
+      SELECT
+        rr.id,
+        rr.user_id,
+        rr.total_reports,
+        rr.valid_reports,
+        rr.invalid_reports,
+        rr.malicious_reports,
+        rr.reputation_score,
+        rr.reputation_level,
+        rr.is_restricted,
+        rr.restriction_reason,
+        rr.restricted_until,
+        rr.last_report_at,
+        u.username,
+        u.email
+      FROM reporter_reputation rr
+      LEFT JOIN users u ON rr.user_id = u.id
+      WHERE rr.reputation_level IN ('poor', 'bad')
+         OR rr.is_restricted = 1
+         OR rr.malicious_reports > 0
+      ORDER BY rr.reputation_score ASC, rr.malicious_reports DESC
+      LIMIT 100
+    `).all();
+
+    return c.json({
+      success: true,
+      data: maliciousUsers.results || [],
+      message: '获取恶意用户列表成功'
+    });
+  } catch (error: any) {
+    console.error('获取恶意用户列表失败:', error);
+    return c.json({
+      success: false,
+      error: 'Internal Server Error',
+      message: '获取恶意用户列表失败: ' + error.message
+    }, 500);
+  }
+});
+
+// 获取举报列表
+simpleAdmin.get('/reports/admin/list', async (c) => {
+  try {
+    const db = c.env.DB;
+    const limit = parseInt(c.req.query('limit') || '100');
+    const status = c.req.query('status');
+    const contentType = c.req.query('content_type');
+
+    let query = `
+      SELECT
+        ur.id,
+        ur.content_type,
+        ur.content_id,
+        ur.content_uuid,
+        ur.reporter_user_id,
+        ur.reported_user_id,
+        ur.report_type,
+        ur.report_reason,
+        ur.status,
+        ur.review_result,
+        ur.review_notes,
+        ur.reviewed_by,
+        ur.reviewed_at,
+        ur.created_at,
+        reporter.username as reporter_username,
+        reported.username as reported_username
+      FROM user_reports ur
+      LEFT JOIN users reporter ON ur.reporter_user_id = reporter.id
+      LEFT JOIN users reported ON ur.reported_user_id = reported.id
+      WHERE 1=1
+    `;
+
+    const params: any[] = [];
+
+    if (status) {
+      query += ` AND ur.status = ?`;
+      params.push(status);
+    }
+
+    if (contentType) {
+      query += ` AND ur.content_type = ?`;
+      params.push(contentType);
+    }
+
+    query += ` ORDER BY ur.created_at DESC LIMIT ?`;
+    params.push(limit);
+
+    const reports = await db.prepare(query).bind(...params).all();
+
+    return c.json({
+      success: true,
+      data: reports.results || [],
+      message: '获取举报列表成功'
+    });
+  } catch (error: any) {
+    console.error('获取举报列表失败:', error);
+    return c.json({
+      success: false,
+      error: 'Internal Server Error',
+      message: '获取举报列表失败: ' + error.message
+    }, 500);
+  }
+});
+
+// 处理举报
+simpleAdmin.post('/reports/admin/:reportId/review', async (c) => {
+  try {
+    const db = c.env.DB;
+    const reportId = c.req.param('reportId');
+    const body = await c.req.json();
+    const { status, review_result, review_notes } = body;
+    const user = c.get('user');
+
+    if (!status || !['valid', 'invalid', 'malicious'].includes(status)) {
+      return c.json({
+        success: false,
+        error: 'Validation Error',
+        message: '无效的审核状态'
+      }, 400);
+    }
+
+    // 更新举报状态
+    await db.prepare(`
+      UPDATE user_reports
+      SET status = ?,
+          review_result = ?,
+          review_notes = ?,
+          reviewed_by = ?,
+          reviewed_at = CURRENT_TIMESTAMP,
+          updated_at = CURRENT_TIMESTAMP
+      WHERE id = ?
+    `).bind(status, review_result, review_notes, user?.username || 'admin', reportId).run();
+
+    // 记录操作日志
+    await db.prepare(`
+      INSERT INTO report_action_logs (
+        report_id, action_type, action_by, action_details, created_at
+      ) VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP)
+    `).bind(
+      reportId,
+      'reviewed',
+      user?.username || 'admin',
+      JSON.stringify({ status, review_result, review_notes })
+    ).run();
+
+    return c.json({
+      success: true,
+      message: '举报审核成功'
+    });
+  } catch (error: any) {
+    console.error('举报审核失败:', error);
+    return c.json({
+      success: false,
+      error: 'Internal Server Error',
+      message: '举报审核失败: ' + error.message
     }, 500);
   }
 });

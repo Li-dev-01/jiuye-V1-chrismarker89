@@ -106,6 +106,11 @@ const DashboardLayout: React.FC = () => {
           label: '标签管理',
         },
         {
+          key: '/admin/user-profile-management',
+          icon: <UserOutlined />,
+          label: '用户画像管理',
+        },
+        {
           key: '/admin/reputation-management',
           icon: <FlagOutlined />,
           label: '信誉管理',
@@ -153,6 +158,11 @@ const DashboardLayout: React.FC = () => {
               label: '账户管理',
             },
             {
+              key: '/admin/audit-logs',
+              icon: <FileTextOutlined />,
+              label: '审计日志',
+            },
+            {
               key: '/admin/security-switches',
               icon: <SecurityScanOutlined />,
               label: '安全开关',
@@ -193,6 +203,11 @@ const DashboardLayout: React.FC = () => {
           key: '/admin/tag-management',
           icon: <TagsOutlined />,
           label: '标签管理',
+        },
+        {
+          key: '/admin/user-profile-management',
+          icon: <UserOutlined />,
+          label: '用户画像管理',
         },
         {
           key: '/admin/reputation-management',

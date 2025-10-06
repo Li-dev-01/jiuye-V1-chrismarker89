@@ -43,6 +43,9 @@ import simpleTestRoutes from './routes/test/simple';
 import favorites from './routes/favorites';
 import userReports from './routes/userReports';
 import systemHealthRoutes from './routes/system-health-simple';
+// import userProfileManagement from './routes/user-profile-management'; // 已集成到admin路由中
+import simpleAdmin from './routes/simpleAdmin';
+import { createSuperAdminRoutes } from './routes/super-admin';
 
 // 创建Hono应用
 const app = new Hono<{ Bindings: Env }>();
@@ -246,8 +249,14 @@ api.route('/analytics', analyticsRoutes);
 // 审核员路由
 api.route('/reviewer', reviewerRoutes);
 
-// 管理员路由
+// 管理员路由 (包含用户画像和数据库监控子路由)
 api.route('/admin', createAdminRoutes());
+
+// 简化管理员路由（包含AI审核等功能）
+api.route('/simple-admin', simpleAdmin);
+
+// 超级管理员路由
+api.route('/super-admin', createSuperAdminRoutes());
 
 // 故事路由
 api.route('/stories', createStoriesRoutes());
@@ -264,8 +273,8 @@ api.route('/tiered-audit', createTieredAuditRoutes());
 // 页面参与统计路由
 api.route('/participation-stats', createParticipationStatsRoutes());
 
-// 数据库监测管理路由
-api.route('/admin/database', createDatabaseMonitorRoutes());
+// 数据库监测管理路由 (已集成到admin路由中)
+// api.route('/admin/database', createDatabaseMonitorRoutes());
 
 // 健康检查路由（也在API前缀下提供）
 api.route('/health', health);

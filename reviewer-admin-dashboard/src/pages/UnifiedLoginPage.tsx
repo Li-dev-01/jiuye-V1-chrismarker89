@@ -41,6 +41,35 @@ const UnifiedLoginPage: React.FC = () => {
   const adminAuth = useAdminAuthStore();
   const superAdminAuth = useSuperAdminAuthStore();
 
+  // 角色名称映射
+  const getRoleName = (role: UserRole): string => {
+    const names = {
+      'reviewer': '审核员',
+      'admin': '管理员',
+      'super_admin': '超级管理员'
+    };
+    return names[role] || role;
+  };
+
+  // 处理tab切换
+  const handleTabChange = (key: string) => {
+    const auth = getCurrentAuth();
+
+    // 如果已登录，检查是否允许切换到这个tab
+    if (auth.isAuthenticated && auth.user) {
+      const userRole = auth.user.role;
+
+      // 不允许切换到其他角色的tab
+      if (userRole !== key) {
+        message.warning(`您当前已以${getRoleName(userRole as UserRole)}身份登录，无法切换到${getRoleName(key as UserRole)}登录页面`);
+        return;
+      }
+    }
+
+    setActiveTab(key as UserRole);
+    setError(null);  // 清除错误信息
+  };
+
   // 根据当前tab获取对应的auth store
   const getCurrentAuth = () => {
     switch (activeTab) {
@@ -55,26 +84,40 @@ const UnifiedLoginPage: React.FC = () => {
     }
   };
 
-  // 检查是否已登录
+  // 检查是否已登录 - 只在组件挂载时检查一次
   useEffect(() => {
     const auth = getCurrentAuth();
     if (auth.isAuthenticated && auth.user) {
-      redirectToDashboard(activeTab);
+      // ✅ 使用用户实际的角色，而不是当前选中的tab
+      const userRole = auth.user.role as UserRole;
+      console.log('[UNIFIED_LOGIN] 🔍 User already authenticated:', {
+        userRole,
+        activeTab,
+        'will redirect to': userRole
+      });
+      redirectToDashboard(userRole);
     }
-  }, [activeTab]);
+  }, []);  // ✅ 空依赖数组，只在挂载时检查一次
 
   // 重定向到对应的仪表板
   const redirectToDashboard = (role: UserRole) => {
+    console.log('[UNIFIED_LOGIN] 🔄 Redirecting to dashboard for role:', role);
     switch (role) {
       case 'reviewer':
+        console.log('[UNIFIED_LOGIN] → Redirecting to /dashboard');
         navigate('/dashboard', { replace: true });
         break;
       case 'admin':
+        console.log('[UNIFIED_LOGIN] → Redirecting to /admin/dashboard');
         navigate('/admin/dashboard', { replace: true });
         break;
       case 'super_admin':
-        navigate('/admin/super', { replace: true });
+        console.log('[UNIFIED_LOGIN] → Redirecting to /admin/dashboard (super admin)');
+        navigate('/admin/dashboard', { replace: true });
         break;
+      default:
+        console.error('[UNIFIED_LOGIN] ⚠️ Unknown role:', role);
+        navigate('/unified-login', { replace: true });
     }
   };
 
@@ -347,8 +390,7 @@ const UnifiedLoginPage: React.FC = () => {
         <Tabs
           activeKey={activeTab}
           onChange={(key) => {
-            setActiveTab(key as UserRole);
-            setError(null);
+            handleTabChange(key);
             form.resetFields();
           }}
           centered

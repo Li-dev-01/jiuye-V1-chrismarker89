@@ -204,12 +204,13 @@ const AdminAIModeration: React.FC = () => {
 
   const loadManualReviewQueue = async () => {
     try {
-      const response = await apiClient.get('/api/stories/admin/manual-review-queue');
+      const response = await apiClient.get('/api/simple-admin/manual-review-queue');
       if (response.data.success) {
         setManualReviewQueue(response.data.data.queue || []);
       }
     } catch (error) {
       console.error('加载人工审核队列失败:', error);
+      // 不显示错误消息，因为这不是关键功能
     }
   };
 
@@ -238,10 +239,21 @@ const AdminAIModeration: React.FC = () => {
 
     setTesting(true);
     try {
+      console.log('[AI_MODERATION] 开始AI测试，内容:', testContent);
+
+      // 检查认证状态
+      const token = localStorage.getItem('ADMIN_TOKEN') ||
+                   localStorage.getItem('SUPER_ADMIN_TOKEN') ||
+                   localStorage.getItem('REVIEWER_TOKEN');
+
+      console.log('[AI_MODERATION] 使用的token:', token ? `${token.substring(0, 20)}...` : 'None');
+
       const response = await apiClient.post('/api/simple-admin/ai-moderation/test', {
         content: testContent,
         contentType: 'story'
       });
+
+      console.log('[AI_MODERATION] API响应:', response.data);
 
       if (response.data.success) {
         setTestResult(response.data.data);
@@ -249,9 +261,24 @@ const AdminAIModeration: React.FC = () => {
       } else {
         message.error('测试失败: ' + response.data.message);
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('AI测试失败:', error);
-      message.error('AI测试失败');
+
+      // 详细错误信息
+      if (error.response) {
+        console.error('错误状态:', error.response.status);
+        console.error('错误数据:', error.response.data);
+
+        if (error.response.status === 401) {
+          message.error('认证失败，请重新登录');
+        } else if (error.response.status === 403) {
+          message.error('权限不足，无法访问AI功能');
+        } else {
+          message.error(`AI测试失败: ${error.response.data?.message || '未知错误'}`);
+        }
+      } else {
+        message.error('网络错误，请检查连接');
+      }
     } finally {
       setTesting(false);
     }

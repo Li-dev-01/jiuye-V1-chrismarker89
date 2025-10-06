@@ -71,10 +71,19 @@ async function exchangeCodeForToken(code: string, redirectUri: string, clientSec
  */
 emailRoleAuth.post('/google/callback', async (c) => {
   try {
+    console.log('[EMAIL_ROLE_AUTH] 🚀 Google OAuth callback started');
+
     const body = await c.req.json();
     const { code, redirectUri, role } = body; // role是用户选择的角色
 
+    console.log('[EMAIL_ROLE_AUTH] 📋 Request params:', {
+      hasCode: !!code,
+      redirectUri,
+      role
+    });
+
     if (!code || !role) {
+      console.error('[EMAIL_ROLE_AUTH] ❌ Missing required parameters');
       return c.json({
         success: false,
         error: 'Invalid Request',
@@ -84,6 +93,7 @@ emailRoleAuth.post('/google/callback', async (c) => {
 
     // 验证角色
     if (!['reviewer', 'admin', 'super_admin'].includes(role)) {
+      console.error('[EMAIL_ROLE_AUTH] ❌ Invalid role:', role);
       return c.json({
         success: false,
         error: 'Invalid Request',
@@ -93,12 +103,14 @@ emailRoleAuth.post('/google/callback', async (c) => {
 
     // 获取Google Client Secret
     const clientSecret = GOOGLE_CLIENT_SECRET(c.env as Env);
+    console.log('[EMAIL_ROLE_AUTH] 🔑 Client secret configured:', !!clientSecret);
+
     if (!clientSecret) {
-      console.error('[EMAIL_ROLE_AUTH] Google Client Secret not configured');
+      console.error('[EMAIL_ROLE_AUTH] ❌ Google Client Secret not configured');
       return c.json({
         success: false,
         error: 'Configuration Error',
-        message: 'Google OAuth配置不完整'
+        message: 'Google OAuth配置不完整，请联系系统管理员'
       }, 500);
     }
 
@@ -118,13 +130,21 @@ emailRoleAuth.post('/google/callback', async (c) => {
     const now = new Date().toISOString();
 
     // 1. 检查邮箱是否在白名单中
+    console.log('[EMAIL_ROLE_AUTH] 🔍 Checking email whitelist for:', googleUser.email);
+
     const emailWhitelist = await db.queryFirst(`
       SELECT id, email, is_active, two_factor_enabled
       FROM email_whitelist
       WHERE email = ? AND is_active = 1
     `, [googleUser.email]);
 
+    console.log('[EMAIL_ROLE_AUTH] 📋 Whitelist check result:', {
+      found: !!emailWhitelist,
+      email: googleUser.email
+    });
+
     if (!emailWhitelist) {
+      console.error('[EMAIL_ROLE_AUTH] ❌ Email not in whitelist:', googleUser.email);
       return c.json({
         success: false,
         error: 'Unauthorized',
@@ -133,13 +153,28 @@ emailRoleAuth.post('/google/callback', async (c) => {
     }
 
     // 2. 检查该邮箱是否有对应角色的账号
+    console.log('[EMAIL_ROLE_AUTH] 🔍 Checking role account for:', {
+      email: googleUser.email,
+      role
+    });
+
     const roleAccount = await db.queryFirst(`
       SELECT id, email, role, username, display_name, permissions, is_active
       FROM role_accounts
       WHERE email = ? AND role = ? AND is_active = 1
     `, [googleUser.email, role]);
 
+    console.log('[EMAIL_ROLE_AUTH] 📋 Role account check result:', {
+      found: !!roleAccount,
+      email: googleUser.email,
+      role
+    });
+
     if (!roleAccount) {
+      console.error('[EMAIL_ROLE_AUTH] ❌ No role account found:', {
+        email: googleUser.email,
+        role
+      });
       return c.json({
         success: false,
         error: 'Forbidden',
@@ -147,7 +182,17 @@ emailRoleAuth.post('/google/callback', async (c) => {
       }, 403);
     }
 
-    // 3. 更新最后登录时间
+    // 3. 准备会话数据
+    const sessionId = generateSessionId();
+    const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(); // 7天有效期
+
+    console.log('[EMAIL_ROLE_AUTH] 🔐 Creating login session...');
+    console.log('[EMAIL_ROLE_AUTH] 📋 2FA status:', {
+      enabled: emailWhitelist.two_factor_enabled,
+      email: googleUser.email
+    });
+
+    // 4. 更新最后登录时间
     await db.execute(`
       UPDATE email_whitelist
       SET last_login_at = ?
@@ -160,15 +205,15 @@ emailRoleAuth.post('/google/callback', async (c) => {
       WHERE id = ?
     `, [now, roleAccount.id]);
 
-    // 4. 创建登录会话
-    const sessionId = generateSessionId();
-    const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(); // 24小时
+    // 5. 创建登录会话
+    // ✅ 无论是否启用2FA，都创建有效会话（让用户先登录）
+    // 如果启用了2FA，标记会话需要验证（但不阻止登录）
 
     await db.execute(`
       INSERT INTO login_sessions (
         session_id, email, role, account_id, login_method,
-        ip_address, user_agent, created_at, expires_at, is_active
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ip_address, user_agent, created_at, expires_at, is_active, requires_2fa
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `, [
       sessionId,
       googleUser.email,
@@ -179,10 +224,18 @@ emailRoleAuth.post('/google/callback', async (c) => {
       c.req.header('User-Agent') || 'unknown',
       now,
       expiresAt,
-      1
+      1, // ✅ 会话立即激活
+      emailWhitelist.two_factor_enabled ? 1 : 0 // 标记是否需要2FA（但不阻止登录）
     ]);
 
-    // 5. 记录登录尝试
+    console.log('[EMAIL_ROLE_AUTH] ✅ Login session created:', {
+      sessionId,
+      email: googleUser.email,
+      role,
+      requires2FA: emailWhitelist.two_factor_enabled
+    });
+
+    // 6. 记录登录尝试
     await db.execute(`
       INSERT INTO login_attempts (
         email, role, ip_address, user_agent, success, login_method, attempted_at
@@ -197,7 +250,8 @@ emailRoleAuth.post('/google/callback', async (c) => {
       now
     ]);
 
-    // 6. 返回登录成功信息
+    // 7. 返回登录成功信息
+    // ✅ 始终返回成功，如果启用了2FA，前端可以根据 requires2FA 标志显示提示
     return c.json({
       success: true,
       data: {
@@ -208,22 +262,30 @@ emailRoleAuth.post('/google/callback', async (c) => {
           username: roleAccount.username,
           displayName: roleAccount.display_name,
           permissions: JSON.parse(roleAccount.permissions || '[]'),
-          googleLinked: true
+          googleLinked: true,
+          requires2FA: emailWhitelist.two_factor_enabled // ✅ 告诉前端是否需要2FA（但不阻止登录）
         },
         session: {
           sessionId,
-          expiresAt
+          expiresAt,
+          requires2FA: emailWhitelist.two_factor_enabled
         }
       },
-      message: `欢迎，${roleAccount.display_name}！`
+      message: emailWhitelist.two_factor_enabled
+        ? `欢迎，${roleAccount.display_name}！您的账户已启用2FA，访问敏感操作时需要验证。`
+        : `欢迎，${roleAccount.display_name}！`
     });
 
   } catch (error: any) {
-    console.error('Email-Role OAuth callback error:', error);
+    console.error('[EMAIL_ROLE_AUTH] ❌ OAuth callback error:', error);
+    console.error('[EMAIL_ROLE_AUTH] ❌ Error stack:', error.stack);
+    console.error('[EMAIL_ROLE_AUTH] ❌ Error message:', error.message);
+
     return c.json({
       success: false,
       error: 'Internal Server Error',
-      message: 'Google登录失败，请稍后重试'
+      message: error.message || 'Google登录失败，请稍后重试',
+      details: process.env.NODE_ENV === 'development' ? error.stack : undefined
     }, 500);
   }
 });
@@ -360,6 +422,189 @@ emailRoleAuth.get('/accounts/:email', async (c) => {
   }
 });
 
+/**
+ * 验证 2FA 代码并完成登录
+ */
+emailRoleAuth.post('/verify-2fa', async (c) => {
+  try {
+    const body = await c.req.json();
+    const { tempSessionId, code, useBackupCode } = body;
+
+    if (!tempSessionId || !code) {
+      return c.json({
+        success: false,
+        error: 'Invalid Request',
+        message: '缺少必要参数'
+      }, 400);
+    }
+
+    const db = createDatabaseService(c.env as Env);
+    const now = new Date().toISOString();
+
+    // 1. 查找临时会话
+    const tempSession = await db.queryFirst(`
+      SELECT session_id, email, role, account_id, requires_2fa, expires_at
+      FROM login_sessions
+      WHERE session_id = ? AND requires_2fa = 1 AND is_active = 0
+    `, [tempSessionId]);
+
+    if (!tempSession) {
+      return c.json({
+        success: false,
+        error: 'Invalid Session',
+        message: '会话不存在或已过期'
+      }, 404);
+    }
+
+    // 2. 检查会话是否过期
+    if (new Date(tempSession.expires_at) < new Date()) {
+      await db.execute(`
+        DELETE FROM login_sessions WHERE session_id = ?
+      `, [tempSessionId]);
+
+      return c.json({
+        success: false,
+        error: 'Session Expired',
+        message: '会话已过期，请重新登录'
+      }, 401);
+    }
+
+    // 3. 获取邮箱的 2FA 设置
+    const emailWhitelist = await db.queryFirst(`
+      SELECT email, two_factor_enabled, two_factor_secret
+      FROM email_whitelist
+      WHERE email = ?
+    `, [tempSession.email]);
+
+    if (!emailWhitelist || !emailWhitelist.two_factor_enabled) {
+      return c.json({
+        success: false,
+        error: 'Invalid Configuration',
+        message: '2FA 未启用'
+      }, 400);
+    }
+
+    // 4. 验证 2FA 代码
+    let isValid = false;
+
+    if (useBackupCode) {
+      // 验证备用代码
+      const { verifyBackupCode } = await import('../utils/totp');
+
+      // 查询所有未使用的备用代码
+      const backupCodes = await db.query(`
+        SELECT id, code_hash FROM two_factor_backup_codes
+        WHERE email = ? AND is_used = 0
+      `, [tempSession.email]);
+
+      // 逐个验证
+      for (const backupCode of backupCodes) {
+        if (await verifyBackupCode(code, backupCode.code_hash)) {
+          isValid = true;
+
+          // 标记备用代码为已使用
+          await db.execute(`
+            UPDATE two_factor_backup_codes
+            SET is_used = 1, used_at = ?
+            WHERE id = ?
+          `, [now, backupCode.id]);
+
+          break;
+        }
+      }
+    } else {
+      // 验证 TOTP 代码
+      isValid = await verifyTOTPCode(code, emailWhitelist.two_factor_secret);
+    }
+
+    // 5. 记录验证尝试
+    await db.execute(`
+      INSERT INTO two_factor_verifications (
+        email, method_used, is_successful, failure_reason,
+        ip_address, user_agent, created_at
+      ) VALUES (?, ?, ?, ?, ?, ?, ?)
+    `, [
+      tempSession.email,
+      useBackupCode ? 'backup_code' : 'totp',
+      isValid ? 1 : 0,
+      isValid ? null : '验证码错误',
+      c.req.header('CF-Connecting-IP') || 'unknown',
+      c.req.header('User-Agent') || 'unknown',
+      now
+    ]);
+
+    if (!isValid) {
+      return c.json({
+        success: false,
+        error: 'Invalid Code',
+        message: '验证码错误，请重试'
+      }, 401);
+    }
+
+    // 6. 验证成功，激活会话
+    const sessionId = generateSessionId();
+    const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(); // 24小时
+
+    await db.execute(`
+      INSERT INTO login_sessions (
+        session_id, email, role, account_id, login_method,
+        ip_address, user_agent, created_at, expires_at, is_active
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `, [
+      sessionId,
+      tempSession.email,
+      tempSession.role,
+      tempSession.account_id,
+      'google_oauth_2fa',
+      c.req.header('CF-Connecting-IP') || 'unknown',
+      c.req.header('User-Agent') || 'unknown',
+      now,
+      expiresAt,
+      1
+    ]);
+
+    // 7. 删除临时会话
+    await db.execute(`
+      DELETE FROM login_sessions WHERE session_id = ?
+    `, [tempSessionId]);
+
+    // 8. 更新最后登录时间
+    await db.execute(`
+      UPDATE email_whitelist SET last_login_at = ? WHERE email = ?
+    `, [now, tempSession.email]);
+
+    await db.execute(`
+      UPDATE role_accounts SET last_login_at = ? WHERE id = ?
+    `, [now, tempSession.account_id]);
+
+    // 9. 生成 JWT token
+    const token = await generateJWTToken({
+      email: tempSession.email,
+      role: tempSession.role,
+      sessionId: sessionId
+    }, c.env as Env);
+
+    return c.json({
+      success: true,
+      data: {
+        token,
+        sessionId,
+        email: tempSession.email,
+        role: tempSession.role
+      },
+      message: '登录成功'
+    });
+
+  } catch (error: any) {
+    console.error('[EMAIL_ROLE_AUTH] Verify 2FA error:', error);
+    return c.json({
+      success: false,
+      error: 'Internal Server Error',
+      message: '验证失败，请稍后重试'
+    }, 500);
+  }
+});
+
 // ============================================
 // 辅助函数
 // ============================================
@@ -375,6 +620,34 @@ function getRoleDisplayName(role: string): string {
     'super_admin': '超级管理员'
   };
   return roleNames[role] || role;
+}
+
+/**
+ * 验证 TOTP 代码
+ */
+async function verifyTOTPCode(code: string, secret: string): Promise<boolean> {
+  // 导入 TOTP 验证函数
+  const { verifyTOTP } = await import('../utils/totp');
+
+  // 验证代码（允许前后1个时间窗口，即前后30秒）
+  return await verifyTOTP(code, secret, 1, 30);
+}
+
+/**
+ * 生成 JWT Token
+ */
+async function generateJWTToken(payload: any, env: Env): Promise<string> {
+  const jwtSecret = env.JWT_SECRET || 'your-jwt-secret-key-change-in-production';
+
+  const header = btoa(JSON.stringify({ alg: 'HS256', typ: 'JWT' }));
+  const payloadStr = btoa(JSON.stringify({
+    ...payload,
+    iat: Math.floor(Date.now() / 1000),
+    exp: Math.floor(Date.now() / 1000) + 24 * 60 * 60 // 24小时
+  }));
+  const signature = btoa(`${header}.${payloadStr}.${jwtSecret}`);
+
+  return `${header}.${payloadStr}.${signature}`;
 }
 
 export default emailRoleAuth;

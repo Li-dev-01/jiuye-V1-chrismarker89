@@ -43,18 +43,37 @@ import type { ColumnsType } from 'antd/es/table';
 const { Title, Text, Paragraph } = Typography;
 const { Option } = Select;
 
-interface AdminWhitelistUser {
+// 角色账号信息
+interface RoleAccount {
   id: number;
-  email: string;
   role: 'reviewer' | 'admin' | 'super_admin';
+  username: string;
+  displayName?: string;
   permissions: string[];
   allowPasswordLogin: boolean;
-  username?: string;
+  isActive: boolean;
+  createdAt: string;
+  lastLoginAt?: string;
+}
+
+// 邮箱账号信息（包含多个角色）
+interface EmailAccount {
+  id: number;
+  email: string;
   isActive: boolean;
   twoFactorEnabled: boolean;
   createdBy: string;
   createdAt: string;
   lastLoginAt?: string;
+  notes?: string;
+  accounts: RoleAccount[];
+}
+
+// 兼容旧的扁平化数据结构（用于表格展示）
+interface AdminWhitelistUser extends RoleAccount {
+  email: string;
+  twoFactorEnabled: boolean;
+  createdBy: string;
   notes?: string;
 }
 
@@ -66,6 +85,7 @@ const SuperAdminAccountManagement: React.FC = () => {
   const [twoFAModalVisible, setTwoFAModalVisible] = useState(false);
   const [twoFASecret, setTwoFASecret] = useState('');
   const [twoFAQRCode, setTwoFAQRCode] = useState('');
+  const [twoFABackupCodes, setTwoFABackupCodes] = useState<string[]>([]);
   const [form] = Form.useForm();
 
   // 权限选项
@@ -84,7 +104,7 @@ const SuperAdminAccountManagement: React.FC = () => {
   const loadUsers = async () => {
     setLoading(true);
     try {
-      const response = await fetch('/api/admin/whitelist', {
+      const response = await fetch('/api/admin/account-management/accounts', {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('super_admin_token')}`
         }
@@ -92,7 +112,35 @@ const SuperAdminAccountManagement: React.FC = () => {
 
       if (response.ok) {
         const data = await response.json();
-        setUsers(data.users || []);
+        // 后端返回的是按邮箱分组的数据，需要转换为扁平化的用户列表
+        const flatUsers: AdminWhitelistUser[] = [];
+
+        if (data.data && data.data.emails) {
+          data.data.emails.forEach((emailGroup: EmailAccount) => {
+            // 为每个角色创建一个扁平化的记录
+            emailGroup.accounts.forEach((account: RoleAccount) => {
+              flatUsers.push({
+                // 角色账号信息
+                id: account.id,
+                role: account.role,
+                username: account.username,
+                displayName: account.displayName,
+                permissions: account.permissions || [],
+                allowPasswordLogin: account.allowPasswordLogin,
+                isActive: account.isActive,
+                createdAt: account.createdAt,
+                lastLoginAt: account.lastLoginAt,
+                // 邮箱级别信息
+                email: emailGroup.email,
+                twoFactorEnabled: emailGroup.twoFactorEnabled,
+                createdBy: emailGroup.createdBy,
+                notes: emailGroup.notes || ''
+              });
+            });
+          });
+        }
+
+        setUsers(flatUsers);
       } else {
         message.error('加载用户列表失败');
       }
@@ -138,10 +186,22 @@ const SuperAdminAccountManagement: React.FC = () => {
     setLoading(true);
     try {
       const url = editingUser
-        ? `/api/admin/whitelist/${editingUser.id}`
-        : '/api/admin/whitelist';
-      
+        ? `/api/admin/account-management/accounts/${editingUser.id}`
+        : '/api/admin/account-management/accounts';
+
       const method = editingUser ? 'PUT' : 'POST';
+
+      // 转换数据格式以匹配后端 API
+      const requestBody = {
+        email: values.email,
+        role: values.role,
+        displayName: values.displayName || `${values.role} User`,
+        permissions: values.permissions || [],
+        allowPasswordLogin: values.allowPasswordLogin || false,
+        username: values.username,
+        password: values.password,
+        notes: values.notes || ''
+      };
 
       const response = await fetch(url, {
         method,
@@ -149,7 +209,7 @@ const SuperAdminAccountManagement: React.FC = () => {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('super_admin_token')}`
         },
-        body: JSON.stringify(values)
+        body: JSON.stringify(requestBody)
       });
 
       if (response.ok) {
@@ -168,11 +228,47 @@ const SuperAdminAccountManagement: React.FC = () => {
     }
   };
 
+  // 使用账号（切换到该角色）
+  const handleUseAccount = async (user: AdminWhitelistUser) => {
+    try {
+      // 调用激活角色 API
+      const response = await fetch(`/api/admin/account-management/accounts/${user.id}/activate`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('super_admin_token')}`
+        }
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+
+        // 保存新的 token
+        if (result.data && result.data.token) {
+          localStorage.setItem('super_admin_token', result.data.token);
+          message.success(`已切换到 ${user.email} 的 ${user.role} 角色`);
+
+          // 刷新页面或跳转到对应的仪表板
+          setTimeout(() => {
+            window.location.reload();
+          }, 1000);
+        } else {
+          message.error('切换角色失败：未返回有效token');
+        }
+      } else {
+        const error = await response.json();
+        message.error(error.message || '切换角色失败');
+      }
+    } catch (error) {
+      console.error('Use account error:', error);
+      message.error('操作失败，请稍后重试');
+    }
+  };
+
   // 删除用户
   const handleDeleteUser = async (userId: number) => {
     setLoading(true);
     try {
-      const response = await fetch(`/api/admin/whitelist/${userId}`, {
+      const response = await fetch(`/api/admin/account-management/accounts/${userId}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('super_admin_token')}`
@@ -197,7 +293,7 @@ const SuperAdminAccountManagement: React.FC = () => {
   const handleEnable2FA = async (user: AdminWhitelistUser) => {
     setLoading(true);
     try {
-      const response = await fetch(`/api/admin/whitelist/${user.id}/enable-2fa`, {
+      const response = await fetch(`/api/admin/account-management/accounts/${user.id}/enable-2fa`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('super_admin_token')}`
@@ -205,10 +301,12 @@ const SuperAdminAccountManagement: React.FC = () => {
       });
 
       if (response.ok) {
-        const data = await response.json();
-        setTwoFASecret(data.secret);
-        setTwoFAQRCode(data.qrCode);
+        const result = await response.json();
+        setTwoFASecret(result.data.secret);
+        setTwoFAQRCode(result.data.qrCode);
+        setTwoFABackupCodes(result.data.backupCodes || []);
         setTwoFAModalVisible(true);
+        loadUsers(); // 刷新列表
       } else {
         message.error('启用2FA失败');
       }
@@ -224,7 +322,7 @@ const SuperAdminAccountManagement: React.FC = () => {
   const handleDisable2FA = async (userId: number) => {
     setLoading(true);
     try {
-      const response = await fetch(`/api/admin/whitelist/${userId}/disable-2fa`, {
+      const response = await fetch(`/api/admin/account-management/accounts/${userId}/disable-2fa`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('super_admin_token')}`
@@ -306,28 +404,10 @@ const SuperAdminAccountManagement: React.FC = () => {
       title: '2FA',
       dataIndex: 'twoFactorEnabled',
       key: 'twoFactorEnabled',
-      render: (enabled: boolean, record: AdminWhitelistUser) => (
-        <Space>
-          <Tag color={enabled ? 'green' : 'default'}>
-            {enabled ? '已启用' : '未启用'}
-          </Tag>
-          {enabled ? (
-            <Popconfirm
-              title="确定要禁用2FA吗？"
-              onConfirm={() => handleDisable2FA(record.id)}
-            >
-              <Button size="small" danger>禁用</Button>
-            </Popconfirm>
-          ) : (
-            <Button
-              size="small"
-              type="primary"
-              onClick={() => handleEnable2FA(record)}
-            >
-              启用
-            </Button>
-          )}
-        </Space>
+      render: (enabled: boolean) => (
+        <Tag color={enabled ? 'green' : 'default'}>
+          {enabled ? '已启用' : '未启用'}
+        </Tag>
       )
     },
     {
@@ -349,20 +429,56 @@ const SuperAdminAccountManagement: React.FC = () => {
     {
       title: '操作',
       key: 'action',
+      fixed: 'right',
+      width: 280,
       render: (_, record: AdminWhitelistUser) => (
-        <Space>
+        <Space size="small" wrap>
+          {/* 使用账号 */}
           <Button
-            type="link"
+            size="small"
+            type="primary"
+            icon={<UserOutlined />}
+            onClick={() => handleUseAccount(record)}
+          >
+            使用
+          </Button>
+
+          {/* 编辑角色 */}
+          <Button
+            size="small"
             icon={<EditOutlined />}
             onClick={() => handleOpenModal(record)}
           >
             编辑
           </Button>
+
+          {/* 2FA 管理（邮箱级别） */}
+          {record.twoFactorEnabled ? (
+            <Popconfirm
+              title="确定要禁用此邮箱的2FA吗？"
+              description="这将影响该邮箱下的所有角色账号"
+              onConfirm={() => handleDisable2FA(record.id)}
+            >
+              <Button size="small" danger>
+                禁用2FA
+              </Button>
+            </Popconfirm>
+          ) : (
+            <Button
+              size="small"
+              onClick={() => handleEnable2FA(record)}
+            >
+              启用2FA
+            </Button>
+          )}
+
+          {/* 删除角色 */}
           <Popconfirm
-            title="确定要删除此用户吗？"
+            title="确定要删除此角色吗？"
+            description={`将删除 ${record.email} 的 ${record.role} 角色`}
             onConfirm={() => handleDeleteUser(record.id)}
           >
-            <Button type="link" danger icon={<DeleteOutlined />}>
+            <Button size="small" danger icon={<DeleteOutlined />}>
               删除
             </Button>
           </Popconfirm>
@@ -453,6 +569,13 @@ const SuperAdminAccountManagement: React.FC = () => {
           </Form.Item>
 
           <Form.Item
+            label="显示名称"
+            name="displayName"
+          >
+            <Input prefix={<UserOutlined />} placeholder="显示名称（可选）" />
+          </Form.Item>
+
+          <Form.Item
             label="权限"
             name="permissions"
             rules={[{ required: true, message: '请选择权限' }]}
@@ -476,13 +599,28 @@ const SuperAdminAccountManagement: React.FC = () => {
           >
             {({ getFieldValue }) =>
               getFieldValue('allowPasswordLogin') ? (
-                <Form.Item
-                  label="用户名"
-                  name="username"
-                  rules={[{ required: true, message: '请输入用户名' }]}
-                >
-                  <Input prefix={<UserOutlined />} placeholder="用户名" />
-                </Form.Item>
+                <>
+                  <Form.Item
+                    label="用户名"
+                    name="username"
+                    rules={[{ required: true, message: '请输入用户名' }]}
+                  >
+                    <Input prefix={<UserOutlined />} placeholder="用户名" />
+                  </Form.Item>
+
+                  {!editingUser && (
+                    <Form.Item
+                      label="密码"
+                      name="password"
+                      rules={[
+                        { required: true, message: '请输入密码' },
+                        { min: 8, message: '密码长度至少为8位' }
+                      ]}
+                    >
+                      <Input.Password prefix={<LockOutlined />} placeholder="密码（至少8位）" />
+                    </Form.Item>
+                  )}
+                </>
               ) : null
             }
           </Form.Item>
@@ -537,8 +675,43 @@ const SuperAdminAccountManagement: React.FC = () => {
             <Paragraph copyable>{twoFASecret}</Paragraph>
           </div>
 
+          <Divider />
+
+          <div>
+            <Text strong>备用代码（请妥善保存）：</Text>
+            <Alert
+              message="这些备用代码只显示一次，请立即保存！每个代码只能使用一次。"
+              type="error"
+              showIcon
+              style={{ marginTop: '8px', marginBottom: '16px' }}
+            />
+            <div style={{
+              background: '#f5f5f5',
+              padding: '16px',
+              borderRadius: '4px',
+              fontFamily: 'monospace'
+            }}>
+              {twoFABackupCodes.map((code, index) => (
+                <div key={index} style={{ marginBottom: '8px' }}>
+                  {index + 1}. {code}
+                </div>
+              ))}
+            </div>
+            <Button
+              type="link"
+              onClick={() => {
+                const text = twoFABackupCodes.map((code, i) => `${i + 1}. ${code}`).join('\n');
+                navigator.clipboard.writeText(text);
+                message.success('备用代码已复制到剪贴板');
+              }}
+              style={{ marginTop: '8px' }}
+            >
+              复制所有备用代码
+            </Button>
+          </div>
+
           <Alert
-            message="请妥善保存密钥，用于恢复访问"
+            message="请妥善保存密钥和备用代码，用于恢复访问"
             type="warning"
             showIcon
           />

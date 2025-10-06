@@ -80,14 +80,14 @@ const AdminReputationManagement: React.FC = () => {
     setLoading(true);
     try {
       // 加载恶意用户列表
-      const maliciousRes = await fetch('/api/reports/admin/malicious-users');
+      const maliciousRes = await fetch('/api/simple-admin/reports/admin/malicious-users');
       const maliciousData = await maliciousRes.json();
       if (maliciousData.success) {
         setMaliciousUsers(maliciousData.data);
       }
 
       // 加载举报列表
-      const reportsRes = await fetch('/api/reports/admin/list?limit=100');
+      const reportsRes = await fetch('/api/simple-admin/reports/admin/list?limit=100');
       const reportsData = await reportsRes.json();
       if (reportsData.success) {
         setReports(reportsData.data);

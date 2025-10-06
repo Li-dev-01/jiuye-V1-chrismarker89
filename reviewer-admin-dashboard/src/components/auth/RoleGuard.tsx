@@ -92,17 +92,33 @@ const RoleGuard: React.FC<RoleGuardProps> = ({
   });
 
   if (!hasPermission) {
-    console.log(`[ROLE_GUARD] Permission denied for role ${userRole}, current path: ${window.location.pathname}`);
+    console.warn(`[ROLE_GUARD] ⚠️ Permission check failed - redirecting user`);
+    console.warn(`[ROLE_GUARD] User role: ${userRole}`);
+    console.warn(`[ROLE_GUARD] Allowed roles:`, allowedRoles);
+    console.warn(`[ROLE_GUARD] Current path: ${window.location.pathname}`);
+    console.warn(`[ROLE_GUARD] Full user object:`, user);
 
     // 根据用户角色智能重定向，避免循环重定向
     if (userRole === 'reviewer') {
       console.log(`[ROLE_GUARD] Redirecting reviewer to /dashboard`);
       return <Navigate to="/dashboard" replace />;
     } else if (userRole === 'admin' || userRole === 'super_admin') {
-      // 如果已经在管理员页面，重定向到登录页避免循环
-      if (window.location.pathname.startsWith('/admin')) {
-        console.log(`[ROLE_GUARD] Admin permission denied on admin route, redirecting to login`);
-        return <Navigate to="/unified-login" replace />;
+      // 检查是否是权限不足的情况（比如普通管理员访问超级管理员功能）
+      const currentPath = window.location.pathname;
+
+      // 如果是超级管理员专属路径但用户是普通管理员，重定向到管理员首页
+      const superAdminPaths = ['/admin/security-console', '/admin/system-logs', '/admin/system-settings',
+                              '/admin/super-admin-panel', '/admin/security-switches', '/admin/email-role-accounts'];
+
+      if (userRole === 'admin' && superAdminPaths.some(path => currentPath.startsWith(path))) {
+        console.log(`[ROLE_GUARD] Regular admin trying to access super admin path, redirecting to admin dashboard`);
+        return <Navigate to="/admin/dashboard" replace />;
+      }
+
+      // 如果已经在管理员页面但权限不足，重定向到管理员首页而不是登录页
+      if (currentPath.startsWith('/admin')) {
+        console.log(`[ROLE_GUARD] Admin permission denied on admin route, redirecting to admin dashboard`);
+        return <Navigate to="/admin/dashboard" replace />;
       } else {
         console.log(`[ROLE_GUARD] Redirecting admin to /admin/dashboard`);
         return <Navigate to="/admin/dashboard" replace />;

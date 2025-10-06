@@ -18,7 +18,13 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
 
   // 确定当前的认证状态和用户信息
   const getCurrentAuth = () => {
+    // 优先检查超级管理员（最高权限）
     if (superAdminAuth.isAuthenticated && superAdminAuth.user) {
+      console.log('[PROTECTED_ROUTE] 👑 Using super admin auth:', {
+        user: superAdminAuth.user.username,
+        role: superAdminAuth.user.role,
+        isAuthenticated: superAdminAuth.isAuthenticated
+      });
       return {
         isAuthenticated: true,
         isLoading: superAdminAuth.isLoading,
@@ -28,6 +34,11 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
         authType: 'super_admin'
       };
     } else if (adminAuth.isAuthenticated && adminAuth.user) {
+      console.log('[PROTECTED_ROUTE] 🔧 Using admin auth:', {
+        user: adminAuth.user.username,
+        role: adminAuth.user.role,
+        isAuthenticated: adminAuth.isAuthenticated
+      });
       return {
         isAuthenticated: true,
         isLoading: adminAuth.isLoading,
@@ -37,6 +48,11 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
         authType: 'admin'
       };
     } else if (reviewerAuth.isAuthenticated && reviewerAuth.user) {
+      console.log('[PROTECTED_ROUTE] 📝 Using reviewer auth:', {
+        user: reviewerAuth.user.username,
+        role: reviewerAuth.user.role,
+        isAuthenticated: reviewerAuth.isAuthenticated
+      });
       return {
         isAuthenticated: true,
         isLoading: reviewerAuth.isLoading,
@@ -50,12 +66,26 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
       const hasToken = !!(superAdminAuth.token || adminAuth.token || reviewerAuth.token);
       const isLoading = superAdminAuth.isLoading || adminAuth.isLoading || reviewerAuth.isLoading;
 
+      console.log('[PROTECTED_ROUTE] ❌ No authenticated user found:', {
+        'superAdmin.isAuthenticated': superAdminAuth.isAuthenticated,
+        'superAdmin.user': !!superAdminAuth.user,
+        'superAdmin.token': !!superAdminAuth.token,
+        'admin.isAuthenticated': adminAuth.isAuthenticated,
+        'admin.user': !!adminAuth.user,
+        'admin.token': !!adminAuth.token,
+        'reviewer.isAuthenticated': reviewerAuth.isAuthenticated,
+        'reviewer.user': !!reviewerAuth.user,
+        'reviewer.token': !!reviewerAuth.token,
+        hasToken,
+        isLoading
+      });
+
       return {
         isAuthenticated: false,
         isLoading,
         user: null,
         token: hasToken,
-        checkAuth: null,
+        checkAuth: superAdminAuth.checkAuth || adminAuth.checkAuth || reviewerAuth.checkAuth,
         authType: 'none'
       };
     }

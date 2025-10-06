@@ -83,11 +83,18 @@ const AdminTagManagement: React.FC = () => {
   const [editingTag, setEditingTag] = useState<TagData | null>(null);
   const [form] = Form.useForm();
 
+  // 获取token（支持多角色）
+  const getToken = () => {
+    return localStorage.getItem(STORAGE_KEYS.ADMIN_TOKEN) ||
+           localStorage.getItem(STORAGE_KEYS.SUPER_ADMIN_TOKEN) ||
+           localStorage.getItem(STORAGE_KEYS.REVIEWER_TOKEN);
+  };
+
   // 获取标签列表
   const fetchTags = async () => {
     setLoading(true);
     try {
-      const token = localStorage.getItem(STORAGE_KEYS.ADMIN_TOKEN);
+      const token = getToken();
       const response = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.CONTENT_TAGS}`, {
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -113,7 +120,7 @@ const AdminTagManagement: React.FC = () => {
   // 获取标签统计
   const fetchTagStats = async () => {
     try {
-      const token = localStorage.getItem(STORAGE_KEYS.ADMIN_TOKEN);
+      const token = getToken();
       const response = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.CONTENT_TAGS_STATS}`, {
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -139,7 +146,7 @@ const AdminTagManagement: React.FC = () => {
   // 创建或更新标签
   const handleSaveTag = async (values: any) => {
     try {
-      const token = localStorage.getItem(STORAGE_KEYS.ADMIN_TOKEN);
+      const token = getToken();
       const payload = {
         ...values,
         color: typeof values.color === 'string' ? values.color : values.color?.toHexString?.() || '#1890ff'
@@ -187,7 +194,7 @@ const AdminTagManagement: React.FC = () => {
   // 删除标签
   const handleDeleteTag = async (tagId: number) => {
     try {
-      const token = localStorage.getItem(STORAGE_KEYS.ADMIN_TOKEN);
+      const token = getToken();
       const response = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.CONTENT_TAGS}/${tagId}`, {
         method: 'DELETE',
         headers: {
@@ -214,7 +221,7 @@ const AdminTagManagement: React.FC = () => {
   // 清理未使用的标签
   const handleCleanupTags = async () => {
     try {
-      const token = localStorage.getItem(STORAGE_KEYS.ADMIN_TOKEN);
+      const token = getToken();
       const response = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.CONTENT_TAGS_CLEANUP}`, {
         method: 'DELETE',
         headers: {

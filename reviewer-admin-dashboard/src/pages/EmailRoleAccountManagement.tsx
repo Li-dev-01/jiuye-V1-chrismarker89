@@ -31,8 +31,10 @@ import {
   MailOutlined,
   UserOutlined,
   SafetyOutlined,
-  GoogleOutlined
+  GoogleOutlined,
+  QrcodeOutlined
 } from '@ant-design/icons';
+import { QRCode } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 
 const { Title, Text, Paragraph } = Typography;
@@ -55,7 +57,8 @@ interface EmailWhitelist {
   id: number;
   email: string;
   isActive: boolean;
-  twoFactorEnabled: boolean;
+  twoFactorBound: boolean; // 是否已绑定2FA
+  twoFactorEnabled: boolean; // 是否已启用2FA
   createdBy: string;
   createdAt: string;
   lastLoginAt?: string;
@@ -67,6 +70,14 @@ const EmailRoleAccountManagement: React.FC = () => {
   const [emails, setEmails] = useState<EmailWhitelist[]>([]);
   const [loading, setLoading] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
+  const [twoFAModalVisible, setTwoFAModalVisible] = useState(false);
+  const [twoFASecret, setTwoFASecret] = useState('');
+  const [twoFAQRCode, setTwoFAQRCode] = useState('');
+  const [twoFABackupCodes, setTwoFABackupCodes] = useState<string[]>([]);
+  const [twoFAStep, setTwoFAStep] = useState<'binding' | 'complete'>('binding');
+  const [twoFAVerificationCode, setTwoFAVerificationCode] = useState('');
+  const [currentEmailId, setCurrentEmailId] = useState<number | null>(null);
+  const [verifying, setVerifying] = useState(false);
   const [form] = Form.useForm();
 
   // 权限选项
@@ -99,11 +110,12 @@ const EmailRoleAccountManagement: React.FC = () => {
         const mappedEmails = (data.data.emails || []).map((email: any) => ({
           id: email.id,
           email: email.email,
-          isActive: email.is_active === 1,
-          twoFactorEnabled: email.two_factor_enabled === 1,
-          createdBy: email.created_by,
-          createdAt: email.created_at,
-          lastLoginAt: email.last_login_at,
+          isActive: email.isActive === true || email.is_active === 1,
+          twoFactorBound: email.twoFactorBound === true || email.two_factor_bound === 1,
+          twoFactorEnabled: email.twoFactorEnabled === true || email.two_factor_enabled === 1,
+          createdBy: email.created_by || email.createdBy,
+          createdAt: email.created_at || email.createdAt,
+          lastLoginAt: email.last_login_at || email.lastLoginAt,
           notes: email.notes,
           accounts: email.accounts || []
         }));
@@ -328,6 +340,151 @@ const EmailRoleAccountManagement: React.FC = () => {
     }
   };
 
+  // 绑定2FA - 第一步：生成密钥和QR码
+  const handleBind2FA = async (emailId: number) => {
+    setLoading(true);
+    try {
+      const response = await fetch(`https://employment-survey-api-prod.chrismarker89.workers.dev/api/admin/account-management/emails/${emailId}/bind-2fa`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('super_admin_token')}`
+        }
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        setCurrentEmailId(emailId);
+        setTwoFASecret(result.data.secret);
+        setTwoFAQRCode(result.data.qrCode);
+        setTwoFABackupCodes(result.data.backupCodes || []);
+        setTwoFAStep('binding'); // 绑定步骤
+        setTwoFAVerificationCode('');
+        setTwoFAModalVisible(true);
+      } else {
+        message.error('生成2FA密钥失败');
+      }
+    } catch (error) {
+      console.error('Bind 2FA error:', error);
+      message.error('操作失败，请稍后重试');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // 验证2FA绑定
+  const handleVerify2FABinding = async () => {
+    if (!twoFAVerificationCode || twoFAVerificationCode.length !== 6) {
+      message.error('请输入6位验证码');
+      return;
+    }
+
+    setVerifying(true);
+    try {
+      const response = await fetch(
+        `https://employment-survey-api-prod.chrismarker89.workers.dev/api/admin/account-management/emails/${currentEmailId}/verify-2fa-binding`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('super_admin_token')}`
+          },
+          body: JSON.stringify({ code: twoFAVerificationCode })
+        }
+      );
+
+      if (response.ok) {
+        const result = await response.json();
+        setTwoFABackupCodes(result.data.backupCodes || []);
+        setTwoFAStep('complete');
+        message.success('2FA绑定成功！');
+        loadAccounts(); // 刷新列表
+      } else {
+        const error = await response.json();
+        message.error(error.message || '验证码错误，请重试');
+      }
+    } catch (error) {
+      console.error('Verify 2FA error:', error);
+      message.error('验证失败，请重试');
+    } finally {
+      setVerifying(false);
+    }
+  };
+
+  // 启用2FA
+  const handleEnable2FA = async (emailId: number) => {
+    setLoading(true);
+    try {
+      const response = await fetch(`https://employment-survey-api-prod.chrismarker89.workers.dev/api/admin/account-management/emails/${emailId}/enable-2fa`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('super_admin_token')}`
+        }
+      });
+
+      if (response.ok) {
+        message.success('2FA已启用');
+        loadAccounts();
+      } else {
+        message.error('启用2FA失败');
+      }
+    } catch (error) {
+      console.error('Enable 2FA error:', error);
+      message.error('操作失败，请稍后重试');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // 禁用2FA（保留绑定）
+  const handleDisable2FA = async (emailId: number) => {
+    setLoading(true);
+    try {
+      const response = await fetch(`https://employment-survey-api-prod.chrismarker89.workers.dev/api/admin/account-management/emails/${emailId}/disable-2fa`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('super_admin_token')}`
+        }
+      });
+
+      if (response.ok) {
+        message.success('2FA已禁用');
+        loadAccounts();
+      } else {
+        message.error('禁用2FA失败');
+      }
+    } catch (error) {
+      console.error('Disable 2FA error:', error);
+      message.error('操作失败，请稍后重试');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // 解绑2FA（完全移除）
+  const handleUnbind2FA = async (emailId: number) => {
+    setLoading(true);
+    try {
+      const response = await fetch(`https://employment-survey-api-prod.chrismarker89.workers.dev/api/admin/account-management/emails/${emailId}/unbind-2fa`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('super_admin_token')}`
+        }
+      });
+
+      if (response.ok) {
+        message.success('2FA已解绑');
+        loadAccounts();
+      } else {
+        message.error('解绑2FA失败');
+      }
+    } catch (error) {
+      console.error('Unbind 2FA error:', error);
+      message.error('操作失败，请稍后重试');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   // 获取默认权限
   const getDefaultPermissions = (role: string): string[] => {
     const permissionMap: Record<string, string[]> = {
@@ -364,7 +521,8 @@ const EmailRoleAccountManagement: React.FC = () => {
       title: '邮箱',
       dataIndex: 'email',
       key: 'email',
-      width: 250,
+      width: 220,
+      fixed: 'left' as const,
       ellipsis: {
         showTitle: false,
       },
@@ -380,13 +538,14 @@ const EmailRoleAccountManagement: React.FC = () => {
     {
       title: '角色账号',
       key: 'accounts',
+      width: 200,
       render: (_, record) => (
-        <Space direction="vertical" size="small">
+        <Space direction="vertical" size="small" style={{ maxWidth: '100%' }}>
           {record.accounts.length === 0 ? (
             <Text type="secondary">无角色账号</Text>
           ) : (
             record.accounts.map(account => (
-              <Tag key={account.id} color={getRoleColor(account.role)}>
+              <Tag key={account.id} color={getRoleColor(account.role)} style={{ marginBottom: 4 }}>
                 {getRoleDisplayName(account.role)} - {account.username}
               </Tag>
             ))
@@ -397,6 +556,8 @@ const EmailRoleAccountManagement: React.FC = () => {
     {
       title: '账号数量',
       key: 'accountCount',
+      width: 100,
+      align: 'center' as const,
       render: (_, record) => (
         <Tag color="blue">{record.accounts.length} 个</Tag>
       )
@@ -405,6 +566,8 @@ const EmailRoleAccountManagement: React.FC = () => {
       title: '状态',
       dataIndex: 'isActive',
       key: 'isActive',
+      width: 80,
+      align: 'center' as const,
       render: (isActive: boolean) => (
         <Tag color={isActive ? 'success' : 'default'}>
           {isActive ? '激活' : '禁用'}
@@ -412,53 +575,114 @@ const EmailRoleAccountManagement: React.FC = () => {
       )
     },
     {
-      title: '2FA',
-      dataIndex: 'twoFactorEnabled',
-      key: 'twoFactorEnabled',
-      render: (enabled: boolean) => (
-        enabled ? <Tag color="green"><SafetyOutlined /> 已启用</Tag> : <Tag>未启用</Tag>
-      )
+      title: '2FA状态',
+      key: 'twoFactorStatus',
+      width: 110,
+      align: 'center' as const,
+      render: (_, record) => {
+        if (!record.twoFactorBound) {
+          return <Tag>未绑定</Tag>;
+        }
+        if (record.twoFactorEnabled) {
+          return <Tag color="green"><SafetyOutlined /> 已启用</Tag>;
+        }
+        return <Tag color="orange">已绑定</Tag>;
+      }
     },
     {
       title: '最后登录',
       dataIndex: 'lastLoginAt',
       key: 'lastLoginAt',
+      width: 160,
       render: (date: string) => date ? new Date(date).toLocaleString('zh-CN') : '-'
     },
     {
       title: '操作',
       key: 'actions',
-      width: 280,
+      width: 400,
+      fixed: 'right' as const,
       render: (_, record) => (
-        <Space>
-          <Button
-            type="link"
-            icon={<PlusOutlined />}
-            onClick={() => {
-              form.setFieldsValue({ email: record.email });
-              setModalVisible(true);
-            }}
-          >
-            添加角色
-          </Button>
-          <Button
-            type="link"
-            onClick={() => handleToggleEmailStatus(record.id, record.isActive)}
-          >
-            {record.isActive ? '停用' : '启用'}
-          </Button>
-          <Popconfirm
-            title={`确定要删除邮箱 ${record.email} 及其所有角色账号吗？`}
-            description="此操作不可恢复，请谨慎操作！"
-            onConfirm={() => handleDeleteEmail(record.id, record.email)}
-            okText="确定删除"
-            cancelText="取消"
-            okButtonProps={{ danger: true }}
-          >
-            <Button type="link" danger>
-              删除邮箱
+        <Space direction="vertical" size={4} style={{ width: '100%' }}>
+          <Space size={4} wrap>
+            <Button
+              type="link"
+              size="small"
+              icon={<PlusOutlined />}
+              onClick={() => {
+                form.setFieldsValue({ email: record.email });
+                setModalVisible(true);
+              }}
+            >
+              添加角色
             </Button>
-          </Popconfirm>
+
+            {/* 2FA 管理 */}
+            {!record.twoFactorBound ? (
+              // 未绑定：显示"绑定2FA"按钮
+              <Button
+                type="link"
+                size="small"
+                onClick={() => handleBind2FA(record.id)}
+              >
+                绑定2FA
+              </Button>
+            ) : record.twoFactorEnabled ? (
+              // 已绑定且已启用：显示"禁用"按钮
+              <Popconfirm
+                title="确定要禁用此邮箱的2FA吗？"
+                description="禁用后仍保留绑定，可随时重新启用"
+                onConfirm={() => handleDisable2FA(record.id)}
+              >
+                <Button type="link" size="small" danger>
+                  禁用2FA
+                </Button>
+              </Popconfirm>
+            ) : (
+              // 已绑定但未启用：显示"启用"按钮
+              <Button
+                type="link"
+                size="small"
+                onClick={() => handleEnable2FA(record.id)}
+              >
+                启用2FA
+              </Button>
+            )}
+
+            {/* 解绑按钮（仅在已绑定时显示） */}
+            {record.twoFactorBound && (
+              <Popconfirm
+                title="确定要解绑2FA吗？"
+                description="解绑后需要重新扫描二维码绑定"
+                onConfirm={() => handleUnbind2FA(record.id)}
+              >
+                <Button type="link" size="small" danger>
+                  解绑2FA
+                </Button>
+              </Popconfirm>
+            )}
+          </Space>
+
+          <Space size={4} wrap>
+            <Button
+              type="link"
+              size="small"
+              onClick={() => handleToggleEmailStatus(record.id, record.isActive)}
+            >
+              {record.isActive ? '停用' : '启用'}
+            </Button>
+            <Popconfirm
+              title={`确定要删除邮箱 ${record.email} 及其所有角色账号吗？`}
+              description="此操作不可恢复，请谨慎操作！"
+              onConfirm={() => handleDeleteEmail(record.id, record.email)}
+              okText="确定删除"
+              cancelText="取消"
+              okButtonProps={{ danger: true }}
+            >
+              <Button type="link" size="small" danger>
+                删除邮箱
+              </Button>
+            </Popconfirm>
+          </Space>
         </Space>
       )
     }
@@ -606,6 +830,7 @@ const EmailRoleAccountManagement: React.FC = () => {
             dataSource={emails}
             loading={loading}
             rowKey="id"
+            scroll={{ x: 1400 }}
             expandable={{
               expandedRowRender,
               rowExpandable: (record) => record.accounts.length > 0
@@ -723,6 +948,134 @@ const EmailRoleAccountManagement: React.FC = () => {
             <Input.TextArea rows={3} placeholder="可选备注信息" />
           </Form.Item>
         </Form>
+      </Modal>
+
+      {/* 2FA 设置模态框 */}
+      <Modal
+        title={
+          twoFAStep === 'binding' ? <><SafetyOutlined /> 绑定2FA</> :
+          <><SafetyOutlined /> 2FA绑定成功</>
+        }
+        open={twoFAModalVisible}
+        onCancel={() => {
+          setTwoFAModalVisible(false);
+          setTwoFAStep('binding');
+          setTwoFAVerificationCode('');
+          loadAccounts();
+        }}
+        footer={
+          twoFAStep === 'binding' ? [
+            <Button key="cancel" onClick={() => {
+              setTwoFAModalVisible(false);
+              setTwoFAStep('binding');
+              setTwoFAVerificationCode('');
+            }}>
+              取消
+            </Button>,
+            <Button key="verify" type="primary" onClick={handleVerify2FABinding} loading={verifying}>
+              验证并绑定
+            </Button>
+          ] : [
+            <Button key="close" type="primary" onClick={() => {
+              setTwoFAModalVisible(false);
+              setTwoFAStep('binding');
+              setTwoFAVerificationCode('');
+              loadAccounts();
+            }}>
+              完成
+            </Button>
+          ]
+        }
+        width={600}
+      >
+        {twoFAStep === 'binding' && (
+          <Space direction="vertical" style={{ width: '100%' }} size="large">
+            <Alert
+              message="请使用Google Authenticator或其他TOTP应用扫描二维码"
+              type="info"
+              showIcon
+            />
+
+            <div style={{ textAlign: 'center' }}>
+              {twoFAQRCode && <QRCode value={twoFAQRCode} size={200} />}
+            </div>
+
+            <div>
+              <Text strong>密钥（手动输入）：</Text>
+              <Paragraph copyable>{twoFASecret}</Paragraph>
+            </div>
+
+            <Divider />
+
+            <div>
+              <Text strong>验证绑定：</Text>
+              <Alert
+                message="扫描二维码后，请输入应用中显示的6位验证码以确认绑定成功"
+                type="warning"
+                showIcon
+                style={{ marginTop: '8px', marginBottom: '16px' }}
+              />
+              <Input
+                placeholder="请输入6位验证码"
+                value={twoFAVerificationCode}
+                onChange={(e) => setTwoFAVerificationCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
+                maxLength={6}
+                size="large"
+                style={{ fontSize: '24px', textAlign: 'center', letterSpacing: '8px' }}
+              />
+            </div>
+          </Space>
+        )}
+
+        {twoFAStep === 'complete' && (
+          <Space direction="vertical" style={{ width: '100%' }} size="large">
+            <Alert
+              message="2FA已成功启用！"
+              description="请妥善保存以下备用代码，这些代码只显示一次。"
+              type="success"
+              showIcon
+            />
+
+            <div>
+              <Text strong>备用代码（请妥善保存）：</Text>
+              <Alert
+                message="这些备用代码只显示一次，请立即保存！每个代码只能使用一次。"
+                type="error"
+                showIcon
+                style={{ marginTop: '8px', marginBottom: '16px' }}
+              />
+              <div style={{
+                background: '#f5f5f5',
+                padding: '16px',
+                borderRadius: '4px',
+                fontFamily: 'monospace'
+              }}>
+                {twoFABackupCodes.map((code, index) => (
+                  <div key={index} style={{ marginBottom: '8px' }}>
+                    {index + 1}. {code}
+                  </div>
+                ))}
+              </div>
+              <Button
+                type="link"
+                onClick={() => {
+                  const text = twoFABackupCodes.map((code, i) => `${i + 1}. ${code}`).join('\n');
+                  navigator.clipboard.writeText(text);
+                  message.success('备用代码已复制到剪贴板');
+                }}
+                style={{ marginTop: '8px' }}
+              >
+                复制所有备用代码
+              </Button>
+            </div>
+
+            <Alert
+              message="请妥善保存密钥和备用代码，用于恢复访问"
+              type="warning"
+              showIcon
+            />
+          </Space>
+        )}
       </Modal>
     </div>
   );

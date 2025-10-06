@@ -90,6 +90,19 @@ const GoogleOAuthCallback: React.FC = () => {
       const data = await response.json();
       console.log('[GoogleOAuthCallback] ✅ API response:', data);
 
+      // 检查是否需要 2FA 验证
+      if (data.requires2FA) {
+        console.log('[GoogleOAuthCallback] 🔐 2FA required, redirecting to verification page');
+        navigate('/verify-2fa', {
+          state: {
+            tempSessionId: data.tempSessionId,
+            email: data.email,
+            role: data.role
+          }
+        });
+        return;
+      }
+
       // 检查返回的数据结构
       if (!data.success || !data.data) {
         throw new Error('登录响应数据格式错误');
@@ -178,10 +191,11 @@ const GoogleOAuthCallback: React.FC = () => {
             navigate('/admin/dashboard', { replace: true });
             break;
           case 'super_admin':
-            navigate('/admin/super', { replace: true });
+            // 超级管理员跳转到超级管理员面板
+            navigate('/admin/super-admin-panel', { replace: true });
             break;
           default:
-            navigate('/login', { replace: true });
+            navigate('/unified-login', { replace: true });
         }
       }, 1500);
 
