@@ -7,6 +7,7 @@ import { Hono } from 'hono';
 import type { Env, AuthContext } from '../types/api';
 import { createDatabaseService } from '../db';
 import { authMiddleware } from '../middleware/auth';
+import { DatabaseBackupService } from '../services/databaseBackupService';
 
 export function createSuperAdminRoutes() {
   const superAdmin = new Hono<{ Bindings: Env; Variables: AuthContext }>();
@@ -953,6 +954,148 @@ export function createSuperAdminRoutes() {
           pageSize: 20
         }
       });
+    }
+  });
+
+  // ==================== 数据备份与恢复 ====================
+
+  /**
+   * 创建数据库备份
+   */
+  superAdmin.post('/backup/create', simpleSuperAdminAuth, async (c) => {
+    try {
+      console.log('📦 超级管理员请求创建数据库备份');
+
+      const backupService = new DatabaseBackupService(c.env as Env);
+      const result = await backupService.createFullBackup();
+
+      if (!result.success) {
+        return c.json({
+          success: false,
+          error: 'Backup Failed',
+          message: result.error || '备份创建失败'
+        }, 500);
+      }
+
+      return c.json({
+        success: true,
+        data: {
+          backupId: result.backupId,
+          metadata: result.metadata,
+          r2Key: result.r2Key
+        },
+        message: '数据库备份创建成功'
+      });
+
+    } catch (error) {
+      console.error('创建数据库备份失败:', error);
+      return c.json({
+        success: false,
+        error: 'Internal Server Error',
+        message: '创建备份时发生错误'
+      }, 500);
+    }
+  });
+
+  /**
+   * 获取备份列表
+   */
+  superAdmin.get('/backup/list', simpleSuperAdminAuth, async (c) => {
+    try {
+      const backupService = new DatabaseBackupService(c.env as Env);
+      const backups = await backupService.listBackups();
+
+      return c.json({
+        success: true,
+        data: {
+          backups,
+          total: backups.length
+        }
+      });
+
+    } catch (error) {
+      console.error('获取备份列表失败:', error);
+      return c.json({
+        success: false,
+        error: 'Internal Server Error',
+        message: '获取备份列表失败'
+      }, 500);
+    }
+  });
+
+  /**
+   * 从备份恢复数据库
+   */
+  superAdmin.post('/backup/restore', simpleSuperAdminAuth, async (c) => {
+    try {
+      const body = await c.req.json();
+      const { backupId } = body;
+
+      if (!backupId) {
+        return c.json({
+          success: false,
+          error: 'Validation Error',
+          message: '缺少备份ID'
+        }, 400);
+      }
+
+      console.log(`🔄 超级管理员请求恢复数据库: ${backupId}`);
+
+      const backupService = new DatabaseBackupService(c.env as Env);
+      const result = await backupService.restoreFromBackup(backupId);
+
+      if (!result.success) {
+        return c.json({
+          success: false,
+          error: 'Restore Failed',
+          message: result.error || '数据恢复失败'
+        }, 500);
+      }
+
+      return c.json({
+        success: true,
+        data: {
+          restoredTables: result.restoredTables,
+          restoredRecords: result.restoredRecords
+        },
+        message: '数据库恢复成功'
+      });
+
+    } catch (error) {
+      console.error('恢复数据库失败:', error);
+      return c.json({
+        success: false,
+        error: 'Internal Server Error',
+        message: '恢复数据库时发生错误'
+      }, 500);
+    }
+  });
+
+  /**
+   * 清理旧备份
+   */
+  superAdmin.post('/backup/cleanup', simpleSuperAdminAuth, async (c) => {
+    try {
+      console.log('🧹 超级管理员请求清理旧备份');
+
+      const backupService = new DatabaseBackupService(c.env as Env);
+      const deletedCount = await backupService.cleanupOldBackups();
+
+      return c.json({
+        success: true,
+        data: {
+          deletedCount
+        },
+        message: `已清理 ${deletedCount} 个旧备份`
+      });
+
+    } catch (error) {
+      console.error('清理旧备份失败:', error);
+      return c.json({
+        success: false,
+        error: 'Internal Server Error',
+        message: '清理旧备份时发生错误'
+      }, 500);
     }
   });
 

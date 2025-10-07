@@ -27,6 +27,7 @@ import SuperAdminSecurityConsole from './pages/SuperAdminSecurityConsole';
 import SuperAdminSystemLogs from './pages/SuperAdminSystemLogs';
 import SuperAdminSystemSettings from './pages/SuperAdminSystemSettings';
 import SuperAdminSecuritySwitches from './pages/SuperAdminSecuritySwitches';
+import SuperAdminBackupManagement from './pages/SuperAdminBackupManagement';
 import ReviewHistory from './pages/ReviewHistory';
 import EnhancedReviewerDashboard from './pages/EnhancedReviewerDashboard';
 import EnhancedPendingReviews from './pages/EnhancedPendingReviews';
@@ -148,6 +149,13 @@ function App() {
               <Route path="audit-logs" element={
                 <SuperAdminOnlyGuard>
                   <SuperAdminAuditLogs />
+                </SuperAdminOnlyGuard>
+              } />
+
+              {/* 📦 数据备份与恢复 */}
+              <Route path="backup-management" element={
+                <SuperAdminOnlyGuard>
+                  <SuperAdminBackupManagement />
                 </SuperAdminOnlyGuard>
               } />
 

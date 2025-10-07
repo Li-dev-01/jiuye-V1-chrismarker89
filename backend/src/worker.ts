@@ -42,6 +42,7 @@ import health from './routes/health';
 import { handleScheduledEvent } from './services/statsScheduler';
 import { handleSyncMonitoringTask } from './services/dataSyncMonitor';
 import { WorkerAnalyticsService } from './services/analyticsEngine';
+import { DatabaseBackupService } from './services/databaseBackupService';
 
 const app = new Hono<{ Bindings: Env }>();
 
@@ -446,7 +447,10 @@ export async function scheduled(event: ScheduledEvent, env: Env, ctx: ExecutionC
     console.log('🔍 执行数据一致性检查任务');
     await handleDataConsistencyCheck(event, env, ctx);
   } else if (event.cron === '0 2 * * *') {
-    // 每天凌晨2点执行数据质量监控
+    // 每天凌晨2点执行数据库备份和清理旧备份
+    console.log('📦 执行数据库备份任务');
+    await handleDatabaseBackup(event, env, ctx);
+
     console.log('📊 执行数据质量监控任务');
     await handleDataQualityMonitoring(event, env, ctx);
   } else {
@@ -695,5 +699,38 @@ async function handleDataQualityMonitoring(event: ScheduledEvent, env: Env, ctx:
 
   } catch (error) {
     console.error('数据质量监控失败:', error);
+  }
+}
+
+/**
+ * 数据库备份任务
+ */
+async function handleDatabaseBackup(event: ScheduledEvent, env: Env, ctx: ExecutionContext) {
+  try {
+    console.log('📦 开始执行数据库备份任务...');
+
+    const backupService = new DatabaseBackupService(env);
+
+    // 创建备份
+    const backupResult = await backupService.createFullBackup();
+
+    if (backupResult.success) {
+      console.log('✅ 数据库备份成功:', {
+        backupId: backupResult.backupId,
+        size: `${(backupResult.metadata.size / 1024 / 1024).toFixed(2)} MB`,
+        tables: backupResult.metadata.tableCount,
+        records: backupResult.metadata.recordCount
+      });
+    } else {
+      console.error('❌ 数据库备份失败:', backupResult.error);
+    }
+
+    // 清理旧备份（保留最近7天）
+    console.log('🧹 清理旧备份...');
+    const deletedCount = await backupService.cleanupOldBackups();
+    console.log(`✅ 清理完成: 删除 ${deletedCount} 个旧备份`);
+
+  } catch (error) {
+    console.error('数据库备份任务失败:', error);
   }
 }

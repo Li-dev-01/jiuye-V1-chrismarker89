@@ -4,6 +4,7 @@
  */
 
 import React, { useState, useEffect } from 'react';
+import { useMobileDetection } from '../../hooks/useMobileDetection';
 import { 
   Card, 
   Typography, 
@@ -123,6 +124,7 @@ const getColorForOption = (label: string, question: any) => {
 };
 
 export const NewQuestionnaireVisualizationPage: React.FC = () => {
+  const { isMobile, isTablet } = useMobileDetection();
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('overview');
   const [summary, setSummary] = useState<VisualizationSummary | null>(null);
@@ -317,34 +319,41 @@ export const NewQuestionnaireVisualizationPage: React.FC = () => {
           {dimension.questions.map((question) => {
             try {
               return (
-                <Col xs={24} lg={12} key={question.questionId}>
+                <Col xs={24} sm={24} md={24} lg={12} key={question.questionId}>
                   <Card
-                    title={
+                    title={isMobile ? (
+                      <BilingualTitle
+                        title={question.questionTitle}
+                        level={5}
+                        align="left"
+                      />
+                    ) : (
                       <Space>
-
                         <BilingualTitle
                           title={question.questionTitle}
                           level={4}
                           align="left"
                         />
                       </Space>
-                    }
-                    extra={
-                      <Tag color="blue">{question.chartType}</Tag>
-                    }
+                    )}
+                    extra={!isMobile && <Tag color="blue">{question.chartType}</Tag>}
+                    bodyStyle={isMobile ? { padding: '8px' } : undefined}
+                    headStyle={isMobile ? { padding: '8px 12px', minHeight: 'auto' } : undefined}
                   >
                     <UniversalChart
                       type={question.chartType as any}
                       data={getRealChartData(question, dimensionData[dimension.id])}
-                      height={350}
-                      showLegend={true}
+                      height={isMobile ? 320 : (isTablet ? 300 : 350)}
+                      showLegend={!isMobile}
                       showTooltip={true}
                     />
-                    <Divider />
+                    {!isMobile && <Divider />}
 
-                    <Paragraph type="secondary" style={{ fontSize: '12px', margin: 0 }}>
-                      <strong>描述：</strong>{question.description}
-                    </Paragraph>
+                    {!isMobile && (
+                      <Paragraph type="secondary" style={{ fontSize: '12px', margin: 0 }}>
+                        <strong>描述：</strong>{question.description}
+                      </Paragraph>
+                    )}
                   </Card>
                 </Col>
               );
@@ -402,34 +411,42 @@ export const NewQuestionnaireVisualizationPage: React.FC = () => {
   }
 
   return (
-    <div style={{ padding: '24px' }}>
+    <div style={{ padding: isMobile ? '8px' : '24px' }}>
 
       {/* 主要内容 */}
-      <Tabs 
-        activeKey={activeTab} 
+      <Tabs
+        activeKey={activeTab}
         onChange={setActiveTab}
         type="card"
-        size="large"
+        size={isMobile ? 'small' : 'large'}
       >
-        <TabPane 
+        <TabPane
           tab={
-            <Space>
-              <BarChartOutlined />
-              总览
-            </Space>
-          } 
+            isMobile ? (
+              <span>📊</span>
+            ) : (
+              <Space>
+                <BarChartOutlined />
+                总览
+              </Space>
+            )
+          }
           key="overview"
         >
           {renderOverview()}
         </TabPane>
-        
+
         {VISUALIZATION_DIMENSIONS.map((dimension) => (
           <TabPane
             tab={
-              <Space>
-                {DIMENSION_ICONS[dimension.id]}
-                {dimension.title}
-              </Space>
+              isMobile ? (
+                <span>{DIMENSION_ICONS[dimension.id]}</span>
+              ) : (
+                <Space>
+                  {DIMENSION_ICONS[dimension.id]}
+                  {dimension.title}
+                </Space>
+              )
             }
             key={dimension.id}
           >

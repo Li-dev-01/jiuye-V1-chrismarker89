@@ -167,6 +167,11 @@ const DashboardLayout: React.FC = () => {
               icon: <SecurityScanOutlined />,
               label: '安全开关',
             },
+            {
+              key: '/admin/backup-management',
+              icon: <DatabaseOutlined />,
+              label: '数据备份',
+            },
           ],
         },
         // 🧪 权限测试

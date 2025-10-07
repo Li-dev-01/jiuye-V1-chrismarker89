@@ -25,6 +25,7 @@ import {
   StopOutlined,
   SearchOutlined
 } from '@ant-design/icons';
+import { adminApiClient } from '../services/adminApiClient';
 
 const { TabPane } = Tabs;
 const { Search } = Input;
@@ -80,15 +81,15 @@ const AdminReputationManagement: React.FC = () => {
     setLoading(true);
     try {
       // 加载恶意用户列表
-      const maliciousRes = await fetch('/api/simple-admin/reports/admin/malicious-users');
-      const maliciousData = await maliciousRes.json();
+      const maliciousRes = await adminApiClient.get('/api/simple-admin/reports/admin/malicious-users');
+      const maliciousData = maliciousRes.data;
       if (maliciousData.success) {
         setMaliciousUsers(maliciousData.data);
       }
 
       // 加载举报列表
-      const reportsRes = await fetch('/api/simple-admin/reports/admin/list?limit=100');
-      const reportsData = await reportsRes.json();
+      const reportsRes = await adminApiClient.get('/api/simple-admin/reports/admin/list?limit=100');
+      const reportsData = reportsRes.data;
       if (reportsData.success) {
         setReports(reportsData.data);
       }

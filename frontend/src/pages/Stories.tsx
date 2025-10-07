@@ -4,7 +4,6 @@
  */
 
 import React, { useState, useEffect, useCallback } from 'react';
-import { useMobileDetection } from '../hooks/useMobileDetection';
 import { MobileStoryCard } from '../components/mobile/MobileStoryCard';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -29,6 +28,8 @@ import AdvancedFilter, { type FilterOptions } from '../components/stories/Advanc
 import EnhancedSearch, { type SearchOptions } from '../components/stories/EnhancedSearch';
 import { getAllCategories, getCategoryInfo } from '../config/storyCategories';
 import SwipeViewer from '../components/common/SwipeViewer';
+import MobileSwipeViewer from '../components/mobile/MobileSwipeViewer';
+import { useMobileDetection } from '../hooks/useMobileDetection';
 import { StoriesDebugPanel } from '../components/debug/StoriesDebugPanel';
 import '../styles/UnifiedPages.css';
 import '../styles/StoriesPage.css';
@@ -51,6 +52,7 @@ const cleanContent = (content: string): string => {
 const Stories: React.FC = () => {
   const navigate = useNavigate();
   const { currentUser, isAuthenticated } = useAuth();
+  const { isMobile } = useMobileDetection();
   const [stories, setStories] = useState<Story[]>([]);
   const [allStories, setAllStories] = useState<Story[]>([]); // 存储所有故事，用于客户端筛选
   const [featuredStories, setFeaturedStories] = useState<Story[]>([]);
@@ -1484,29 +1486,48 @@ const Stories: React.FC = () => {
         )}
       </Modal>
 
-      {/* 滑动浏览器 */}
-      <SwipeViewer
-        visible={swipeViewerVisible}
-        onClose={() => setSwipeViewerVisible(false)}
-        items={swipeStories}
-        currentIndex={currentSwipeIndex}
-        onIndexChange={setCurrentSwipeIndex}
-        onLike={handleLike}
-        onDislike={handleDislike}
-        onDownload={handleDownload}
-        onFavorite={handleFavorite}
-        onReport={(story) => {
-          // 举报功能 - 可以在这里添加举报逻辑
-          console.log('Report story:', story);
-          message.info('举报功能开发中...');
-        }}
-        contentType="story"
-        userLikes={userLikes}
-        userDislikes={userDislikes}
-        userFavorites={favoriteStories}
-        hasMore={swipeStories.length < (tabTotal[activeTab] || 0)}
-        onLoadMore={handleLoadMoreInSwipe}
-      />
+      {/* 滑动浏览器 - 根据设备类型选择组件 */}
+      {isMobile ? (
+        <MobileSwipeViewer
+          visible={swipeViewerVisible}
+          onClose={() => setSwipeViewerVisible(false)}
+          items={swipeStories}
+          currentIndex={currentSwipeIndex}
+          onIndexChange={setCurrentSwipeIndex}
+          onLike={handleLike}
+          onDislike={handleDislike}
+          onFavorite={handleFavorite}
+          onDownload={handleDownload}
+          hasMore={swipeStories.length < (tabTotal[activeTab] || 0)}
+          onLoadMore={handleLoadMoreInSwipe}
+          userLikes={userLikes}
+          userDislikes={userDislikes}
+          userFavorites={favoriteStories}
+        />
+      ) : (
+        <SwipeViewer
+          visible={swipeViewerVisible}
+          onClose={() => setSwipeViewerVisible(false)}
+          items={swipeStories}
+          currentIndex={currentSwipeIndex}
+          onIndexChange={setCurrentSwipeIndex}
+          onLike={handleLike}
+          onDislike={handleDislike}
+          onDownload={handleDownload}
+          onFavorite={handleFavorite}
+          onReport={(story) => {
+            // 举报功能 - 可以在这里添加举报逻辑
+            console.log('Report story:', story);
+            message.info('举报功能开发中...');
+          }}
+          contentType="story"
+          userLikes={userLikes}
+          userDislikes={userDislikes}
+          userFavorites={favoriteStories}
+          hasMore={swipeStories.length < (tabTotal[activeTab] || 0)}
+          onLoadMore={handleLoadMoreInSwipe}
+        />
+      )}
     </div>
   );
 };

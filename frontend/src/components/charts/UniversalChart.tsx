@@ -99,7 +99,21 @@ export const UniversalChart: React.FC<UniversalChartProps> = ({
   insightText
 }) => {
   // 移动端检测
-  const { isMobile, isTablet } = useMobileDetection();
+  const { isMobile, isTablet, isIOS, deviceType, screenWidth } = useMobileDetection();
+
+  // iPhone特定检测
+  const isIPhone = isIOS && isMobile;
+
+  // 调试信息
+  console.log('📊 图表渲染信息:', {
+    isMobile,
+    isTablet,
+    isIOS,
+    isIPhone,
+    deviceType,
+    screenWidth,
+    userAgent: navigator.userAgent
+  });
 
   // 根据设备类型调整图表配置
   const responsiveHeight = isMobile ? Math.min(height, 280) : (isTablet ? Math.min(height, 350) : height);
@@ -338,7 +352,16 @@ export const UniversalChart: React.FC<UniversalChartProps> = ({
   };
 
   return (
-    <div style={{ width: '100%' }}>
+    <div style={{
+      width: '100%',
+      // iPhone特定优化
+      ...(isIPhone && {
+        WebkitTransform: 'translateZ(0)', // 启用硬件加速
+        transform: 'translateZ(0)',
+        WebkitBackfaceVisibility: 'hidden',
+        backfaceVisibility: 'hidden'
+      })
+    }}>
       {title && (
         <div style={{
           textAlign: 'center',
@@ -349,8 +372,24 @@ export const UniversalChart: React.FC<UniversalChartProps> = ({
           {title}
         </div>
       )}
-      <div style={{ height: responsiveHeight }}>
-        <ResponsiveContainer width="100%" height="100%">
+      <div style={{
+        height: responsiveHeight,
+        // iPhone特定样式
+        ...(isIPhone && {
+          WebkitTransform: 'translateZ(0)',
+          transform: 'translateZ(0)',
+          position: 'relative',
+          overflow: 'hidden'
+        })
+      }}>
+        <ResponsiveContainer
+          width="100%"
+          height="100%"
+          // iPhone特定属性
+          {...(isIPhone && {
+            debounce: 100 // 减少重绘频率
+          })}
+        >
           {renderChart()}
         </ResponsiveContainer>
       </div>

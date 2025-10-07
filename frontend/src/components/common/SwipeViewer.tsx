@@ -283,14 +283,19 @@ export const SwipeViewer: React.FC<SwipeViewerProps> = ({
         {/* 顶部控制栏 */}
         <div className={styles.topBar}>
           <div className={styles.progressContainer}>
-            <Progress 
-              percent={progress} 
+            <Progress
+              percent={progress}
               showInfo={false}
               strokeColor="#1890ff"
               trailColor="rgba(255, 255, 255, 0.3)"
             />
             <span className={styles.progressText}>
               {currentIndex + 1} / {items.length}
+              {hasMore && (
+                <span className={styles.moreIndicator}>
+                  {isLoadingMore ? ' (加载中...)' : ' (还有更多)'}
+                </span>
+              )}
             </span>
           </div>
           
@@ -299,6 +304,7 @@ export const SwipeViewer: React.FC<SwipeViewerProps> = ({
             icon={<CloseOutlined />}
             onClick={onClose}
             className={styles.closeButton}
+            title="关闭 (ESC)"
           />
         </div>
 

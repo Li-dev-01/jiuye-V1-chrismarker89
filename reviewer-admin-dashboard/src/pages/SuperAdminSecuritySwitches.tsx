@@ -408,76 +408,76 @@ const SuperAdminSecuritySwitches: React.FC = () => {
                   />
                 </Col>
                 <Col span={12}>
-                  <Form.Item name={['turnstile', 'enabled']} valuePropName="checked">
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                      <div>
-                        <Text strong>启用Turnstile验证</Text>
-                        <br />
-                        <Text type="secondary">全局开关，控制所有Turnstile功能</Text>
-                      </div>
-                      <Switch />
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 0' }}>
+                    <div>
+                      <Text strong>启用Turnstile验证</Text>
+                      <br />
+                      <Text type="secondary">全局开关，控制所有Turnstile功能</Text>
                     </div>
-                  </Form.Item>
+                    <Form.Item name={['turnstile', 'enabled']} valuePropName="checked" noStyle>
+                      <Switch />
+                    </Form.Item>
+                  </div>
                 </Col>
                 <Col span={12}>
-                  <Form.Item name={['turnstile', 'bypassInDev']} valuePropName="checked">
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                      <div>
-                        <Text strong>开发环境绕过</Text>
-                        <br />
-                        <Text type="secondary">开发环境自动禁用验证</Text>
-                      </div>
-                      <Switch />
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 0' }}>
+                    <div>
+                      <Text strong>开发环境绕过</Text>
+                      <br />
+                      <Text type="secondary">开发环境自动禁用验证</Text>
                     </div>
-                  </Form.Item>
+                    <Form.Item name={['turnstile', 'bypassInDev']} valuePropName="checked" noStyle>
+                      <Switch />
+                    </Form.Item>
+                  </div>
                 </Col>
                 <Col span={12}>
-                  <Form.Item name={['turnstile', 'questionnaire']} valuePropName="checked">
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                      <div>
-                        <Text strong>问卷提交验证</Text>
-                        <br />
-                        <Text type="secondary">问卷提交时进行人机验证</Text>
-                      </div>
-                      <Switch />
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 0' }}>
+                    <div>
+                      <Text strong>问卷提交验证</Text>
+                      <br />
+                      <Text type="secondary">问卷提交时进行人机验证</Text>
                     </div>
-                  </Form.Item>
+                    <Form.Item name={['turnstile', 'questionnaire']} valuePropName="checked" noStyle>
+                      <Switch />
+                    </Form.Item>
+                  </div>
                 </Col>
                 <Col span={12}>
-                  <Form.Item name={['turnstile', 'story']} valuePropName="checked">
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                      <div>
-                        <Text strong>故事发布验证</Text>
-                        <br />
-                        <Text type="secondary">故事发布时进行人机验证</Text>
-                      </div>
-                      <Switch />
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 0' }}>
+                    <div>
+                      <Text strong>故事发布验证</Text>
+                      <br />
+                      <Text type="secondary">故事发布时进行人机验证</Text>
                     </div>
-                  </Form.Item>
+                    <Form.Item name={['turnstile', 'story']} valuePropName="checked" noStyle>
+                      <Switch />
+                    </Form.Item>
+                  </div>
                 </Col>
                 <Col span={12}>
-                  <Form.Item name={['turnstile', 'registration']} valuePropName="checked">
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                      <div>
-                        <Text strong>用户注册验证</Text>
-                        <br />
-                        <Text type="secondary">用户注册时进行人机验证</Text>
-                      </div>
-                      <Switch />
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 0' }}>
+                    <div>
+                      <Text strong>用户注册验证</Text>
+                      <br />
+                      <Text type="secondary">用户注册时进行人机验证</Text>
                     </div>
-                  </Form.Item>
+                    <Form.Item name={['turnstile', 'registration']} valuePropName="checked" noStyle>
+                      <Switch />
+                    </Form.Item>
+                  </div>
                 </Col>
                 <Col span={12}>
-                  <Form.Item name={['turnstile', 'login']} valuePropName="checked">
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                      <div>
-                        <Text strong>登录验证</Text>
-                        <br />
-                        <Text type="secondary">用户登录时进行人机验证</Text>
-                      </div>
-                      <Switch />
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 0' }}>
+                    <div>
+                      <Text strong>登录验证</Text>
+                      <br />
+                      <Text type="secondary">用户登录时进行人机验证</Text>
                     </div>
-                  </Form.Item>
+                    <Form.Item name={['turnstile', 'login']} valuePropName="checked" noStyle>
+                      <Switch />
+                    </Form.Item>
+                  </div>
                 </Col>
               </Row>
             </TabPane>
@@ -495,76 +495,76 @@ const SuperAdminSecuritySwitches: React.FC = () => {
                   />
                 </Col>
                 <Col span={12}>
-                  <Form.Item name={['rateLimit', 'enabled']} valuePropName="checked">
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                      <div>
-                        <Text strong>启用频率限制</Text>
-                        <br />
-                        <Text type="secondary">全局频率限制开关</Text>
-                      </div>
-                      <Switch />
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 0' }}>
+                    <div>
+                      <Text strong>启用频率限制</Text>
+                      <br />
+                      <Text type="secondary">全局频率限制开关</Text>
                     </div>
-                  </Form.Item>
+                    <Form.Item name={['rateLimit', 'enabled']} valuePropName="checked" noStyle>
+                      <Switch />
+                    </Form.Item>
+                  </div>
                 </Col>
                 <Col span={12}>
-                  <Form.Item name={['rateLimit', 'ipReputation']} valuePropName="checked">
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                      <div>
-                        <Text strong>IP信誉评分</Text>
-                        <br />
-                        <Text type="secondary">基于历史行为的IP信誉系统</Text>
-                      </div>
-                      <Switch />
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 0' }}>
+                    <div>
+                      <Text strong>IP信誉评分</Text>
+                      <br />
+                      <Text type="secondary">基于历史行为的IP信誉系统</Text>
                     </div>
-                  </Form.Item>
+                    <Form.Item name={['rateLimit', 'ipReputation']} valuePropName="checked" noStyle>
+                      <Switch />
+                    </Form.Item>
+                  </div>
                 </Col>
                 <Col span={8}>
-                  <Form.Item name={['rateLimit', 'shortTerm']} valuePropName="checked">
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                      <div>
-                        <Text strong>短期限制</Text>
-                        <br />
-                        <Text type="secondary">1分钟窗口</Text>
-                      </div>
-                      <Switch />
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 0' }}>
+                    <div>
+                      <Text strong>短期限制</Text>
+                      <br />
+                      <Text type="secondary">1分钟窗口</Text>
                     </div>
-                  </Form.Item>
+                    <Form.Item name={['rateLimit', 'shortTerm']} valuePropName="checked" noStyle>
+                      <Switch />
+                    </Form.Item>
+                  </div>
                 </Col>
                 <Col span={8}>
-                  <Form.Item name={['rateLimit', 'mediumTerm']} valuePropName="checked">
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                      <div>
-                        <Text strong>中期限制</Text>
-                        <br />
-                        <Text type="secondary">1小时窗口</Text>
-                      </div>
-                      <Switch />
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 0' }}>
+                    <div>
+                      <Text strong>中期限制</Text>
+                      <br />
+                      <Text type="secondary">1小时窗口</Text>
                     </div>
-                  </Form.Item>
+                    <Form.Item name={['rateLimit', 'mediumTerm']} valuePropName="checked" noStyle>
+                      <Switch />
+                    </Form.Item>
+                  </div>
                 </Col>
                 <Col span={8}>
-                  <Form.Item name={['rateLimit', 'longTerm']} valuePropName="checked">
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                      <div>
-                        <Text strong>长期限制</Text>
-                        <br />
-                        <Text type="secondary">24小时窗口</Text>
-                      </div>
-                      <Switch />
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 0' }}>
+                    <div>
+                      <Text strong>长期限制</Text>
+                      <br />
+                      <Text type="secondary">24小时窗口</Text>
                     </div>
-                  </Form.Item>
+                    <Form.Item name={['rateLimit', 'longTerm']} valuePropName="checked" noStyle>
+                      <Switch />
+                    </Form.Item>
+                  </div>
                 </Col>
                 <Col span={12}>
-                  <Form.Item name={['rateLimit', 'suspiciousDetection']} valuePropName="checked">
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                      <div>
-                        <Text strong>可疑行为检测</Text>
-                        <br />
-                        <Text type="secondary">自动检测和处理可疑行为</Text>
-                      </div>
-                      <Switch />
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 0' }}>
+                    <div>
+                      <Text strong>可疑行为检测</Text>
+                      <br />
+                      <Text type="secondary">自动检测和处理可疑行为</Text>
                     </div>
-                  </Form.Item>
+                    <Form.Item name={['rateLimit', 'suspiciousDetection']} valuePropName="checked" noStyle>
+                      <Switch />
+                    </Form.Item>
+                  </div>
                 </Col>
               </Row>
             </TabPane>
@@ -582,52 +582,52 @@ const SuperAdminSecuritySwitches: React.FC = () => {
                   />
                 </Col>
                 <Col span={12}>
-                  <Form.Item name={['emergency', 'enabled']} valuePropName="checked">
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                      <div>
-                        <Text strong>启用紧急模式</Text>
-                        <br />
-                        <Text type="secondary">激活紧急响应机制</Text>
-                      </div>
-                      <Switch />
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 0' }}>
+                    <div>
+                      <Text strong>启用紧急模式</Text>
+                      <br />
+                      <Text type="secondary">激活紧急响应机制</Text>
                     </div>
-                  </Form.Item>
+                    <Form.Item name={['emergency', 'enabled']} valuePropName="checked" noStyle>
+                      <Switch />
+                    </Form.Item>
+                  </div>
                 </Col>
                 <Col span={12}>
-                  <Form.Item name={['emergency', 'maintenanceMode']} valuePropName="checked">
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                      <div>
-                        <Text strong>维护模式</Text>
-                        <br />
-                        <Text type="secondary">系统维护时禁用所有功能</Text>
-                      </div>
-                      <Switch />
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 0' }}>
+                    <div>
+                      <Text strong>维护模式</Text>
+                      <br />
+                      <Text type="secondary">系统维护时禁用所有功能</Text>
                     </div>
-                  </Form.Item>
+                    <Form.Item name={['emergency', 'maintenanceMode']} valuePropName="checked" noStyle>
+                      <Switch />
+                    </Form.Item>
+                  </div>
                 </Col>
                 <Col span={12}>
-                  <Form.Item name={['emergency', 'blockAllSubmissions']} valuePropName="checked">
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                      <div>
-                        <Text strong>阻止所有提交</Text>
-                        <br />
-                        <Text type="secondary">紧急情况下阻止所有用户提交</Text>
-                      </div>
-                      <Switch />
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 0' }}>
+                    <div>
+                      <Text strong>阻止所有提交</Text>
+                      <br />
+                      <Text type="secondary">紧急情况下阻止所有用户提交</Text>
                     </div>
-                  </Form.Item>
+                    <Form.Item name={['emergency', 'blockAllSubmissions']} valuePropName="checked" noStyle>
+                      <Switch />
+                    </Form.Item>
+                  </div>
                 </Col>
                 <Col span={12}>
-                  <Form.Item name={['emergency', 'strictMode']} valuePropName="checked">
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                      <div>
-                        <Text strong>严格模式</Text>
-                        <br />
-                        <Text type="secondary">启用最严格的安全检查</Text>
-                      </div>
-                      <Switch />
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 0' }}>
+                    <div>
+                      <Text strong>严格模式</Text>
+                      <br />
+                      <Text type="secondary">启用最严格的安全检查</Text>
                     </div>
-                  </Form.Item>
+                    <Form.Item name={['emergency', 'strictMode']} valuePropName="checked" noStyle>
+                      <Switch />
+                    </Form.Item>
+                  </div>
                 </Col>
               </Row>
             </TabPane>
@@ -645,52 +645,52 @@ const SuperAdminSecuritySwitches: React.FC = () => {
                   />
                 </Col>
                 <Col span={12}>
-                  <Form.Item name={['debug', 'enabled']} valuePropName="checked">
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                      <div>
-                        <Text strong>启用调试模式</Text>
-                        <br />
-                        <Text type="secondary">开启调试功能</Text>
-                      </div>
-                      <Switch />
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 0' }}>
+                    <div>
+                      <Text strong>启用调试模式</Text>
+                      <br />
+                      <Text type="secondary">开启调试功能</Text>
                     </div>
-                  </Form.Item>
+                    <Form.Item name={['debug', 'enabled']} valuePropName="checked" noStyle>
+                      <Switch />
+                    </Form.Item>
+                  </div>
                 </Col>
                 <Col span={12}>
-                  <Form.Item name={['debug', 'verboseLogging']} valuePropName="checked">
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                      <div>
-                        <Text strong>详细日志</Text>
-                        <br />
-                        <Text type="secondary">记录详细的调试信息</Text>
-                      </div>
-                      <Switch />
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 0' }}>
+                    <div>
+                      <Text strong>详细日志</Text>
+                      <br />
+                      <Text type="secondary">记录详细的调试信息</Text>
                     </div>
-                  </Form.Item>
+                    <Form.Item name={['debug', 'verboseLogging']} valuePropName="checked" noStyle>
+                      <Switch />
+                    </Form.Item>
+                  </div>
                 </Col>
                 <Col span={12}>
-                  <Form.Item name={['debug', 'logAllRequests']} valuePropName="checked">
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                      <div>
-                        <Text strong>记录所有请求</Text>
-                        <br />
-                        <Text type="secondary">记录所有API请求</Text>
-                      </div>
-                      <Switch />
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 0' }}>
+                    <div>
+                      <Text strong>记录所有请求</Text>
+                      <br />
+                      <Text type="secondary">记录所有API请求</Text>
                     </div>
-                  </Form.Item>
+                    <Form.Item name={['debug', 'logAllRequests']} valuePropName="checked" noStyle>
+                      <Switch />
+                    </Form.Item>
+                  </div>
                 </Col>
                 <Col span={12}>
-                  <Form.Item name={['debug', 'bypassAllChecks']} valuePropName="checked">
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                      <div>
-                        <Text strong style={{ color: '#cf1322' }}>绕过所有检查</Text>
-                        <br />
-                        <Text type="secondary">⚠️ 危险：禁用所有安全检查</Text>
-                      </div>
-                      <Switch />
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 0' }}>
+                    <div>
+                      <Text strong style={{ color: '#cf1322' }}>绕过所有检查</Text>
+                      <br />
+                      <Text type="secondary">⚠️ 危险：禁用所有安全检查</Text>
                     </div>
-                  </Form.Item>
+                    <Form.Item name={['debug', 'bypassAllChecks']} valuePropName="checked" noStyle>
+                      <Switch />
+                    </Form.Item>
+                  </div>
                 </Col>
               </Row>
             </TabPane>

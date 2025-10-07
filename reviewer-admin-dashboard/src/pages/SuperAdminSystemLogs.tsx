@@ -551,10 +551,11 @@ IP地址: ${log.ip_address}
           rowKey="id"
           loading={loading}
           size="small"
+          scroll={{ x: 1400 }}
           pagination={{
             showSizeChanger: true,
             showQuickJumper: true,
-            showTotal: (total, range) => 
+            showTotal: (total, range) =>
               `第 ${range[0]}-${range[1]} 条，共 ${total} 条`
           }}
         />

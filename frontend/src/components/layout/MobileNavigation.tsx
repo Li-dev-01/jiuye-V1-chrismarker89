@@ -23,7 +23,8 @@ import {
   MessageOutlined,
   UserOutlined,
   CloseOutlined,
-  ExperimentOutlined
+  ExperimentOutlined,
+  StarOutlined
 } from '@ant-design/icons';
 import { useUniversalAuthStore } from '../../stores/universalAuthStore';
 import { getUserDisplayName } from '../../utils/userDisplayUtils';
@@ -44,29 +45,29 @@ export const MobileNavigation: React.FC<MobileNavigationProps> = ({ role }) => {
   // 底部导航项
   const bottomNavItems = [
     {
-      key: 'home',
-      icon: <HomeOutlined />,
-      label: '首页',
-      path: '/'
-    },
-    {
       key: 'questionnaire',
       icon: <FileTextOutlined />,
       label: '问卷',
-      path: '/questionnaire',
-      requireAuth: true
+      path: '/questionnaire/survey'
     },
     {
       key: 'analytics',
       icon: <BarChartOutlined />,
       label: '数据',
-      path: '/analytics'
+      path: '/analytics/v3' // 与桌面端保持一致，使用问卷2的7维度分析
     },
     {
       key: 'stories',
       icon: <BookOutlined />,
       label: '故事',
       path: '/stories'
+    },
+    {
+      key: 'favorites',
+      icon: <StarOutlined />,
+      label: '收藏',
+      path: '/favorites',
+      requireAuth: true
     },
     {
       key: 'menu',
@@ -80,16 +81,16 @@ export const MobileNavigation: React.FC<MobileNavigationProps> = ({ role }) => {
   const getDrawerMenuItems = () => {
     const baseItems = [
       {
-        key: 'questionnaire-v2',
-        icon: <ExperimentOutlined />,
-        label: '问卷2',
-        path: '/questionnaire-v2'
+        key: 'profile',
+        icon: <UserOutlined />,
+        label: '个人信息',
+        path: '/profile'
       },
       {
-        key: 'results',
-        icon: <BarChartOutlined />,
-        label: '调研结果',
-        path: '/results'
+        key: 'my-content',
+        icon: <BookOutlined />,
+        label: '我的内容',
+        path: '/my-content'
       }
     ];
 
@@ -219,9 +220,6 @@ export const MobileNavigation: React.FC<MobileNavigationProps> = ({ role }) => {
               >
                 匿名注册/登录
               </Button>
-              <Link to="/admin/login" onClick={() => setDrawerVisible(false)}>
-                <Button block type="default" size="small">管理后台登录</Button>
-              </Link>
             </Space>
           ) : (
             <Space direction="vertical" style={{ width: '100%' }}>
