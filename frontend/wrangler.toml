@@ -1,6 +1,6 @@
 # Cloudflare Pages 配置文件
 
-name = "college-employment-survey-frontend"
+name = "college-employment-survey"
 compatibility_date = "2024-01-01"
 
 [env.production]
@@ -48,4 +48,4 @@ VITE_ENABLE_ERROR_BOUNDARY = "true"
 VITE_ENABLE_PERFORMANCE_MONITORING = "true"
 VITE_API_BASE_URL = "https://employment-survey-api-prod.chrismarker89.workers.dev/api"
 VITE_GOOGLE_CLIENT_ID = "23546164414-3t3g8n9hvnv4ekjok90co2sm3sfb6mt8.apps.googleusercontent.com"
-VITE_GOOGLE_REDIRECT_URI = "https://college-employment-survey-frontend-l84.pages.dev/auth/google/callback"
+VITE_GOOGLE_REDIRECT_URI = "https://college-employment-survey-8rh.pages.dev/auth/google/callback"

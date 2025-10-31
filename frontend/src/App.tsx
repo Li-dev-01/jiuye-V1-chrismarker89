@@ -17,8 +17,19 @@ import { QuestionnaireLayout } from './components/layout/QuestionnaireLayout';
 import DevAccessPanel from './components/dev/DevAccessPanel';
 import './styles/global.css';
 
+// ========== 方案E优化：模块顶层预加载核心组件 ==========
+// 立即预加载核心组件（在模块加载时执行，而非组件挂载后）
+// 这样可以确保用户访问时组件已加载完成，消除LoadingSpinner闪烁
+const preloadCoreComponents = () => {
+  import('./pages/SecondQuestionnairePage');
+  import('./pages/Stories');
+  import('./pages/SecondQuestionnaireAnalyticsPage');
+};
+
+// 立即执行预加载
+preloadCoreComponents();
+
 // 懒加载组件
-const HomePage = React.lazy(() => import('./pages/HomePage'));
 const QuestionnairePage = React.lazy(() => import('./pages/IntelligentQuestionnairePage'));
 const SecondQuestionnaireHomePage = React.lazy(() => import('./pages/SecondQuestionnaireHomePage'));
 const SecondQuestionnairePage = React.lazy(() => import('./pages/SecondQuestionnairePage'));
@@ -26,20 +37,10 @@ const SecondQuestionnaireCompletePage = React.lazy(() => import('./pages/SecondQ
 const SecondQuestionnaireAnalyticsPage = React.lazy(() => import('./pages/SecondQuestionnaireAnalyticsPage'));
 const Questionnaire2SevenDimensionPage = React.lazy(() => import('./pages/Questionnaire2SevenDimensionPage'));
 const StoriesPage = React.lazy(() => import('./pages/Stories'));
-const StoriesSimple = React.lazy(() => import('./pages/StoriesSimple'));
-const StoriesTest1 = React.lazy(() => import('./pages/test/StoriesTest1'));
-const StoriesTest2 = React.lazy(() => import('./pages/test/StoriesTest2'));
-const StoriesTest3 = React.lazy(() => import('./pages/test/StoriesTest3'));
-const StoriesTest4 = React.lazy(() => import('./pages/test/StoriesTest4'));
 const FavoritesPage = React.lazy(() => import('./pages/FavoritesPage'));
 // 问卷完成页面
 const QuestionnaireCompletion = React.lazy(() => import('./pages/QuestionnaireCompletion'));
 const StorySubmitPage = React.lazy(() => import('./pages/StorySubmitPage'));
-
-// 测试页面
-const TurnstileTestPage = React.lazy(() => import('./pages/TurnstileTestPage'));
-const DataSourceTestPage = React.lazy(() => import('./pages/DataSourceTestPage'));
-const SimpleAnalyticsTestPage = React.lazy(() => import('./pages/SimpleAnalyticsTestPage'));
 
 // 用户内容管理页面
 const MyContentPage = React.lazy(() => import('./pages/user/MyContent'));
@@ -86,18 +87,9 @@ const AnalyticsNavigationPage = React.lazy(() => import('./pages/analytics/Analy
 // const AuthSystemTestPage = React.lazy(() => import('./pages/debug/AuthSystemTestPage').then(module => ({ default: module.AuthSystemTestPage })));
 const GoogleCallbackPage = React.lazy(() => import('./pages/auth/GoogleCallbackPage').then(module => ({ default: module.GoogleCallbackPage })));
 const GoogleQuestionnaireCallbackPage = React.lazy(() => import('./pages/auth/GoogleQuestionnaireCallbackPage').then(module => ({ default: module.default })));
-const OAuthUrlDebugPage = React.lazy(() => import('./pages/debug/OAuthUrlDebugPage').then(module => ({ default: module.default })));
-// 调试页面已移动到归档目录
-// const SimpleAdminTestPage = React.lazy(() => import('./pages/debug/SimpleAdminTestPage').then(module => ({ default: module.SimpleAdminTestPage })));
-// const AdminDataTestPage = React.lazy(() => import('./pages/debug/AdminDataTestPage').then(module => ({ default: module.AdminDataTestPage })));
 
-// 测试和调试页面已移动到归档目录
-// const ViolationContentTest = React.lazy(() => import('./pages/test/ViolationContentTest'));
-const TestPage = React.lazy(() => import('./pages/TestPage').then(module => ({ default: module.TestPage })));
+// 保留的页面
 const IntelligentQuestionnairePage = React.lazy(() => import('./pages/IntelligentQuestionnairePage'));
-const GoogleOAuthTestPage = React.lazy(() => import('./pages/test/GoogleOAuthTestPage').then(module => ({ default: module.default })));
-const GoogleOAuthDebugPage = React.lazy(() => import('./pages/debug/GoogleOAuthDebugPage').then(module => ({ default: module.default })));
-const AuthTestPage = React.lazy(() => import('./pages/test/AuthTestPage').then(module => ({ default: module.AuthTestPage })));
 const QuestionnaireComboPage = React.lazy(() => import('./pages/QuestionnaireComboPage'));
 // const FloatingComponentTestPage = React.lazy(() => import('./pages/test/FloatingComponentTestPage').then(module => ({ default: module.FloatingComponentTestPage })));
 // const AdminRoutesTestPage = React.lazy(() => import('./pages/dev/AdminRoutesTestPage').then(module => ({ default: module.default })));
@@ -105,12 +97,26 @@ const QuestionnaireComboPage = React.lazy(() => import('./pages/QuestionnaireCom
 // const UserContentTestPage = React.lazy(() => import('./pages/debug/UserContentTestPage').then(module => ({ default: module.default })));
 // const SimpleUserContentTest = React.lazy(() => import('./pages/debug/SimpleUserContentTest').then(module => ({ default: module.default })));
 
-// 加载中组件
-const LoadingSpinner = () => (
-  <div className="loading-spinner">
-    <Spin size="large" />
-  </div>
-);
+// ========== 方案E优化：延迟显示LoadingSpinner ==========
+// 加载中组件 - 优化版：只有加载超过200ms才显示spinner，避免快速加载时的闪烁
+const LoadingSpinner = () => {
+  const [show, setShow] = React.useState(false);
+
+  React.useEffect(() => {
+    // 只有加载超过200ms才显示spinner，避免快速加载时的闪烁
+    const timer = setTimeout(() => setShow(true), 200);
+    return () => clearTimeout(timer);
+  }, []);
+
+  // 如果加载很快（<200ms），不显示spinner
+  if (!show) return null;
+
+  return (
+    <div className="loading-spinner">
+      <Spin size="large" />
+    </div>
+  );
+};
 
 function App() {
   useEffect(() => {
@@ -120,17 +126,15 @@ function App() {
     // 清理过期缓存
     cacheManager.cleanup();
 
-    // 预加载核心页面组件，减少首次访问时的懒加载延迟
-    // 这些是用户最常访问的页面，预加载可以显著提升用户体验
-    import('./pages/SecondQuestionnairePage');
-    import('./pages/Stories');
-    import('./pages/SecondQuestionnaireAnalyticsPage');
+    // ========== 方案E优化：预加载已移至模块顶层 ==========
+    // 预加载核心页面组件已在模块顶层执行（第20-28行）
+    // 这样可以更早开始预加载，减少首次访问时的懒加载延迟
 
     // 在开发环境中显示性能信息（减少频率）
     if (import.meta.env.DEV && Math.random() < 0.2) {
       console.log('Performance Monitor initialized');
       console.log('Cache Manager initialized');
-      console.log('Core components preloading started');
+      console.log('Core components preloaded at module level');
     }
   }, []);
 
@@ -202,45 +206,7 @@ function App() {
                       </PublicRouteGuard>
                     } />
 
-                    <Route path="/stories-simple" element={
-                      <PublicRouteGuard>
-                        <QuestionnaireLayout>
-                          <StoriesSimple />
-                        </QuestionnaireLayout>
-                      </PublicRouteGuard>
-                    } />
 
-                    <Route path="/test/stories-1" element={
-                      <PublicRouteGuard>
-                        <QuestionnaireLayout>
-                          <StoriesTest1 />
-                        </QuestionnaireLayout>
-                      </PublicRouteGuard>
-                    } />
-
-                    <Route path="/test/stories-2" element={
-                      <PublicRouteGuard>
-                        <QuestionnaireLayout>
-                          <StoriesTest2 />
-                        </QuestionnaireLayout>
-                      </PublicRouteGuard>
-                    } />
-
-                    <Route path="/test/stories-3" element={
-                      <PublicRouteGuard>
-                        <QuestionnaireLayout>
-                          <StoriesTest3 />
-                        </QuestionnaireLayout>
-                      </PublicRouteGuard>
-                    } />
-
-                    <Route path="/test/stories-4" element={
-                      <PublicRouteGuard>
-                        <QuestionnaireLayout>
-                          <StoriesTest4 />
-                        </QuestionnaireLayout>
-                      </PublicRouteGuard>
-                    } />
 
                     {/* 收藏页面 */}
                     <Route path="/favorites" element={
@@ -287,28 +253,7 @@ function App() {
 
 
 
-                    {/* 测试路由 */}
-                    <Route path="/test/turnstile" element={
-                      <PublicRouteGuard>
-                        <QuestionnaireLayout>
-                          <TurnstileTestPage />
-                        </QuestionnaireLayout>
-                      </PublicRouteGuard>
-                    } />
-                    <Route path="/test/datasource" element={
-                      <PublicRouteGuard>
-                        <QuestionnaireLayout>
-                          <DataSourceTestPage />
-                        </QuestionnaireLayout>
-                      </PublicRouteGuard>
-                    } />
-                    <Route path="/test/analytics" element={
-                      <PublicRouteGuard>
-                        <QuestionnaireLayout>
-                          <SimpleAnalyticsTestPage />
-                        </QuestionnaireLayout>
-                      </PublicRouteGuard>
-                    } />
+
 
                     {/* 其他测试路由已移动到归档目录 */}
                     {/* <Route path="/test/state" element={<PublicRouteGuard><StateTest /></PublicRouteGuard>} /> */}
@@ -402,26 +347,7 @@ function App() {
 
 
 
-                    {/* 测试路由 - 开发用 */}
-                    <Route path="/test" element={<PublicRouteGuard><TestPage /></PublicRouteGuard>} />
 
-                    {/* Google OAuth测试页面 */}
-                    <Route path="/test/google-oauth" element={<PublicRouteGuard><GoogleOAuthTestPage /></PublicRouteGuard>} />
-
-                    {/* 认证功能测试页面 */}
-                    <Route path="/test/auth" element={
-                      <PublicRouteGuard>
-                        <QuestionnaireLayout>
-                          <AuthTestPage />
-                        </QuestionnaireLayout>
-                      </PublicRouteGuard>
-                    } />
-
-                    {/* Google OAuth调试页面 */}
-                    <Route path="/debug/google-oauth" element={<PublicRouteGuard><GoogleOAuthDebugPage /></PublicRouteGuard>} />
-
-                    {/* OAuth URL调试页面 */}
-                    <Route path="/debug/oauth-url" element={<PublicRouteGuard><OAuthUrlDebugPage /></PublicRouteGuard>} />
 
 
                     {/* 测试、演示和调试路由已移动到归档目录 */}
