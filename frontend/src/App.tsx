@@ -120,10 +120,17 @@ function App() {
     // 清理过期缓存
     cacheManager.cleanup();
 
+    // 预加载核心页面组件，减少首次访问时的懒加载延迟
+    // 这些是用户最常访问的页面，预加载可以显著提升用户体验
+    import('./pages/SecondQuestionnairePage');
+    import('./pages/Stories');
+    import('./pages/SecondQuestionnaireAnalyticsPage');
+
     // 在开发环境中显示性能信息（减少频率）
     if (import.meta.env.DEV && Math.random() < 0.2) {
       console.log('Performance Monitor initialized');
       console.log('Cache Manager initialized');
+      console.log('Core components preloading started');
     }
   }, []);
 

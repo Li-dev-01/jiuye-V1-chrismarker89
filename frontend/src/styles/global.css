@@ -47,7 +47,8 @@ body {
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background: #ffffff;
+  /* 优化：使用与问卷页面一致的渐变背景，消除页面切换时的视觉闪烁 */
+  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 50%, #dbeafe 100%);
 }
 
 .loading-spinner .ant-spin {
