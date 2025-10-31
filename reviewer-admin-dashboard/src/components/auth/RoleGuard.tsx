@@ -75,7 +75,10 @@ const RoleGuard: React.FC<RoleGuardProps> = ({
   // 检查用户角色是否在允许的角色列表中
   // 同时检查 user.role 和 user.userType，因为有些地方可能使用 userType
   const userRole = user.role || user.userType;
-  const hasPermission = allowedRoles.includes(userRole as any);
+
+  // 添加空值检查，确保allowedRoles是数组
+  const safeAllowedRoles = Array.isArray(allowedRoles) ? allowedRoles : [];
+  const hasPermission = userRole && safeAllowedRoles.includes(userRole as any);
 
   console.log(`[ROLE_GUARD] 🛡️ Permission check details:`, {
     'user.role': user.role,

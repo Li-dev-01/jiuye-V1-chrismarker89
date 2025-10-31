@@ -72,8 +72,7 @@ class EnhancedReviewerService {
           },
           pending_by_type: {
             story: 7,
-            questionnaire: 3,
-            heart_voice: 2
+            questionnaire: 3
           },
           pending_by_priority: {
             urgent: 2,
@@ -116,7 +115,7 @@ class EnhancedReviewerService {
     page?: number;
     pageSize?: number;
     audit_level?: 'rule_based' | 'ai_assisted' | 'manual_review';
-    content_type?: 'story' | 'questionnaire' | 'heart_voice';
+    content_type?: 'story' | 'questionnaire';
     priority?: 'urgent' | 'high' | 'medium' | 'low';
     has_complaints?: boolean;
   } = {}): Promise<PendingReviewsResponse> {
@@ -211,30 +210,33 @@ class EnhancedReviewerService {
   /**
    * 提交审核结果（连接三层审核系统）
    */
-  async submitReview(action: ReviewAction): Promise<ReviewSubmissionResponse> {
+  async submitReview(action: any): Promise<ReviewSubmissionResponse> {
     try {
+      // 确保发送的数据格式与后端API期望的一致（驼峰命名）
+      const requestBody = {
+        auditId: action.auditId,
+        action: action.action,
+        reason: action.reason || '',
+        notes: action.notes || ''
+      };
+
+      console.log('[ENHANCED_REVIEWER_SERVICE] Submitting review:', requestBody);
+
       const response = await this.makeRequest<ReviewSubmissionResponse>(
         '/api/simple-reviewer/submit-review',
         {
           method: 'POST',
-          body: JSON.stringify(action)
+          body: JSON.stringify(requestBody)
         }
       );
 
+      console.log('[ENHANCED_REVIEWER_SERVICE] Review submission response:', response);
       return response;
     } catch (error) {
-      console.warn('Failed to submit review, using mock response:', error);
-      
-      // 返回模拟成功响应
-      return {
-        success: true,
-        data: {
-          audit_id: action.audit_id,
-          final_decision: action.action === 'approve' ? 'approved' : 'rejected',
-          processing_time: Math.random() * 300 + 100, // 100-400ms
-          next_actions: action.action === 'reject' ? ['notify_user', 'update_user_score'] : ['publish_content']
-        }
-      };
+      console.error('[ENHANCED_REVIEWER_SERVICE] Failed to submit review:', error);
+
+      // 不再返回模拟响应，直接抛出错误让调用方处理
+      throw error;
     }
   }
 

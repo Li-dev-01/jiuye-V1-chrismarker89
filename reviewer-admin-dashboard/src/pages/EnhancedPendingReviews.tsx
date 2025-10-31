@@ -21,7 +21,7 @@ import {
   Divider,
   Timeline
 } from 'antd';
-import { 
+import {
   EyeOutlined,
   CheckOutlined,
   CloseOutlined,
@@ -38,6 +38,7 @@ import {
 } from '@ant-design/icons';
 import { enhancedReviewerService } from '../services/enhancedReviewerService';
 import type { PendingReviewItem, ReviewAction } from '../types/auditTypes';
+import { useAuthStore } from '../stores/authStore';
 import dayjs from 'dayjs';
 
 const { Text, Paragraph } = Typography;
@@ -45,6 +46,9 @@ const { Panel } = Collapse;
 const { Option } = Select;
 
 const EnhancedPendingReviews: React.FC = () => {
+  // 获取当前登录的审核员信息
+  const { user } = useAuthStore();
+
   const [items, setItems] = useState<PendingReviewItem[]>([]);
   const [loading, setLoading] = useState(false);
   const [selectedItem, setSelectedItem] = useState<PendingReviewItem | null>(null);
@@ -56,7 +60,7 @@ const EnhancedPendingReviews: React.FC = () => {
   // 筛选状态
   const [filters, setFilters] = useState<{
     audit_level: 'rule_based' | 'ai_assisted' | 'manual_review' | '';
-    content_type: 'story' | 'questionnaire' | 'heart_voice' | '';
+    content_type: 'story' | 'questionnaire' | '';
     priority: 'urgent' | 'high' | 'medium' | 'low' | '';
     has_complaints: boolean | undefined;
   }>({
@@ -177,15 +181,26 @@ const EnhancedPendingReviews: React.FC = () => {
 
   const submitReview = async () => {
     try {
-      if (!selectedItem) return;
+      if (!selectedItem) {
+        message.error('请先选择要审核的内容');
+        return;
+      }
 
-      const reviewAction: ReviewAction = {
-        audit_id: selectedItem.id,
+      if (!user) {
+        message.error('用户未登录，请重新登录');
+        return;
+      }
+
+      // 后端API期望的字段名是驼峰命名（auditId），而不是下划线命名（audit_id）
+      const reviewAction = {
+        auditId: selectedItem.id,  // 修复：使用auditId而不是audit_id
         action: actionType,
         reason: actionType === 'reject' ? '内容不符合规范' : '',
         notes: '详细审核',
-        reviewer_id: 'current_reviewer' // 这里应该从认证状态获取
+        reviewerId: user.id || user.username  // 从认证状态获取真实的reviewer ID
       };
+
+      console.log('[PENDING_REVIEWS] Submitting review:', reviewAction);
 
       const response = await enhancedReviewerService.submitReview(reviewAction);
 
@@ -197,8 +212,8 @@ const EnhancedPendingReviews: React.FC = () => {
         throw new Error(response.error || 'Review submission failed');
       }
     } catch (error: any) {
-      console.error('提交审核失败:', error);
-      message.error('提交审核失败: ' + error.message);
+      console.error('[PENDING_REVIEWS] 提交审核失败:', error);
+      message.error('提交审核失败: ' + (error.message || '未知错误'));
     }
   };
 
@@ -527,7 +542,6 @@ const EnhancedPendingReviews: React.FC = () => {
               >
                 <Option value="story">故事</Option>
                 <Option value="questionnaire">问卷</Option>
-                <Option value="heart_voice">心声</Option>
               </Select>
             </Col>
             <Col span={4}>
